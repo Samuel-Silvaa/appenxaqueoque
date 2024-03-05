@@ -17,6 +17,7 @@ module.exports = {
         'blue-primary': '#8FD7FF',
         'gray-light': '#F1F1F1',
         white: '#fff',
+        error: '#FFB0B5',
       },
     },
   },

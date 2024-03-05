@@ -1,0 +1,30 @@
+export const getAlignment = (alignment: string) => {
+  switch (alignment) {
+    case 'start':
+      return ' items-start justify-start';
+    default:
+      return 'items-center justify-center';
+  }
+};
+
+export const getBtnColorScheme = (
+  scheme: string
+): { pressable: string; title: string } => {
+  const stylesheet = {
+    pressable:
+      'w-full flex flex-row items-center justify-center round rounded-full h-[63px] p-4 ',
+    title: 'font-semibold mx-4',
+  };
+  switch (scheme) {
+    case 'primary':
+      return {
+        pressable: `${stylesheet.pressable} bg-blue-primary`,
+        title: `${stylesheet.title} text-primary`,
+      };
+    default:
+      return {
+        pressable: `${stylesheet.pressable} bg-white`,
+        title: `${stylesheet.title} `,
+      };
+  }
+};

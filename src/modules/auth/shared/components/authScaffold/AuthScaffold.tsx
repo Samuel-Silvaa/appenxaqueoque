@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { ReactNode } from 'react';
 import { Image, View } from 'react-native';
+import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 
 const stylesheet = {
   view: 'flex grow bg-primary p-4 gap-y-4',
@@ -18,17 +19,10 @@ const AuthScaffold = ({
   hasArrowBack = true,
   children,
   alignment = 'items-start',
-  justify = 'justify-start',
 }: AuthScaffoldProps) => {
   return (
-    <View className={`${stylesheet.view} ${alignment} ${justify}`}>
+    <View className={`${stylesheet.view} ${getAlignment(alignment)}`}>
       <StatusBar />
-      {hasArrowBack && (
-        <Image
-          className={stylesheet.header}
-          source={require('assets/arrowback.svg')}
-        ></Image>
-      )}
       {children}
     </View>
   );
