@@ -3,7 +3,7 @@ import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
 import ExPressable from '../shared/components/buttons/pressable/ExPressable';
 
-export default function LandingPage({ navigation }) {
+const LandingPage = ({ navigation }) => {
   return (
     <AuthScaffold
       alignment='items-center'
@@ -24,4 +24,6 @@ export default function LandingPage({ navigation }) {
       />
     </AuthScaffold>
   );
-}
+};
+
+export default LandingPage;
