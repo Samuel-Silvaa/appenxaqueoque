@@ -12,14 +12,14 @@ const LandingPage = ({ navigation }) => {
     >
       <Image source={require('assets/welcome.svg')} />
       <Text className={sharedStyleSheet.title}>Bem vindo! </Text>
-      <Text className={sharedStyleSheet.subtitle + ' text-center'}>
+      <Text className={sharedStyleSheet.subtitle + ' text-center '}>
         Faça seu login ou cadastre-se para <br /> iniciarmos seu acompanhamento
         médico.
       </Text>
       <ExPressable title='Login' onPress={() => navigation.navigate('login')} />
       <ExPressable
         colorScheme='light'
-        onPress={() => navigation.navigate('userType')}
+        onPress={() => navigation.navigate('welcome')}
         title='Cadastrar'
       />
     </AuthScaffold>

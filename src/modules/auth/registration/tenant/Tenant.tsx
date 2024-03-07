@@ -20,7 +20,7 @@ const tenantSchema = yup.object<TenantSchema>().shape({
   confirmPassword: yup.string().required('Preencha sua senha'),
 });
 
-const Tenant = () => {
+const Tenant = ({ navigation }) => {
   const {
     handleSubmit,
     control,
@@ -32,6 +32,7 @@ const Tenant = () => {
 
   const onSubmitHandler = (data: TenantSchema) => {
     console.log({ data });
+    navigation.navigate('welcome');
     reset();
   };
 
