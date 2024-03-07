@@ -1,6 +1,5 @@
 import { Text } from 'react-native';
 import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
-import ExPressable from '../../shared/components/buttons/pressable/ExPressable';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 

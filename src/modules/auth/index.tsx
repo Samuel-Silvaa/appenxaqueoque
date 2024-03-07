@@ -7,7 +7,7 @@ import Welcome from './welcome/Welcome';
 
 const Stack = createNativeStackNavigator();
 
-const Routes = () => {
+const AuthRoutes = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -26,4 +26,4 @@ const Routes = () => {
   );
 };
 
-export default Routes;
+export default AuthRoutes;

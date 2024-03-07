@@ -1,7 +1,6 @@
 import { Image, Text } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
-import ExPressable from '../shared/components/buttons/pressable/ExPressable';
 
 const LandingPage = ({ navigation }) => {
   return (

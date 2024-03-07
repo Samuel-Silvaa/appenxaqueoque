@@ -9,7 +9,7 @@ import ProfilePage from './profile/Profile';
 
 const stylesheet = {
   calendarBtnContainer:
-    'bg-blue-secondary rounded-full w-14 h-14 flex items-center justify-center translate-y-[-10px]',
+    'bg-blue-secondary rounded-full w-12 h-12 flex items-center justify-center translate-y-[-15px]',
   header: 'w-[90vw] flex flex-row grow-0 justify-between',
 };
 
@@ -24,9 +24,19 @@ const TabsRoutes = () => {
         tabBarIcon: ({ focused, color, size }) => {
           switch (route.name) {
             case 'Home':
-              return <Image source={require('assets/home.svg')} />;
+              return (
+                <Image
+                  tintColor={focused ? '#8FD7FF' : '#262D33'}
+                  source={require('assets/home.svg')}
+                />
+              );
             case 'Report':
-              return <Image source={require('assets/stats.svg')} />;
+              return (
+                <Image
+                  tintColor={focused ? '#8FD7FF' : '#262D33'}
+                  source={require('assets/stats.svg')}
+                />
+              );
             case 'Episode':
               return (
                 <View className={stylesheet.calendarBtnContainer}>
@@ -34,9 +44,19 @@ const TabsRoutes = () => {
                 </View>
               );
             case 'Calendar':
-              return <Image source={require('assets/document.svg')} />;
+              return (
+                <Image
+                  tintColor={focused ? '#8FD7FF' : '#262D33'}
+                  source={require('assets/document.svg')}
+                />
+              );
             case 'Profile':
-              return <Image source={require('assets/user.svg')} />;
+              return (
+                <Image
+                  tintColor={focused ? '#8FD7FF' : '#262D33'}
+                  source={require('assets/user.svg')}
+                />
+              );
           }
         },
         headerTitle: () => (
@@ -53,15 +73,18 @@ const TabsRoutes = () => {
               height: '100%',
               borderRadius: 50,
               alignSelf: 'center',
+              shadowColor: '#C5C5C5',
+              shadowOpacity: 0.3,
+              shadowOffset: { height: 3, width: 3 },
+              shadowRadius: 50,
             }}
           />
         ),
         tabBarStyle: {
           borderWidth: 0,
           backgroundColor: '#F7F7F7',
-          shadowOffset: { height: 2, width: 2 },
-          shadowColor: '#CCC',
-          shadowOpacity: 0.2,
+          position: 'absolute',
+          bottom: 15,
         },
       })}
     >

@@ -8,6 +8,8 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from 'src/infra/auth/auth';
+import { AuthenticationActions } from 'src/infra/auth/auth.actions';
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',
@@ -24,18 +26,17 @@ const loginSchema = yup.object<LoginSchema>().shape({
 });
 
 const Login = () => {
+  const { dispatch } = useAuth();
   const {
     handleSubmit,
     control,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
 
   const onSubmitHandler = (data: LoginSchema) => {
-    console.log({ data });
-    reset();
+    dispatch(AuthenticationActions.REQUEST_LOGIN, data);
   };
 
   return (
@@ -58,6 +59,7 @@ const Login = () => {
 
       <InputContainer
         keyboardType='visible-password'
+        secureTextEntry={true}
         label='Senha'
         name='password'
         control={control}

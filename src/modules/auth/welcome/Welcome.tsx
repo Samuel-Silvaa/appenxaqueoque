@@ -1,7 +1,6 @@
 import { Image, ImageSourcePropType, Text } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
-import ExPressable from '../shared/components/buttons/pressable/ExPressable';
 import { useCallback, useState } from 'react';
 
 const stylesheet = {
