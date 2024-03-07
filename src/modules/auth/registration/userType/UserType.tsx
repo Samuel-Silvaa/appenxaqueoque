@@ -15,7 +15,11 @@ const UserType = ({ navigation }) => {
   ]);
 
   return (
-    <AuthScaffold alignment='start'>
+    <AuthScaffold
+      alignment='start'
+      ctaPrimaryText='Continuar'
+      ctaPrimary={() => navigation.navigate('tenant')}
+    >
       <Text className={sharedStyleSheet.title}>Como deseja acessar?</Text>
       <Text className={sharedStyleSheet.subtitle}>Nos informe quem você é</Text>
       <Image
@@ -40,11 +44,6 @@ const UserType = ({ navigation }) => {
           }}
         />
       ))}
-
-      <ExPressable
-        title='Continuar'
-        onPress={() => navigation.navigate('tenant')}
-      />
     </AuthScaffold>
   );
 };

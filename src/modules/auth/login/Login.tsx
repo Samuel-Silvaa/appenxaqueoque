@@ -39,7 +39,11 @@ const Login = () => {
   };
 
   return (
-    <AuthScaffold alignment='start'>
+    <AuthScaffold
+      alignment='start'
+      ctaPrimary={handleSubmit(onSubmitHandler)}
+      ctaPrimaryText='Acessar'
+    >
       <Text className={sharedStyleSheet.title}>Acesse</Text>
       <Text className={sharedStyleSheet.subtitle}>
         Com e-mail e senha para entrar
@@ -70,8 +74,6 @@ const Login = () => {
         />
         <Text>Esqueci minha senha</Text>
       </View>
-
-      <ExPressable title='Acessar' onPress={handleSubmit(onSubmitHandler)} />
     </AuthScaffold>
   );
 };

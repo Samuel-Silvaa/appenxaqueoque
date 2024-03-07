@@ -49,7 +49,7 @@ const Welcome = ({ navigation }) => {
   }, []);
 
   return (
-    <AuthScaffold>
+    <AuthScaffold ctaPrimaryText='Próximo' ctaPrimary={handleCtaButton}>
       {data[welcomeIndex].title && (
         <Text className={sharedStyleSheet.title}>
           {data[welcomeIndex].title}
@@ -76,7 +76,6 @@ const Welcome = ({ navigation }) => {
           {data[welcomeIndex].effetcMessage}
         </Text>
       )}
-      <ExPressable title='Próximo' onPress={handleCtaButton} />
     </AuthScaffold>
   );
 };

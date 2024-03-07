@@ -37,7 +37,11 @@ const Tenant = ({ navigation }) => {
   };
 
   return (
-    <AuthScaffold alignment='start'>
+    <AuthScaffold
+      alignment='start'
+      ctaPrimaryText='Continuar'
+      ctaPrimary={handleSubmit(onSubmitHandler)}
+    >
       <Text className={sharedStyleSheet.title}>Cadastre-se</Text>
       <Text className={sharedStyleSheet.subtitle}>
         Informe seu e-mail e crie uma senha
@@ -64,8 +68,6 @@ const Tenant = ({ navigation }) => {
         control={control}
         errors={errors}
       ></InputContainer>
-
-      <ExPressable title='Continuar' onPress={handleSubmit(onSubmitHandler)} />
     </AuthScaffold>
   );
 };

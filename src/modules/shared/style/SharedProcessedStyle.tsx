@@ -1,9 +1,9 @@
 export const getAlignment = (alignment: string) => {
   switch (alignment) {
     case 'start':
-      return ' items-start justify-start';
+      return ' items-start justify-between';
     default:
-      return 'items-center justify-center';
+      return 'items-center justify-between';
   }
 };
 

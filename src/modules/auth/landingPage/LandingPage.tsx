@@ -9,6 +9,10 @@ const LandingPage = ({ navigation }) => {
       alignment='items-center'
       justify='justify-center'
       hasArrowBack={false}
+      ctaPrimary={() => navigation.navigate('login')}
+      ctaPrimaryText='Login'
+      ctaSecondary={() => navigation.navigate('tenant')}
+      ctaSecondaryText='Cadastrar'
     >
       <Image source={require('assets/welcome.svg')} />
       <Text className={sharedStyleSheet.title}>Bem vindo! </Text>
@@ -16,12 +20,6 @@ const LandingPage = ({ navigation }) => {
         Faça seu login ou cadastre-se para <br /> iniciarmos seu acompanhamento
         médico.
       </Text>
-      <ExPressable title='Login' onPress={() => navigation.navigate('login')} />
-      <ExPressable
-        colorScheme='light'
-        onPress={() => navigation.navigate('welcome')}
-        title='Cadastrar'
-      />
     </AuthScaffold>
   );
 };
