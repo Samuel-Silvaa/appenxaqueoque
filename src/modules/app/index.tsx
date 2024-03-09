@@ -2,14 +2,14 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './home/HomePage';
 import ReportPage from './report/Report';
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 import EpisodePage from './episode/Episode';
 import CalendarPage from './calendar/Calendar';
 import ProfilePage from './profile/Profile';
 
 const stylesheet = {
   calendarBtnContainer:
-    'bg-blue-secondary rounded-full w-12 h-12 flex items-center justify-center translate-y-[-15px]',
+    'bg-blue-secondary rounded-full w-13 h-13 flex items-center justify-center translate-y-[-15px]',
   header: 'w-[90vw] flex flex-row grow-0 justify-between',
 };
 
@@ -40,14 +40,14 @@ const TabsRoutes = () => {
             case 'Episode':
               return (
                 <View className={stylesheet.calendarBtnContainer}>
-                  <Image source={require('assets/calendar.svg')} />
+                  <Image source={require('assets/plus.svg')} />
                 </View>
               );
             case 'Calendar':
               return (
                 <Image
                   tintColor={focused ? '#8FD7FF' : '#262D33'}
-                  source={require('assets/document.svg')}
+                  source={require('assets/calendar.svg')}
                 />
               );
             case 'Profile':
