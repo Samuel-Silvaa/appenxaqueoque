@@ -1,14 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { ReactNode } from 'react';
-import { Image, SafeAreaView, View } from 'react-native';
-import {
-  getAlignment,
-  getAppScaffoldAlignment,
-} from 'src/modules/shared/style/SharedProcessedStyle';
+import { SafeAreaView } from 'react-native';
+import { getAppScaffoldAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 
 const stylesheet = {
-  view: 'w-fll max-h-[60%] flex grow bg-primary p-4 gap-y-4',
-  header: 'my-6 self-start',
+  view: 'w-full h-[100%] bg-primary p-4 pt-[80px] overflow-scroll',
 };
 
 interface AppPageScaffoldProps {
