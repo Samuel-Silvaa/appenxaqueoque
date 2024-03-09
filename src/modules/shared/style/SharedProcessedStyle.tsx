@@ -7,6 +7,15 @@ export const getAlignment = (alignment: string) => {
   }
 };
 
+export const getAppScaffoldAlignment = (alignment: string) => {
+  switch (alignment) {
+    case 'start':
+      return ' items-start';
+    default:
+      return 'items-center justify-between';
+  }
+};
+
 export const getBtnColorScheme = (
   scheme: string
 ): { pressable: string; title: string } => {
