@@ -6,7 +6,7 @@ const stylesheet = {
   userName: 'text-2xl font-bold p-4',
   innerHomeContainer: {
     container:
-      'w-full h-[90%] bg-beige-primary flex-row flex-wrap justify-between rounded-[30px] mt-[80px] pt-[50px] p-2',
+      'relative w-full h-[100vw] bg-beige-primary flex-row flex-wrap justify-between rounded-[30px] mt-[80px] p-2',
     header: 'w-full h-[20%] flex items-center ',
     body: 'flex-row flex-wrap justify-evenly items-end w-full h-[80%] p-1',
     innerCardCategory:

@@ -22,6 +22,7 @@
     "react-hook-form": "^7.51.0",
     "react-native": "0.73.4",
     "react-native-bouncy-checkbox": "^3.0.7",
+    "react-native-calendars": "^1.1304.1",
     "react-native-gesture-handler": "^2.15.0",
     "react-native-toast-notifications": "^3.4.0",
     "react-navigation": "^5.0.0",

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './home/HomePage';
 import ReportPage from './report/Report';
-import { Image, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import EpisodePage from './episode/Episode';
 import CalendarPage from './calendar/Calendar';
 import ProfilePage from './profile/Profile';
@@ -10,7 +10,7 @@ import ProfilePage from './profile/Profile';
 const stylesheet = {
   calendarBtnContainer:
     'bg-blue-secondary rounded-full w-13 h-13 flex items-center justify-center translate-y-[-15px]',
-  header: 'w-[90vw] flex flex-row grow-0 justify-between',
+  header: 'w-full p-4 flex flex-row grow-0 justify-between',
 };
 
 const Tab = createBottomTabNavigator();
@@ -21,21 +21,44 @@ const TabsRoutes = () => {
       screenOptions={({ route }) => ({
         headerStyle: { backgroundColor: '#f7f7f7' },
         headerShadowVisible: false,
+        tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
           switch (route.name) {
             case 'Home':
               return (
-                <Image
-                  tintColor={focused ? '#8FD7FF' : '#262D33'}
-                  source={require('assets/home.svg')}
-                />
+                <>
+                  <Image
+                    tintColor={focused ? '#8FD7FF' : '#262D33'}
+                    source={require('assets/home.svg')}
+                  />
+                  <Text
+                    className={
+                      focused
+                        ? 'text-[#8FD7FF]'
+                        : 'text-[#262D33]' + ' text-[9px]'
+                    }
+                  >
+                    {route.name}
+                  </Text>
+                </>
               );
             case 'Report':
               return (
-                <Image
-                  tintColor={focused ? '#8FD7FF' : '#262D33'}
-                  source={require('assets/stats.svg')}
-                />
+                <>
+                  <Image
+                    tintColor={focused ? '#8FD7FF' : '#262D33'}
+                    source={require('assets/stats.svg')}
+                  />
+                  <Text
+                    className={
+                      focused
+                        ? 'text-[#8FD7FF]'
+                        : 'text-[#262D33]' + ' text-[9px]'
+                    }
+                  >
+                    {route.name}
+                  </Text>
+                </>
               );
             case 'Episode':
               return (
@@ -45,21 +68,43 @@ const TabsRoutes = () => {
               );
             case 'Calendar':
               return (
-                <Image
-                  tintColor={focused ? '#8FD7FF' : '#262D33'}
-                  source={require('assets/calendar.svg')}
-                />
+                <>
+                  <Image
+                    tintColor={focused ? '#8FD7FF' : '#262D33'}
+                    source={require('assets/calendar.svg')}
+                  />
+                  <Text
+                    className={
+                      focused
+                        ? 'text-[#8FD7FF]'
+                        : 'text-[#262D33]' + ' text-[9px]'
+                    }
+                  >
+                    {route.name}
+                  </Text>
+                </>
               );
             case 'Profile':
               return (
-                <Image
-                  tintColor={focused ? '#8FD7FF' : '#262D33'}
-                  source={require('assets/user.svg')}
-                />
+                <>
+                  <Image
+                    tintColor={focused ? '#8FD7FF' : '#262D33'}
+                    source={require('assets/user.svg')}
+                  />
+                  <Text
+                    className={
+                      focused
+                        ? 'text-[#8FD7FF]'
+                        : 'text-[#262D33]' + ' text-[9px]'
+                    }
+                  >
+                    {route.name}
+                  </Text>
+                </>
               );
           }
         },
-        headerTitle: () => (
+        header: () => (
           <View className={stylesheet.header}>
             <Image source={require('assets/arrowback.svg')} />
             <Image source={require('assets/moon.svg')} />
@@ -86,6 +131,7 @@ const TabsRoutes = () => {
           position: 'absolute',
           bottom: 15,
         },
+        headerTransparent: true,
       })}
     >
       <Tab.Screen name='Home' component={HomePage} />
