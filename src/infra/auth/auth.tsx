@@ -8,19 +8,21 @@ import {
 
 import { AuthenticationActions } from './auth.actions';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
-import { AuthContextDefaultValues } from '../@types/auth.types';
+import { AuthContextDefaultValues, LogInResponse } from '../@types/auth.types';
 
 const AuthContext = createContext<AuthContextDefaultValues>({
   dispatch: () => null,
   form: {},
   handleFormChange: () => null,
   signOut: () => null,
+  session: undefined,
   isLogged: false,
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [formState, setFormState] = useState<object>({});
   const [isLogged, setIsLogged] = useState(true);
+  const [session, setSession] = useState<LogInResponse>();
   const toast = useToast();
 
   const signOut = () => {
@@ -138,6 +140,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       case AuthenticationActions.REQUEST_LOGIN:
         delete payload.password;
         setIsLogged(true);
+        setSession(response);
         handleFormChange({ id: user.id, session: response });
         break;
       case AuthenticationActions.REQUEST_SIGNUP:
@@ -162,6 +165,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         form: formState,
         handleFormChange,
         signOut,
+        session,
         isLogged,
       }}
     >

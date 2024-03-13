@@ -6,6 +6,7 @@ export interface AuthContextDefaultValues {
   handleFormChange: (payload: any) => void;
   isLogged: boolean;
   signOut: () => void;
+  session: LogInResponse | undefined;
 }
 
 export interface LogInDTO {

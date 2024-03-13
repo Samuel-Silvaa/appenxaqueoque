@@ -1,12 +1,11 @@
 import { Calendar } from 'react-native-calendars';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
-import { View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Dimensions, ScrollView, View } from 'react-native';
 import './locale';
 
 const stylesheet = {
   innerHomeContainer: {
-    container: 'w-full max-h-[220] bg-blue-tertiary rounded-[30px] p-2 ',
+    container: 'w-full bg-blue-tertiary rounded-[30px] p-2 ',
     header: 'w-full h-[10%] flex items-center ',
     body: 'flex-row flex-wrap justify-evenly items-start w-full h-[90%] p-1',
   },
@@ -17,7 +16,7 @@ const CustomCalendar = () => {
     <Calendar
       style={{
         position: 'relative',
-        width: window.screen.width - 50,
+        width: Dimensions.get('window').width - 50,
         minHeight: 400,
         borderRadius: 30,
       }}
@@ -78,9 +77,7 @@ const InnerHomeContainer = () => {
 const CalendarPage = () => {
   return (
     <AppPageScaffold>
-      <ScrollView className='w-full flex'>
-        <InnerHomeContainer />
-      </ScrollView>
+      <InnerHomeContainer />
     </AppPageScaffold>
   );
 };

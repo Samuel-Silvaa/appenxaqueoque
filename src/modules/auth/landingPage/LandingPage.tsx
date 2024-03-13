@@ -1,4 +1,4 @@
-import { Image, Text } from 'react-native';
+import { Dimensions, Image, Text } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
 
@@ -16,8 +16,7 @@ const LandingPage = ({ navigation }) => {
       <Image source={require('assets/welcome.svg')} />
       <Text className={sharedStyleSheet.title}>Bem vindo! </Text>
       <Text className={sharedStyleSheet.subtitle + ' text-center '}>
-        Faça seu login ou cadastre-se para <br /> iniciarmos seu acompanhamento
-        médico.
+        Faça seu login ou cadastre-se para iniciarmos seu acompanhamento médico.
       </Text>
     </AuthScaffold>
   );

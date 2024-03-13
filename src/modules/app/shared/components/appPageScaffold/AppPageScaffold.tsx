@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { ReactNode } from 'react';
-import { SafeAreaView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { getAppScaffoldAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 
 const stylesheet = {
-  view: 'w-full h-[100%] bg-primary p-4 pt-[80px] overflow-scroll',
+  view: 'w-full h-[100%] bg-primary p-4 pt-[60px] scroll-smooth relative',
 };
 
 interface AppPageScaffoldProps {
@@ -20,12 +20,14 @@ const AppPageScaffold = ({
   alignment = 'start',
 }: AppPageScaffoldProps) => {
   return (
-    <SafeAreaView
+    <View
       className={`${stylesheet.view} ${getAppScaffoldAlignment(alignment)}`}
     >
-      <StatusBar />
-      {children}
-    </SafeAreaView>
+      <ScrollView className='w-full' showsVerticalScrollIndicator={false}>
+        <StatusBar />
+        {children}
+      </ScrollView>
+    </View>
   );
 };
 

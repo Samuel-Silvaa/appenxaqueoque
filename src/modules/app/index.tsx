@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './home/HomePage';
-import ReportPage from './report/Report';
-import { Image, Text, View } from 'react-native';
+import { Image, Pressable, Text, View } from 'react-native';
 import EpisodePage from './episode/Episode';
 import CalendarPage from './calendar/Calendar';
 import ProfilePage from './profile/Profile';
+import AppHeader from '../shared/components/AppHeader/AppHeader';
+import ReportStackNavigation from './report/Report';
 
 const stylesheet = {
   calendarBtnContainer:
     'bg-blue-secondary rounded-full w-13 h-13 flex items-center justify-center translate-y-[-15px]',
-  header: 'w-full p-4 flex flex-row grow-0 justify-between',
 };
 
 const Tab = createBottomTabNavigator();
@@ -104,12 +104,12 @@ const TabsRoutes = () => {
               );
           }
         },
-        header: () => (
-          <View className={stylesheet.header}>
-            <Image source={require('assets/arrowback.svg')} />
-            <Image source={require('assets/moon.svg')} />
-          </View>
-        ),
+        header: (bottomTabsProps) =>
+          bottomTabsProps.route.name != 'Report' ? (
+            <AppHeader {...bottomTabsProps} />
+          ) : (
+            <></>
+          ),
         tabBarBackground: () => (
           <Image
             style={{
@@ -131,11 +131,10 @@ const TabsRoutes = () => {
           position: 'absolute',
           bottom: 15,
         },
-        headerTransparent: true,
       })}
     >
       <Tab.Screen name='Home' component={HomePage} />
-      <Tab.Screen name='Report' component={ReportPage} />
+      <Tab.Screen name='Report' component={ReportStackNavigation} />
       <Tab.Screen name='Episode' component={EpisodePage} />
       <Tab.Screen name='Calendar' component={CalendarPage} />
       <Tab.Screen name='Profile' component={ProfilePage} />

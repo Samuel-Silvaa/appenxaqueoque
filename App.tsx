@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { NativeWindStyleSheet } from 'nativewind';
 import { useMemo } from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
+import { AppProvider } from 'src/infra/app/app';
 import { AuthProvider, useAuth } from 'src/infra/auth/auth';
 import TabsRoutes from 'src/modules/app';
 import AuthRoutes from 'src/modules/auth';
@@ -24,7 +25,9 @@ const App = () => {
     <NavigationContainer>
       <ToastProvider>
         <AuthProvider>
-          <ActiveRoutes />
+          <AppProvider>
+            <ActiveRoutes />
+          </AppProvider>
         </AuthProvider>
       </ToastProvider>
     </NavigationContainer>

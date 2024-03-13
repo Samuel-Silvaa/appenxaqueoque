@@ -1,16 +1,22 @@
 import { Image, ImageSourcePropType, Text, View } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
+import { useAuth } from 'src/infra/auth/auth';
 
 const stylesheet = {
   userName: 'text-2xl font-bold p-4',
+  countingDays: {
+    card: 'w-full bg-whgite rounded-[30px] flex justify-center items-center sticky top-0',
+    title:
+      'text-start bg-white rounded-[30px] w-full h-[56px] flex  items-center p-4 font-semibold mb-14 mt-4',
+  },
   innerHomeContainer: {
     container:
       'relative w-full h-[100vw] bg-beige-primary flex-row flex-wrap justify-between rounded-[30px] mt-[80px] p-2',
     header: 'w-full h-[20%] flex items-center ',
     body: 'flex-row flex-wrap justify-evenly items-end w-full h-[80%] p-1',
     innerCardCategory:
-      'bg-white w-[45%] h-[45%] rounded-[30px] p-2 pt-4 box-border',
+      'bg-white w-[45%] h-[45%] rounded-[30px] p-2 pt-4 box-border m-1',
     innerCardImage: 'm-2',
     kidsImg: 'absolute top-[-90px]',
   },
@@ -42,8 +48,8 @@ const categories: Array<HomeCategory> = [
 
 const CountingDaysTitle = () => {
   return (
-    <View className='w-full bg-whgite rounded-[30px] flex justify-center items-center'>
-      <Text className='text-start bg-white rounded-[30px] w-full h-[56px] flex  items-center p-4 font-semibold mb-14 mt-4'>
+    <View className={stylesheet.countingDays.card}>
+      <Text className={stylesheet.countingDays.title}>
         Você está a 40 dias sem crises!
       </Text>
     </View>
@@ -79,8 +85,8 @@ const InnerHomeContainer = () => {
         ></Image>
       </View>
       <View className={stylesheet.innerHomeContainer.body}>
-        {categories.map((cat) => (
-          <InnerCardCategory title={cat.title} icon={cat.icon} />
+        {categories.map((cat, index) => (
+          <InnerCardCategory key={index} title={cat.title} icon={cat.icon} />
         ))}
       </View>
     </View>
@@ -88,9 +94,10 @@ const InnerHomeContainer = () => {
 };
 
 const HomePage = () => {
+  const { session } = useAuth();
   return (
     <AppPageScaffold>
-      <Text className={stylesheet.userName}>Olá, Pietra...</Text>
+      <Text className={stylesheet.userName}>Olá, {session?.user.name}...</Text>
       <CountingDaysTitle />
       <InnerHomeContainer />
     </AppPageScaffold>
