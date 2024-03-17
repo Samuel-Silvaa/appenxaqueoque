@@ -13,12 +13,12 @@ const AppHeader = ({
     <View className={stylesheet.header}>
       {navigation.canGoBack() ? (
         <Pressable onPress={() => navigation.goBack()}>
-          <Image source={require('assets/arrowback.svg')} />
+          <Image source={require('assets/arrowback.png')} />
         </Pressable>
       ) : (
         <Image></Image>
       )}
-      <Image source={require('assets/moon.svg')} />
+      <Image source={require('assets/moon.png')} />
     </View>
   );
 };

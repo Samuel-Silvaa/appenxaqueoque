@@ -13,7 +13,7 @@ const LandingPage = ({ navigation }) => {
       ctaSecondary={() => navigation.navigate('tenant')}
       ctaSecondaryText='Cadastrar'
     >
-      <Image source={require('assets/welcome.svg')} />
+      <Image source={require('assets/welcome.png')} />
       <Text className={sharedStyleSheet.title}>Bem vindo! </Text>
       <Text className={sharedStyleSheet.subtitle + ' text-center '}>
         Faça seu login ou cadastre-se para iniciarmos seu acompanhamento médico.

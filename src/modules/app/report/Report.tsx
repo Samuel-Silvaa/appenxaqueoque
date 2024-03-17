@@ -50,7 +50,7 @@ const ResourceCard = ({
       <Image className='mr-3' source={require('assets/stats.svg')}></Image>
       <Text>{title}</Text>
     </Pressable>
-  );
+  );;
 };
 
 const ReportPage = ({ navigation }) => {

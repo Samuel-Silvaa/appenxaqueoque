@@ -9,11 +9,11 @@ const stylesheet = {
     container: 'flex-row w-full justify-center items-center',
   },
   topic: {
-    container: 'flex-row w-full my-8',
-    item: 'font-semibold min-w-[100px] h-[43px] bg-gray rounded-full flex items-center justify-center mx-2 p-2',
+    container: 'flex-row w-full my-8 ',
+    item: 'font-semibold min-w-[100px] h-[43px] rounded-full flex items-center justify-center mx-2 p-2',
   },
   form: {
-    wrapper: 'flex-col w-full items-center',
+    wrapper: 'flex-col w-full ',
     header: {
       wrapper: 'flex-col w-full',
     },
@@ -32,7 +32,7 @@ const Steps = () => {
               key={index}
               className={`w-[18px] h-[18px] rounded-full shadow-md ${
                 currentStep == index
-                  ? 'bg-blue-dark-secondary border border-blue-dark-primary'
+                  ? 'bg-blue-dark-secondary border border-blue-dark-primary '
                   : 'bg-white border border-gray-opacity'
               } mx-2`}
             ></View>
@@ -49,6 +49,8 @@ interface HeadListProps {
 
 const Topic = () => {
   const { setCurrentStep } = useApp();
+  const { currentStep } = useApp();
+
   const DATA: { id: string; title: string }[] = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -96,9 +98,22 @@ const Topic = () => {
         renderItem={({ item, index }: HeadListProps) => (
           <TouchableOpacity
             onPress={() => setCurrentStep(index)}
-            className={stylesheet.topic.item}
+            className={
+              stylesheet.topic.item +
+              `${
+                currentStep == index
+                  ? ' bg-purple-dark-primary '
+                  : ' bg-purple-dark-secondary'
+              }`
+            }
           >
-            <Text>{item.title}</Text>
+            <Text
+              className={`${
+                currentStep == index ? 'text-[#fff]' : 'text-black '
+              }`}
+            >
+              {item.title}
+            </Text>
           </TouchableOpacity>
         )}
         horizontal

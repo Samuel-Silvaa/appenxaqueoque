@@ -29,20 +29,20 @@ interface HomeCategory {
 
 const categories: Array<HomeCategory> = [
   {
-    title: 'Home',
-    icon: require('assets/home.svg'),
+    title: 'Episódio',
+    icon: require('assets/plus-dark.png'),
   },
   {
     title: 'Relatórios',
-    icon: require('assets/stats.svg'),
+    icon: require('assets/stats.png'),
   },
   {
     title: 'Episódio',
-    icon: require('assets/calendar.svg'),
+    icon: require('assets/calendar.png'),
   },
   {
     title: 'Perfil',
-    icon: require('assets/user.svg'),
+    icon: require('assets/user.png'),
   },
 ];
 
