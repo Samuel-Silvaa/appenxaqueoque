@@ -12,7 +12,7 @@ const AuthRoutes = () => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: '#F7F7F7' },
-        headerBackImageSource: require('assets/arrowback.svg'),
+        headerBackImageSource: require('assets/arrowback.png'),
         headerShadowVisible: false,
         headerTitle: () => '',
       }}

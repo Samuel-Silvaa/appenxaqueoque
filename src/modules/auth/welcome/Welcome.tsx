@@ -19,19 +19,19 @@ const data: {
     title: ' Seja bem vindo(a) ao',
     subtitle:
       'Aqui temos médicos especializados e capacitados para cuidar de você!',
-    logo: require('assets/logo.svg'),
-    image: require('assets/doc_boy.svg'),
+    logo: require('assets/logo.png'),
+    image: require('assets/doc_boy.png'),
   },
   {
     subtitle:
       'Você terá acompanhamento médico para tratar a enxaqueca de uma forma descomplicada.',
-    image: require('assets/group_doc_kids.svg'),
+    image: require('assets/group_doc_kids.png'),
   },
   {
     title: ' Seja bem vindo(a) ao',
     subtitle:
       'Você só precisa anotar os episódios da dor quando estiver em crise.',
-    image: require('assets/lunar_kid.svg'),
+    image: require('assets/lunar_kid.png'),
     effetcMessage: 'Vamos começar?',
   },
 ];

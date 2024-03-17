@@ -24,7 +24,7 @@ const UserType = ({ navigation }) => {
       <Text className={sharedStyleSheet.subtitle}>Nos informe quem você é</Text>
       <Image
         className='self-center'
-        source={require('assets/doctorchild.svg')}
+        source={require('assets/doctorchild.png')}
       />
       {users.map((userType) => (
         <ExPressable

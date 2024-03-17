@@ -19,7 +19,7 @@ const TabsRoutes = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerStyle: { backgroundColor: '#f7f7f7' },
+        headerStyle: { backgroundColor: '#ecf1f8' },
         headerShadowVisible: false,
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
@@ -63,7 +63,7 @@ const TabsRoutes = () => {
             case 'Episode':
               return (
                 <View className={stylesheet.calendarBtnContainer}>
-                  <Image source={require('assets/plus.svg')} />
+                  <Image source={require('assets/plus-white.png')} />
                 </View>
               );
             case 'Calendar':
@@ -89,7 +89,7 @@ const TabsRoutes = () => {
                 <>
                   <Image
                     tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/user.svg')}
+                    source={require('assets/user.png')}
                   />
                   <Text
                     className={

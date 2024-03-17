@@ -13,7 +13,7 @@ const stylesheet = {
 const CustomActionButton = ({ title }: { title: string }) => {
   return (
     <View className={stylesheet.customActionButton}>
-      <Image className='mr-3' source={require('assets/out.svg')}></Image>
+      <Image className='mr-3' source={require('assets/out.png')}></Image>
       <Text>{title}</Text>
     </View>
   );
@@ -23,7 +23,7 @@ const ProfilePage = () => {
   return (
     <AppPageScaffold>
       <View className={stylesheet.profile.wrapper}>
-        <Image source={require('assets/pietra.svg')}></Image>
+        <Image source={require('assets/pietra.png')}></Image>
         <Text className='my-1'>Pietra Menezes</Text>
         <View className={stylesheet.profile.infoRow}>
           <Text>8 anos</Text>
