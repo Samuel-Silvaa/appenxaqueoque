@@ -2,7 +2,8 @@ import { ImageSourcePropType, Text, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
 import { RadioButton } from 'react-native-paper';
 import Card from '../form/card/Card';
-import { useState } from 'react';
+import { useApp } from 'src/infra/app/app';
+import { PainType as PainTypeEnum } from 'src/infra/@types/app.types';
 
 const data: {
   label: string;
@@ -11,29 +12,29 @@ const data: {
 }[] = [
   {
     label: 'Pulsátil: como um coração batendo na cabeça.',
-    value: 'throb',
+    value: PainTypeEnum.THROB,
   },
   {
     label: 'Em aperto: como um capacete muito apertado.',
-    value: 'mild',
+    value: PainTypeEnum.TIGHT,
   },
 ];
 
 const PainType = () => {
-  const [selectedValue, setSelectedValue] = useState('morning');
+  const { episodeFormState, handleFormChange } = useApp();
 
   return (
     <View className='h-full w-full'>
       <Wrapper title='Nos mostre como você sente a dor :'>
         <RadioButton.Group
-          onValueChange={(value) => setSelectedValue(value)}
-          value={selectedValue}
+          onValueChange={(value) => handleFormChange({ painType: value })}
+          value={episodeFormState.painType}
         >
           {data.map((act, index) => (
             <Card
               key={index}
               onPress={() => {
-                setSelectedValue(act.value);
+                handleFormChange({ painType: act.value });
               }}
               children={
                 <View className='flex-row items-center'>

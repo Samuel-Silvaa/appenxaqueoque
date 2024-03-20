@@ -1,28 +1,31 @@
-import { useState } from 'react';
-import { ImageBackground, Pressable, Text, View } from 'react-native';
+import { useCallback } from 'react';
+import { Image, ImageBackground, Pressable, Text, View } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import CalendarComponent from 'src/modules/app/shared/components/calendar/CalendarComponent';
 import { sharedEpisodeStyleSheet } from '../../shared/SharedEpisodeStyleSheet';
+import { DateData } from 'react-native-calendars';
+import { useApp } from 'src/infra/app/app';
+import { Time } from 'src/infra/@types/app.types';
 
 const data = [
   {
     label: 'De manhã',
-    value: 'morning',
+    value: Time.MORNING,
     img: require('assets/morning.png'),
   },
   {
     label: 'De tarde',
-    value: 'evening',
+    value: Time.EVENING,
     img: require('assets/evening.png'),
   },
   {
     label: 'De noite',
-    value: 'night',
+    value: Time.NIGHT,
     img: require('assets/night.png'),
   },
   {
     label: 'De madrugada',
-    value: 'midnight',
+    value: Time.MIDNIGHT,
     img: require('assets/midnight.png'),
   },
 ];
@@ -42,11 +45,12 @@ const stylesheet = {
 };
 
 const Timepicker = () => {
-  const [selectedValue, setSelectedValue] = useState('morning');
+  const { episodeFormState, handleFormChange } = useApp();
+
   return (
     <RadioButton.Group
-      onValueChange={(value) => setSelectedValue(value)}
-      value={selectedValue}
+      onValueChange={(value) => handleFormChange({ time: value })}
+      value={episodeFormState.time}
     >
       <View className={sharedEpisodeStyleSheet.timepicker.container}>
         <Text className={sharedEpisodeStyleSheet.timepicker.title}>
@@ -56,7 +60,7 @@ const Timepicker = () => {
 
         {data.map((time, index) => (
           <Pressable
-            onPress={() => setSelectedValue(time.value)}
+            onPress={() => handleFormChange({ time: time.value })}
             key={index}
             className={
               sharedEpisodeStyleSheet.timepicker.timeIndicatorContainer
@@ -93,10 +97,38 @@ const Timepicker = () => {
 };
 
 const Datetime = () => {
+  const { episodeFormState, handleFormChange } = useApp();
+
+  const handleSelectDate = useCallback((date: DateData) => {
+    if (!Object.keys(episodeFormState.dates).includes(date.dateString)) {
+      handleFormChange({
+        dates: {
+          ...episodeFormState.dates,
+          [date.dateString]: {
+            selected: true,
+            marked: true,
+            selectedColor: '#9194E9',
+          },
+        },
+      });
+    }
+  }, []);
+
   return (
-    <View className='h-full'>
+    <View className='h-full pt-14'>
+      <View className='absolute right-5 top-[-18px] z-30'>
+        <Image
+          width={38}
+          height={38}
+          resizeMode='cover'
+          source={require('assets/boy_phone.png')}
+        />
+      </View>
       <View className={stylesheet.calendarWrapper}>
-        <CalendarComponent />
+        <CalendarComponent
+          markedDates={episodeFormState.dates}
+          onDayPress={(date) => handleSelectDate(date)}
+        />
       </View>
       <Timepicker />
     </View>

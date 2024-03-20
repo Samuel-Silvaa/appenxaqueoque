@@ -1,13 +1,13 @@
 import {
   Image,
   ImageSourcePropType,
-  Pressable,
-  PressableProps,
   Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
 } from 'react-native';
 import { getBtnColorScheme } from 'src/modules/shared/style/SharedProcessedStyle';
 
-interface ExPressableProps extends PressableProps {
+interface ExPressableProps extends TouchableOpacityProps {
   title: string;
   colorScheme?: string;
   icon?: ImageSourcePropType;
@@ -26,10 +26,10 @@ const ExPressable = ({
   );
 
   return (
-    <Pressable className={pressable} {...res}>
+    <TouchableOpacity className={pressable} {...res}>
       {icon && <Image source={icon}></Image>}
       <Text className={titleStyle}>{title}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

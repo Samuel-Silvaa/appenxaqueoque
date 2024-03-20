@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextDefaultValues>({
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [formState, setFormState] = useState<object>({});
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(false);
   const [session, setSession] = useState<LogInResponse>();
   const toast = useToast();
 

@@ -1,25 +1,40 @@
 import { ReactNode } from 'react';
-import { Image, ImageSourcePropType, Pressable, View } from 'react-native';
+import {
+  Image,
+  ImageSourcePropType,
+  Pressable,
+  Text,
+  View,
+} from 'react-native';
 
 const Card = ({
   children,
   image,
   onPress,
+  title,
+  ...res
 }: {
   children: ReactNode;
   image?: ImageSourcePropType;
   onPress?: () => void;
+  title?: string;
 }) => (
   <Pressable
+    {...res}
     onPress={onPress}
-    className='flex-col w-full rounded-[30px] bg-white py-3 px-2 my-2 shadow-md'
+    className='flex-col w-full rounded-[30px] bg-white py-2 px-2 my-2 drop-shadow-md'
   >
+    {title && (
+      <Text className='font-semibold text-black my-2 mx-auto text-lg'>
+        {title}
+      </Text>
+    )}
     {image && (
       <View className='w-full min-h-[120px] max-h-2/3 flex items-center border-b border-gray py-4'>
         <Image resizeMode='cover' source={image} />
       </View>
     )}
-    <View className={`w-3/4 ${!image ? ' ' : ' pt-4 my-auto'}`}>
+    <View className={` ${!image ? ' w-full' : ' w-3/4 py-4 my-auto'}`}>
       {children}
     </View>
   </Pressable>

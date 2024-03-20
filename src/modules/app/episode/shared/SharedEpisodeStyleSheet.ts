@@ -3,7 +3,7 @@ export const sharedEpisodeStyleSheet = {
     container: 'w-full bg-white rounded-[44px] p-2 items-center',
     title: 'font-semibold text-lg',
     divider: 'w-1/5 border border-gray h-[1px]',
-    timeIndicatorContainer: 'w-full h-[100px] rounded-[40px] flex',
+    timeIndicatorContainer: 'w-full h-[100px] rounded-[40px] flex my-1',
     timeIndicatorBg: 'w-full h-full bg-contain',
     timeIndicatorRadioContainer:
       'absolute left-4 top-1/3 flex-row items-center',

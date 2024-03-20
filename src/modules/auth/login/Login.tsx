@@ -21,8 +21,12 @@ interface LoginSchema {
 }
 
 const loginSchema = yup.object<LoginSchema>().shape({
-  email: yup.string().email('Email inválido').required('Preencha seu email'),
-  password: yup.string().required('Preencha sua senha'),
+  email: yup
+    .string()
+    .email('Email inválido')
+    .required('Preencha seu email')
+    .default('bruna@gmail.com'),
+  password: yup.string().required('Preencha sua senha').default('123123'),
 });
 
 const Login = () => {

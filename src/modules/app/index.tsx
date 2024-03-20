@@ -7,6 +7,8 @@ import CalendarPage from './calendar/Calendar';
 import ProfilePage from './profile/Profile';
 import AppHeader from '../shared/components/AppHeader/AppHeader';
 import ReportStackNavigation from './report/Report';
+import { useApp } from 'src/infra/app/app';
+import { AppActions } from 'src/infra/app/actions';
 
 const stylesheet = {
   calendarBtnContainer:
@@ -16,6 +18,12 @@ const stylesheet = {
 const Tab = createBottomTabNavigator();
 
 const TabsRoutes = () => {
+  const { patient, dispatch } = useApp();
+
+  React.useEffect(() => {
+    if (!patient) dispatch(AppActions.REQUEST_FETCH_PATIENT, {});
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

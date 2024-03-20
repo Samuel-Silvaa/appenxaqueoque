@@ -2,7 +2,7 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { useApp } from 'src/infra/app/app';
 import FormSteps from './components';
-import { ReactNode } from 'react';
+import { BaseSyntheticEvent, ReactNode, createRef } from 'react';
 
 const stylesheet = {
   steps: {
@@ -15,7 +15,7 @@ const stylesheet = {
   form: {
     wrapper: 'flex-col w-full ',
     header: {
-      wrapper: 'flex-col w-full',
+      wrapper: 'flex-col w-full ',
     },
   },
 };
@@ -30,7 +30,7 @@ const Steps = () => {
           return (
             <View
               key={index}
-              className={`w-[18px] h-[18px] rounded-full shadow-md ${
+              className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${
                 currentStep == index
                   ? 'bg-blue-dark-secondary border border-blue-dark-primary '
                   : 'bg-white border border-gray-opacity'
@@ -50,6 +50,7 @@ interface HeadListProps {
 const Topic = () => {
   const { setCurrentStep } = useApp();
   const { currentStep } = useApp();
+  const flatList = createRef<FlatList>();
 
   const DATA: { id: string; title: string }[] = [
     {
@@ -93,11 +94,20 @@ const Topic = () => {
   return (
     <View className={stylesheet.topic.container}>
       <FlatList
+        ref={flatList}
         data={DATA}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }: HeadListProps) => (
           <TouchableOpacity
-            onPress={() => setCurrentStep(index)}
+            onPress={() => {
+              setCurrentStep(index);
+              if (flatList.current) {
+                flatList.current.scrollToIndex({
+                  index: index,
+                  animated: true,
+                });
+              }
+            }}
             className={
               stylesheet.topic.item +
               `${
