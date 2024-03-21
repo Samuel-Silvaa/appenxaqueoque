@@ -93,7 +93,7 @@ const InnerHomeContainer = () => {
   );
 };
 
-const HomePage = () => {
+const HomePage = ({ navigation }) => {
   const { session } = useAuth();
   return (
     <AppPageScaffold>

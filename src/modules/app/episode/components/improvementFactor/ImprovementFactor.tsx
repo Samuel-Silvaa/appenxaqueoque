@@ -114,7 +114,7 @@ const ImprovementFactor = () => {
                   <View className='flex-row items-center bg-tertiary w-full rounded-full'>
                     <RadioButton
                       disabled={isMedicineEditable}
-                      value='improved'
+                      value='Melhorou'
                       color='#CEB0FA'
                     />
                     <Text>Melhorou</Text>
@@ -122,7 +122,7 @@ const ImprovementFactor = () => {
                   <View className='flex-row items-center bg-tertiary w-full rounded-full '>
                     <RadioButton
                       disabled={isMedicineEditable}
-                      value='partialImprovement'
+                      value='Melhorou parcialmente'
                       color='#CEB0FA'
                     />
                     <Text>Melhorou parcialmente</Text>
@@ -130,7 +130,7 @@ const ImprovementFactor = () => {
                   <View className='flex-row items-center bg-tertiary w-full rounded-full'>
                     <RadioButton
                       disabled={isMedicineEditable}
-                      value='notImproved'
+                      value='Não melhorou'
                       color='#CEB0FA'
                     />
                     <Text>Não melhorou</Text>

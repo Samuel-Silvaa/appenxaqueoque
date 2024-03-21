@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Image, ImageBackground, Pressable, Text, View } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import CalendarComponent from 'src/modules/app/shared/components/calendar/CalendarComponent';

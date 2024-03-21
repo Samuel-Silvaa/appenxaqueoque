@@ -12,7 +12,7 @@ export const getAppScaffoldAlignment = (alignment: string) => {
     case 'start':
       return ' items-start';
     default:
-      return 'items-center justify-between';
+      return 'items-center justify-center';
   }
 };
 

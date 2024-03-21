@@ -14,7 +14,7 @@ export interface Patient {
 export interface Episode {
   id?: string;
   dateTime?: string;
-  dates: object | any;
+  dates?: object | any;
   time: string;
   location: string;
   acuteness: string;
@@ -40,7 +40,8 @@ export interface AppContextDefaultValues {
   ) => Promise<any> | void;
   steps: number;
   currentStep: number;
-  setCurrentStep: (step: number) => void;
+  validateStepForward: (step: number) => boolean;
+  validateAutomaticEpisodeStepNavigation: () => boolean;
   handleFormChange: (payload: object) => void;
   submitEpisode: () => void;
   episodeFormState: Episode;

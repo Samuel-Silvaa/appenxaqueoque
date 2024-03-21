@@ -2,7 +2,7 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { useApp } from 'src/infra/app/app';
 import FormSteps from './components';
-import { BaseSyntheticEvent, ReactNode, createRef } from 'react';
+import { ReactNode, createRef, useEffect } from 'react';
 
 const stylesheet = {
   steps: {
@@ -48,9 +48,24 @@ interface HeadListProps {
 }
 
 const Topic = () => {
-  const { setCurrentStep } = useApp();
-  const { currentStep } = useApp();
+  const { validateStepForward } = useApp();
+  const {
+    currentStep,
+    episodeFormState,
+    validateAutomaticEpisodeStepNavigation,
+  } = useApp();
   const flatList = createRef<FlatList>();
+
+  useEffect(() => {
+    if (validateAutomaticEpisodeStepNavigation()) {
+      if (flatList.current) {
+        flatList.current.scrollToIndex({
+          index: currentStep,
+          animated: true,
+        });
+      }
+    }
+  }, [episodeFormState]);
 
   const DATA: { id: string; title: string }[] = [
     {
@@ -100,12 +115,20 @@ const Topic = () => {
         renderItem={({ item, index }: HeadListProps) => (
           <TouchableOpacity
             onPress={() => {
-              setCurrentStep(index);
-              if (flatList.current) {
-                flatList.current.scrollToIndex({
-                  index: index,
-                  animated: true,
-                });
+              if (validateStepForward(index)) {
+                if (flatList.current) {
+                  flatList.current.scrollToIndex({
+                    index: index,
+                    animated: true,
+                  });
+                }
+              } else {
+                if (flatList.current) {
+                  flatList.current.scrollToIndex({
+                    index: currentStep,
+                    animated: true,
+                  });
+                }
               }
             }}
             className={

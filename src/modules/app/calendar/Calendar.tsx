@@ -67,7 +67,6 @@ const InnerHomeContainer = () => {
           dotColor: pinColor(ep.acuteness),
         };
       });
-      debugger;
       return markedDates;
     } else {
       return {};

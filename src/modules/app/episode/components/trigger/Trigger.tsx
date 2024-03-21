@@ -72,7 +72,12 @@ const Trigger = () => {
         name='foodImpair'
         control={control}
         errors={errors}
-        className='bg-white drop-shadow-sm'
+        editable={episodeFormState.triggers == TriggerType.FOOD}
+        className={`${
+          episodeFormState.triggers == TriggerType.FOOD
+            ? 'opacity-100'
+            : ' opacity-25'
+        } bg-white drop-shadow-sm`}
         defaultValue={episodeFormState.foodImpair}
         onChange={(e) => handleFormChange({ foodImpair: e.target.value })}
       ></InputContainer>

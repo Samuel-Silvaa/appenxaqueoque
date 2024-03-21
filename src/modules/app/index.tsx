@@ -9,6 +9,8 @@ import AppHeader from '../shared/components/AppHeader/AppHeader';
 import ReportStackNavigation from './report/Report';
 import { useApp } from 'src/infra/app/app';
 import { AppActions } from 'src/infra/app/actions';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Success from './success/Success';
 
 const stylesheet = {
   calendarBtnContainer:
@@ -150,4 +152,15 @@ const TabsRoutes = () => {
   );
 };
 
-export default TabsRoutes;
+const Stack = createNativeStackNavigator();
+
+const LoggedPages = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Tabs' component={TabsRoutes} />
+      <Stack.Screen name='Success' component={Success} />
+    </Stack.Navigator>
+  );
+};
+
+export default LoggedPages;

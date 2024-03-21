@@ -35,15 +35,12 @@ const get = async <T>(url: string, params?: object): Promise<T> => {
     const { data } = await api.get(url, { params });
     return data;
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('API call failed:', error);
     throw error;
   }
 };
 
 const post = async <T>(url: string, payload: object): Promise<T> => {
   const { data } = await api.post(url, payload);
-  debugger;
   return data;
 };
 
