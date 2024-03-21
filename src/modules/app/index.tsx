@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './home/HomePage';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import EpisodePage from './episode/Episode';
 import CalendarPage from './calendar/Calendar';
 import ProfilePage from './profile/Profile';
@@ -29,7 +29,7 @@ const TabsRoutes = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerStyle: { backgroundColor: '#ecf1f8' },
+        headerStyle: { backgroundColor: '#edf1f8' },
         headerShadowVisible: false,
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
@@ -120,6 +120,7 @@ const TabsRoutes = () => {
           ) : (
             <></>
           ),
+
         tabBarBackground: () => (
           <Image
             style={{
@@ -136,6 +137,7 @@ const TabsRoutes = () => {
           />
         ),
         tabBarStyle: {
+          display: route.name == 'Episode' ? 'none' : 'flex',
           borderWidth: 0,
           backgroundColor: '#F7F7F7',
           position: 'absolute',

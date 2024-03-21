@@ -207,8 +207,16 @@ const FormScaffold = () => {
 };
 
 const EpisodePage = () => {
+  const { setPageTitle } = useApp();
+
+  useEffect(() => {
+    return () => {
+      if (setPageTitle) setPageTitle('');
+    };
+  }, []);
+
   return (
-    <AppPageScaffold>
+    <AppPageScaffold title='Data e horário'>
       <FormScaffold />
     </AppPageScaffold>
   );

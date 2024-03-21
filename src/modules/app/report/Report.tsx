@@ -50,33 +50,26 @@ const ResourceCard = ({
       <Image className='mr-3' source={require('assets/stats.svg')}></Image>
       <Text>{title}</Text>
     </Pressable>
-  );;
+  );
 };
 
 const ReportPage = ({ navigation }) => {
   return (
-    <FlatList
-      className={stylesheet.report.wrapper}
-      data={[
+    <AppPageScaffold title='Relatório'>
+      {[
         { key: '123123asdasd' },
         { key: '123123asdasd12312' },
         { key: '4512123' },
-      ]}
-      renderItem={(item) => (
-        <ResourceCard
-          key={item.index}
-          title='Relatório'
-          navigation={navigation}
-        />
-      )}
-      keyExtractor={(item) => item.key}
-    ></FlatList>
+      ].map((report, index) => (
+        <ResourceCard key={index} title='Relatório' navigation={navigation} />
+      ))}
+    </AppPageScaffold>
   );
 };
 
 const ChartsPage = () => {
   return (
-    <AppPageScaffold>
+    <AppPageScaffold title='Relatório'>
       <Text className={sharedStyleSheet.title}> Relatório</Text>
       <Text className={sharedStyleSheet.subtitle}>05/01/2024 - 05/03/2024</Text>
 

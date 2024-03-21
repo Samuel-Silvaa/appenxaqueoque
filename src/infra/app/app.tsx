@@ -1,6 +1,7 @@
 import React, {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -52,6 +53,8 @@ const AppContext = createContext<AppContextDefaultValues>({
   dispatch: () => undefined,
   patient: undefined,
   episodes: undefined,
+  pageTitle: '',
+  setPageTitle: undefined,
 });
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
@@ -61,14 +64,16 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [episodeFormState, setEpisodeFormState] = useState(episodeInitialForm);
   const [patient, setPatient] = useState<Patient | null>(null);
   const [episodes, setEpisodes] = useState<Episode[] | null>(null);
+  const [pageTitle, setPageTitle] = useState();
   const toast = useToast();
 
   const ValidateFormEnabledAndReturnBehavior = (
     condition = true,
+    nextStep = currentStep + 1,
     showToast = true
   ): boolean => {
     if (condition) {
-      setCurrentStep(currentStep + 1);
+      setCurrentStep(nextStep);
       return true;
     }
     if (showToast)
@@ -79,61 +84,98 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     return false;
   };
 
-  const validateAutomaticEpisodeStepNavigation = (): boolean => {
+  const episodeTitle = () => {
+    switch (currentStep) {
+      case 0:
+        return 'Data e horário';
+      case 1:
+        return 'Localização';
+      case 2:
+        return 'Intensidade';
+      case 3:
+        return 'Característica da dor';
+      case 4:
+        return 'Sintomas associados';
+      case 5:
+        return 'Gatilhos';
+      case 6:
+        return 'Fatores de melhora';
+      case 7:
+        return 'Período menstrual';
+      case 8:
+        return 'Observações';
+      default:
+        return '';
+    }
+  };
+
+  useEffect(() => {
+    setPageTitle(episodeTitle());
+  }, [currentStep]);
+
+  const validateAutomaticEpisodeStepNavigation = (
+    nextStep?: number
+  ): boolean => {
     switch (currentStep) {
       case 0:
         if (!!episodeFormState.dates && !!episodeFormState.time)
-          return ValidateFormEnabledAndReturnBehavior(true, false);
+          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
       case 1:
         if (!!episodeFormState.dates && !!episodeFormState.time)
-          return ValidateFormEnabledAndReturnBehavior(true, false);
+          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
       case 2:
         if (!!episodeFormState.acuteness)
-          return ValidateFormEnabledAndReturnBehavior(true, false);
+          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
       case 3:
         if (!!episodeFormState.painType)
-          return ValidateFormEnabledAndReturnBehavior(true, false);
+          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
       case 4:
         if (!!episodeFormState.symptoms)
-          return ValidateFormEnabledAndReturnBehavior(true, false);
+          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
       case 5:
         if (
           episodeFormState.triggers != Trigger.FOOD &&
           !!episodeFormState.triggers
         )
-          return ValidateFormEnabledAndReturnBehavior(true, false);
+          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
       default:
         return false;
     }
   };
 
-  const validateFullfilledForm = (): boolean => {
+  const validateFullfilledForm = (nextStep: number): boolean => {
     switch (currentStep) {
       case 0:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.dates && !!episodeFormState.time
+          !!episodeFormState.dates && !!episodeFormState.time,
+          nextStep
         );
       case 1:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.dates && !!episodeFormState.time
+          !!episodeFormState.dates && !!episodeFormState.time,
+          nextStep
         );
       case 2:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.acuteness
+          !!episodeFormState.acuteness,
+          nextStep
         );
       case 3:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.painType
+          !!episodeFormState.painType,
+          nextStep
         );
       case 4:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.symptoms
+          !!episodeFormState.symptoms,
+          nextStep
         );
       case 5:
         return ValidateFormEnabledAndReturnBehavior(
           episodeFormState.triggers == Trigger.FOOD
             ? !!episodeFormState.triggers && !!episodeFormState.foodImpair
-            : !!episodeFormState.triggers
+            : !!episodeFormState.triggers,
+          nextStep
         );
       case 6:
         return ValidateFormEnabledAndReturnBehavior(
@@ -145,17 +187,21 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             : episodeFormState.improvementFactor == ImprovementFactor.FOOD
             ? !!episodeFormState.improvementFactor &&
               !!episodeFormState.foodImprovement
-            : !!episodeFormState.improvementFactor
+            : !!episodeFormState.improvementFactor,
+          nextStep
         );
       case 7:
-        return ValidateFormEnabledAndReturnBehavior(!!episodeFormState.period);
+        return ValidateFormEnabledAndReturnBehavior(
+          !!episodeFormState.period,
+          nextStep
+        );
       default:
         return false;
     }
   };
 
   const validateStepForward = (nextStep: number): boolean => {
-    if (nextStep > currentStep) return validateFullfilledForm();
+    if (nextStep > currentStep) return validateFullfilledForm(nextStep);
     if (nextStep < currentStep) {
       setCurrentStep(nextStep);
       return true;
@@ -289,6 +335,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         steps,
         submitEpisode,
         episodes: episodes || undefined,
+        pageTitle: pageTitle || undefined,
+        setPageTitle: setPageTitle,
       }}
     >
       {children}

@@ -47,6 +47,8 @@ export interface AppContextDefaultValues {
   episodeFormState: Episode;
   episodes?: Episode[];
   patient?: Patient;
+  pageTitle?: string;
+  setPageTitle?: (value: string) => void;
 }
 
 export enum Location {
