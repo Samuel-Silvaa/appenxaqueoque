@@ -22,7 +22,7 @@ const Success = ({ navigation }) => {
         <ExPressable
           title='Voltar ao início'
           onPress={() => {
-            navigation.navigate('Tabs');
+            navigation.navigate('Home');
           }}
         />
       </View>

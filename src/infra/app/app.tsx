@@ -1,7 +1,6 @@
 import React, {
   createContext,
   ReactNode,
-  useCallback,
   useContext,
   useEffect,
   useState,
@@ -85,28 +84,33 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const episodeTitle = () => {
-    switch (currentStep) {
-      case 0:
-        return 'Data e horário';
-      case 1:
-        return 'Localização';
-      case 2:
-        return 'Intensidade';
-      case 3:
-        return 'Característica da dor';
-      case 4:
-        return 'Sintomas associados';
-      case 5:
-        return 'Gatilhos';
-      case 6:
-        return 'Fatores de melhora';
-      case 7:
-        return 'Período menstrual';
-      case 8:
-        return 'Observações';
-      default:
-        return '';
-    }
+    navigation.addListener('state', (e) => {
+      if (e.data.state)
+        if (e.data.state.index == 2) {
+          switch (currentStep) {
+            case 0:
+              return 'Data e horário';
+            case 1:
+              return 'Localização';
+            case 2:
+              return 'Intensidade';
+            case 3:
+              return 'Característica da dor';
+            case 4:
+              return 'Sintomas associados';
+            case 5:
+              return 'Gatilhos';
+            case 6:
+              return 'Fatores de melhora';
+            case 7:
+              return 'Período menstrual';
+            case 8:
+              return 'Observações';
+          }
+        } else {
+          return '';
+        }
+    });
   };
 
   useEffect(() => {
@@ -152,47 +156,54 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         );
       case 1:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.dates && !!episodeFormState.time,
+          // !!episodeFormState.dates && !!episodeFormState.time,
+          true,
           nextStep
         );
       case 2:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.acuteness,
+          // !!episodeFormState.acuteness,
+          true,
           nextStep
         );
       case 3:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.painType,
+          // !!episodeFormState.painType,
+          true,
           nextStep
         );
       case 4:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.symptoms,
+          // !!episodeFormState.symptoms,
+          true,
           nextStep
         );
       case 5:
         return ValidateFormEnabledAndReturnBehavior(
-          episodeFormState.triggers == Trigger.FOOD
-            ? !!episodeFormState.triggers && !!episodeFormState.foodImpair
-            : !!episodeFormState.triggers,
+          // episodeFormState.triggers == Trigger.FOOD
+          //   ? !!episodeFormState.triggers && !!episodeFormState.foodImpair
+          //   : !!episodeFormState.triggers,
+          true,
           nextStep
         );
       case 6:
         return ValidateFormEnabledAndReturnBehavior(
-          episodeFormState.improvementFactor == ImprovementFactor.MEDICINE
-            ? !!episodeFormState.improvementFactor &&
-                !!episodeFormState.medicine &&
-                !episodeFormState.medicineDosage &&
-                !episodeFormState.medicineImprovement
-            : episodeFormState.improvementFactor == ImprovementFactor.FOOD
-            ? !!episodeFormState.improvementFactor &&
-              !!episodeFormState.foodImprovement
-            : !!episodeFormState.improvementFactor,
+          // episodeFormState.improvementFactor == ImprovementFactor.MEDICINE
+          //   ? !!episodeFormState.improvementFactor &&
+          //       !!episodeFormState.medicine &&
+          //       !episodeFormState.medicineDosage &&
+          //       !episodeFormState.medicineImprovement
+          //   : episodeFormState.improvementFactor == ImprovementFactor.FOOD
+          //   ? !!episodeFormState.improvementFactor &&
+          //     !!episodeFormState.foodImprovement
+          //   : !!episodeFormState.improvementFactor,
+          true,
           nextStep
         );
       case 7:
         return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.period,
+          // !!episodeFormState.period,
+          true,
           nextStep
         );
       default:

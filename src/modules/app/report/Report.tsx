@@ -55,7 +55,7 @@ const ResourceCard = ({
 
 const ReportPage = ({ navigation }) => {
   return (
-    <AppPageScaffold title='Relatório'>
+    <AppPageScaffold>
       {[
         { key: '123123asdasd' },
         { key: '123123asdasd12312' },

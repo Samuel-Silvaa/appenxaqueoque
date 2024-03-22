@@ -9,9 +9,9 @@ const stylesheet = {
 
 const AppHeader = ({
   navigation,
+  options,
 }: BottomTabHeaderProps | NativeStackHeaderProps) => {
-  const { pageTitle } = useApp();
-
+  console.log(options);
   return (
     <View className={stylesheet.header}>
       {navigation.canGoBack() ? (
@@ -21,8 +21,10 @@ const AppHeader = ({
       ) : (
         <Image></Image>
       )}
-      {pageTitle && (
-        <Text className='text-2xl text-black font-extrabold'>{pageTitle}</Text>
+      {options.headerTitle && (
+        <Text className='text-2xl text-black font-extrabold'>
+          {options.headerTitle.toString()}
+        </Text>
       )}
       <Image source={require('assets/moon.png')} />
     </View>

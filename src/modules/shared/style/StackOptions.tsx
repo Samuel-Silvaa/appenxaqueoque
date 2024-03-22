@@ -1,5 +1,5 @@
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import AppHeader from '../components/AppHeader/AppHeader';
+import AppHeader from '../components/appHeader/AppHeader';
 
 const screenOptions: NativeStackNavigationOptions = {
   headerStyle: { backgroundColor: '#F7F7F7' },
