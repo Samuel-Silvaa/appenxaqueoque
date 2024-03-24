@@ -13,30 +13,11 @@ import ChartsPage from './components/charts/Charts';
 import { Report } from 'src/infra/@types/app.types';
 
 const stylesheet = {
-  resourceCard:
+  reportCard:
     'w-full flex-row items-start p-3 my-1 bg-white rounded-[30px] min-h-[86px]',
-  report: {
-    wrapper: 'w-full bg-primary p-4 pt-[60px] ',
-  },
-};
-
-const ReportStack = createNativeStackNavigator();
-
-const ReportStackNavigation = () => {
-  return (
-    <ReportStack.Navigator>
-      <ReportStack.Screen
-        options={screenOptions}
-        name='ReportList'
-        component={ReportPage}
-      ></ReportStack.Screen>
-      <ReportStack.Screen
-        options={screenOptions}
-        name='Charts'
-        component={ChartsPage}
-      ></ReportStack.Screen>
-    </ReportStack.Navigator>
-  );
+  reportCardColor: 'h-[80%] rounded-full w-2 mr-4 py-2 self-center',
+  reportCardHeader: 'flex-col h-full',
+  reportCardDesc: 'mt-2 h-2/4 w-2/4 truncate',
 };
 
 const ResourceCard = ({
@@ -48,16 +29,16 @@ const ResourceCard = ({
 }) => {
   return (
     <Pressable
-      className={stylesheet.resourceCard}
+      className={stylesheet.reportCard}
       onPress={() => {
         navigation.navigate('Charts', { reportDetails });
       }}
     >
       <View
-        className='h-[80%] rounded-full w-2 mr-4 py-2 self-center'
+        className={stylesheet.reportCardColor}
         style={{ backgroundColor: pinColor(reportDetails.acuteness) }}
       ></View>
-      <View className='flex-col h-full'>
+      <View className={stylesheet.reportCardHeader}>
         <Text className='font-semibold capitalize'>
           {format(reportDetails.startDate, 'dd MMM', { locale: ptBR })} -
           {format(reportDetails.endDate, 'dd MMM', { locale: ptBR })} -
@@ -65,7 +46,7 @@ const ResourceCard = ({
             {parseAcuteness(reportDetails.acuteness)}
           </Text>
         </Text>
-        <Text className='mt-2 h-2/4 w-2/4 truncate'>
+        <Text className={stylesheet.reportCardDesc}>
           Lorem ipsum dolor sit amet consectetur dispsi{' '}
         </Text>
       </View>
@@ -96,6 +77,25 @@ const ReportPage = ({ navigation }) => {
           />
         ))}
     </AppPageScaffold>
+  );
+};
+
+const ReportStack = createNativeStackNavigator();
+
+const ReportStackNavigation = () => {
+  return (
+    <ReportStack.Navigator>
+      <ReportStack.Screen
+        options={screenOptions}
+        name='ReportList'
+        component={ReportPage}
+      ></ReportStack.Screen>
+      <ReportStack.Screen
+        options={screenOptions}
+        name='Charts'
+        component={ChartsPage}
+      ></ReportStack.Screen>
+    </ReportStack.Navigator>
   );
 };
 

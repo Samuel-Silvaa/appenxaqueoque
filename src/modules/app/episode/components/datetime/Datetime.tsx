@@ -42,6 +42,10 @@ const stylesheet = {
       'absolute left-4 top-1/3 flex-row items-center',
     timeIndicatorRadioLabel: 'text-white font-semibold',
   },
+  calendar: {
+    wrapper: 'h-full pt-14',
+    img: 'absolute right-5 top-[-18px] z-30',
+  },
 };
 
 const Timepicker = () => {
@@ -115,8 +119,8 @@ const Datetime = () => {
   }, []);
 
   return (
-    <View className='h-full pt-14'>
-      <View className='absolute right-5 top-[-18px] z-30'>
+    <View className={stylesheet.calendar.wrapper}>
+      <View className={stylesheet.calendar.img}>
         <Image
           width={38}
           height={38}

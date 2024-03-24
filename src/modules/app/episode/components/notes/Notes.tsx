@@ -4,10 +4,16 @@ import { Text, View } from 'react-native';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
-import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
 import Card from '../form/card/Card';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import { useApp } from 'src/infra/app/app';
+
+const stylesheet = {
+  wrapper: 'flex-col w-full items-center h-3/4 justify-between',
+  title: 'font-semibold text-black my-2 mx-auto text-lg',
+  label: 'text-md font-semibold text-black self-start mt-14 pl-4',
+  inputWrapper: 'flex-row items-center justify-center w-full',
+};
 
 interface NotesSchema {
   notes: number;
@@ -26,18 +32,15 @@ const Notes = () => {
   } = useForm({ resolver: yupResolver(notesSchema) });
 
   return (
-    <View className='flex-col w-full items-center h-3/4 justify-between'>
-      <Text className='font-semibold text-black my-2 mx-auto text-lg'>
-        Estamos quase lá
-      </Text>
+    <View className={stylesheet.wrapper}>
+      <Text className={stylesheet.title}>Estamos quase lá</Text>
 
-      <Text className='text-md font-semibold text-black self-start mt-14 pl-4'>
-        Alguma observação?
-      </Text>
+      <Text className={stylesheet.label}>Alguma observação?</Text>
+
       <Card
         className='bg-[#000571]/10 mt-2'
         children={
-          <View className='flex-row items-center justify-center w-full'>
+          <View className={stylesheet.inputWrapper}>
             <InputContainer
               name='notes'
               control={control}

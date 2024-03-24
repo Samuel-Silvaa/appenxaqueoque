@@ -7,6 +7,15 @@ import { RadioButton } from 'react-native-paper';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useApp } from 'src/infra/app/app';
 
+const stylesheet = {
+  wrapper: 'flex-col w-full items-center ',
+  cardWrapper: 'flex-row items-center justify-center w-full ',
+  cardOption: 'flex-row items-center bg-white rounded-full w-1/3 mx-1',
+  notesLabel: 'text-md font-semibold text-black self-start mt-14 pl-4',
+  notesWrapper: 'flex-row items-center justify-center w-full',
+  notesInput: 'bg-white w-full p-4 min-h-[140px]',
+};
+
 interface PeriodSchema {
   period: string;
   periodNotes: number;
@@ -29,17 +38,17 @@ const Period = () => {
       onValueChange={(value) => handleFormChange({ period: value })}
       value={episodeFormState.period}
     >
-      <View className='flex-col w-full items-center '>
+      <View className={stylesheet.wrapper}>
         <Card
           title='Menstruação'
           className='bg-[#000571]/10'
           children={
-            <View className='flex-row items-center justify-center w-full '>
-              <View className='flex-row items-center bg-white rounded-full w-1/3 mx-1'>
+            <View className={stylesheet.cardWrapper}>
+              <View className={stylesheet.cardOption}>
                 <RadioButton value={true} color='#CEB0FA' />
                 <Text>Sim</Text>
               </View>
-              <View className='flex-row items-center bg-white rounded-full w-1/3 mx-1'>
+              <View className={stylesheet.cardOption}>
                 <RadioButton value={false} color='#CEB0FA' />
                 <Text>Não</Text>
               </View>
@@ -47,19 +56,17 @@ const Period = () => {
           }
         />
 
-        <Text className='text-md font-semibold text-black self-start mt-14 pl-4'>
-          Anotações:
-        </Text>
+        <Text className={stylesheet.notesLabel}>Anotações:</Text>
 
         <Card
           className='bg-[#680071]/10 mt-2'
           children={
-            <View className='flex-row items-center justify-center w-full'>
+            <View className={stylesheet.notesWrapper}>
               <InputContainer
                 name='notes'
                 control={control}
                 errors={errors}
-                className='bg-white w-full p-4 min-h-[140px]'
+                className={stylesheet.notesInput}
                 numberOfLines={4}
                 multiline={true}
                 defaultValue={episodeFormState.periodNotes}

@@ -167,15 +167,6 @@ const Topic = () => {
   );
 };
 
-const FormHeader = () => {
-  return (
-    <View className={stylesheet.form.header.wrapper}>
-      <Steps />
-      <Topic />
-    </View>
-  );
-};
-
 const getCurrentFormElement = (step: number): ReactNode => {
   switch (step) {
     case 0:
@@ -204,6 +195,15 @@ const FormContent = () => {
   return (
     <View className={stylesheet.form.wrapper}>
       {getCurrentFormElement(currentStep)}
+    </View>
+  );
+};
+
+const FormHeader = () => {
+  return (
+    <View className={stylesheet.form.header.wrapper}>
+      <Steps />
+      <Topic />
     </View>
   );
 };

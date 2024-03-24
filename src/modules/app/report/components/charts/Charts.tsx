@@ -16,14 +16,30 @@ import {
 } from 'src/infra/utils/appUtils';
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
 
+const stylesheet = {
+  wrapper: 'h-2/4 w-full rounded-[25px] bg-white',
+  header:
+    'bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4',
+  status: 'w-[26px] h-[26px] rounded-full',
+  contentWrapper:
+    'h-[90%] w-full p-[28px] flex-col justify-between items-center',
+  content:
+    'bg-primary w-full h-[70%] rounded-[16px] p-6 flex-col justify-around ',
+  summaryItem: 'flex-row gap-x-4',
+  footer: 'w-full h-[20%]',
+  footerBtn: 'bg-primary w-ful h-full rounded-full p-2',
+  footerBtnInner:
+    'bg-white w-ful h-full rounded-full p-1 flex-row items-center justify-center',
+};
+
 const SummedUpReport = () => {
   const route = useRoute();
   const [report, _] = useState<Report>(route.params['reportDetails']);
   return (
-    <View className='h-2/4 w-full rounded-[25px] bg-white'>
-      <View className='bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4'>
+    <View className={stylesheet.wrapper}>
+      <View className={stylesheet.header}>
         <View
-          className='w-[26px] h-[26px] rounded-full'
+          className={stylesheet.status}
           style={{ backgroundColor: pinColor(report.acuteness) }}
         ></View>
         <Text>
@@ -32,40 +48,40 @@ const SummedUpReport = () => {
         </Text>
         <View></View>
       </View>
-      <View className='h-[90%] w-full p-[28px] flex-col justify-between items-center'>
-        <View className='bg-primary w-full h-[70%] rounded-[16px] p-6 flex-col justify-around '>
-          <View className='flex-row gap-x-4'>
+      <View className={stylesheet.contentWrapper}>
+        <View className={stylesheet.content}>
+          <View className={stylesheet.summaryItem}>
             <Image source={require('assets/stats.png')}></Image>
             <Text>{report.episodeAmount} episódios</Text>
           </View>
-          <View className='flex-row gap-x-4'>
+          <View className={stylesheet.summaryItem}>
             <Image source={require('assets/stats.png')}></Image>
             <Text>{parseTime(report.time)} </Text>
           </View>
-          <View className='flex-row gap-x-4'>
+          <View className={stylesheet.summaryItem}>
             <Image source={require('assets/stats.png')}></Image>
             <Text>{parseLocation(report.location)} </Text>
           </View>
-          <View className='flex-row gap-x-4'>
+          <View className={stylesheet.summaryItem}>
             <Image source={require('assets/stats.png')}></Image>
             <Text>{parseAcuteness(report.acuteness)} </Text>
           </View>
-          <View className='flex-row gap-x-4'>
+          <View className={stylesheet.summaryItem}>
             <Image source={require('assets/stats.png')}></Image>
             <Text>{parsePainType(report.painType)} </Text>
           </View>
-          <View className='flex-row gap-x-4'>
+          <View className={stylesheet.summaryItem}>
             <Image source={require('assets/stats.png')}></Image>
             <Text>{parseSymptoms(report.symptoms)} </Text>
           </View>
-          <View className='flex-row gap-x-4'>
+          <View className={stylesheet.summaryItem}>
             <Image source={require('assets/stats.png')}></Image>
             <Text>{parseTriggers(report.triggers)} </Text>
           </View>
         </View>
-        <View className='w-full h-[20%]'>
-          <Pressable className='bg-primary w-ful h-full rounded-full p-2'>
-            <Pressable className='bg-white w-ful h-full rounded-full p-1 flex-row items-center justify-center'>
+        <View className={stylesheet.footer}>
+          <Pressable className={stylesheet.footerBtn}>
+            <Pressable className={stylesheet.footerBtnInner}>
               <Text>Enviar relatório para o médico </Text>
               <Image
                 className='ml-4'
