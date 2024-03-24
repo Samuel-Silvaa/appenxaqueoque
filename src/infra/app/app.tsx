@@ -9,7 +9,6 @@ import React, {
 import {
   AppContextDefaultValues,
   Episode,
-  ImprovementFactor,
   Patient,
   Trigger,
 } from '../@types/app.types';
@@ -18,27 +17,31 @@ import {
   requestCreateEpisode,
   requestFetchEpisodes,
   requestFetchPatient,
+  requestFetchReports,
+  requestUpdateEpisode,
 } from '../services/appService';
 import { AppActions } from './actions';
 import { useNavigation } from '@react-navigation/native';
 
 const episodeInitialForm = {
-  dates: {},
-  time: '',
-  location: '',
+  id: '',
   acuteness: '',
-  painType: '',
-  symptoms: '',
-  triggers: '',
-  foodImprovement: '',
+  dates: {},
   foodImpair: '',
+  foodImprovement: '',
   improvementFactor: '',
+  isEdition: false,
+  location: '',
   medicine: '',
   medicineDosage: 0,
   medicineImprovement: '',
+  notes: '',
+  painType: '',
   period: '',
   periodNotes: '',
-  notes: '',
+  symptoms: '',
+  time: '',
+  triggers: '',
 };
 
 const AppContext = createContext<AppContextDefaultValues>({
@@ -49,9 +52,11 @@ const AppContext = createContext<AppContextDefaultValues>({
   handleFormChange: () => null,
   episodeFormState: episodeInitialForm,
   submitEpisode: () => null,
+  clearEpisodeFormState: () => null,
   dispatch: () => undefined,
   patient: undefined,
   episodes: undefined,
+  reports: undefined,
   pageTitle: '',
   setPageTitle: undefined,
 });
@@ -63,8 +68,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [episodeFormState, setEpisodeFormState] = useState(episodeInitialForm);
   const [patient, setPatient] = useState<Patient | null>(null);
   const [episodes, setEpisodes] = useState<Episode[] | null>(null);
+  const [reports, setReports] = useState<Report[] | null>(null);
   const [pageTitle, setPageTitle] = useState();
   const toast = useToast();
+
+  const clearEpisodeFormState = () => {
+    setEpisodeFormState(episodeInitialForm);
+  };
 
   const ValidateFormEnabledAndReturnBehavior = (
     condition = true,
@@ -84,33 +94,26 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const episodeTitle = () => {
-    navigation.addListener('state', (e) => {
-      if (e.data.state)
-        if (e.data.state.index == 2) {
-          switch (currentStep) {
-            case 0:
-              return 'Data e horário';
-            case 1:
-              return 'Localização';
-            case 2:
-              return 'Intensidade';
-            case 3:
-              return 'Característica da dor';
-            case 4:
-              return 'Sintomas associados';
-            case 5:
-              return 'Gatilhos';
-            case 6:
-              return 'Fatores de melhora';
-            case 7:
-              return 'Período menstrual';
-            case 8:
-              return 'Observações';
-          }
-        } else {
-          return '';
-        }
-    });
+    switch (currentStep) {
+      case 0:
+        return 'Data e horário';
+      case 1:
+        return 'Localização';
+      case 2:
+        return 'Intensidade';
+      case 3:
+        return 'Característica da dor';
+      case 4:
+        return 'Sintomas associados';
+      case 5:
+        return 'Gatilhos';
+      case 6:
+        return 'Fatores de melhora';
+      case 7:
+        return 'Período menstrual';
+      case 8:
+        return 'Observações';
+    }
   };
 
   useEffect(() => {
@@ -120,31 +123,33 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const validateAutomaticEpisodeStepNavigation = (
     nextStep?: number
   ): boolean => {
-    switch (currentStep) {
-      case 0:
-        if (!!episodeFormState.dates && !!episodeFormState.time)
-          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-      case 1:
-        if (!!episodeFormState.dates && !!episodeFormState.time)
-          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-      case 2:
-        if (!!episodeFormState.acuteness)
-          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-      case 3:
-        if (!!episodeFormState.painType)
-          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-      case 4:
-        if (!!episodeFormState.symptoms)
-          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-      case 5:
-        if (
-          episodeFormState.triggers != Trigger.FOOD &&
-          !!episodeFormState.triggers
-        )
-          return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-      default:
-        return false;
-    }
+    if (!episodeFormState?.isEdition)
+      switch (currentStep) {
+        case 0:
+          if (!!episodeFormState.dates && !!episodeFormState.time)
+            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+        case 1:
+          if (!!episodeFormState.dates && !!episodeFormState.time)
+            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+        case 2:
+          if (!!episodeFormState.acuteness)
+            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+        case 3:
+          if (!!episodeFormState.painType)
+            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+        case 4:
+          if (!!episodeFormState.symptoms)
+            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+        case 5:
+          if (
+            episodeFormState.triggers != Trigger.FOOD &&
+            !!episodeFormState.triggers
+          )
+            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+        default:
+          return false;
+      }
+    return false;
   };
 
   const validateFullfilledForm = (nextStep: number): boolean => {
@@ -238,7 +243,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       }
     });
     delete parsedObject.dates;
-    dispatch(AppActions.REQUEST_CREATE_EPISODE, parsedObject);
+
+    if (parsedObject.isEdition) {
+      delete parsedObject.isEdition;
+      dispatch(AppActions.REQUEST_UPDATE_EPISODE, parsedObject);
+    } else {
+      dispatch(AppActions.REQUEST_CREATE_EPISODE, parsedObject);
+    }
   };
 
   const handleToast = (message: string, type: string) => {
@@ -296,11 +307,24 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
               dispatch(AppActions.REQUEST_FETCH_EPISODES);
               navigation.navigate('Success', res);
               setCurrentStep(0);
-              setEpisodeFormState(episodeInitialForm);
+              setEpisodeFormState(res);
             },
             isShowingToast: true,
           });
         }
+        break;
+      case AppActions.REQUEST_UPDATE_EPISODE:
+        return handlePromise({
+          promiseFromService: requestUpdateEpisode(payload, payload.id),
+          payload,
+          successCallbackAction: (res) => {
+            dispatch(AppActions.REQUEST_FETCH_EPISODES);
+            navigation.navigate('Success', res);
+            setCurrentStep(0);
+            setEpisodeFormState(res);
+          },
+          isShowingToast: true,
+        });
         break;
       case AppActions.REQUEST_FETCH_PATIENT:
         if (userId) {
@@ -320,6 +344,14 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             successCallbackAction: (res) => reducer(action, payload, res),
           });
         break;
+      case AppActions.REQUEST_FETCH_REPORTS:
+        if (userId)
+          return handlePromise({
+            promiseFromService: requestFetchReports(userId),
+            payload,
+            successCallbackAction: (res) => reducer(action, payload, res),
+          });
+        break;
     }
   };
 
@@ -329,6 +361,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         setPatient(response);
       case AppActions.REQUEST_FETCH_EPISODES:
         setEpisodes(response);
+        break;
+      case AppActions.REQUEST_FETCH_REPORTS:
+        setReports(response);
         break;
     }
   };
@@ -347,7 +382,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         submitEpisode,
         episodes: episodes || undefined,
         pageTitle: pageTitle || undefined,
+        reports: reports || undefined,
         setPageTitle: setPageTitle,
+        clearEpisodeFormState,
       }}
     >
       {children}

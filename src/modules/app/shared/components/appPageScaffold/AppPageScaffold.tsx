@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { ImageBackground, ScrollView, View } from 'react-native';
+import { useApp } from 'src/infra/app/app';
 import { getAppScaffoldAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 
 const stylesheet = {
@@ -13,6 +14,7 @@ interface AppPageScaffoldProps {
   hasArrowBack?: boolean;
   displayBg?: boolean;
   children: ReactNode;
+  title?: string;
 }
 
 const AppPageScaffold = ({
@@ -20,7 +22,11 @@ const AppPageScaffold = ({
   children,
   alignment = 'start',
   displayBg = true,
+  title = '',
 }: AppPageScaffoldProps) => {
+  const { setPageTitle } = useApp();
+  if (setPageTitle) setPageTitle(title);
+
   return (
     <View
       className={`${stylesheet.view} ${getAppScaffoldAlignment(alignment)}`}

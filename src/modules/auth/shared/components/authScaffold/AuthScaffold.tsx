@@ -5,7 +5,7 @@ import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
 
 const stylesheet = {
-  view: 'flex flex-col grow bg-primary p-4 gap-y-4 pb-14',
+  view: 'flex-col grow bg-primary p-4 gap-y-4 pb-14',
   header: 'my-6 self-start',
 };
 

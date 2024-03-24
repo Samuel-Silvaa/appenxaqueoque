@@ -9,10 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Acuteness, Episode } from 'src/infra/@types/app.types';
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
 import { ptBR } from 'date-fns/locale';
 import { useNavigation } from '@react-navigation/native';
+import { useApp } from 'src/infra/app/app';
+import { pinColor } from 'src/infra/utils/appUtils';
+import { Episode } from 'src/infra/@types/app.types';
 
 const EpisodeModal = ({
   isOpen,
@@ -23,7 +25,9 @@ const EpisodeModal = ({
   onClose: () => void;
   episode: Episode;
 }) => {
+  const { handleFormChange } = useApp();
   const navigation = useNavigation();
+
   const details = useMemo(() => {
     return [
       { title: 'Localização', desc: episode.location, opened: true },
@@ -41,19 +45,6 @@ const EpisodeModal = ({
     ];
   }, []);
 
-  const pinColor = (acuteness: string): string => {
-    switch (acuteness) {
-      case Acuteness.LIGHT:
-        return '#C8F7E1';
-      case Acuteness.MILD:
-        return '#FFCBA6';
-      case Acuteness.SEVERE:
-        return '#FFCACD';
-      default:
-        return '#9194E9';
-    }
-  };
-
   return (
     <Modal
       animationType='slide'
@@ -69,12 +60,12 @@ const EpisodeModal = ({
           <View className='w-full flex-row items-center justify-between mb-4'>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('Episode', { episode: episode });
+                handleFormChange({ ...episode, isEdition: true });
                 onClose();
+                navigation.navigate('Episode', { episode: episode });
               }}
-              className={`flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 bg-[${pinColor(
-                episode.acuteness
-              )}]`}
+              style={{ backgroundColor: pinColor(episode.acuteness) }}
+              className={`flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 `}
             >
               <Image source={require('assets/pencil.png')}></Image>
               <Text className='text-[8px] text-black'>Editar</Text>
@@ -119,7 +110,7 @@ const EpisodeModal = ({
                   </View>
                   {opened && (
                     <Animated.View className='w-full min-h-[55px] bg-white rounded-b-[16px] p-4'>
-                      {dtl.desc}
+                      <Text>{dtl.desc}</Text>
                     </Animated.View>
                   )}
                 </Pressable>

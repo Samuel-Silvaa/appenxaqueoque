@@ -20,7 +20,7 @@ const stylesheet = {
 const Tab = createBottomTabNavigator();
 
 const TabsRoutes = () => {
-  const { patient, dispatch } = useApp();
+  const { patient, dispatch, setPageTitle } = useApp();
 
   React.useEffect(() => {
     if (!patient) dispatch(AppActions.REQUEST_FETCH_PATIENT, {});
@@ -28,6 +28,12 @@ const TabsRoutes = () => {
 
   return (
     <Tab.Navigator
+      screenListeners={{
+        state: (e) => {
+          console.log('state:: ', e);
+          if (setPageTitle) setPageTitle('');
+        },
+      }}
       screenOptions={({ route }) => ({
         headerStyle: { backgroundColor: '#edf1f8' },
         headerShadowVisible: false,
@@ -146,11 +152,7 @@ const TabsRoutes = () => {
       })}
     >
       <Tab.Screen name='Home' component={HomePage} />
-      <Tab.Screen
-        name='Report'
-        component={ReportStackNavigation}
-        options={{ headerTitle: 'Relatório' }}
-      />
+      <Tab.Screen name='Report' component={ReportStackNavigation} />
       <Tab.Screen name='Episode' component={EpisodePage} />
       <Tab.Screen name='Calendar' component={CalendarPage} />
       <Tab.Screen name='Profile' component={ProfilePage} />

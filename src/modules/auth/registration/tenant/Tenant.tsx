@@ -30,7 +30,6 @@ const Tenant = ({ navigation }) => {
   });
 
   const onSubmitHandler = (data: TenantSchema) => {
-    console.log({ data });
     navigation.navigate('welcome');
     reset();
   };

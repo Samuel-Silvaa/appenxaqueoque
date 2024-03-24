@@ -2,6 +2,7 @@ import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { Image, Pressable, Text, View } from 'react-native';
 import { useApp } from 'src/infra/app/app';
+
 const stylesheet = {
   header:
     'w-full bg-[#edf1f8] p-4 flex flex-row grow-0 justify-between items-center',
@@ -9,9 +10,8 @@ const stylesheet = {
 
 const AppHeader = ({
   navigation,
-  options,
 }: BottomTabHeaderProps | NativeStackHeaderProps) => {
-  console.log(options);
+  const { pageTitle } = useApp();
   return (
     <View className={stylesheet.header}>
       {navigation.canGoBack() ? (
@@ -21,10 +21,8 @@ const AppHeader = ({
       ) : (
         <Image></Image>
       )}
-      {options.headerTitle && (
-        <Text className='text-2xl text-black font-extrabold'>
-          {options.headerTitle.toString()}
-        </Text>
+      {pageTitle && (
+        <Text className='text-2xl text-black font-extrabold'>{pageTitle}</Text>
       )}
       <Image source={require('assets/moon.png')} />
     </View>

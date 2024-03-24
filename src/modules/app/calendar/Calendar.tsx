@@ -9,19 +9,7 @@ import { format } from 'date-fns';
 import { Text, View } from 'react-native';
 import { Acuteness } from 'src/infra/@types/app.types';
 import EpisodeModal from 'src/modules/shared/components/episodemodal/EpisodeModal';
-
-const pinColor = (acuteness: string): string => {
-  switch (acuteness) {
-    case Acuteness.LIGHT:
-      return '#C8F7E1';
-    case Acuteness.MILD:
-      return '#FFCBA6';
-    case Acuteness.SEVERE:
-      return '#FFCACD';
-    default:
-      return '#9194E9';
-  }
-};
+import { pinColor } from 'src/infra/utils/appUtils';
 
 const InnerHomeContainer = () => {
   const { episodes, dispatch } = useApp();
@@ -66,7 +54,13 @@ const InnerHomeContainer = () => {
       />
       {isModalOpen && selectedEpisode && (
         <EpisodeModal
-          episode={selectedEpisode}
+          episode={{
+            ...selectedEpisode,
+            dates: {
+              [format(selectedEpisode.dateTime, 'yyyy-MM-dd').toString()]:
+                parsedEpisodes[format(selectedEpisode.dateTime, 'yyyy-MM-dd')],
+            },
+          }}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         />

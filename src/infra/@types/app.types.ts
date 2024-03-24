@@ -12,24 +12,39 @@ export interface Patient {
 }
 
 export interface Episode {
-  id?: string;
-  dateTime?: string;
-  dates?: object | any;
-  time: string;
-  location: string;
   acuteness: string;
-  painType: string;
-  symptoms: string;
-  triggers: string;
-  foodImprovement: string;
+  dates?: object | any;
+  dateTime?: string;
   foodImpair: string;
+  foodImprovement: string;
+  id?: string;
   improvementFactor: string;
+  isEdition?: boolean;
+  location: string;
   medicine: string;
   medicineDosage: number;
   medicineImprovement: string;
+  notes: string;
+  painType: string;
   period: string;
   periodNotes: string;
-  notes: string;
+  symptoms: string;
+  time: string;
+  triggers: string;
+}
+
+export interface Report {
+  id?: string;
+  startDate: Date;
+  endDate: Date;
+  episodeAmount: number;
+  time: number;
+  location: number;
+  acuteness: number;
+  painType: number;
+  symptoms: number;
+  triggers: number;
+  improvementFactor: number;
 }
 
 export interface AppContextDefaultValues {
@@ -44,9 +59,11 @@ export interface AppContextDefaultValues {
   validateAutomaticEpisodeStepNavigation: () => boolean;
   handleFormChange: (payload: object) => void;
   submitEpisode: () => void;
+  clearEpisodeFormState: () => void;
   episodeFormState: Episode;
   episodes?: Episode[];
   patient?: Patient;
+  reports?: Report[];
   pageTitle?: string;
   setPageTitle?: (value: string) => void;
 }

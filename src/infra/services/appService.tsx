@@ -1,4 +1,4 @@
-import { get, post } from '../api';
+import { get, patch, post } from '../api';
 import { Episode, Patient } from '../@types/app.types';
 
 const requestCreateEpisode = async (
@@ -6,10 +6,35 @@ const requestCreateEpisode = async (
   patientId: string
 ): Promise<Episode> => post(`episode/${patientId}`, payload);
 
+const requestUpdateEpisode = async (
+  payload: Episode,
+  episodeId: string
+): Promise<Episode> => {
+  delete payload.id;
+  delete payload.createdAt;
+  delete payload.updatedAt;
+  delete payload.email;
+  delete payload.height;
+  delete payload.kinship;
+  delete payload.name;
+  delete payload.patientId;
+  delete payload.weight;
+  return patch(`episode/${episodeId}`, payload);
+};
+
 const requestFetchPatient = async (id: string): Promise<Patient> =>
   get(`patient/${id}`);
 
 const requestFetchEpisodes = async (patientId: string): Promise<Episode[]> =>
   get(`episode/patient/${patientId}`);
 
-export { requestCreateEpisode, requestFetchPatient, requestFetchEpisodes };
+const requestFetchReports = async (patientId: string): Promise<Episode[]> =>
+  get(`report/list/${patientId}`);
+
+export {
+  requestCreateEpisode,
+  requestFetchPatient,
+  requestFetchEpisodes,
+  requestUpdateEpisode,
+  requestFetchReports,
+};

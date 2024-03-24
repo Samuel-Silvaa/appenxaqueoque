@@ -36,11 +36,11 @@ const Period = () => {
           children={
             <View className='flex-row items-center justify-center w-full '>
               <View className='flex-row items-center bg-white rounded-full w-1/3 mx-1'>
-                <RadioButton value='true' color='#CEB0FA' />
+                <RadioButton value={true} color='#CEB0FA' />
                 <Text>Sim</Text>
               </View>
               <View className='flex-row items-center bg-white rounded-full w-1/3 mx-1'>
-                <RadioButton value='false' color='#CEB0FA' />
+                <RadioButton value={false} color='#CEB0FA' />
                 <Text>Não</Text>
               </View>
             </View>

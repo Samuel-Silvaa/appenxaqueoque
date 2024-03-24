@@ -106,6 +106,17 @@ const Topic = () => {
     },
   ];
 
+  useEffect(() => {
+    return () => {
+      if (flatList.current) {
+        flatList.current.scrollToIndex({
+          index: 0,
+          animated: true,
+        });
+      }
+    };
+  });
+
   return (
     <View className={stylesheet.topic.container}>
       <FlatList
