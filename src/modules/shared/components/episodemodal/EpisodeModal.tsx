@@ -16,6 +16,23 @@ import { useApp } from 'src/infra/app/app';
 import { pinColor } from 'src/infra/utils/appUtils';
 import { Episode } from 'src/infra/@types/app.types';
 
+const stylesheet = {
+  wrapper: 'w-full',
+  header: 'w-full flex-row items-center justify-between mb-4',
+  arrowdown: 'flex items-center justify-center p-2',
+  edition:
+    'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 ',
+  editText: 'text-[8px] text-black',
+  headerDate: 'font-bold text-black',
+  contentWrapper:
+    'my-2 w-full flex-row flex-wrap justify-start overflow-hidden gap-1',
+  longInfo: ' w-[98%] shadow-sm rounded-[16px] bg-blue-baby',
+  smallInfoBlock: 'w-[48%] shadow-sm rounded-[16px] bg-blue-baby',
+  smallInfoContainer: 'w-full flex-col justify-start items-start p-4 ',
+  smallInfoTitle: 'font-bold',
+  smallInfoImgContainer: 'flex-col justify-start items-start py-3',
+};
+
 const EpisodeModal = ({
   isOpen,
   onClose,
@@ -28,21 +45,68 @@ const EpisodeModal = ({
   const { handleFormChange } = useApp();
   const navigation = useNavigation();
 
+  const fullDetails = [
+    {
+      icon: require('assets/chart-header-location.png'),
+      title: 'Localização',
+      desc: episode.location,
+    },
+    {
+      icon: require('assets/chart-acuteness.png'),
+      title: 'Intensidade',
+      desc: episode.acuteness,
+    },
+    {
+      icon: require('assets/chart-sad.png'),
+      title: 'Característica da dor',
+      desc: episode.painType,
+    },
+    {
+      icon: require('assets/chart-symptom.png'),
+      title: 'Sintomas associados',
+      desc: episode.symptoms,
+    },
+    {
+      icon: require('assets/chart-trigger.png'),
+      title: 'Gatilhos',
+      desc: episode.triggers,
+    },
+    {
+      icon: require('assets/chart-symptom.png'),
+      title: 'Fatores de melhora',
+      desc: episode.improvementFactor,
+      opened: false,
+    },
+    {
+      icon: require('assets/chart-symptom.png'),
+      title: 'Período menstrual',
+      desc: episode.periodNotes,
+    },
+    {
+      icon: require('assets/chart-symptom.png'),
+      title: 'Observações',
+      desc: episode.notes,
+    },
+  ];
+
   const details = useMemo(() => {
-    return [
-      { title: 'Localização', desc: episode.location, opened: true },
-      { title: 'Intensidade', desc: episode.acuteness, opened: false },
-      { title: 'Característica da dor', desc: episode.painType, opened: false },
-      { title: 'Sintomas associados', desc: episode.symptoms, opened: false },
-      { title: 'Gatilhos', desc: episode.triggers, opened: false },
-      {
-        title: 'Fatores de melhora',
-        desc: episode.improvementFactor,
-        opened: false,
-      },
-      { title: 'Período menstrual', desc: episode.periodNotes, opened: false },
-      { title: 'Observações', desc: episode.notes, opened: false },
-    ];
+    const parsedDetails: Array<any> = [];
+    fullDetails.map((dt) => {
+      if (!!dt.desc) {
+        parsedDetails.splice(0, 0, dt);
+      }
+    });
+    return parsedDetails;
+  }, []);
+
+  const nullDetails = useMemo(() => {
+    const parsedDetails: Array<any> = [];
+    fullDetails.map((dt) => {
+      if (!dt.desc) {
+        parsedDetails.splice(parsedDetails.length, 0, dt);
+      }
+    });
+    return parsedDetails;
   }, []);
 
   return (
@@ -56,8 +120,8 @@ const EpisodeModal = ({
       }}
     >
       <AppPageScaffold>
-        <View className='w-full'>
-          <View className='w-full flex-row items-center justify-between mb-4'>
+        <View className={stylesheet.wrapper}>
+          <View className={stylesheet.header}>
             <TouchableOpacity
               onPress={() => {
                 handleFormChange({ ...episode, isEdition: true });
@@ -65,57 +129,91 @@ const EpisodeModal = ({
                 navigation.navigate('Episode', { episode: episode });
               }}
               style={{ backgroundColor: pinColor(episode.acuteness) }}
-              className={`flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 `}
+              className={stylesheet.edition}
             >
               <Image source={require('assets/pencil.png')}></Image>
-              <Text className='text-[8px] text-black'>Editar</Text>
+              <Text className={stylesheet.editText}>Editar</Text>
             </TouchableOpacity>
-            <Text className='font-bold text-black'>
+            <Text className={stylesheet.headerDate}>
               {format(episode?.dateTime, 'PPPP', { locale: ptBR })}
             </Text>
             <TouchableOpacity onPress={onClose}>
               <Image
-                className='flex items-center justify-center p-2'
+                className={stylesheet.arrowdown}
                 source={require('assets/arrowdown.png')}
               ></Image>
             </TouchableOpacity>
           </View>
 
-          <View className='rounded-full w-3/4 h-[38px] bg-beige-primary flex-row my-8 m-auto justify-center items-center'>
-            <Image source={require('assets/timer.png')}></Image>
-            <Text className='text-bold mx-4'>
-              Horário do episódio: {episode.time}
-            </Text>
-          </View>
-
-          {details &&
-            details.map((dtl) => {
-              const [opened, setOpened] = useState(false);
-              return (
-                <Pressable
-                  className='my-2'
-                  onPress={() => {
-                    if (dtl.desc) {
-                      setOpened((prevState) => !prevState);
-                    }
-                  }}
-                >
-                  <View
-                    className={` w-full h-[55px] bg-blue-baby flex-row justify-between items-center p-4 ${
-                      opened ? ' rounded-t-[16px]' : ' rounded-[16px]'
-                    } ${dtl.desc ? ' opacity-100 ' : ' opacity-25'} `}
-                  >
-                    <Text>{dtl.title}</Text>
-                    <Image source={require('assets/arrowdown.png')}></Image>
+          <View className={stylesheet.contentWrapper}>
+            <Pressable className={stylesheet.longInfo}>
+              <View className='flex-row justify-between items-start h-full w-full'>
+                <View className='flex-col justify-start items-start p-4 '>
+                  <Text className='font-bold'> Horário do episódio</Text>
+                  <View className='flex-col justify-start items-start py-3'>
+                    <Image
+                      className='w-4 h-4 mb-2'
+                      source={require('assets/timer.png')}
+                    />
+                    <Text>{episode.time}</Text>
                   </View>
-                  {opened && (
-                    <Animated.View className='w-full min-h-[55px] bg-white rounded-b-[16px] p-4'>
-                      <Text>{dtl.desc}</Text>
-                    </Animated.View>
-                  )}
-                </Pressable>
-              );
-            })}
+                </View>
+                <Image
+                  className='mr-4 '
+                  source={require('assets/boy_magnifier.png')}
+                />
+              </View>
+            </Pressable>
+
+            {details &&
+              details.map((dtl) => {
+                return (
+                  <Pressable className={stylesheet.smallInfoBlock}>
+                    <View className={stylesheet.smallInfoContainer}>
+                      <Text className={stylesheet.smallInfoTitle}>
+                        {dtl.title}
+                      </Text>
+                      <View className={stylesheet.smallInfoImgContainer}>
+                        {dtl.icon && (
+                          <Image className='w-4 h-4 mb-2' source={dtl.icon} />
+                        )}
+                        <Text>{dtl.desc}</Text>
+                      </View>
+                    </View>
+                  </Pressable>
+                );
+              })}
+          </View>
+          {nullDetails.length > 0 && (
+            <Text className='font-semibold pl-2 font-black my-2'>
+              Campos não preenchidos
+            </Text>
+          )}
+
+          <View className={stylesheet.contentWrapper}>
+            {nullDetails &&
+              nullDetails.map((dtl) => {
+                return (
+                  <Pressable
+                    className={stylesheet.smallInfoBlock + ' opacity-75'}
+                  >
+                    <View className={stylesheet.smallInfoContainer}>
+                      <Text className={stylesheet.smallInfoTitle}>
+                        {dtl.title}
+                      </Text>
+                      <View className={stylesheet.smallInfoImgContainer}>
+                        <Text>Informação não preenchida</Text>
+                      </View>
+                    </View>
+                  </Pressable>
+                  // <Pressable className='my-2'>
+                  //   <View className='w-full h-[55px] bg-blue-baby flex-row justify-start items-center p-4 rounded-[16px]'>
+                  //     <Text>{dtl.title}</Text>
+                  //   </View>
+                  // </Pressable>
+                );
+              })}
+          </View>
         </View>
       </AppPageScaffold>
     </Modal>

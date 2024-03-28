@@ -30,9 +30,13 @@ api.interceptors.request.use(
 //   }
 // );
 
-const get = async <T>(url: string, params?: object): Promise<T> => {
+const get = async <T>(
+  url: string,
+  params?: object,
+  headers?: object
+): Promise<T> => {
   try {
-    const { data } = await api.get(url, { params });
+    const { data } = await api.get(url, { headers: headers, params: params });
     return data;
   } catch (error) {
     throw error;

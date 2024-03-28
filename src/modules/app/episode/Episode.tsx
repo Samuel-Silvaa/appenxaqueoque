@@ -49,23 +49,8 @@ interface HeadListProps {
 
 const Topic = () => {
   const { validateStepForward } = useApp();
-  const {
-    currentStep,
-    episodeFormState,
-    validateAutomaticEpisodeStepNavigation,
-  } = useApp();
+  const { currentStep, episodeFormState } = useApp();
   const flatList = createRef<FlatList>();
-
-  useEffect(() => {
-    if (validateAutomaticEpisodeStepNavigation()) {
-      if (flatList.current) {
-        flatList.current.scrollToIndex({
-          index: currentStep,
-          animated: true,
-        });
-      }
-    }
-  }, [episodeFormState]);
 
   const DATA: { id: string; title: string }[] = [
     {
@@ -115,7 +100,7 @@ const Topic = () => {
         });
       }
     };
-  });
+  }, []);
 
   return (
     <View className={stylesheet.topic.container}>

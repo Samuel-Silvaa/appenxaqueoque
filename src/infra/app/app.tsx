@@ -17,6 +17,7 @@ import {
   requestCreateEpisode,
   requestFetchEpisodes,
   requestFetchPatient,
+  requestFetchReportEpisodesRange,
   requestFetchReports,
   requestUpdateEpisode,
 } from '../services/appService';
@@ -29,7 +30,7 @@ const episodeInitialForm = {
   dates: {},
   foodImpair: '',
   foodImprovement: '',
-  improvementFactor: '',
+  improvementFactor: [],
   isEdition: false,
   location: '',
   medicine: '',
@@ -39,21 +40,20 @@ const episodeInitialForm = {
   painType: '',
   period: '',
   periodNotes: '',
-  symptoms: '',
+  symptoms: [],
   time: '',
-  triggers: '',
+  triggers: [],
 };
 
 const AppContext = createContext<AppContextDefaultValues>({
   steps: 9,
   currentStep: 0,
   validateStepForward: () => false,
-  validateAutomaticEpisodeStepNavigation: () => false,
   handleFormChange: () => null,
   episodeFormState: episodeInitialForm,
   submitEpisode: () => null,
   clearEpisodeFormState: () => null,
-  dispatch: () => undefined,
+  dispatch: () => new Promise(() => {}),
   patient: undefined,
   episodes: undefined,
   reports: undefined,
@@ -120,37 +120,37 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     setPageTitle(episodeTitle());
   }, [currentStep]);
 
-  const validateAutomaticEpisodeStepNavigation = (
-    nextStep?: number
-  ): boolean => {
-    if (!episodeFormState?.isEdition)
-      switch (currentStep) {
-        case 0:
-          if (!!episodeFormState.dates && !!episodeFormState.time)
-            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-        case 1:
-          if (!!episodeFormState.dates && !!episodeFormState.time)
-            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-        case 2:
-          if (!!episodeFormState.acuteness)
-            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-        case 3:
-          if (!!episodeFormState.painType)
-            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-        case 4:
-          if (!!episodeFormState.symptoms)
-            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-        case 5:
-          if (
-            episodeFormState.triggers != Trigger.FOOD &&
-            !!episodeFormState.triggers
-          )
-            return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-        default:
-          return false;
-      }
-    return false;
-  };
+  // const validateAutomaticEpisodeStepNavigation = (
+  //   nextStep?: number
+  // ): boolean => {
+  //   if (!episodeFormState?.isEdition)
+  //     switch (currentStep) {
+  //       case 0:
+  //         if (!!episodeFormState.dates && !!episodeFormState.time)
+  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+  //       case 1:
+  //         if (!!episodeFormState.dates && !!episodeFormState.time)
+  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+  //       case 2:
+  //         if (!!episodeFormState.acuteness)
+  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+  //       case 3:
+  //         if (!!episodeFormState.painType)
+  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+  //       case 4:
+  //         if (!!episodeFormState.symptoms)
+  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+  //       case 5:
+  //         if (
+  //           episodeFormState.triggers != Trigger.FOOD &&
+  //           !!episodeFormState.triggers
+  //         )
+  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
+  //       default:
+  //         return false;
+  //     }
+  //   return false;
+  // };
 
   const validateFullfilledForm = (nextStep: number): boolean => {
     switch (currentStep) {
@@ -235,6 +235,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     const parsedObject = Object.assign(episodeFormState, {
       dateTime: new Date(Object.keys(episodeFormState.dates)[0]),
       location: 'Esquerda',
+      triggers: episodeFormState.triggers.join(','),
+      improvementFactor: episodeFormState.improvementFactor.join(','),
+      symptoms: episodeFormState.symptoms.join(','),
     });
 
     Object.keys(parsedObject).map((key) => {
@@ -248,6 +251,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       delete parsedObject.isEdition;
       dispatch(AppActions.REQUEST_UPDATE_EPISODE, parsedObject);
     } else {
+      delete parsedObject.id;
+      delete parsedObject.isEdition;
       dispatch(AppActions.REQUEST_CREATE_EPISODE, parsedObject);
     }
   };
@@ -291,6 +296,15 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       });
   };
 
+  const handleFitEpisodeData = (ep: Episode): Episode => {
+    return {
+      ...ep,
+      triggers: String(ep.triggers).split(','),
+      improvementFactor: String(ep.improvementFactor).split(','),
+      symptoms: String(ep.symptoms).split(','),
+    };
+  };
+
   const dispatch = async (
     action: string,
     payload?: any,
@@ -305,9 +319,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             payload,
             successCallbackAction: (res) => {
               dispatch(AppActions.REQUEST_FETCH_EPISODES);
-              navigation.navigate('Success', res);
+              navigation.navigate('Success', handleFitEpisodeData(res));
               setCurrentStep(0);
-              setEpisodeFormState(res);
+              setEpisodeFormState(handleFitEpisodeData(res));
             },
             isShowingToast: true,
           });
@@ -321,7 +335,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             dispatch(AppActions.REQUEST_FETCH_EPISODES);
             navigation.navigate('Success', res);
             setCurrentStep(0);
-            setEpisodeFormState(res);
+            setEpisodeFormState(handleFitEpisodeData(res));
           },
           isShowingToast: true,
         });
@@ -351,6 +365,15 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             payload,
             successCallbackAction: (res) => reducer(action, payload, res),
           });
+      case AppActions.REQUEST_FETCH_REPORTS_EPISODES_RANGE:
+        if (userId) {
+          handlePromise({
+            promiseFromService: requestFetchReportEpisodesRange(payload),
+            payload,
+            successCallbackAction: (res) => reducer(action, payload, res),
+          });
+          return requestFetchReportEpisodesRange(payload);
+        }
         break;
     }
   };
@@ -377,7 +400,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         handleFormChange,
         patient: patient || undefined,
         validateStepForward,
-        validateAutomaticEpisodeStepNavigation,
         steps,
         submitEpisode,
         episodes: episodes || undefined,

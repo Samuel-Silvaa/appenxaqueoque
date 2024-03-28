@@ -7,9 +7,10 @@ import { useApp } from 'src/infra/app/app';
 import { format } from 'date-fns';
 
 const stylesheet = {
-  wrapper: 'w-full h-full gap-y-4 flex justify-center items-center mt-[25%]'
-  title: 'rounded-[16px] h-[45px] bg-blue-primary w-3/4 text-black font-bold flex items-center justify-center'
-}
+  wrapper: 'w-full h-full gap-y-4 flex justify-center items-center mt-[25%]',
+  title:
+    'rounded-[16px] h-[45px] bg-blue-primary w-3/4 text-black font-bold flex items-center justify-center',
+};
 
 const Success = ({ navigation }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

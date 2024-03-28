@@ -11,13 +11,15 @@ import { ptBR } from 'date-fns/locale';
 import { parseAcuteness, pinColor } from 'src/infra/utils/appUtils';
 import ChartsPage from './components/charts/Charts';
 import { Report } from 'src/infra/@types/app.types';
+import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
+import { useForm } from 'react-hook-form';
 
 const stylesheet = {
   reportCard:
-    'w-full flex-row items-start p-3 my-1 bg-white rounded-[30px] min-h-[86px]',
+    'w-full flex-row items-start p-3 my-1 bg-white rounded-[30px] h-[90px]',
   reportCardColor: 'h-[80%] rounded-full w-2 mr-4 py-2 self-center',
-  reportCardHeader: 'flex-col h-full',
-  reportCardDesc: 'mt-2 h-2/4 w-2/4 truncate',
+  reportCardHeader: 'flex-col h-full w-[80%]',
+  reportCardDesc: 'mt-2 w-3/4 truncate text-ellipsis lowercase opacity-50',
 };
 
 const ResourceCard = ({
@@ -47,7 +49,7 @@ const ResourceCard = ({
           </Text>
         </Text>
         <Text className={stylesheet.reportCardDesc}>
-          Lorem ipsum dolor sit amet consectetur dispsi{' '}
+          {reportDetails.notes.replaceAll(',', ' ')}
         </Text>
       </View>
 
@@ -61,6 +63,10 @@ const ResourceCard = ({
 
 const ReportPage = ({ navigation }) => {
   const { dispatch, reports } = useApp();
+  const {
+    control,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     dispatch(AppActions.REQUEST_FETCH_REPORTS);
@@ -68,6 +74,15 @@ const ReportPage = ({ navigation }) => {
 
   return (
     <AppPageScaffold title='Relatórios'>
+      <InputContainer
+        className='bg-[#FAFAFA] mb-4 '
+        secureTextEntry={true}
+        placeholder='Pesquisar'
+        label=''
+        name='search'
+        control={control}
+        errors={errors}
+      ></InputContainer>
       {reports &&
         reports.map((report) => (
           <ResourceCard

@@ -9,6 +9,9 @@ import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffol
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
 import { useAuth } from 'src/infra/auth/auth';
 import { useNavigation } from '@react-navigation/native';
+import { useApp } from 'src/infra/app/app';
+import { differenceInDays, format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const stylesheet = {
   userName: 'text-2xl font-bold p-4',
@@ -59,11 +62,28 @@ const categories: Array<HomeCategory> = [
 ];
 
 const CountingDaysTitle = () => {
+  const { episodes } = useApp();
+
   return (
     <View className={stylesheet.countingDays.card}>
-      <Text className={stylesheet.countingDays.title}>
-        Você está a 40 dias sem crises!
-      </Text>
+      {episodes && (
+        <Text className={stylesheet.countingDays.title}>
+          Você está a{' '}
+          {episodes?.length > 0
+            ? differenceInDays(
+                format(new Date(), 'yyyy-MM-dd', {
+                  locale: ptBR,
+                }),
+                new Date(
+                  format(episodes[0].dateTime, 'yyyy-MM-dd', {
+                    locale: ptBR,
+                  })
+                )
+              )
+            : 0}{' '}
+          dias sem crises!
+        </Text>
+      )}
     </View>
   );
 };
@@ -114,6 +134,7 @@ const InnerHomeContainer = () => {
 
 const HomePage = () => {
   const { session } = useAuth();
+
   return (
     <AppPageScaffold>
       <Text className={stylesheet.userName}>Olá, {session?.user.name}...</Text>

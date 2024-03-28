@@ -1,10 +1,17 @@
 import { useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Dimensions, Image, Pressable, Text, View } from 'react-native';
-import { BarChart, LineChart, PieChart } from 'react-native-chart-kit';
-import { Report } from 'src/infra/@types/app.types';
+import {
+  BarChart,
+  LineChart,
+  PieChart,
+  StackedBarChart,
+} from 'react-native-chart-kit';
+import { Acuteness, Episode, Report } from 'src/infra/@types/app.types';
+import { AppActions } from 'src/infra/app/actions';
+import { useApp } from 'src/infra/app/app';
 import {
   parseAcuteness,
   parseLocation,
@@ -15,26 +22,25 @@ import {
   pinColor,
 } from 'src/infra/utils/appUtils';
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
+import AcutenessLegend from 'src/modules/app/shared/components/calendar/AcutenessLegend';
 
 const stylesheet = {
-  wrapper: 'h-2/4 w-full rounded-[25px] bg-white',
+  wrapper: 'min-h-[200px] w-full rounded-[25px] bg-white shadow-sm my-4',
   header:
     'bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4',
   status: 'w-[26px] h-[26px] rounded-full',
   contentWrapper:
-    'h-[90%] w-full p-[28px] flex-col justify-between items-center',
-  content:
-    'bg-primary w-full h-[70%] rounded-[16px] p-6 flex-col justify-around ',
-  summaryItem: 'flex-row gap-x-4',
+    'h-[85%] w-full p-[28px] flex-col justify-between items-center',
+  content: 'bg-primary w-full rounded-[16px] p-6 flex-col justify-around ',
+  summaryItem: 'flex-row gap-x-4 my-1',
   footer: 'w-full h-[20%]',
-  footerBtn: 'bg-primary w-ful h-full rounded-full p-2',
+  footerBtn: 'bg-[#F8ECDE] w-ful h-full rounded-full p-2 my-2',
   footerBtnInner:
     'bg-white w-ful h-full rounded-full p-1 flex-row items-center justify-center',
 };
 
-const SummedUpReport = () => {
-  const route = useRoute();
-  const [report, _] = useState<Report>(route.params['reportDetails']);
+const SummedUpReport = (data: { report: Report }) => {
+  const { report } = data;
   return (
     <View className={stylesheet.wrapper}>
       <View className={stylesheet.header}>
@@ -43,39 +49,60 @@ const SummedUpReport = () => {
           style={{ backgroundColor: pinColor(report.acuteness) }}
         ></View>
         <Text>
-          {format(report.startDate, 'dd MMM', { locale: ptBR })} -
-          {format(report.endDate, 'dd MMM', { locale: ptBR })} -
+          {format(new Date(report.startDate), 'dd MMM', { locale: ptBR })} -{' '}
+          {format(new Date(report.endDate), 'dd MMM', { locale: ptBR })}
         </Text>
         <View></View>
       </View>
       <View className={stylesheet.contentWrapper}>
         <View className={stylesheet.content}>
           <View className={stylesheet.summaryItem}>
-            <Image source={require('assets/stats.png')}></Image>
+            <Image
+              className='w-4 h-4'
+              source={require('assets/chart-doc.png')}
+            />
             <Text>{report.episodeAmount} episódios</Text>
           </View>
           <View className={stylesheet.summaryItem}>
-            <Image source={require('assets/stats.png')}></Image>
+            <Image
+              className='w-4 h-4'
+              source={require('assets/chart-clock.png')}
+            />
             <Text>{parseTime(report.time)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
-            <Image source={require('assets/stats.png')}></Image>
+            <Image
+              className='w-4 h-4'
+              source={require('assets/chart-header-location.png')}
+            />
             <Text>{parseLocation(report.location)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
-            <Image source={require('assets/stats.png')}></Image>
+            <Image
+              className='w-4 h-4'
+              source={require('assets/chart-acuteness.png')}
+            />
             <Text>{parseAcuteness(report.acuteness)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
-            <Image source={require('assets/stats.png')}></Image>
+            <Image
+              className='w-4 h-4'
+              source={require('assets/chart-sad.png')}
+            />
             <Text>{parsePainType(report.painType)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
-            <Image source={require('assets/stats.png')}></Image>
+            <Image
+              className='w-4 h-4'
+              source={require('assets/chart-symptom.png')}
+            />
             <Text>{parseSymptoms(report.symptoms)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
-            <Image source={require('assets/stats.png')}></Image>
+            <Image
+              className='w-4 h-4'
+              source={require('assets/chart-trigger.png')}
+            />
             <Text>{parseTriggers(report.triggers)} </Text>
           </View>
         </View>
@@ -96,46 +123,92 @@ const SummedUpReport = () => {
 };
 
 const ChartsPage = () => {
+  const route = useRoute();
+  const { dispatch } = useApp();
+  const [report, _] = useState<Report>(route.params['reportDetails']);
+  const [episodes, setEpisodes] = useState([]);
+
+  useEffect(() => {
+    dispatch(
+      AppActions.REQUEST_FETCH_REPORTS_EPISODES_RANGE,
+      report.episodesIds
+    ).then((res) => {
+      setEpisodes(res);
+    });
+  }, [this]);
+
+  const months = useMemo(() => {
+    const monthsList: string[] = [];
+    episodes.map((ep: Episode) => {
+      if (
+        ep?.dateTime &&
+        !monthsList.includes(format(ep?.dateTime, 'MMMM', { locale: ptBR }))
+      ) {
+        monthsList.push(format(ep?.dateTime, 'MMMM', { locale: ptBR }));
+      }
+      return ep;
+    });
+    return monthsList;
+  }, [episodes]);
+
+  const acuteness = useMemo(() => {
+    const monthAcutenessCount: number[] = [];
+    months.map((month: string) => {
+      [Acuteness.LIGHT, Acuteness.MILD, Acuteness.SEVERE].forEach((indx) => {
+        monthAcutenessCount.push(
+          episodes.filter(
+            (ep: Episode) =>
+              month == format(ep.dateTime, 'MMMM', { locale: ptBR }) &&
+              indx == ep.acuteness
+          ).length
+        );
+      });
+    });
+    return monthAcutenessCount;
+  }, [episodes]);
+
   return (
     <AppPageScaffold title='Relatório'>
-      <SummedUpReport />
+      {!!report && <SummedUpReport report={report} />}
 
-      <LineChart
+      <Text className='mt-4 mb-2 pl-2 font-medium '>Intensidade da dor </Text>
+
+      <BarChart
         data={{
-          labels: ['Janeiro', 'Fevereiro', 'Março'],
+          labels: months,
           datasets: [
             {
-              data: [3, 5, 1],
+              data: acuteness,
+              colors: [() => '#C8F7E1', () => '#FFCBA6', () => '#FFCACD'],
             },
           ],
         }}
         width={Dimensions.get('window').width - 32} // from react-native
         height={220}
         chartConfig={{
-          backgroundColor: '#8FD7FF',
-          backgroundGradientFrom: '#A5D1EA',
-          backgroundGradientTo: '#B4CFE6',
-          decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          backgroundColor: '#fff',
+          backgroundGradientFrom: '#fff',
+          backgroundGradientTo: '#f7f7f7',
+          decimalPlaces: 0, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          propsForDots: {
+            stroke: 'transparent',
+          },
           style: {
             borderRadius: 30,
-            paddingTop: 20,
-          },
-          propsForDots: {
-            r: '6',
-            strokeWidth: '2',
-            stroke: '#F7F7F7',
+            padding: 24,
           },
         }}
-        bezier
         style={{
-          marginVertical: 8,
           borderRadius: 16,
+          shadowColor: '#ccc',
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.1,
         }}
       />
+      <AcutenessLegend />
 
-      <BarChart
+      {/* <BarChart
         style={{
           marginVertical: 8,
           borderRadius: 16,
@@ -170,9 +243,9 @@ const ChartsPage = () => {
         width={Dimensions.get('window').width - 32} // from react-native
         height={220}
         verticalLabelRotation={30}
-      />
+      /> */}
 
-      <PieChart
+      {/* <PieChart
         data={[
           {
             name: 'Seoul',
@@ -234,7 +307,7 @@ const ChartsPage = () => {
         paddingLeft={'15'}
         center={[10, 50]}
         absolute
-      />
+      /> */}
     </AppPageScaffold>
   );
 };

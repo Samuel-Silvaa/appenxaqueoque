@@ -26,6 +26,10 @@ const TabsRoutes = () => {
     if (!patient) dispatch(AppActions.REQUEST_FETCH_PATIENT, {});
   }, []);
 
+  React.useEffect(() => {
+    dispatch(AppActions.REQUEST_FETCH_EPISODES);
+  }, []);
+
   return (
     <Tab.Navigator
       screenListeners={{

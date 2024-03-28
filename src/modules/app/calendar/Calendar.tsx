@@ -3,22 +3,17 @@ import './locale';
 
 import CalendarComponent from '../shared/components/calendar/CalendarComponent';
 import { useApp } from 'src/infra/app/app';
-import { useEffect, useMemo, useState } from 'react';
-import { AppActions } from 'src/infra/app/actions';
+import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
-import { Text, View } from 'react-native';
-import { Acuteness } from 'src/infra/@types/app.types';
+import { View } from 'react-native';
 import EpisodeModal from 'src/modules/shared/components/episodemodal/EpisodeModal';
 import { pinColor } from 'src/infra/utils/appUtils';
+import AcutenessLegend from '../shared/components/calendar/AcutenessLegend';
 
 const InnerHomeContainer = () => {
-  const { episodes, dispatch } = useApp();
+  const { episodes } = useApp();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState();
-
-  useEffect(() => {
-    dispatch(AppActions.REQUEST_FETCH_EPISODES);
-  }, []);
 
   const parsedEpisodes = useMemo(() => {
     if (Array.isArray(episodes)) {
@@ -31,6 +26,7 @@ const InnerHomeContainer = () => {
           dotColor: pinColor(ep.acuteness),
         };
       });
+      console.log(markedDates);
       return markedDates;
     } else {
       return {};
@@ -69,39 +65,11 @@ const InnerHomeContainer = () => {
   );
 };
 
-const CalendarSubtitle = () => {
-  return (
-    <View className='flex-row justify-around item-center w-full my-8 '>
-      <Text>
-        <View
-          style={{ backgroundColor: pinColor(Acuteness.SEVERE) }}
-          className='w-3 h-3 rounded-full mx-2'
-        ></View>
-        Forte
-      </Text>
-      <Text>
-        <View
-          style={{ backgroundColor: pinColor(Acuteness.MILD) }}
-          className='w-3 h-3 rounded-full  mx-2'
-        ></View>
-        Moderada
-      </Text>
-      <Text>
-        <View
-          style={{ backgroundColor: pinColor(Acuteness.LIGHT) }}
-          className='w-3 h-3 rounded-full  mx-2'
-        ></View>
-        Leve
-      </Text>
-    </View>
-  );
-};
-
 const CalendarPage = () => {
   return (
     <AppPageScaffold>
       <InnerHomeContainer />
-      <CalendarSubtitle />
+      <AcutenessLegend />
     </AppPageScaffold>
   );
 };

@@ -8,6 +8,8 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useApp } from 'src/infra/app/app';
 import { Trigger as TriggerType } from 'src/infra/@types/app.types';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { useEffect, useState } from 'react';
 
 interface TriggerSchema {
   foodImpair: string;
@@ -43,38 +45,56 @@ const Trigger = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(triggerSchema) });
 
+  const handleSetTriggersValues = (value: string) => {
+    if (episodeFormState.triggers.includes(value)) {
+      handleFormChange({
+        triggers: episodeFormState.triggers.filter((tr) => tr !== value),
+      });
+    } else {
+      handleFormChange({ triggers: [...episodeFormState.triggers, value] });
+    }
+  };
+
+  useEffect(() => {
+    console.log(episodeFormState.triggers);
+  }, [episodeFormState.triggers]);
+
   return (
     <View className='h-full w-full'>
       <Wrapper title='Nos diga quais foram os gatilhos : '>
-        <RadioButton.Group
-          onValueChange={(value) => handleFormChange({ triggers: value })}
-          value={episodeFormState.triggers}
-        >
-          {data.map((act, index) => (
-            <Card
-              key={index}
-              onPress={() => {
-                handleFormChange({ triggers: act.value });
-              }}
-              children={
-                <View className='flex-row items-center'>
-                  <RadioButton value={act.value} color='#CEB0FA' />
-                  <Text>{act.label}</Text>
-                </View>
-              }
-              image={act?.img}
-            />
-          ))}
-        </RadioButton.Group>
+        {data.map((act, index) => (
+          <Card
+            key={index}
+            onPress={() => {
+              handleSetTriggersValues(act.value);
+            }}
+            children={
+              <View className='flex-row items-center'>
+                <BouncyCheckbox
+                  size={22}
+                  fillColor='#CEB0FA'
+                  unfillColor='#FFFFFF'
+                  textStyle={{ textDecorationLine: 'none' }}
+                  text={act.label}
+                  isChecked={episodeFormState.triggers.includes(act.value)}
+                  onPress={(isChecked: boolean) => {
+                    handleSetTriggersValues(act.value);
+                  }}
+                />
+              </View>
+            }
+            image={act?.img}
+          />
+        ))}
       </Wrapper>
       <InputContainer
         label='Qual alimento foi o gatilho?'
         name='foodImpair'
         control={control}
         errors={errors}
-        editable={episodeFormState.triggers == TriggerType.FOOD}
+        editable={episodeFormState.triggers.includes(TriggerType.FOOD)}
         className={`${
-          episodeFormState.triggers == TriggerType.FOOD
+          episodeFormState.triggers.includes(TriggerType.FOOD)
             ? 'opacity-100'
             : ' opacity-25'
         } bg-white drop-shadow-sm`}

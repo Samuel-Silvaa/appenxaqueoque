@@ -46,7 +46,7 @@ const Notes = () => {
               control={control}
               errors={errors}
               defaultValue={episodeFormState.notes}
-              className='bg-white w-full p-4 min-h-[140px]'
+              className='bg-white w-full p-4 min-h-[140px] my-0'
               numberOfLines={4}
               multiline={true}
               onChange={(e) => handleFormChange({ notes: e.target.value })}

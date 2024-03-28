@@ -31,10 +31,15 @@ const requestFetchEpisodes = async (patientId: string): Promise<Episode[]> =>
 const requestFetchReports = async (patientId: string): Promise<Episode[]> =>
   get(`report/list/${patientId}`);
 
+const requestFetchReportEpisodesRange = async (
+  ids: string
+): Promise<Episode[]> => get(`report/episodes`, {}, { ids: ids });
+
 export {
   requestCreateEpisode,
   requestFetchPatient,
   requestFetchEpisodes,
   requestUpdateEpisode,
   requestFetchReports,
+  requestFetchReportEpisodesRange,
 };

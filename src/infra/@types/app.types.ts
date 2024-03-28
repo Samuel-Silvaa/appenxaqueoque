@@ -18,7 +18,7 @@ export interface Episode {
   foodImpair: string;
   foodImprovement: string;
   id?: string;
-  improvementFactor: string;
+  improvementFactor: string[];
   isEdition?: boolean;
   location: string;
   medicine: string;
@@ -28,9 +28,9 @@ export interface Episode {
   painType: string;
   period: string;
   periodNotes: string;
-  symptoms: string;
+  symptoms: string[];
   time: string;
-  triggers: string;
+  triggers: string[];
 }
 
 export interface Report {
@@ -45,18 +45,16 @@ export interface Report {
   symptoms: number;
   triggers: number;
   improvementFactor: number;
+  episodesIds: string;
+  notes: string;
+  periodNotes: string;
 }
 
 export interface AppContextDefaultValues {
-  dispatch: (
-    action: any,
-    payload?: any,
-    assetId?: string
-  ) => Promise<any> | void;
+  dispatch: (action: any, payload?: any, assetId?: string) => Promise<any>;
   steps: number;
   currentStep: number;
   validateStepForward: (step: number) => boolean;
-  validateAutomaticEpisodeStepNavigation: () => boolean;
   handleFormChange: (payload: object) => void;
   submitEpisode: () => void;
   clearEpisodeFormState: () => void;

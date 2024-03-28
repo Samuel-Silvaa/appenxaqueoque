@@ -34,6 +34,7 @@ export const parseAcuteness = (acuteness: number) => {
       return Acuteness.SEVERE;
   }
 };
+
 export const parseTime = (acuteness: number) => {
   switch (acuteness) {
     case 0:
@@ -46,6 +47,7 @@ export const parseTime = (acuteness: number) => {
       Time.MIDNIGHT;
   }
 };
+
 export const parseImprovementFactor = (acuteness: number) => {
   switch (acuteness) {
     case 0:
@@ -56,6 +58,7 @@ export const parseImprovementFactor = (acuteness: number) => {
       return ImprovementFactor.FOOD;
   }
 };
+
 export const parseSymptoms = (acuteness: number) => {
   switch (acuteness) {
     case 0:

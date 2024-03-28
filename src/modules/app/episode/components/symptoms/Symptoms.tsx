@@ -4,6 +4,7 @@ import Wrapper from '../form/wrapper/Wrapper';
 import Card from '../form/card/Card';
 import { useApp } from 'src/infra/app/app';
 import { Symptom as SymptomType } from 'src/infra/@types/app.types';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 const data: {
   label: string;
@@ -40,29 +41,43 @@ const data: {
 const Symptoms = () => {
   const { episodeFormState, handleFormChange } = useApp();
 
+  const handleSetSymptomsValues = (value: string) => {
+    if (episodeFormState.symptoms.includes(value)) {
+      handleFormChange({
+        symptoms: episodeFormState.symptoms.filter((tr) => tr !== value),
+      });
+    } else {
+      handleFormChange({ symptoms: [...episodeFormState.symptoms, value] });
+    }
+  };
+
   return (
     <View className='h-full w-full'>
       <Wrapper title='Nos diga quais são os sintomas : '>
-        <RadioButton.Group
-          onValueChange={(value) => handleFormChange({ symptoms: value })}
-          value={episodeFormState.symptoms}
-        >
-          {data.map((act, index) => (
-            <Card
-              key={index}
-              onPress={() => {
-                handleFormChange({ symptoms: act.value });
-              }}
-              children={
-                <View className='flex-row items-center'>
-                  <RadioButton value={act.value} color='#CEB0FA' />
-                  <Text>{act.label}</Text>
-                </View>
-              }
-              image={act?.img}
-            />
-          ))}
-        </RadioButton.Group>
+        {data.map((act, index) => (
+          <Card
+            key={index}
+            onPress={() => {
+              handleSetSymptomsValues(act.value);
+            }}
+            children={
+              <View className='flex-row items-center'>
+                <BouncyCheckbox
+                  size={22}
+                  fillColor='#CEB0FA'
+                  unfillColor='#FFFFFF'
+                  textStyle={{ textDecorationLine: 'none' }}
+                  text={act.label}
+                  isChecked={episodeFormState.symptoms.includes(act.value)}
+                  onPress={(isChecked: boolean) => {
+                    handleSetSymptomsValues(act.value);
+                  }}
+                />
+              </View>
+            }
+            image={act?.img}
+          />
+        ))}
       </Wrapper>
     </View>
   );
