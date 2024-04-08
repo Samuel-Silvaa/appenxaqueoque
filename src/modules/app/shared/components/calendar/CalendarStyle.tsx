@@ -6,7 +6,7 @@ export const CalendarTheme: Theme = {
     width: '9px',
     height: '9px',
     transform: 'translateY(8px)',
-    borderRadius: '50%',
+    borderRadius: 4.5,
   },
   backgroundColor: '#ffffff',
   calendarBackground: '#ffffff',
@@ -22,6 +22,5 @@ export const CalendarTheme: Theme = {
 export const Calendarstyle: StyleProp<ViewStyle> = {
   position: 'relative',
   width: Dimensions.get('window').width - 50,
-  minHeight: 400,
-  borderRadius: 30,
+  borderRadius: 28,
 };

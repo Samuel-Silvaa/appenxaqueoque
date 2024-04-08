@@ -20,7 +20,7 @@ const stylesheet = {
 const Tab = createBottomTabNavigator();
 
 const TabsRoutes = () => {
-  const { patient, dispatch, setPageTitle } = useApp();
+  const { patient, dispatch, setPageTitle, validateStepForward } = useApp();
 
   React.useEffect(() => {
     if (!patient) dispatch(AppActions.REQUEST_FETCH_PATIENT, {});
@@ -30,12 +30,26 @@ const TabsRoutes = () => {
     dispatch(AppActions.REQUEST_FETCH_EPISODES);
   }, []);
 
+  const getHeaderName = (routeIndex: number) => {
+    switch (routeIndex) {
+      case 1:
+        return 'Relatório';
+      case 2:
+        return 'Data e horário';
+      case 3:
+        return 'Calenário';
+      default:
+        return '';
+    }
+  };
+
   return (
     <Tab.Navigator
       screenListeners={{
         state: (e) => {
-          console.log('state:: ', e);
-          if (setPageTitle) setPageTitle('');
+          validateStepForward(0);
+          if (setPageTitle && e.data?.state)
+            setPageTitle(getHeaderName(e.data?.state.index));
         },
       }}
       screenOptions={({ route }) => ({
@@ -58,7 +72,7 @@ const TabsRoutes = () => {
                         : 'text-[#262D33]' + ' text-[9px]'
                     }
                   >
-                    {route.name}
+                    Início
                   </Text>
                 </>
               );
@@ -76,7 +90,7 @@ const TabsRoutes = () => {
                         : 'text-[#262D33]' + ' text-[9px]'
                     }
                   >
-                    {route.name}
+                    Relatório
                   </Text>
                 </>
               );
@@ -100,7 +114,7 @@ const TabsRoutes = () => {
                         : 'text-[#262D33]' + ' text-[9px]'
                     }
                   >
-                    {route.name}
+                    Calenário
                   </Text>
                 </>
               );
@@ -118,7 +132,7 @@ const TabsRoutes = () => {
                         : 'text-[#262D33]' + ' text-[9px]'
                     }
                   >
-                    {route.name}
+                    Perfil
                   </Text>
                 </>
               );

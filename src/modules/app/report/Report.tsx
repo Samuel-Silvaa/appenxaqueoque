@@ -4,7 +4,7 @@ import { Image, Pressable, Text, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import screenOptions from 'src/modules/shared/style/StackOptions';
 import { useApp } from 'src/infra/app/app';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AppActions } from 'src/infra/app/actions';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -13,13 +13,15 @@ import ChartsPage from './components/charts/Charts';
 import { Report } from 'src/infra/@types/app.types';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useForm } from 'react-hook-form';
+import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
+import ReportDateRangeModal from 'src/modules/shared/components/reportDateRangeModal/ReportDateRangeModal';
 
 const stylesheet = {
   reportCard:
     'w-full flex-row items-start p-3 my-1 bg-white rounded-[30px] h-[90px]',
   reportCardColor: 'h-[80%] rounded-full w-2 mr-4 py-2 self-center',
   reportCardHeader: 'flex-col h-full w-[80%]',
-  reportCardDesc: 'mt-2 w-3/4 truncate text-ellipsis lowercase opacity-50',
+  reportCardDesc: 'mt-2 w-3/4 truncate lowercase opacity-50',
 };
 
 const ResourceCard = ({
@@ -63,26 +65,47 @@ const ResourceCard = ({
 
 const ReportPage = ({ navigation }) => {
   const { dispatch, reports } = useApp();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState();
+
   const {
     control,
     formState: { errors },
   } = useForm();
 
   useEffect(() => {
-    dispatch(AppActions.REQUEST_FETCH_REPORTS);
+    dispatch(AppActions.REQUEST_FETCH_REPORTS, {});
   }, []);
 
   return (
     <AppPageScaffold title='Relatórios'>
-      <InputContainer
-        className='bg-[#FAFAFA] mb-4 '
-        secureTextEntry={true}
-        placeholder='Pesquisar'
-        label=''
-        name='search'
-        control={control}
-        errors={errors}
-      ></InputContainer>
+      <View className='flex-col items-center justify-between my-4 gap-y-4'>
+        <View className='w-full pr-2 h-[45px]'>
+          <InputContainer
+            className='bg-[#FAFAFA] rounded-[16px] h-[45px]'
+            placeholder='Pesquisar'
+            label=''
+            name='search'
+            control={control}
+            errors={errors}
+          ></InputContainer>
+        </View>
+        <View className='flex-row justify-between items-center w-full '>
+          <ExPressable
+            className='rounded-full w-2/4 h-[45px]'
+            title='Gerar relatório'
+            onPress={() => setIsModalOpen(true)}
+          />
+          <ExPressable
+            className='rounded-full w-[40%] h-[45px]'
+            title='Filtrar'
+            colorScheme='light'
+            onPress={() => setIsFilterModalOpen(true)}
+          />
+        </View>
+      </View>
+
       {reports &&
         reports.map((report) => (
           <ResourceCard
@@ -91,6 +114,19 @@ const ReportPage = ({ navigation }) => {
             navigation={navigation}
           />
         ))}
+      {isModalOpen && (
+        <ReportDateRangeModal
+          isOpen={isModalOpen}
+          onClose={(dates) => setIsModalOpen(false)}
+        />
+      )}
+      {isFilterModalOpen && (
+        <ReportDateRangeModal
+          filter
+          isOpen={isFilterModalOpen}
+          onClose={(dates) => setIsFilterModalOpen(false)}
+        />
+      )}
     </AppPageScaffold>
   );
 };

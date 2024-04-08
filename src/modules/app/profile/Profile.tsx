@@ -34,6 +34,9 @@ const ProfilePage = () => {
       <CustomActionButton title='Editar perfil' />
       <CustomActionButton title='Termos de uso' />
       <CustomActionButton title='Sair' />
+      <CustomActionButton title='Editar perfil' />
+      <CustomActionButton title='Termos de uso' />
+      <CustomActionButton title='Sair' />
     </AppPageScaffold>
   );
 };

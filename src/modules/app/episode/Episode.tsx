@@ -1,16 +1,24 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { useApp } from 'src/infra/app/app';
 import FormSteps from './components';
-import { ReactNode, createRef, useEffect } from 'react';
+import { RefObject, createRef, useEffect, useState } from 'react';
+
+import { sharedEpisodeStyleSheet } from './shared/SharedEpisodeStyleSheet';
+import React from 'react';
 
 const stylesheet = {
   steps: {
     container: 'flex-row w-full justify-center items-center',
-  },
-  topic: {
-    container: 'flex-row w-full my-8 ',
-    item: 'font-semibold min-w-[100px] h-[43px] rounded-full flex items-center justify-center mx-2 p-2',
   },
   form: {
     wrapper: 'flex-col w-full ',
@@ -22,8 +30,9 @@ const stylesheet = {
 
 const Steps = () => {
   const { steps, currentStep } = useApp();
+
   return (
-    <View className={stylesheet.steps.container}>
+    <Animated.View className={stylesheet.steps.container}>
       {Array(steps)
         .fill(0)
         .map((_, index) => {
@@ -38,7 +47,7 @@ const Steps = () => {
             ></View>
           );
         })}
-    </View>
+    </Animated.View>
   );
 };
 
@@ -47,10 +56,17 @@ interface HeadListProps {
   index: number;
 }
 
-const Topic = () => {
-  const { validateStepForward } = useApp();
-  const { currentStep, episodeFormState } = useApp();
-  const flatList = createRef<FlatList>();
+interface EpisodeScaffold {
+  headerStepsFlatListRef: RefObject<FlatList>;
+  episodePagesFlatListRef: RefObject<FlatList>;
+}
+
+const Topic = ({
+  headerStepsFlatListRef,
+  episodePagesFlatListRef,
+}: EpisodeScaffold) => {
+  const { validateStepForward, setPageTitle } = useApp();
+  const { currentStep } = useApp();
 
   const DATA: { id: string; title: string }[] = [
     {
@@ -92,43 +108,34 @@ const Topic = () => {
   ];
 
   useEffect(() => {
-    return () => {
-      if (flatList.current) {
-        flatList.current.scrollToIndex({
-          index: 0,
-          animated: true,
-        });
-      }
-    };
-  }, []);
+    if (setPageTitle && currentStep > 0) setPageTitle(DATA[currentStep].title);
+  }, [currentStep]);
 
   return (
-    <View className={stylesheet.topic.container}>
+    <View className={sharedEpisodeStyleSheet.topic.container}>
       <FlatList
-        ref={flatList}
+        ref={headerStepsFlatListRef}
         data={DATA}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }: HeadListProps) => (
           <TouchableOpacity
             onPress={() => {
-              if (validateStepForward(index)) {
-                if (flatList.current) {
-                  flatList.current.scrollToIndex({
+              if (validateStepForward(index))
+                if (episodePagesFlatListRef?.current) {
+                  episodePagesFlatListRef?.current.scrollToIndex({
                     index: index,
                     animated: true,
                   });
                 }
-              } else {
-                if (flatList.current) {
-                  flatList.current.scrollToIndex({
-                    index: currentStep,
-                    animated: true,
-                  });
-                }
+              if (headerStepsFlatListRef?.current) {
+                headerStepsFlatListRef?.current.scrollToIndex({
+                  index: index,
+                  animated: true,
+                });
               }
             }}
             className={
-              stylesheet.topic.item +
+              sharedEpisodeStyleSheet.topic.item +
               `${
                 currentStep == index
                   ? ' bg-purple-dark-primary '
@@ -151,58 +158,131 @@ const Topic = () => {
     </View>
   );
 };
+const pages = [
+  { page: <FormSteps.Datetime /> },
+  { page: <FormSteps.Location /> },
+  { page: <FormSteps.Acuteness /> },
+  { page: <FormSteps.PainType /> },
+  { page: <FormSteps.Symptoms /> },
+  { page: <FormSteps.Trigger /> },
+  { page: <FormSteps.ImprovementFactor /> },
+  { page: <FormSteps.Period /> },
+  { page: <FormSteps.Notes /> },
+];
 
-const getCurrentFormElement = (step: number): ReactNode => {
-  switch (step) {
-    case 0:
-      return <FormSteps.Datetime />;
-    case 1:
-      return <FormSteps.Location />;
-    case 2:
-      return <FormSteps.Acuteness />;
-    case 3:
-      return <FormSteps.PainType />;
-    case 4:
-      return <FormSteps.Symptoms />;
-    case 5:
-      return <FormSteps.Trigger />;
-    case 6:
-      return <FormSteps.ImprovementFactor />;
-    case 7:
-      return <FormSteps.Period />;
-    case 8:
-      return <FormSteps.Notes />;
-  }
-};
+const FormContent = ({
+  episodePagesFlatListRef,
+  headerStepsFlatListRef,
+}: EpisodeScaffold) => {
+  const { currentStep, validateStepForward } = useApp();
+  const [screenOfffset, setScreenOffset] = useState(0);
 
-const FormContent = () => {
-  const { currentStep } = useApp();
+  const handleHeaderSlideAction = (direction: number) => {
+    if (direction == 0 && currentStep < pages.length - 1) {
+      if (validateStepForward(currentStep + 1))
+        if (headerStepsFlatListRef?.current) {
+          headerStepsFlatListRef?.current.scrollToIndex({
+            index: currentStep + 1,
+            animated: true,
+          });
+        }
+    } else if (direction == 1) {
+      if (validateStepForward(currentStep - 1))
+        if (headerStepsFlatListRef?.current) {
+          headerStepsFlatListRef?.current.scrollToIndex({
+            index: currentStep - 1,
+            animated: true,
+          });
+        }
+    }
+  };
+
+  const handleScrollBeginDrag = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    setScreenOffset(event.nativeEvent.contentOffset.x);
+  };
+
+  const handleScrollEndDrag = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    const endOffset = event.nativeEvent.contentOffset.x;
+    handleHeaderSlideAction(endOffset > screenOfffset ? 0 : 1);
+  };
+
   return (
-    <View className={stylesheet.form.wrapper}>
-      {getCurrentFormElement(currentStep)}
-    </View>
+    <FlatList
+      ref={episodePagesFlatListRef}
+      windowSize={3}
+      initialNumToRender={5}
+      initialScrollIndex={currentStep}
+      maxToRenderPerBatch={5}
+      horizontal
+      pagingEnabled={true}
+      decelerationRate='fast'
+      bounces={true}
+      showsHorizontalScrollIndicator={false}
+      renderItem={({ item, index }) => (
+        <View
+          style={{
+            width: Dimensions.get('screen').width - 32,
+            paddingTop: 20,
+          }}
+        >
+          {item.page}
+        </View>
+      )}
+      keyExtractor={(item, index) => item.toString() + index}
+      onScrollBeginDrag={handleScrollBeginDrag}
+      onScrollEndDrag={handleScrollEndDrag}
+      scrollEventThrottle={16} // Adjust as needed
+      data={pages}
+    />
   );
 };
 
-const FormHeader = () => {
+const FormHeader = ({
+  headerStepsFlatListRef,
+  episodePagesFlatListRef,
+}: EpisodeScaffold) => {
   return (
     <View className={stylesheet.form.header.wrapper}>
       <Steps />
-      <Topic />
+      <Topic
+        headerStepsFlatListRef={headerStepsFlatListRef}
+        episodePagesFlatListRef={episodePagesFlatListRef}
+      />
     </View>
   );
 };
 
 const FormScaffold = () => {
+  const { currentStep } = useApp();
+  const headerStepsFlatListRef = createRef<FlatList>();
+  const episodePagesFlatListRef = createRef<FlatList>();
+
   return (
     <View className='w-full'>
-      <FormHeader />
-      <FormContent />
+      <FormHeader
+        headerStepsFlatListRef={headerStepsFlatListRef}
+        episodePagesFlatListRef={episodePagesFlatListRef}
+      />
+      <FormContent
+        headerStepsFlatListRef={headerStepsFlatListRef}
+        episodePagesFlatListRef={episodePagesFlatListRef}
+      />
     </View>
   );
 };
 
 const EpisodePage = () => {
+  const { setPageTitle } = useApp();
+
+  useEffect(() => {
+    return () => {
+      if (setPageTitle) setPageTitle('');
+    };
+  }, [this]);
   return (
     <AppPageScaffold>
       <FormScaffold />

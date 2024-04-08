@@ -1,20 +1,17 @@
 import React, {
   createContext,
+  createRef,
   ReactNode,
+  RefObject,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 
-import {
-  AppContextDefaultValues,
-  Episode,
-  Patient,
-  Trigger,
-} from '../@types/app.types';
+import { AppContextDefaultValues, Episode, Patient } from '../@types/app.types';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
 import {
   requestCreateEpisode,
+  requestCreateReport,
   requestFetchEpisodes,
   requestFetchPatient,
   requestFetchReportEpisodesRange,
@@ -76,22 +73,23 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     setEpisodeFormState(episodeInitialForm);
   };
 
-  const ValidateFormEnabledAndReturnBehavior = (
-    condition = true,
-    nextStep = currentStep + 1,
-    showToast = true
-  ): boolean => {
-    if (condition) {
-      setCurrentStep(nextStep);
-      return true;
-    }
-    if (showToast)
-      handleToast(
-        'Preencha todos os campos obrigatórios antes de continuar!',
-        'danger'
-      );
-    return false;
-  };
+  // const ValidateFormEnabledAndReturnBehavior = (
+  //   condition = true,
+  //   nextStep = currentStep + 1,
+  //   showToast = true
+  // ): boolean => {
+  //   if (condition) {
+  //     setCurrentStep(nextStep);
+  //     debugger;
+  //     return true;
+  //   }
+  //   if (showToast)
+  //     handleToast(
+  //       'Preencha todos os campos obrigatórios antes de continuar!',
+  //       'danger'
+  //     );
+  //   return false;
+  // };
 
   const episodeTitle = () => {
     switch (currentStep) {
@@ -116,112 +114,12 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    setPageTitle(episodeTitle());
-  }, [currentStep]);
-
-  // const validateAutomaticEpisodeStepNavigation = (
-  //   nextStep?: number
-  // ): boolean => {
-  //   if (!episodeFormState?.isEdition)
-  //     switch (currentStep) {
-  //       case 0:
-  //         if (!!episodeFormState.dates && !!episodeFormState.time)
-  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-  //       case 1:
-  //         if (!!episodeFormState.dates && !!episodeFormState.time)
-  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-  //       case 2:
-  //         if (!!episodeFormState.acuteness)
-  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-  //       case 3:
-  //         if (!!episodeFormState.painType)
-  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-  //       case 4:
-  //         if (!!episodeFormState.symptoms)
-  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-  //       case 5:
-  //         if (
-  //           episodeFormState.triggers != Trigger.FOOD &&
-  //           !!episodeFormState.triggers
-  //         )
-  //           return ValidateFormEnabledAndReturnBehavior(true, nextStep, false);
-  //       default:
-  //         return false;
-  //     }
-  //   return false;
-  // };
-
-  const validateFullfilledForm = (nextStep: number): boolean => {
-    switch (currentStep) {
-      case 0:
-        return ValidateFormEnabledAndReturnBehavior(
-          !!episodeFormState.dates && !!episodeFormState.time,
-          nextStep
-        );
-      case 1:
-        return ValidateFormEnabledAndReturnBehavior(
-          // !!episodeFormState.dates && !!episodeFormState.time,
-          true,
-          nextStep
-        );
-      case 2:
-        return ValidateFormEnabledAndReturnBehavior(
-          // !!episodeFormState.acuteness,
-          true,
-          nextStep
-        );
-      case 3:
-        return ValidateFormEnabledAndReturnBehavior(
-          // !!episodeFormState.painType,
-          true,
-          nextStep
-        );
-      case 4:
-        return ValidateFormEnabledAndReturnBehavior(
-          // !!episodeFormState.symptoms,
-          true,
-          nextStep
-        );
-      case 5:
-        return ValidateFormEnabledAndReturnBehavior(
-          // episodeFormState.triggers == Trigger.FOOD
-          //   ? !!episodeFormState.triggers && !!episodeFormState.foodImpair
-          //   : !!episodeFormState.triggers,
-          true,
-          nextStep
-        );
-      case 6:
-        return ValidateFormEnabledAndReturnBehavior(
-          // episodeFormState.improvementFactor == ImprovementFactor.MEDICINE
-          //   ? !!episodeFormState.improvementFactor &&
-          //       !!episodeFormState.medicine &&
-          //       !episodeFormState.medicineDosage &&
-          //       !episodeFormState.medicineImprovement
-          //   : episodeFormState.improvementFactor == ImprovementFactor.FOOD
-          //   ? !!episodeFormState.improvementFactor &&
-          //     !!episodeFormState.foodImprovement
-          //   : !!episodeFormState.improvementFactor,
-          true,
-          nextStep
-        );
-      case 7:
-        return ValidateFormEnabledAndReturnBehavior(
-          // !!episodeFormState.period,
-          true,
-          nextStep
-        );
-      default:
-        return false;
-    }
-  };
-
   const validateStepForward = (nextStep: number): boolean => {
-    if (nextStep > currentStep) return validateFullfilledForm(nextStep);
-    if (nextStep < currentStep) {
+    if (nextStep >= 0) {
       setCurrentStep(nextStep);
       return true;
     }
+
     return false;
   };
 
@@ -232,7 +130,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const submitEpisode = () => {
-    const parsedObject = Object.assign(episodeFormState, {
+    const parsedObject: any = Object.assign(episodeFormState, {
       dateTime: new Date(Object.keys(episodeFormState.dates)[0]),
       location: 'Esquerda',
       triggers: episodeFormState.triggers.join(','),
@@ -327,6 +225,21 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           });
         }
         break;
+      case AppActions.REQUEST_CREATE_REPORT:
+        if (userId) {
+          return handlePromise({
+            promiseFromService: requestCreateReport({
+              ...payload,
+              patientId: userId,
+            }),
+            payload,
+            successCallbackAction: (res) => {
+              dispatch(AppActions.REQUEST_FETCH_REPORTS, {});
+            },
+            isShowingToast: true,
+          });
+        }
+        break;
       case AppActions.REQUEST_UPDATE_EPISODE:
         return handlePromise({
           promiseFromService: requestUpdateEpisode(payload, payload.id),
@@ -361,7 +274,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       case AppActions.REQUEST_FETCH_REPORTS:
         if (userId)
           return handlePromise({
-            promiseFromService: requestFetchReports(userId),
+            promiseFromService: requestFetchReports(userId, payload),
             payload,
             successCallbackAction: (res) => reducer(action, payload, res),
           });

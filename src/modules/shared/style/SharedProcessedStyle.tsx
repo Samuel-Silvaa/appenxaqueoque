@@ -21,7 +21,7 @@ export const getBtnColorScheme = (
 ): { pressable: string; title: string } => {
   const stylesheet = {
     pressable:
-      'w-full flex flex-row items-center justify-center round rounded-full h-[63px] p-4 ',
+      'w-full flex flex-row items-center justify-center round rounded-full h-[63px] px-4 ',
     title: 'font-semibold mx-4',
   };
   switch (scheme) {

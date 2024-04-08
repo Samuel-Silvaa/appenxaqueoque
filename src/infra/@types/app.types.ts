@@ -1,3 +1,6 @@
+import { RefObject } from 'react';
+import { FlatList } from 'react-native';
+
 export interface Patient {
   id?: string;
   name: string;
@@ -18,7 +21,7 @@ export interface Episode {
   foodImpair: string;
   foodImprovement: string;
   id?: string;
-  improvementFactor: string[];
+  improvementFactor: string;
   isEdition?: boolean;
   location: string;
   medicine: string;
@@ -28,9 +31,9 @@ export interface Episode {
   painType: string;
   period: string;
   periodNotes: string;
-  symptoms: string[];
+  symptoms: string;
   time: string;
-  triggers: string[];
+  triggers: string;
 }
 
 export interface Report {
@@ -63,7 +66,7 @@ export interface AppContextDefaultValues {
   patient?: Patient;
   reports?: Report[];
   pageTitle?: string;
-  setPageTitle?: (value: string) => void;
+  setPageTitle?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 export enum Location {

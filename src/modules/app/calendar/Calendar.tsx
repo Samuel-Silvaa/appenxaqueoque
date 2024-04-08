@@ -26,7 +26,6 @@ const InnerHomeContainer = () => {
           dotColor: pinColor(ep.acuteness),
         };
       });
-      console.log(markedDates);
       return markedDates;
     } else {
       return {};
@@ -34,7 +33,7 @@ const InnerHomeContainer = () => {
   }, [episodes]);
 
   return (
-    <View>
+    <View className='flex-grow'>
       <CalendarComponent
         onDayPress={(date) => {
           if (Object.keys(parsedEpisodes).includes(date.dateString)) {

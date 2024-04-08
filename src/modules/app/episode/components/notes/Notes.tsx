@@ -9,7 +9,7 @@ import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/Ex
 import { useApp } from 'src/infra/app/app';
 
 const stylesheet = {
-  wrapper: 'flex-col w-full items-center h-3/4 justify-between',
+  wrapper: 'flex-col w-full items-center justify-between',
   title: 'font-semibold text-black my-2 mx-auto text-lg',
   label: 'text-md font-semibold text-black self-start mt-14 pl-4',
   inputWrapper: 'flex-row items-center justify-center w-full',

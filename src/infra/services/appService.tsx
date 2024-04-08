@@ -1,5 +1,16 @@
 import { get, patch, post } from '../api';
 import { Episode, Patient } from '../@types/app.types';
+import { format, subDays } from 'date-fns';
+
+interface CreateReportDTO {
+  startDate: string;
+  endDate: string;
+  patientId: string;
+}
+
+const requestCreateReport = async (
+  payload: CreateReportDTO
+): Promise<Episode> => post(`report`, payload);
 
 const requestCreateEpisode = async (
   payload: Episode,
@@ -28,8 +39,22 @@ const requestFetchPatient = async (id: string): Promise<Patient> =>
 const requestFetchEpisodes = async (patientId: string): Promise<Episode[]> =>
   get(`episode/patient/${patientId}`);
 
-const requestFetchReports = async (patientId: string): Promise<Episode[]> =>
-  get(`report/list/${patientId}`);
+const requestFetchReports = async (
+  patientId: string,
+  payload: { startDate: string; endDate: string }
+): Promise<Episode[]> =>
+  get(
+    `report/list/${patientId}`,
+    {},
+    {
+      enddate: payload.endDate
+        ? payload.endDate
+        : format(new Date(), 'yyyy-MM-dd'),
+      startdate: payload.startDate
+        ? payload.startDate
+        : format(subDays(new Date(), 15), 'yyyy-MM-dd'),
+    }
+  );
 
 const requestFetchReportEpisodesRange = async (
   ids: string
@@ -42,4 +67,5 @@ export {
   requestUpdateEpisode,
   requestFetchReports,
   requestFetchReportEpisodesRange,
+  requestCreateReport,
 };
