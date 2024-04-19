@@ -1,6 +1,5 @@
-import { ImageSourcePropType, Text, View } from 'react-native';
+import { ImageSourcePropType, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
-import { RadioButton } from 'react-native-paper';
 import Card from '../form/card/Card';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useForm } from 'react-hook-form';
@@ -9,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useApp } from 'src/infra/app/app';
 import { Trigger as TriggerType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface TriggerSchema {
   foodImpair: string;
@@ -46,18 +45,18 @@ const Trigger = () => {
   } = useForm({ resolver: yupResolver(triggerSchema) });
 
   const handleSetTriggersValues = (value: string) => {
-    if (episodeFormState.triggers.includes(value)) {
+    if (episodeFormState.triggers?.includes(value)) {
       handleFormChange({
-        triggers: episodeFormState.triggers.filter((tr) => tr !== value),
+        triggers: Array.from(episodeFormState.triggers).filter(
+          (tr) => tr !== value
+        ),
       });
     } else {
       handleFormChange({ triggers: [...episodeFormState.triggers, value] });
     }
   };
 
-  useEffect(() => {
-    console.log(episodeFormState.triggers);
-  }, [episodeFormState.triggers]);
+  useEffect(() => {}, [episodeFormState.triggers]);
 
   return (
     <View className='h-full w-full'>
@@ -76,7 +75,7 @@ const Trigger = () => {
                   unfillColor='#FFFFFF'
                   textStyle={{ textDecorationLine: 'none' }}
                   text={act.label}
-                  isChecked={episodeFormState.triggers.includes(act.value)}
+                  isChecked={episodeFormState.triggers?.includes(act.value)}
                   onPress={(isChecked: boolean) => {
                     handleSetTriggersValues(act.value);
                   }}
@@ -92,9 +91,9 @@ const Trigger = () => {
         name='foodImpair'
         control={control}
         errors={errors}
-        editable={episodeFormState.triggers.includes(TriggerType.FOOD)}
+        editable={episodeFormState.triggers?.includes(TriggerType.FOOD)}
         className={`${
-          episodeFormState.triggers.includes(TriggerType.FOOD)
+          episodeFormState.triggers?.includes(TriggerType.FOOD)
             ? 'opacity-100'
             : ' opacity-25'
         } bg-white drop-shadow-sm`}

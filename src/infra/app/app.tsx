@@ -1,13 +1,11 @@
-import React, {
-  createContext,
-  createRef,
-  ReactNode,
-  RefObject,
-  useContext,
-  useState,
-} from 'react';
+import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { AppContextDefaultValues, Episode, Patient } from '../@types/app.types';
+import {
+  AppContextDefaultValues,
+  Episode,
+  Location,
+  Patient,
+} from '../@types/app.types';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
 import {
   requestCreateEpisode,
@@ -16,10 +14,12 @@ import {
   requestFetchPatient,
   requestFetchReportEpisodesRange,
   requestFetchReports,
+  requestGeneratePdfReport,
   requestUpdateEpisode,
 } from '../services/appService';
 import { AppActions } from './actions';
 import { useNavigation } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
 
 const episodeInitialForm = {
   id: '',
@@ -65,7 +65,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [episodeFormState, setEpisodeFormState] = useState(episodeInitialForm);
   const [patient, setPatient] = useState<Patient | null>(null);
   const [episodes, setEpisodes] = useState<Episode[] | null>(null);
-  const [reports, setReports] = useState<Report[] | null>(null);
+  const [reports, setReports] = useState<Report[] | undefined>();
   const [pageTitle, setPageTitle] = useState();
   const toast = useToast();
 
@@ -132,7 +132,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const submitEpisode = () => {
     const parsedObject: any = Object.assign(episodeFormState, {
       dateTime: new Date(Object.keys(episodeFormState.dates)[0]),
-      location: 'Esquerda',
+      location: Location.FRONTALRIGHT,
       triggers: episodeFormState.triggers.join(','),
       improvementFactor: episodeFormState.improvementFactor.join(','),
       symptoms: episodeFormState.symptoms.join(','),
@@ -185,6 +185,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         if (isShowingToast) handleToast('Tudo certo!', 'success');
       })
       .catch((err) => {
+        console.log(err);
         handleToast(
           err.response.data.message != 'Validation failed'
             ? err.response.data.message
@@ -208,7 +209,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     payload?: any,
     assetId?: string
   ): Promise<any> => {
-    const userId = localStorage.getItem('userId');
+    const userId = await SecureStore.getItemAsync('userId');
     switch (action) {
       case AppActions.REQUEST_CREATE_EPISODE:
         if (userId) {
@@ -239,6 +240,21 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             isShowingToast: true,
           });
         }
+        break;
+      case AppActions.REQUEST_GENERATE_PDF_REPORT:
+        return handlePromise({
+          promiseFromService: requestGeneratePdfReport({
+            id: payload.id,
+            physicianEmail: payload.physicianEmail,
+          }),
+          payload,
+          successCallbackAction: (res) => {
+            toast.show('Um pdf do relátorio foi enviado ao médico!', {
+              type: 'success',
+            });
+          },
+          isShowingToast: true,
+        });
         break;
       case AppActions.REQUEST_UPDATE_EPISODE:
         return handlePromise({
@@ -317,7 +333,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         submitEpisode,
         episodes: episodes || undefined,
         pageTitle: pageTitle || undefined,
-        reports: reports || undefined,
+        reports: reports,
         setPageTitle: setPageTitle,
         clearEpisodeFormState,
       }}

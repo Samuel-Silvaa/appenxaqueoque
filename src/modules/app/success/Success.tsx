@@ -7,9 +7,10 @@ import { useApp } from 'src/infra/app/app';
 import { format } from 'date-fns';
 
 const stylesheet = {
-  wrapper: 'w-full h-full gap-y-4 flex justify-center items-center mt-[25%]',
-  title:
-    'rounded-[16px] h-[45px] bg-blue-primary w-3/4 text-black font-bold flex items-center justify-center',
+  wrapper: 'w-full h-full gap-y-4 flex justify-center items-center mt-[10%]',
+  titleconainer:
+    'rounded-[16px] h-[45px] bg-blue-primary w-3/4 flex items-center justify-center',
+  title: 'text-black font-bold',
 };
 
 const Success = ({ navigation }) => {
@@ -19,9 +20,11 @@ const Success = ({ navigation }) => {
   return (
     <AppPageScaffold alignment='center'>
       <View className={stylesheet.wrapper}>
-        <Text className={stylesheet.title}>
-          Cadastro finalizado com sucesso!
-        </Text>
+        <View className={stylesheet.titleconainer}>
+          <Text className={stylesheet.title}>
+            Cadastro finalizado com sucesso!
+          </Text>
+        </View>
         <Image source={require('assets/success.png')}></Image>
         <ExPressable
           title='Ver relatório'
@@ -40,15 +43,7 @@ const Success = ({ navigation }) => {
       </View>
       {isModalOpen && (
         <EpisodeModal
-          episode={{
-            ...episodeFormState,
-            dates: {
-              [format(episodeFormState.dateTime, 'yyyy-MM-dd').toString()]:
-                episodeFormState[
-                  format(episodeFormState.dateTime, 'yyyy-MM-dd')
-                ],
-            },
-          }}
+          episode={episodeFormState}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         />

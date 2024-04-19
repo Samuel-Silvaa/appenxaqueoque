@@ -5,6 +5,7 @@ import { ToastProvider } from 'react-native-toast-notifications';
 import { AppProvider } from 'src/infra/app/app';
 import { AuthProvider, useAuth } from 'src/infra/auth/auth';
 import TabsRoutes from 'src/modules/app';
+import PhysicianTabRoutes from 'src/modules/physicianApp';
 import AuthRoutes from 'src/modules/auth';
 
 NativeWindStyleSheet.setOutput({
@@ -12,11 +13,19 @@ NativeWindStyleSheet.setOutput({
 });
 
 const ActiveRoutes = () => {
-  const { isLogged } = useAuth();
-
+  const { isLogged, session } = useAuth();
   return useMemo(
-    () => (isLogged ? <TabsRoutes /> : <AuthRoutes />),
-    [isLogged]
+    () =>
+      isLogged && !!session ? (
+        session?.userType == 'PATIENT' ? (
+          <TabsRoutes />
+        ) : (
+          <PhysicianTabRoutes />
+        )
+      ) : (
+        <AuthRoutes />
+      ),
+    [isLogged, session]
   );
 };
 

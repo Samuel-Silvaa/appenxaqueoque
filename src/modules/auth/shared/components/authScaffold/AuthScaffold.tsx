@@ -5,7 +5,7 @@ import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
 
 const stylesheet = {
-  view: 'flex-col grow bg-primary p-4 gap-y-4 pb-14',
+  view: 'flex-col h-screen flex-grow bg-primary p-4 gap-y-4 pb-14',
   header: 'my-6 self-start',
 };
 
@@ -39,7 +39,7 @@ const AuthScaffold = ({
 
       {children}
 
-      <View className='w-full gap-y-4'>
+      <View className='w-full gap-y-2'>
         {ctaPrimary && ctaPrimaryText && (
           <ExPressable
             title={ctaPrimaryText}

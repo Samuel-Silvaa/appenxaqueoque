@@ -27,10 +27,11 @@ const stylesheet = {
   contentWrapper:
     'my-2 w-full flex-row flex-wrap justify-start overflow-hidden gap-1',
   longInfo: ' w-[98%] shadow-sm rounded-[16px] bg-blue-baby',
-  smallInfoBlock: 'w-[48%] shadow-sm rounded-[16px] bg-blue-baby',
-  smallInfoContainer: 'w-full flex-col justify-start items-start p-4 ',
+  smallInfoBlock: 'w-[48%] shadow-sm rounded-[16px] bg-primary',
+  smallInfoContainer: 'w-full flex-col justify-start items-start p-4',
   smallInfoTitle: 'font-bold',
-  smallInfoImgContainer: 'flex-col justify-start items-start py-3',
+  smallInfoDesc: 'w-3/4',
+  smallInfoImgContainer: 'flex-row gap-x-2 justify-start items-start py-3',
 };
 
 const EpisodeModal = ({
@@ -47,6 +48,11 @@ const EpisodeModal = ({
 
   const fullDetails = [
     {
+      icon: require('assets/timer.png'),
+      title: 'Horário do episódio',
+      desc: episode.time,
+    },
+    {
       icon: require('assets/chart-header-location.png'),
       title: 'Localização',
       desc: episode.location,
@@ -62,7 +68,7 @@ const EpisodeModal = ({
       desc: episode.painType,
     },
     {
-      icon: require('assets/chart-symptom.png'),
+      icon: require('assets/chart-symptoms.png'),
       title: 'Sintomas associados',
       desc: episode.symptoms,
     },
@@ -72,18 +78,18 @@ const EpisodeModal = ({
       desc: episode.triggers,
     },
     {
-      icon: require('assets/chart-symptom.png'),
+      icon: require('assets/chart-improvement.png'),
       title: 'Fatores de melhora',
       desc: episode.improvementFactor,
       opened: false,
     },
     {
-      icon: require('assets/chart-symptom.png'),
+      icon: require('assets/chart-period.png'),
       title: 'Período menstrual',
       desc: episode.periodNotes,
     },
     {
-      icon: require('assets/chart-symptom.png'),
+      icon: require('assets/chart-notes.png'),
       title: 'Observações',
       desc: episode.notes,
     },
@@ -108,7 +114,7 @@ const EpisodeModal = ({
     });
     return parsedDetails;
   }, []);
-
+  console.log(episode);
   return (
     <Modal
       animationType='slide'
@@ -134,10 +140,15 @@ const EpisodeModal = ({
               <Image source={require('assets/pencil.png')}></Image>
               <Text className={stylesheet.editText}>Editar</Text>
             </TouchableOpacity>
-            <Text className={stylesheet.headerDate}>
-              {format(episode?.dateTime, 'PPPP', { locale: ptBR })}
-            </Text>
-            <TouchableOpacity onPress={onClose}>
+            {episode?.dateTime && (
+              <Text className={stylesheet.headerDate}>
+                {format(episode?.dateTime, 'PPPP', { locale: ptBR })}
+              </Text>
+            )}
+            <TouchableOpacity
+              onPress={onClose}
+              className='w-8 h-8 flex items-end justify-center'
+            >
               <Image
                 className={stylesheet.arrowdown}
                 source={require('assets/arrowdown.png')}
@@ -146,29 +157,13 @@ const EpisodeModal = ({
           </View>
 
           <View className={stylesheet.contentWrapper}>
-            <Pressable className={stylesheet.longInfo}>
-              <View className='flex-row justify-between items-start h-full w-full'>
-                <View className='flex-col justify-start items-start p-4 '>
-                  <Text className='font-bold'> Horário do episódio</Text>
-                  <View className='flex-col justify-start items-start py-3'>
-                    <Image
-                      className='w-4 h-4 mb-2'
-                      source={require('assets/timer.png')}
-                    />
-                    <Text>{episode.time}</Text>
-                  </View>
-                </View>
-                <Image
-                  className='mr-4 '
-                  source={require('assets/boy_magnifier.png')}
-                />
-              </View>
-            </Pressable>
-
             {details &&
-              details.map((dtl) => {
+              details.reverse().map((dtl) => {
                 return (
-                  <Pressable className={stylesheet.smallInfoBlock}>
+                  <Pressable
+                    key={dtl.title}
+                    className={stylesheet.smallInfoBlock}
+                  >
                     <View className={stylesheet.smallInfoContainer}>
                       <Text className={stylesheet.smallInfoTitle}>
                         {dtl.title}
@@ -177,7 +172,9 @@ const EpisodeModal = ({
                         {dtl.icon && (
                           <Image className='w-4 h-4 mb-2' source={dtl.icon} />
                         )}
-                        <Text>{dtl.desc}</Text>
+                        <Text className={stylesheet.smallInfoDesc}>
+                          {dtl.desc}
+                        </Text>
                       </View>
                     </View>
                   </Pressable>
@@ -195,6 +192,7 @@ const EpisodeModal = ({
               nullDetails.map((dtl) => {
                 return (
                   <Pressable
+                    key={dtl.title}
                     className={stylesheet.smallInfoBlock + ' opacity-75'}
                   >
                     <View className={stylesheet.smallInfoContainer}>

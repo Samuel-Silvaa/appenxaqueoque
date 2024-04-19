@@ -1,6 +1,3 @@
-import { RefObject } from 'react';
-import { FlatList } from 'react-native';
-
 export interface Patient {
   id?: string;
   name: string;
@@ -21,7 +18,7 @@ export interface Episode {
   foodImpair: string;
   foodImprovement: string;
   id?: string;
-  improvementFactor: string;
+  improvementFactor: string | string[];
   isEdition?: boolean;
   location: string;
   medicine: string;
@@ -31,9 +28,9 @@ export interface Episode {
   painType: string;
   period: string;
   periodNotes: string;
-  symptoms: string;
+  symptoms: string | string[];
   time: string;
-  triggers: string;
+  triggers: string | string[];
 }
 
 export interface Report {
@@ -70,10 +67,16 @@ export interface AppContextDefaultValues {
 }
 
 export enum Location {
-  LEFT = 'Esquerdo',
-  RIGHT = 'Direito',
-  BOTH = 'Ambos os lados',
-  BACKSIDE = 'Parte de trás',
+  FRONTALRIGHT = 'Frontal direita',
+  FRONTALLEFT = 'Frontal esquerda',
+  FRONTALBILATERAL = 'Frontal bilateral',
+  PARIETALRIGHT = 'Parietal direita',
+  PARIETALLEFT = 'Parietal esquerda',
+  PARIETALBILATERAL = 'Parietal bilateral',
+  TEMPLERIGHT = 'Temporal direita',
+  TEMPLELEFT = 'Temporal esquerda',
+  TEMPLEBILATERAL = 'Temporal bilateral',
+  BACKSIDE = 'Posterior/nuca',
 }
 
 export enum Acuteness {

@@ -12,6 +12,18 @@ const requestCreateReport = async (
   payload: CreateReportDTO
 ): Promise<Episode> => post(`report`, payload);
 
+const requestGeneratePdfReport = async (payload: {
+  id: string;
+  physicianEmail: string;
+}): Promise<Episode> => {
+  console.log(payload);
+  return get(
+    `report/chart/generate/${payload.id}`,
+    {},
+    { physicianemail: payload.physicianEmail }
+  );
+};
+
 const requestCreateEpisode = async (
   payload: Episode,
   patientId: string
@@ -61,6 +73,7 @@ const requestFetchReportEpisodesRange = async (
 ): Promise<Episode[]> => get(`report/episodes`, {}, { ids: ids });
 
 export {
+  requestGeneratePdfReport,
   requestCreateEpisode,
   requestFetchPatient,
   requestFetchEpisodes,

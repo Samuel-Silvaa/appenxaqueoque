@@ -9,6 +9,7 @@ import {
 import { AuthenticationActions } from './auth.actions';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
 import { AuthContextDefaultValues, LogInResponse } from '../@types/auth.types';
+import * as SecureStore from 'expo-secure-store';
 
 const AuthContext = createContext<AuthContextDefaultValues>({
   dispatch: () => null,
@@ -21,18 +22,17 @@ const AuthContext = createContext<AuthContextDefaultValues>({
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [formState, setFormState] = useState<object>({});
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(false);
   const [session, setSession] = useState<LogInResponse>();
   const toast = useToast();
 
   const signOut = () => {
-    localStorage.clear();
     setFormState({});
     window.dispatchEvent(new Event('storage'));
   };
 
-  const setLocalStorageWelcomeAttr = () => {
-    localStorage.setItem('welcome', JSON.stringify('true'));
+  const setLocalStorageWelcomeAttr = async () => {
+    await SecureStore.setItemAsync('welcome', JSON.stringify('true'));
     window.dispatchEvent(new Event('storage'));
   };
 
@@ -66,7 +66,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     handleToast('Processando...', 'warning');
     await promiseFromService
       .then((res) => {
-        successCallbackAction(res);
+        successCallbackAction(res.data);
         handleToast('Tudo certo!', 'success');
       })
       .catch((err) => {
@@ -112,16 +112,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const handleSetLocalHeaderData = (data: {
+  const handleSetLocalHeaderData = async (data: {
     token: string;
     refreshToken: string;
     userId: string;
   }) => {
     const { token, refreshToken, userId } = data;
-
-    if (token) localStorage.setItem('token', token);
-    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-    if (userId) localStorage.setItem('userId', userId);
+    if (token) await SecureStore.setItemAsync('token', token);
+    if (refreshToken)
+      await SecureStore.setItemAsync('refreshToken', refreshToken);
+    if (userId) await SecureStore.setItemAsync('userId', userId);
     window.dispatchEvent(new Event('storage'));
   };
 

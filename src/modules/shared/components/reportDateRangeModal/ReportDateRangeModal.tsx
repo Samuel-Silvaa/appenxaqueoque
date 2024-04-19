@@ -180,7 +180,7 @@ const ReportDateRangeModal = ({
         endDate: format(payload.endDate, 'yyyy-MM-dd'),
       });
     }
-    onClose();
+    onClose({ start: getValues('startDate'), end: getValues('endDate') });
   };
 
   return (

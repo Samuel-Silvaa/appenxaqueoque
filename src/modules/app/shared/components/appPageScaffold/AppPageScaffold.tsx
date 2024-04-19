@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { ReactNode } from 'react';
 import { ImageBackground, ScrollView, View } from 'react-native';
-import { useApp } from 'src/infra/app/app';
 import { getAppScaffoldAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 
 const stylesheet = {
@@ -38,7 +37,13 @@ const AppPageScaffold = ({
           resizeMode='cover'
           source={require('assets/appbg.png')}
         >
-          <ScrollView className='w-full p-4 pt-[40px]'>{children}</ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            className='w-full p-4 pt-[40px]'
+          >
+            {children}
+            <View className='h-[140px] w-full'></View>
+          </ScrollView>
         </ImageBackground>
       )}
 
@@ -47,10 +52,10 @@ const AppPageScaffold = ({
           className='w-full p-4 pt-[40px] pb-14'
           showsHorizontalScrollIndicator={false}
           horizontal={false}
-          stickyHeaderIndices={[0]}
           showsVerticalScrollIndicator={false}
         >
           {children}
+          <View className='h-[140px] w-full'></View>
         </ScrollView>
       )}
     </View>

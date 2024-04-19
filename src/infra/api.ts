@@ -1,18 +1,18 @@
 import axios, { AxiosError } from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'http://192.168.1.66:8080/',
 });
 
 api.interceptors.request.use(
-  (config) => {
-    if (localStorage.getItem('token')) {
-      config.headers['Authorization'] =
-        'Bearer ' + localStorage.getItem('token');
-    }
+  async (config) => {
+    const token = await SecureStore.getItemAsync('token');
+    if (token) config.headers['Authorization'] = 'Bearer ' + token;
     return config;
   },
   (error: AxiosError) => {
+    console.log(error);
     Promise.reject(error);
   }
 );
@@ -44,13 +44,11 @@ const get = async <T>(
 };
 
 const post = async <T>(url: string, payload: object): Promise<T> => {
-  const { data } = await api.post(url, payload);
-  return data;
+  return await api.post(url, payload);
 };
 
 const put = async <T>(url: string, payload: object): Promise<T> => {
-  const { data } = await api.put(url, payload);
-  return data;
+  return await api.put(url, payload);
 };
 
 const patch = async <T>(
@@ -58,13 +56,11 @@ const patch = async <T>(
   payload: object,
   headers?: object
 ): Promise<T> => {
-  const { data } = await api.patch(url, payload, headers);
-  return data;
+  return await api.patch(url, payload, headers);
 };
 
 const remove = async <T>(url: string, body?: object): Promise<T> => {
-  const { data } = await api.delete(url, body);
-  return data;
+  return await api.delete(url, body);
 };
 
 export { get, patch, post, put, remove, api as wbsAPI };

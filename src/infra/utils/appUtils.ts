@@ -79,11 +79,23 @@ export const parseSymptoms = (acuteness: number) => {
 export const parseLocation = (acuteness: number) => {
   switch (acuteness) {
     case 0:
-      return Location.LEFT;
+      return Location.FRONTALRIGHT;
     case 1:
-      return Location.RIGHT;
+      return Location.FRONTALLEFT;
     case 2:
-      return Location.BOTH;
+      return Location.FRONTALBILATERAL;
+    case 3:
+      return Location.PARIETALRIGHT;
+    case 4:
+      return Location.PARIETALLEFT;
+    case 5:
+      return Location.PARIETALBILATERAL;
+    case 6:
+      return Location.TEMPLERIGHT;
+    case 7:
+      return Location.TEMPLELEFT;
+    case 8:
+      return Location.TEMPLEBILATERAL;
     default:
       return Location.BACKSIDE;
   }

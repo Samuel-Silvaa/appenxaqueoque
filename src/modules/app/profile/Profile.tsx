@@ -1,5 +1,7 @@
 import { Image, Text, View } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
+import { sharedEpisodeStyleSheet } from '../episode/shared/SharedEpisodeStyleSheet';
+import { useAuth } from 'src/infra/auth/auth';
 
 const stylesheet = {
   profile: {
@@ -7,7 +9,7 @@ const stylesheet = {
     infoRow: 'flex-row justify-between items-center w-2/4 my-1',
   },
   customActionButton:
-    'w-full flex-row items-center p-4 my-1 bg-white rounded-[30px] min-h-[66px]',
+    'w-full flex-row items-center p-4 bg-white rounded-[30px]',
 };
 
 const CustomActionButton = ({ title }: { title: string }) => {
@@ -20,8 +22,10 @@ const CustomActionButton = ({ title }: { title: string }) => {
 };
 
 const ProfilePage = () => {
+  const { session } = useAuth();
+
   return (
-    <AppPageScaffold>
+    <AppPageScaffold displayBg={session?.userType == 'PATIENT'}>
       <View className={stylesheet.profile.wrapper}>
         <Image source={require('assets/pietra.png')}></Image>
         <Text className='my-1'>Pietra Menezes</Text>
@@ -31,12 +35,18 @@ const ProfilePage = () => {
           <Text>30kg</Text>
         </View>
       </View>
-      <CustomActionButton title='Editar perfil' />
-      <CustomActionButton title='Termos de uso' />
-      <CustomActionButton title='Sair' />
-      <CustomActionButton title='Editar perfil' />
-      <CustomActionButton title='Termos de uso' />
-      <CustomActionButton title='Sair' />
+      <View className='bg-blue-tertiary w-full flex-grow rounded-[33px] p-4'>
+        <View className='bg-white w-full flex-grow rounded-[33px]'>
+          <CustomActionButton title='Editar perfil' />
+          <CustomActionButton title='Notificações' />
+          <CustomActionButton title='Privacidade' />
+          <CustomActionButton title='Segurança' />
+          <CustomActionButton title='Meus relatórios' />
+          <CustomActionButton title='Contas vinculadas' />
+          <CustomActionButton title='Ajuda' />
+          <CustomActionButton title='Sair' />
+        </View>
+      </View>
     </AppPageScaffold>
   );
 };

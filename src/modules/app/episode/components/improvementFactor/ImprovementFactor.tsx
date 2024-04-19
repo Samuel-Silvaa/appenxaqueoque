@@ -42,7 +42,7 @@ const improvementSchema = yup.object<ImprovementSchema>().shape({
 
 const ImprovementFactor = () => {
   const { episodeFormState, handleFormChange } = useApp();
-  const isMedicineEditable = !episodeFormState.improvementFactor.includes(
+  const isMedicineEditable = !episodeFormState.improvementFactor?.includes(
     ImprovementFactorType.MEDICINE
   );
   const {
@@ -53,9 +53,9 @@ const ImprovementFactor = () => {
   const handleSetImprovementFactorValues = (value: string) => {
     if (episodeFormState.improvementFactor.includes(value)) {
       handleFormChange({
-        improvementFactor: episodeFormState.improvementFactor.filter(
-          (tr) => tr !== value
-        ),
+        improvementFactor: Array.from(
+          episodeFormState.improvementFactor
+        ).filter((tr) => tr !== value),
       });
     } else {
       handleFormChange({
@@ -81,7 +81,7 @@ const ImprovementFactor = () => {
                   unfillColor='#FFFFFF'
                   textStyle={{ textDecorationLine: 'none' }}
                   text={act.label}
-                  isChecked={episodeFormState.triggers.includes(act.value)}
+                  isChecked={episodeFormState.triggers?.includes(act.value)}
                   onPress={(isChecked: boolean) => {
                     handleSetImprovementFactorValues(act.value);
                   }}
@@ -114,7 +114,7 @@ const ImprovementFactor = () => {
                 errors={errors}
                 className='bg-tertiary w-full'
                 editable={!isMedicineEditable}
-                defaultValue={episodeFormState.medicineDosage.toString()}
+                defaultValue={episodeFormState.medicineDosage?.toString()}
                 onChange={(e) =>
                   handleFormChange({ medicineDosage: e.target.value })
                 }
@@ -158,7 +158,7 @@ const ImprovementFactor = () => {
         />
       </Wrapper>
       <InputContainer
-        editable={episodeFormState.improvementFactor.includes(
+        editable={episodeFormState.improvementFactor?.includes(
           ImprovementFactorType.FOOD
         )}
         label='Qual alimento ajudou a melhorar?'
@@ -166,7 +166,7 @@ const ImprovementFactor = () => {
         control={control}
         errors={errors}
         className={
-          !episodeFormState.improvementFactor.includes(
+          !episodeFormState.improvementFactor?.includes(
             ImprovementFactorType.FOOD
           )
             ? 'opacity-25' + ' bg-white drop-shadow-sm'

@@ -15,6 +15,7 @@ import { RefObject, createRef, useEffect, useState } from 'react';
 
 import { sharedEpisodeStyleSheet } from './shared/SharedEpisodeStyleSheet';
 import React from 'react';
+import _ from 'lodash';
 
 const stylesheet = {
   steps: {
@@ -176,26 +177,45 @@ const FormContent = ({
 }: EpisodeScaffold) => {
   const { currentStep, validateStepForward } = useApp();
   const [screenOfffset, setScreenOffset] = useState(0);
+  const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 
-  const handleHeaderSlideAction = (direction: number) => {
+  const handleHeaderAndEpisodeSlidesAction = (direction: number) => {
     if (direction == 0 && currentStep < pages.length - 1) {
-      if (validateStepForward(currentStep + 1))
+      if (validateStepForward(currentStep + 1)) {
         if (headerStepsFlatListRef?.current) {
           headerStepsFlatListRef?.current.scrollToIndex({
             index: currentStep + 1,
             animated: true,
           });
         }
+        if (episodePagesFlatListRef?.current) {
+          episodePagesFlatListRef?.current.scrollToIndex({
+            index: currentStep + 1,
+            animated: true,
+          });
+        }
+      }
     } else if (direction == 1) {
-      if (validateStepForward(currentStep - 1))
+      if (validateStepForward(currentStep - 1)) {
         if (headerStepsFlatListRef?.current) {
           headerStepsFlatListRef?.current.scrollToIndex({
             index: currentStep - 1,
             animated: true,
           });
         }
+        if (episodePagesFlatListRef?.current) {
+          episodePagesFlatListRef?.current.scrollToIndex({
+            index: currentStep - 1,
+            animated: true,
+          });
+        }
+      }
     }
   };
+
+  const handleScrollDebounced = _.debounce((event) => {
+    setIsScrollEnabled(true);
+  }, 1500);
 
   const handleScrollBeginDrag = (
     event: NativeSyntheticEvent<NativeScrollEvent>
@@ -206,17 +226,23 @@ const FormContent = ({
   const handleScrollEndDrag = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
+    setIsScrollEnabled(false);
     const endOffset = event.nativeEvent.contentOffset.x;
-    handleHeaderSlideAction(endOffset > screenOfffset ? 0 : 1);
+    handleHeaderAndEpisodeSlidesAction(endOffset > screenOfffset ? 0 : 1);
   };
+
+  useEffect(() => {
+    handleScrollDebounced;
+  }, [isScrollEnabled]);
 
   return (
     <FlatList
       ref={episodePagesFlatListRef}
       windowSize={3}
-      initialNumToRender={5}
+      scrollEnabled={isScrollEnabled}
+      initialNumToRender={pages.length}
       initialScrollIndex={currentStep}
-      maxToRenderPerBatch={5}
+      maxToRenderPerBatch={0}
       horizontal
       pagingEnabled={true}
       decelerationRate='fast'
@@ -232,10 +258,11 @@ const FormContent = ({
           {item.page}
         </View>
       )}
+      onScrollToIndexFailed={() => {}}
       keyExtractor={(item, index) => item.toString() + index}
       onScrollBeginDrag={handleScrollBeginDrag}
       onScrollEndDrag={handleScrollEndDrag}
-      scrollEventThrottle={16} // Adjust as needed
+      scrollEventThrottle={10} // Adjust as needed
       data={pages}
     />
   );
@@ -257,7 +284,6 @@ const FormHeader = ({
 };
 
 const FormScaffold = () => {
-  const { currentStep } = useApp();
   const headerStepsFlatListRef = createRef<FlatList>();
   const episodePagesFlatListRef = createRef<FlatList>();
 

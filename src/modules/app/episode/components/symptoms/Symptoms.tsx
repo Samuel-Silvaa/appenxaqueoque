@@ -1,5 +1,4 @@
-import { ImageSourcePropType, Text, View } from 'react-native';
-import { RadioButton } from 'react-native-paper';
+import { ImageSourcePropType, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
 import Card from '../form/card/Card';
 import { useApp } from 'src/infra/app/app';
@@ -42,9 +41,11 @@ const Symptoms = () => {
   const { episodeFormState, handleFormChange } = useApp();
 
   const handleSetSymptomsValues = (value: string) => {
-    if (episodeFormState.symptoms.includes(value)) {
+    if (episodeFormState.symptoms?.includes(value)) {
       handleFormChange({
-        symptoms: episodeFormState.symptoms.filter((tr) => tr !== value),
+        symptoms: Array.from(episodeFormState.symptoms).filter(
+          (tr) => tr !== value
+        ),
       });
     } else {
       handleFormChange({ symptoms: [...episodeFormState.symptoms, value] });
@@ -68,7 +69,7 @@ const Symptoms = () => {
                   unfillColor='#FFFFFF'
                   textStyle={{ textDecorationLine: 'none' }}
                   text={act.label}
-                  isChecked={episodeFormState.symptoms.includes(act.value)}
+                  isChecked={episodeFormState.symptoms?.includes(act.value)}
                   onPress={(isChecked: boolean) => {
                     handleSetSymptomsValues(act.value);
                   }}

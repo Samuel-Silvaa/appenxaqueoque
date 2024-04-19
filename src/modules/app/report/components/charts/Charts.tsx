@@ -1,22 +1,16 @@
 import { useRoute } from '@react-navigation/native';
 import { differenceInDays, format } from 'date-fns';
-import { ptBR, tr } from 'date-fns/locale';
+import { ptBR } from 'date-fns/locale';
 import { useEffect, useMemo, useState } from 'react';
 import { Dimensions, Image, Pressable, Text, View } from 'react-native';
-import {
-  BarChart,
-  LineChart,
-  PieChart,
-  StackedBarChart,
-} from 'react-native-chart-kit';
+import { BarChart, PieChart } from 'react-native-gifted-charts';
 import {
   Acuteness,
   Episode,
-  ImprovementFactor,
   Location,
+  PainType,
   Report,
   Symptom,
-  Time,
   Trigger,
 } from 'src/infra/@types/app.types';
 import { AppActions } from 'src/infra/app/actions';
@@ -31,10 +25,17 @@ import {
   pinColor,
 } from 'src/infra/utils/appUtils';
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
-import AcutenessLegend from 'src/modules/app/shared/components/calendar/AcutenessLegend';
+import PhysicianEmailModal from 'src/modules/shared/components/physicianEmailModal/PhysicianEmailModal';
+import PieCharComponent from './components/PieCharComponent';
+// import fetch_blob from 'react-native-fetch-blob';
+// import RNFS from 'react-native-fs';
+// import * as FileSystem from 'expo-file-system';
+// // import base64 from 'react-native-base64';
+// import * as Sharing from 'expo-sharing';
 
 const stylesheet = {
-  wrapper: 'min-h-[200px] w-full rounded-[25px] bg-white shadow-sm my-4 ',
+  wrapper:
+    'min-h-[200px] h-[300px] w-full rounded-[25px] bg-white shadow-sm my-4 ',
   header:
     'bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4',
   status: 'w-[26px] h-[26px] rounded-full',
@@ -63,9 +64,10 @@ const ReportCard = ({
       <View className={stylesheet.contentWrapper}>
         <View className={stylesheet.content}>
           {description &&
-            description.map((desc) => (
-              <View className={stylesheet.summaryItem}>
-                •<Text className='m-y-4 font-xs'>{desc} </Text>
+            description.map((desc, index) => (
+              <View key={index} className={stylesheet.summaryItem}>
+                <Text>•</Text>
+                <Text className='m-y-4 font-xs'>{desc} </Text>
               </View>
             ))}
         </View>
@@ -164,6 +166,7 @@ const ChartsPage = () => {
   const { dispatch } = useApp();
   const [report, _] = useState<Report>(route.params['reportDetails']);
   const [episodes, setEpisodes] = useState([]);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -174,187 +177,171 @@ const ChartsPage = () => {
     });
   }, [this]);
 
-  const months = useMemo(() => {
-    const monthsList: string[] = [];
-    episodes.map((ep: Episode) => {
-      if (
-        ep?.dateTime &&
-        !monthsList.includes(format(ep?.dateTime, 'MMMM', { locale: ptBR }))
-      ) {
-        monthsList.push(format(ep?.dateTime, 'MMMM', { locale: ptBR }));
-      }
-      return ep;
-    });
-    return monthsList;
-  }, [episodes]);
-
   const acuteness = useMemo(() => {
-    const monthAcutenessCount: number[] = [];
-    months.map((month: string) => {
-      [Acuteness.LIGHT, Acuteness.MILD, Acuteness.SEVERE].forEach(
-        (acutenessType) => {
-          monthAcutenessCount.push(
-            episodes.filter(
-              (ep: Episode) =>
-                month == format(ep.dateTime, 'MMMM', { locale: ptBR }) &&
-                acutenessType == ep.acuteness
-            ).length
-          );
-        }
-      );
-    });
-    return monthAcutenessCount;
-  }, [episodes]);
-
-  const time = useMemo(() => {
-    const timeCount: {
-      name: string;
-      population: number;
-      color: string;
-      legendFontColor: string;
-      legendFontSize: number;
-    }[] = [];
-    months.map((month: string) => {
-      [Time.MORNING, Time.EVENING, Time.NIGHT, Time.MIDNIGHT].forEach(
-        (timeType, indx) => {
-          timeCount.push({
-            name: timeType,
-            population: episodes.filter(
-              (ep: Episode) =>
-                month == format(ep.dateTime, 'MMMM', { locale: ptBR }) &&
-                timeType == ep.time
-            ).length,
-            color: colorList[indx],
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 14,
-          });
-        }
-      );
-    });
-    return timeCount;
-  }, [episodes]);
-
-  // parse list of symptoms
-  const symptoms = useMemo(() => {
-    const symptomsCount: {
-      name: string;
-      population: number;
-      color: string;
-      legendFontColor: string;
-      legendFontSize: number;
-    }[] = [];
-    months.map((month: string) => {
-      [
-        Symptom.HALO,
-        Symptom.PHOTOSENSIBILITY,
-        Symptom.HYPERACUSIS,
-        Symptom.NAUSEA,
-        Symptom.SICKNESS,
-        Symptom.VOMIT,
-      ].forEach((sympType, indx) => {
-        symptomsCount.push({
-          name: sympType,
-          population: episodes.filter(
-            (ep: Episode) =>
-              month == format(ep.dateTime, 'MMMM', { locale: ptBR }) &&
-              sympType == ep.symptoms
-          ).length,
-          color: colorList[indx],
-          legendFontColor: '#7F7F7F',
-          legendFontSize: 14,
+    const dataList: Array<{ value: number; name: string; color: string }> = [];
+    [Acuteness.LIGHT, Acuteness.MILD, Acuteness.SEVERE].forEach(
+      (act, index) => {
+        let count = 0;
+        episodes.map((ep: Episode) => {
+          if (ep.acuteness == act) {
+            count++;
+          }
         });
+        dataList.push({ value: count, name: act, color: colorList[index] });
+        count = 0;
+      }
+    );
+    return dataList;
+  }, [episodes]);
+
+  const painType = useMemo(() => {
+    const dataList: Array<{ value: number; name: string; color: string }> = [];
+    [PainType.THROB, PainType.TIGHT].forEach((pt, index) => {
+      let count = 0;
+      episodes.map((ep: Episode) => {
+        if (ep.painType == pt) {
+          count++;
+        }
       });
+      dataList.push({ value: count, name: pt, color: colorList[index] });
+      count = 0;
     });
-    return symptomsCount;
+    return dataList;
   }, [episodes]);
 
   const location = useMemo(() => {
-    const locationCount: {
-      name: string;
-      population: number;
-      color: string;
-      legendFontColor: string;
-      legendFontSize: number;
-    }[] = [];
-    months.map((month: string) => {
-      [Location.LEFT, Location.RIGHT, Location.BOTH, Location.BACKSIDE].forEach(
-        (locationType, indx) => {
-          locationCount.push({
-            name: locationType,
-            population: episodes.filter(
-              (ep: Episode) =>
-                month == format(ep.dateTime, 'MMMM', { locale: ptBR }) &&
-                locationType == ep.location
-            ).length,
-            color: colorList[indx],
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 14,
-          });
+    const locationList: Array<{
+      value: number;
+      label: Location;
+      frontColor: string;
+    }> = [];
+    [
+      Location.FRONTALRIGHT,
+      Location.FRONTALLEFT,
+      Location.FRONTALBILATERAL,
+      Location.PARIETALRIGHT,
+      Location.PARIETALLEFT,
+      Location.PARIETALBILATERAL,
+      Location.TEMPLERIGHT,
+      Location.TEMPLELEFT,
+      Location.TEMPLEBILATERAL,
+      Location.BACKSIDE,
+    ].forEach((location) => {
+      let count = 0;
+      episodes.map((ep: Episode) => {
+        if (ep.location == location) {
+          count++;
         }
-      );
-    });
-    return locationCount;
-  }, [episodes]);
-
-  // Parse list of triggers
-  const trigger = useMemo(() => {
-    const triggerCount: {
-      name: string;
-      population: number;
-      color: string;
-      legendFontColor: string;
-      legendFontSize: number;
-    }[] = [];
-    months.map((month: string) => {
-      [Trigger.FOOD, Trigger.JAGGEDSLEEP, Trigger.EMOTIONAL].forEach(
-        (triggerType, indx) => {
-          triggerCount.push({
-            name: triggerType,
-            population: episodes.filter(
-              (ep: Episode) =>
-                month == format(ep.dateTime, 'MMMM', { locale: ptBR }) &&
-                triggerType == ep.triggers
-            ).length,
-            color: colorList[indx],
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 14,
-          });
-        }
-      );
-    });
-    return triggerCount;
-  }, [episodes]);
-
-  // Parse list of improvements
-  const improvementFactor = useMemo(() => {
-    const improvementFactorCount: {
-      name: string;
-      population: number;
-      color: string;
-      legendFontColor: string;
-      legendFontSize: number;
-    }[] = [];
-    months.map((month: string) => {
-      [
-        ImprovementFactor.MEDICINE,
-        ImprovementFactor.SLEEP,
-        ImprovementFactor.FOOD,
-      ].forEach((improvementFactorType, indx) => {
-        improvementFactorCount.push({
-          name: improvementFactorType,
-          population: episodes.filter(
-            (ep: Episode) =>
-              month == format(ep.dateTime, 'MMMM', { locale: ptBR }) &&
-              improvementFactorType == ep.improvementFactor
-          ).length,
-          color: colorList[indx],
-          legendFontColor: '#7F7F7F',
-          legendFontSize: 14,
-        });
       });
+      locationList.push({
+        value: count,
+        label: location,
+        frontColor: '#177AD5',
+      });
+      count = 0;
     });
-    return improvementFactorCount;
+    return locationList;
   }, [episodes]);
+
+  const symptoms = useMemo(() => {
+    const symptomsList: Array<{
+      value: number;
+      label: Symptom;
+      frontColor: string;
+    }> = [];
+    [
+      Symptom.HALO,
+      Symptom.PHOTOSENSIBILITY,
+      Symptom.HYPERACUSIS,
+      Symptom.NAUSEA,
+      Symptom.SICKNESS,
+      Symptom.VOMIT,
+    ].forEach((symptom) => {
+      let count = 0;
+      episodes.map((ep: Episode) => {
+        if (symptom?.includes(',')) {
+          Array.from(symptom.split(',')).map((s) => {
+            if (s == symptom) {
+              count++;
+            }
+          });
+        } else if (ep.symptoms == symptom) {
+          count++;
+        }
+      });
+      symptomsList.push({
+        value: count,
+        label: symptom,
+        frontColor: '#177AD5',
+      });
+      count = 0;
+    });
+    return symptomsList;
+  }, [episodes]);
+
+  const triggers = useMemo(() => {
+    const triggersList: Array<{
+      value: number;
+      label: Trigger;
+      frontColor: string;
+    }> = [];
+    [Trigger.FOOD, Trigger.JAGGEDSLEEP, Trigger.EMOTIONAL].forEach(
+      (trigger) => {
+        let count = 0;
+        episodes.map((ep: Episode) => {
+          if (trigger?.includes(',')) {
+            Array.from(trigger.split(',')).map((t) => {
+              if (t == trigger) {
+                count++;
+              }
+            });
+          } else if (ep.triggers == trigger) {
+            count++;
+          }
+        });
+        triggersList.push({
+          value: count,
+          label: trigger,
+          frontColor: '#177AD5',
+        });
+        count = 0;
+      }
+    );
+    return triggersList;
+  }, [episodes]);
+
+  const locationMaxValue = useMemo(() => {
+    let greater = 0;
+
+    location.map((loc) => {
+      if (loc.value > greater) {
+        greater = loc.value;
+      }
+    });
+    return greater;
+  }, [location]);
+
+  const symptomsMaxValue = useMemo(() => {
+    let greater = 0;
+
+    symptoms.map((loc) => {
+      if (loc.value > greater) {
+        greater = loc.value;
+      }
+    });
+    return greater;
+  }, [symptoms]);
+
+  const triggersMaxValue = useMemo(() => {
+    let greater = 0;
+
+    triggers.map((loc) => {
+      if (loc.value > greater) {
+        greater = loc.value;
+      }
+    });
+    return greater;
+  }, [triggers]);
 
   const foodImprovement = useMemo(
     () => episodes.map((ep: Episode) => ep.foodImprovement),
@@ -365,64 +352,148 @@ const ChartsPage = () => {
     () => episodes.map((ep: Episode) => ep.foodImpair),
     [episodes]
   );
-
   return (
-    <AppPageScaffold title='Relatório'>
+    <AppPageScaffold>
       <View className={stylesheet.footer}>
         <Pressable className={stylesheet.footerBtn}>
-          <Pressable className={stylesheet.footerBtnInner}>
+          <Pressable
+            className={stylesheet.footerBtnInner}
+            onPress={() => {
+              setEmailModalOpen(true);
+            }}
+          >
             <Text>Enviar relatório para o médico </Text>
             <Image className='ml-4' source={require('assets/send.png')}></Image>
           </Pressable>
         </Pressable>
       </View>
-
       {!!report && <SummedUpReport report={report} />}
 
-      <Text className='mt-4 mb-2 pl-2 font-medium '>Intensidade da dor </Text>
+      <View className='m-auto p-4 rounded-[6px] bg-blue-four/40 w-full mt-4 mb-2'>
+        <Text className='m-auto font-bold'>Localização da dor </Text>
+      </View>
 
-      <StackedBarChart
-        hideLegend={true}
-        data={{
-          legend: [],
-          labels: months,
-          data: [acuteness],
-          barColors: ['#C8F7E1', '#FFCBA6', '#FFCACD'],
-        }}
-        formatYLabel={(label) => parseInt(label).toString()}
-        width={Dimensions.get('window').width - 32} // from react-native
-        height={220}
-        chartConfig={{
-          backgroundGradientFrom: '#fff',
-          backgroundGradientTo: '#f7f7f7',
-          decimalPlaces: 0, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          propsForDots: {
-            stroke: 'transparent',
-          },
-          style: {
-            backgroundColor: '#C8F7E1',
-            borderRadius: 30,
-            padding: 24,
-          },
-        }}
-        style={{
-          borderRadius: 16,
-          shadowColor: '#ccc',
-          shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: 0.1,
-        }}
-      />
-      <AcutenessLegend />
+      {location && (
+        <View
+          style={{
+            backgroundColor: '#fff',
+            paddingBottom: 40,
+            borderRadius: 10,
+            zIndex: 20,
+            overflow: 'hidden',
+          }}
+        >
+          <BarChart
+            verticalLinesZIndex={20}
+            showXAxisIndices
+            barWidth={18}
+            spacing={10}
+            data={location}
+            width={Dimensions.get('window').width - 32}
+            showValuesAsTopLabel
+            xAxisLabelsVerticalShift={60}
+            xAxisLabelTextStyle={{
+              transform: 'rotate(50deg) translate(-20px,10px)',
+            }}
+            labelWidth={110}
+            hideYAxisText
+            labelsExtraHeight={20}
+            barBorderRadius={3}
+            yAxisThickness={1}
+            xAxisThickness={1}
+            xAxisColor='#ccc'
+            yAxisColor='#CCC'
+            maxValue={locationMaxValue ? locationMaxValue + 1 : 10}
+          />
+        </View>
+      )}
 
-      {[
-        { chart: time, title: 'Período do dia em que o episódio ocorreu' },
-        { chart: symptoms, title: 'Sintomas associados ao episódio' },
-        { chart: location, title: 'Localização da dor' },
-        { chart: trigger, title: 'Gatilhos que geraram um episódio de dor' },
-        { chart: improvementFactor, title: 'Fatores de melhora' },
-      ].map((data) => (
-        <View>
+      <View className='m-auto p-4 rounded-[6px] bg-blue-four/40 w-full mt-4 mb-2'>
+        <Text className='m-auto font-bold'>Sintomas associados à dor </Text>
+      </View>
+
+      {symptoms && (
+        <View
+          style={{
+            backgroundColor: '#fff',
+            paddingBottom: 40,
+            borderRadius: 10,
+            marginVertical: 40,
+            overflow: 'hidden',
+          }}
+        >
+          <BarChart
+            verticalLinesZIndex={20}
+            showXAxisIndices
+            barWidth={18}
+            spacing={10}
+            data={symptoms}
+            width={Dimensions.get('window').width - 32}
+            showValuesAsTopLabel
+            xAxisLabelsVerticalShift={60}
+            xAxisLabelTextStyle={{
+              transform: 'rotate(50deg) translate(-20px,10px)',
+            }}
+            labelWidth={110}
+            hideYAxisText
+            labelsExtraHeight={20}
+            barBorderRadius={3}
+            yAxisThickness={1}
+            xAxisThickness={1}
+            xAxisColor='#ccc'
+            yAxisColor='#CCC'
+            maxValue={symptomsMaxValue ? symptomsMaxValue + 1 : 10}
+          />
+        </View>
+      )}
+
+      <View className='m-auto p-4 rounded-[6px] bg-blue-four/40 w-full mt-4 mb-2'>
+        <Text className='m-auto font-bold'>Fatores desencadeantes da dor </Text>
+      </View>
+
+      {triggers && (
+        <View
+          style={{
+            backgroundColor: '#fff',
+            paddingBottom: 40,
+            borderRadius: 10,
+            marginVertical: 40,
+            overflow: 'hidden',
+          }}
+        >
+          <BarChart
+            verticalLinesZIndex={20}
+            showXAxisIndices
+            barWidth={18}
+            spacing={12}
+            data={triggers}
+            width={Dimensions.get('window').width - 32}
+            showValuesAsTopLabel
+            xAxisLabelsVerticalShift={40}
+            xAxisLabelTextStyle={{
+              transform: 'rotate(40deg) translate(-20px,10px)',
+            }}
+            labelWidth={130}
+            hideYAxisText
+            labelsExtraHeight={20}
+            barBorderRadius={3}
+            yAxisThickness={1}
+            xAxisThickness={1}
+            xAxisColor='#ccc'
+            yAxisColor='#CCC'
+            maxValue={triggersMaxValue ? triggersMaxValue + 1 : 10}
+          />
+        </View>
+      )}
+
+      <PieCharComponent assets={acuteness} title='Intensidade da dor' />
+      <PieCharComponent assets={painType} title='Característica da dor' />
+
+      {/* {[
+        { chart: acuteness, title: 'Intensidade da dor' },
+        { chart: painType, title: 'Característica da dor' },
+      ].map((data, i) => (
+        <View key={i}>
           <Text className='mt-4 mb-2 pl-2 font-medium '>{data.title}</Text>
           <PieChart
             data={data.chart}
@@ -454,29 +525,68 @@ const ChartsPage = () => {
         </View>
       ))}
 
+      <Text className='mt-4 mb-2 pl-2 font-medium '>Localização da dor </Text> */}
+      {/* <StackedBarChart
+        hideLegend={true}
+        data={{
+          legend: [],
+          labels: months,
+          data: location,
+          barColors: [
+            '#C8F7E1',
+            '#FFCBA6',
+            '#FFCACD',
+            '#C8F7E1',
+            '#FFCBA6',
+            '#FFCACD',
+            '#C8F7E1',
+            '#FFCBA6',
+            '#FFCACD',
+          ],
+        }}
+        formatYLabel={(label) => parseInt(label).toString()}
+        width={Dimensions.get('window').width - 32} // from react-native
+        height={220}
+        chartConfig={{
+          backgroundGradientFrom: '#fff',
+          backgroundGradientTo: '#f7f7f7',
+          decimalPlaces: 0, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          propsForDots: {
+            stroke: 'transparent',
+          },
+          style: {
+            backgroundColor: '#C8F7E1',
+            borderRadius: 30,
+            padding: 24,
+          },
+        }}
+        style={{
+          borderRadius: 16,
+          shadowColor: '#fff',
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.1,
+        }}
+      /> */}
       {foodImprovement && (
         <ReportCard
           title='Alimentos que ajudaram a melhorar'
           description={foodImprovement}
         />
       )}
-
       {foodImpair && (
         <ReportCard
           title='Alimentos que foram gatilhos para a dor'
           description={foodImpair}
         />
       )}
-
       <ReportCard title='Observações' description={report.notes.split(',')} />
-
       {report.periodNotes && (
         <ReportCard
           title='Período menstrual'
           description={report.periodNotes.split(',')}
         />
       )}
-
       {/* <BarChart
         style={{
           marginVertical: 8,
@@ -513,7 +623,6 @@ const ChartsPage = () => {
         height={220}
         verticalLabelRotation={30}
       /> */}
-
       {/* <PieChart
         data={[
           {
@@ -577,6 +686,13 @@ const ChartsPage = () => {
         center={[10, 50]}
         absolute
       /> */}
+      <PhysicianEmailModal
+        isOpen={emailModalOpen}
+        report={report}
+        onClose={() => {
+          setEmailModalOpen(false);
+        }}
+      />
     </AppPageScaffold>
   );
 };

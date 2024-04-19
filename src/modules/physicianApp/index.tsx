@@ -1,25 +1,22 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomePage from './home/HomePage';
 import { Image, Text, View } from 'react-native';
-import EpisodePage from './episode/Episode';
-import CalendarPage from './calendar/Calendar';
-import ProfilePage from './profile/Profile';
 import AppHeader from '../shared/components/appHeader/AppHeader';
-import ReportStackNavigation from './report/Report';
 import { useApp } from 'src/infra/app/app';
 import { AppActions } from 'src/infra/app/actions';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Success from './success/Success';
+import HomePage from './home/HomePage';
+import PatientPage from './patient/PatientPage';
+import ProfilePage from '../app/profile/Profile';
 
 const stylesheet = {
   calendarBtnContainer:
-    'bg-blue-secondary rounded-full w-16 h-16 flex items-center justify-center translate-y-[-20px]',
+    'bg-blue-secondary rounded-full w-13 h-13 flex items-center justify-center translate-y-[-15px]',
 };
 
 const Tab = createBottomTabNavigator();
 
-const TabsRoutes = () => {
+const PhysicianTabsRoutes = () => {
   const { patient, dispatch, setPageTitle, validateStepForward } = useApp();
 
   React.useEffect(() => {
@@ -33,11 +30,9 @@ const TabsRoutes = () => {
   const getHeaderName = (routeIndex: number) => {
     switch (routeIndex) {
       case 1:
-        return 'Relatório';
+        return 'Pacientes';
       case 2:
-        return 'Data e horário';
-      case 3:
-        return 'Calendário';
+        return 'Perfil';
       default:
         return '';
     }
@@ -53,7 +48,6 @@ const TabsRoutes = () => {
         },
       }}
       screenOptions={({ route }) => ({
-        headerStyle: { backgroundColor: '#edf1f8' },
         headerShadowVisible: false,
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
@@ -76,12 +70,12 @@ const TabsRoutes = () => {
                   </Text>
                 </>
               );
-            case 'Report':
+            case 'Patient':
               return (
                 <>
                   <Image
                     tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/stats.png')}
+                    source={require('assets/user.png')}
                   />
                   <Text
                     className={
@@ -90,31 +84,7 @@ const TabsRoutes = () => {
                         : 'text-[#262D33]' + ' text-[9px]'
                     }
                   >
-                    Relatório
-                  </Text>
-                </>
-              );
-            case 'Episode':
-              return (
-                <View className={stylesheet.calendarBtnContainer}>
-                  <Image source={require('assets/plus-white.png')} />
-                </View>
-              );
-            case 'Calendar':
-              return (
-                <>
-                  <Image
-                    tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/calendar.png')}
-                  />
-                  <Text
-                    className={
-                      focused
-                        ? 'text-[#8FD7FF]'
-                        : 'text-[#262D33]' + ' text-[9px]'
-                    }
-                  >
-                    Calenário
+                    Pacientes
                   </Text>
                 </>
               );
@@ -138,13 +108,7 @@ const TabsRoutes = () => {
               );
           }
         },
-        header: (bottomTabsProps) =>
-          bottomTabsProps.route.name != 'Report' ? (
-            <AppHeader {...bottomTabsProps} />
-          ) : (
-            <></>
-          ),
-
+        header: (bottomTabsProps) => <AppHeader {...bottomTabsProps} />,
         tabBarBackground: () => (
           <Image
             style={{
@@ -164,7 +128,6 @@ const TabsRoutes = () => {
         tabBarStyle: {
           display: route.name == 'Episode' ? 'none' : 'flex',
           borderWidth: 0,
-          height: 60,
           borderStyle: 'dashed',
           backgroundColor: '#transparent',
           position: 'absolute',
@@ -173,9 +136,7 @@ const TabsRoutes = () => {
       })}
     >
       <Tab.Screen name='Home' component={HomePage} />
-      <Tab.Screen name='Report' component={ReportStackNavigation} />
-      <Tab.Screen name='Episode' component={EpisodePage} />
-      <Tab.Screen name='Calendar' component={CalendarPage} />
+      <Tab.Screen name='Patient' component={PatientPage} />
       <Tab.Screen name='Profile' component={ProfilePage} />
     </Tab.Navigator>
   );
@@ -186,8 +147,7 @@ const Stack = createNativeStackNavigator();
 const LoggedPages = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='Tabs' component={TabsRoutes} />
-      <Stack.Screen name='Success' component={Success} />
+      <Stack.Screen name='Tabs' component={PhysicianTabsRoutes} />
     </Stack.Navigator>
   );
 };
