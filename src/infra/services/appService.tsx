@@ -1,5 +1,5 @@
 import { get, patch, post } from '../api';
-import { Episode, Patient } from '../@types/app.types';
+import { Episode, EpisodeModalDTO, Patient } from '../@types/app.types';
 import { format, subDays } from 'date-fns';
 
 interface CreateReportDTO {
@@ -30,19 +30,21 @@ const requestCreateEpisode = async (
 ): Promise<Episode> => post(`episode/${patientId}`, payload);
 
 const requestUpdateEpisode = async (
-  payload: Episode,
+  payload: EpisodeModalDTO,
   episodeId: string
 ): Promise<Episode> => {
-  delete payload.id;
-  delete payload.createdAt;
-  delete payload.updatedAt;
-  delete payload.email;
-  delete payload.height;
-  delete payload.kinship;
-  delete payload.name;
-  delete payload.patientId;
-  delete payload.weight;
-  return patch(`episode/${episodeId}`, payload);
+  console.log('pay: =', payload);
+  const ep = Object.assign({}, payload);
+  delete ep.id;
+  delete ep.createdAt;
+  delete ep.updatedAt;
+  delete ep.email;
+  delete ep.height;
+  delete ep.kinship;
+  delete ep.name;
+  delete ep.patientId;
+  delete ep.weight;
+  return patch(`episode/${episodeId}`, ep);
 };
 
 const requestFetchPatient = async (id: string): Promise<Patient> =>

@@ -26,7 +26,37 @@ export interface Episode {
   medicineImprovement: string;
   notes: string;
   painType: string;
-  period: string;
+  period: boolean;
+  periodNotes: string;
+  symptoms: string | string[];
+  time: string;
+  triggers: string | string[];
+}
+
+export interface EpisodeModalDTO {
+  createdAt?: string;
+  updatedAt?: string;
+  email?: string;
+  height?: string;
+  kinship?: string;
+  name?: string;
+  patientId?: string;
+  weight?: string;
+  acuteness: string;
+  dates?: object | any;
+  dateTime?: string;
+  foodImpair: string;
+  foodImprovement: string;
+  id?: string;
+  improvementFactor: string | string[];
+  isEdition?: boolean;
+  location: string;
+  medicine: string;
+  medicineDosage: number;
+  medicineImprovement: string;
+  notes: string;
+  painType: string;
+  period: boolean;
   periodNotes: string;
   symptoms: string | string[];
   time: string;
@@ -56,7 +86,7 @@ export interface AppContextDefaultValues {
   currentStep: number;
   validateStepForward: (step: number) => boolean;
   handleFormChange: (payload: object) => void;
-  submitEpisode: () => void;
+  submitEpisode: () => Promise<any>;
   clearEpisodeFormState: () => void;
   episodeFormState: Episode;
   episodes?: Episode[];

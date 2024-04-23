@@ -4,6 +4,7 @@ import Login from './login/Login';
 import UserType from './registration/userType/UserType';
 import Tenant from './registration/tenant/Tenant';
 import Welcome from './welcome/Welcome';
+import { Image, TouchableOpacity, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +15,23 @@ const AuthRoutes = () => {
         headerStyle: { backgroundColor: '#F7F7F7' },
         headerBackImageSource: require('assets/arrowback.png'),
         headerShadowVisible: false,
-        headerTitle: () => '',
+        header: (bottomTabsProps) => {
+          return (
+            <View className='w-full py-8 pl-4 flex flex-row justify-between items-center bg-primary'>
+              {bottomTabsProps.navigation.canGoBack() ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    bottomTabsProps.navigation.goBack();
+                  }}
+                >
+                  <Image source={require('assets/arrowback.png')} />
+                </TouchableOpacity>
+              ) : (
+                <Image></Image>
+              )}
+            </View>
+          );
+        },
       }}
     >
       <Stack.Screen name='landingPage' component={LandingPage}></Stack.Screen>

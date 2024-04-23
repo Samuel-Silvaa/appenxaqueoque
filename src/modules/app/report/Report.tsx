@@ -22,7 +22,7 @@ const stylesheet = {
   reportCardColor: 'h-[80%] rounded-full w-2 mr-4 py-2 self-center',
   reportCardHeader: 'flex-col h-full w-[80%]',
   reportCardDesc:
-    'mt-2 w-3/4 h-3/4 text-ellipsis overflow-hidden ... lowercase opacity-50',
+    'mt-2 w-3/4 h-3/4 text-ellipsis overflow-hidden ... opacity-50',
 };
 
 const ResourceCard = ({
@@ -48,17 +48,23 @@ const ResourceCard = ({
           {format(reportDetails.startDate, 'dd MMM', { locale: ptBR })} -
           {format(reportDetails.endDate, 'dd MMM', { locale: ptBR })} -
           <Text className='ml-2 font-medium'>
+            {' '}
             {parseAcuteness(reportDetails.acuteness)}
           </Text>
         </Text>
-        <Text className={stylesheet.reportCardDesc}>
-          {reportDetails.notes
-            .replaceAll(',', ' ')
-            .substring(0, Dimensions.get('window').width * 0.14) +
-            (reportDetails.notes.length > Dimensions.get('window').width * 0.14
-              ? '...'
-              : '')}
-        </Text>
+        {!!reportDetails?.notes ? (
+          <Text className={stylesheet.reportCardDesc}>
+            {reportDetails.notes
+              .replaceAll(',', ' ')
+              .substring(0, Dimensions.get('window').width * 0.14) +
+              (reportDetails.notes.length >
+              Dimensions.get('window').width * 0.14
+                ? '...'
+                : '')}
+          </Text>
+        ) : (
+          <Text className={stylesheet.reportCardDesc}>Sem anotações</Text>
+        )}
       </View>
 
       <Image

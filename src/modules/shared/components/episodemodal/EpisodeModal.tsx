@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
-  Animated,
   Image,
   Modal,
   Pressable,
@@ -25,7 +24,7 @@ const stylesheet = {
   editText: 'text-[8px] text-black',
   headerDate: 'font-bold text-black',
   contentWrapper:
-    'my-2 w-full flex-row flex-wrap justify-start overflow-hidden gap-1',
+    'my-2 w-full flex-row flex-wrap justify-start overflow-hidden gap-1 pb-2',
   longInfo: ' w-[98%] shadow-sm rounded-[16px] bg-blue-baby',
   smallInfoBlock: 'w-[48%] shadow-sm rounded-[16px] bg-primary',
   smallInfoContainer: 'w-full flex-col justify-start items-start p-4',
@@ -70,18 +69,23 @@ const EpisodeModal = ({
     {
       icon: require('assets/chart-symptoms.png'),
       title: 'Sintomas associados',
-      desc: episode.symptoms,
+      desc: Array.isArray(episode.symptoms)
+        ? Array.from(episode.symptoms).join(' - ')
+        : episode.symptoms,
     },
     {
       icon: require('assets/chart-trigger.png'),
       title: 'Gatilhos',
-      desc: episode.triggers,
+      desc: Array.isArray(episode.triggers)
+        ? Array.from(episode.triggers).join(' - ')
+        : episode.triggers,
     },
     {
       icon: require('assets/chart-improvement.png'),
       title: 'Fatores de melhora',
-      desc: episode.improvementFactor,
-      opened: false,
+      desc: Array.isArray(episode.improvementFactor)
+        ? Array.from(episode.improvementFactor).join(' - ')
+        : episode.improvementFactor,
     },
     {
       icon: require('assets/chart-period.png'),
@@ -98,7 +102,7 @@ const EpisodeModal = ({
   const details = useMemo(() => {
     const parsedDetails: Array<any> = [];
     fullDetails.map((dt) => {
-      if (!!dt.desc) {
+      if (!!dt.desc && dt.desc != 'null') {
         parsedDetails.splice(0, 0, dt);
       }
     });
@@ -108,13 +112,12 @@ const EpisodeModal = ({
   const nullDetails = useMemo(() => {
     const parsedDetails: Array<any> = [];
     fullDetails.map((dt) => {
-      if (!dt.desc) {
+      if (!dt.desc || dt.desc == 'null') {
         parsedDetails.splice(parsedDetails.length, 0, dt);
       }
     });
     return parsedDetails;
   }, []);
-  console.log(episode);
   return (
     <Modal
       animationType='slide'
@@ -130,9 +133,33 @@ const EpisodeModal = ({
           <View className={stylesheet.header}>
             <TouchableOpacity
               onPress={() => {
-                handleFormChange({ ...episode, isEdition: true });
                 onClose();
-                navigation.navigate('Episode', { episode: episode });
+                handleFormChange({
+                  ...episode,
+                  isEdition: true,
+                  dates: {
+                    [format(
+                      String(episode?.dateTime),
+                      'yyyy-MM-dd'
+                    ).toString()]: {
+                      selected: true,
+                      marked: true,
+                      selectedColor: pinColor(episode.acuteness),
+                      dotColor: pinColor(episode.acuteness),
+                    },
+                  },
+                });
+                navigation.setOptions({
+                  ...episode,
+                  isEdition: true,
+                  dates: {
+                    selected: true,
+                    marked: true,
+                    selectedColor: pinColor(episode.acuteness),
+                    dotColor: pinColor(episode.acuteness),
+                  },
+                });
+                navigation.navigate('Episode');
               }}
               style={{ backgroundColor: pinColor(episode.acuteness) }}
               className={stylesheet.edition}
@@ -147,7 +174,7 @@ const EpisodeModal = ({
             )}
             <TouchableOpacity
               onPress={onClose}
-              className='w-8 h-8 flex items-end justify-center'
+              className='fw-8 h-8 flex items-end justify-center'
             >
               <Image
                 className={stylesheet.arrowdown}
@@ -182,7 +209,7 @@ const EpisodeModal = ({
               })}
           </View>
           {nullDetails.length > 0 && (
-            <Text className='font-semibold pl-2 font-black my-2'>
+            <Text className='font-semibold pl-2 font-black my-'>
               Campos não preenchidos
             </Text>
           )}

@@ -7,6 +7,7 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import Card from '../form/card/Card';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import { useApp } from 'src/infra/app/app';
+import { useNavigation } from '@react-navigation/native';
 
 const stylesheet = {
   wrapper: 'flex-col w-full items-center justify-between',
@@ -25,11 +26,24 @@ const notesSchema = yup.object<NotesSchema>().shape({
 
 const Notes = () => {
   const { episodeFormState, handleFormChange, submitEpisode } = useApp();
-
+  const navigation = useNavigation();
   const {
     control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(notesSchema) });
+
+  const handleSubmit = async () => {
+    submitEpisode().then((ep) => {
+      const { data } = ep;
+      navigation.setOptions({
+        ...data,
+        triggers: String(data.triggers).split(','),
+        improvementFactor: String(data.improvementFactor).split(','),
+        symptoms: String(data.symptoms).split(','),
+      });
+      navigation.navigate('Success');
+    });
+  };
 
   return (
     <View className={stylesheet.wrapper}>
@@ -55,7 +69,7 @@ const Notes = () => {
         }
       />
       <ExPressable
-        onPress={submitEpisode}
+        onPress={handleSubmit}
         title='Salvar cadastro'
         className='bg-[#8FD7FF] '
       />

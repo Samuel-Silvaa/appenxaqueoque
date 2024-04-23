@@ -1,5 +1,11 @@
 import { useCallback } from 'react';
-import { Image, ImageBackground, Pressable, Text, View } from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import CalendarComponent from 'src/modules/app/shared/components/calendar/CalendarComponent';
 import { sharedEpisodeStyleSheet } from '../../shared/SharedEpisodeStyleSheet';
@@ -32,16 +38,7 @@ const data = [
 
 const stylesheet = {
   calendarWrapper: 'flex-col w-full items-center overflow-hidden',
-  timepicker: {
-    container: 'w-full bg-white rounded-[44px] p-2 items-center',
-    title: 'font-semibold text-lg',
-    divider: 'w-1/5 border border-gray-light h-[1px]',
-    timeIndicatorContainer: 'w-full h-[100px] rounded-[40px] flex',
-    timeIndicatorBg: 'w-full h-full bg-contain',
-    timeIndicatorRadioContainer:
-      'absolute left-4 top-1/3 flex-row items-center',
-    timeIndicatorRadioLabel: 'text-white font-semibold',
-  },
+
   calendar: {
     wrapper: 'h-full pt-14',
     img: 'absolute right-5 top-[-18px] z-30',
@@ -63,7 +60,7 @@ const Timepicker = () => {
         <View className={sharedEpisodeStyleSheet.timepicker.divider}></View>
 
         {data.map((time, index) => (
-          <Pressable
+          <TouchableOpacity
             onPress={() => handleFormChange({ time: time.value })}
             key={index}
             className={
@@ -72,6 +69,7 @@ const Timepicker = () => {
           >
             <ImageBackground
               source={time.img}
+              resizeMode='contain'
               className={sharedEpisodeStyleSheet.timepicker.timeIndicatorBg}
             >
               <View
@@ -93,7 +91,7 @@ const Timepicker = () => {
                 </Text>
               </View>
             </ImageBackground>
-          </Pressable>
+          </TouchableOpacity>
         ))}
       </View>
     </RadioButton.Group>
@@ -125,7 +123,7 @@ const Datetime = () => {
           width={38}
           height={38}
           resizeMode='cover'
-          source={require('assets/boy_phone.png')}
+          source={require('assets/victor_bear.png')}
         />
       </View>
       <View className={stylesheet.calendarWrapper}>

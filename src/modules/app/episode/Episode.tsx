@@ -1,5 +1,4 @@
 import {
-  Animated,
   Dimensions,
   FlatList,
   NativeScrollEvent,
@@ -33,7 +32,7 @@ const Steps = () => {
   const { steps, currentStep } = useApp();
 
   return (
-    <Animated.View className={stylesheet.steps.container}>
+    <View className={stylesheet.steps.container}>
       {Array(steps)
         .fill(0)
         .map((_, index) => {
@@ -48,7 +47,7 @@ const Steps = () => {
             ></View>
           );
         })}
-    </Animated.View>
+    </View>
   );
 };
 
@@ -177,7 +176,6 @@ const FormContent = ({
 }: EpisodeScaffold) => {
   const { currentStep, validateStepForward } = useApp();
   const [screenOfffset, setScreenOffset] = useState(0);
-  const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 
   const handleHeaderAndEpisodeSlidesAction = (direction: number) => {
     if (direction == 0 && currentStep < pages.length - 1) {
@@ -213,10 +211,6 @@ const FormContent = ({
     }
   };
 
-  const handleScrollDebounced = _.debounce((event) => {
-    setIsScrollEnabled(true);
-  }, 1500);
-
   const handleScrollBeginDrag = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
@@ -226,20 +220,14 @@ const FormContent = ({
   const handleScrollEndDrag = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
-    setIsScrollEnabled(false);
     const endOffset = event.nativeEvent.contentOffset.x;
     handleHeaderAndEpisodeSlidesAction(endOffset > screenOfffset ? 0 : 1);
   };
-
-  useEffect(() => {
-    handleScrollDebounced;
-  }, [isScrollEnabled]);
 
   return (
     <FlatList
       ref={episodePagesFlatListRef}
       windowSize={3}
-      scrollEnabled={isScrollEnabled}
       initialNumToRender={pages.length}
       initialScrollIndex={currentStep}
       maxToRenderPerBatch={0}
@@ -262,7 +250,7 @@ const FormContent = ({
       keyExtractor={(item, index) => item.toString() + index}
       onScrollBeginDrag={handleScrollBeginDrag}
       onScrollEndDrag={handleScrollEndDrag}
-      scrollEventThrottle={10} // Adjust as needed
+      scrollEventThrottle={1} // Adjust as needed
       data={pages}
     />
   );
@@ -284,8 +272,27 @@ const FormHeader = ({
 };
 
 const FormScaffold = () => {
+  const { currentStep } = useApp();
   const headerStepsFlatListRef = createRef<FlatList>();
   const episodePagesFlatListRef = createRef<FlatList>();
+
+  useEffect(() => {
+    if (currentStep == 0) {
+      if (headerStepsFlatListRef?.current) {
+        headerStepsFlatListRef?.current.scrollToIndex({
+          index: 0,
+          animated: true,
+        });
+      }
+
+      if (episodePagesFlatListRef?.current) {
+        episodePagesFlatListRef?.current.scrollToIndex({
+          index: 0,
+          animated: true,
+        });
+      }
+    }
+  }, [currentStep]);
 
   return (
     <View className='w-full'>

@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { ReactNode } from 'react';
-import { Image, ImageSourcePropType, View } from 'react-native';
+import { ImageSourcePropType, View } from 'react-native';
 import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
 
 const stylesheet = {
-  view: 'flex-col h-screen flex-grow bg-primary p-4 gap-y-4 pb-14',
+  view: 'flex-col flex-grow bg-primary p-4 gap-y-4 pb-14',
   header: 'my-6 self-start',
 };
 
@@ -23,7 +23,6 @@ interface AuthScaffoldProps {
 }
 
 const AuthScaffold = ({
-  hasArrowBack = true,
   children,
   alignment = 'items-start',
   ctaPrimary,

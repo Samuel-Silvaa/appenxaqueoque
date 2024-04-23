@@ -36,9 +36,15 @@ const AppHeader = ({
         <Image></Image>
       )}
       {pageTitle && (
-        <Text className='text-2xl text-black font-extrabold'>{pageTitle}</Text>
+        <Text className='text-2xl text-black font-extrabold ml-8'>
+          {pageTitle}
+        </Text>
       )}
-      <Image source={require('assets/moon.png')} />
+      <Image
+        className='w-14 h-14 bg-red'
+        resizeMode='contain'
+        source={require('assets/moon.png')}
+      />
     </View>
   );
 };

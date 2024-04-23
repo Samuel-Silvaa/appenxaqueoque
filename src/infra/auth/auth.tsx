@@ -28,12 +28,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOut = () => {
     setFormState({});
-    window.dispatchEvent(new Event('storage'));
   };
 
   const setLocalStorageWelcomeAttr = async () => {
     await SecureStore.setItemAsync('welcome', JSON.stringify('true'));
-    window.dispatchEvent(new Event('storage'));
   };
 
   const handleFormChange = (payload: any) => {
@@ -122,7 +120,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (refreshToken)
       await SecureStore.setItemAsync('refreshToken', refreshToken);
     if (userId) await SecureStore.setItemAsync('userId', userId);
-    window.dispatchEvent(new Event('storage'));
   };
 
   const reducer = (

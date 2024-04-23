@@ -1,4 +1,4 @@
-import { Dimensions, Image, Text } from 'react-native';
+import { Image, Text } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
 
@@ -14,7 +14,7 @@ const LandingPage = ({ navigation }) => {
       ctaSecondaryText='Cadastrar'
     >
       <Image
-        className='h-[40%]'
+        className='h-[50%] '
         resizeMode='contain'
         source={require('assets/welcome.png')}
       />

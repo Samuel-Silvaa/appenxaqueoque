@@ -1,9 +1,6 @@
 import { useRoute } from '@react-navigation/native';
-import { differenceInDays, format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { useEffect, useMemo, useState } from 'react';
-import { Dimensions, Image, Pressable, Text, View } from 'react-native';
-import { BarChart, PieChart } from 'react-native-gifted-charts';
+import { Image, Pressable, Text, View } from 'react-native';
 import {
   Acuteness,
   Episode,
@@ -15,23 +12,12 @@ import {
 } from 'src/infra/@types/app.types';
 import { AppActions } from 'src/infra/app/actions';
 import { useApp } from 'src/infra/app/app';
-import {
-  parseAcuteness,
-  parseLocation,
-  parsePainType,
-  parseSymptoms,
-  parseTime,
-  parseTriggers,
-  pinColor,
-} from 'src/infra/utils/appUtils';
+
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
 import PhysicianEmailModal from 'src/modules/shared/components/physicianEmailModal/PhysicianEmailModal';
-import PieCharComponent from './components/PieCharComponent';
-// import fetch_blob from 'react-native-fetch-blob';
-// import RNFS from 'react-native-fs';
-// import * as FileSystem from 'expo-file-system';
-// // import base64 from 'react-native-base64';
-// import * as Sharing from 'expo-sharing';
+import PieChartComponent from './components/PieChartComponent';
+import { BarChartComponent } from './components/BarChartComponent';
+import { SummedUpReport } from './components/SummedUpRepost';
 
 const stylesheet = {
   wrapper:
@@ -58,94 +44,22 @@ const ReportCard = ({
 }) => {
   return (
     <View className={stylesheet.wrapper}>
-      <View className={stylesheet.header + ' bg-beige-primary/50 h-[60px]'}>
-        <Text className='font-semibold text-black py-8'>{title}</Text>
+      <View className={stylesheet.header + ' bg-beige-primary/50 h-[50px]'}>
+        <Text className='font-semibold text-black py-5 text-md'>{title}</Text>
       </View>
       <View className={stylesheet.contentWrapper}>
         <View className={stylesheet.content}>
           {description &&
-            description.map((desc, index) => (
-              <View key={index} className={stylesheet.summaryItem}>
-                <Text>•</Text>
-                <Text className='m-y-4 font-xs'>{desc} </Text>
-              </View>
-            ))}
-        </View>
-      </View>
-    </View>
-  );
-};
-
-const SummedUpReport = (data: { report: Report }) => {
-  const { report } = data;
-  return (
-    <View className={stylesheet.wrapper}>
-      <View className={stylesheet.header}>
-        <View
-          className={stylesheet.status}
-          style={{ backgroundColor: pinColor(report.acuteness) }}
-        ></View>
-        <Text className='font-semibold text-black'>
-          De {format(new Date(report.startDate), 'dd MMM', { locale: ptBR })} à{' '}
-          {format(new Date(report.endDate), 'dd MMM', { locale: ptBR })}
-        </Text>
-        <View>
-          <Text className='font-semibold text-black'>
-            {differenceInDays(report.endDate, report.startDate)} dias
-          </Text>
-        </View>
-      </View>
-      <View className={stylesheet.contentWrapper}>
-        <View className={stylesheet.content}>
-          <View className={stylesheet.summaryItem}>
-            <Image
-              className='w-4 h-4'
-              source={require('assets/chart-doc.png')}
-            />
-            <Text>{report.episodeAmount} episódios</Text>
-          </View>
-          <View className={stylesheet.summaryItem}>
-            <Image
-              className='w-4 h-4'
-              source={require('assets/chart-clock.png')}
-            />
-            <Text>{parseTime(report.time)} </Text>
-          </View>
-          <View className={stylesheet.summaryItem}>
-            <Image
-              className='w-4 h-4'
-              source={require('assets/chart-header-location.png')}
-            />
-            <Text>{parseLocation(report.location)} </Text>
-          </View>
-          <View className={stylesheet.summaryItem}>
-            <Image
-              className='w-4 h-4'
-              source={require('assets/chart-acuteness.png')}
-            />
-            <Text>{parseAcuteness(report.acuteness)} </Text>
-          </View>
-          <View className={stylesheet.summaryItem}>
-            <Image
-              className='w-4 h-4'
-              source={require('assets/chart-sad.png')}
-            />
-            <Text>{parsePainType(report.painType)} </Text>
-          </View>
-          <View className={stylesheet.summaryItem}>
-            <Image
-              className='w-4 h-4'
-              source={require('assets/chart-symptom.png')}
-            />
-            <Text>{parseSymptoms(report.symptoms)} </Text>
-          </View>
-          <View className={stylesheet.summaryItem}>
-            <Image
-              className='w-4 h-4'
-              source={require('assets/chart-trigger.png')}
-            />
-            <Text>{parseTriggers(report.triggers)} </Text>
-          </View>
+            description.map((desc, index) =>
+              !!desc ? (
+                <View key={index} className={stylesheet.summaryItem}>
+                  <Text>•</Text>
+                  <Text className='m-y-4 font-xs'>{desc} </Text>
+                </View>
+              ) : (
+                <></>
+              )
+            )}
         </View>
       </View>
     </View>
@@ -367,325 +281,65 @@ const ChartsPage = () => {
           </Pressable>
         </Pressable>
       </View>
+
       {!!report && <SummedUpReport report={report} />}
 
-      <View className='m-auto p-4 rounded-[6px] bg-blue-four/40 w-full mt-4 mb-2'>
-        <Text className='m-auto font-bold'>Localização da dor </Text>
-      </View>
+      <BarChartComponent
+        title='Localização da dor'
+        dataset={location}
+        maxValue={locationMaxValue}
+      />
 
-      {location && (
-        <View
-          style={{
-            backgroundColor: '#fff',
-            paddingBottom: 40,
-            borderRadius: 10,
-            zIndex: 20,
-            overflow: 'hidden',
-          }}
-        >
-          <BarChart
-            verticalLinesZIndex={20}
-            showXAxisIndices
-            barWidth={18}
-            spacing={10}
-            data={location}
-            width={Dimensions.get('window').width - 32}
-            showValuesAsTopLabel
-            xAxisLabelsVerticalShift={60}
-            xAxisLabelTextStyle={{
-              transform: 'rotate(50deg) translate(-20px,10px)',
-            }}
-            labelWidth={110}
-            hideYAxisText
-            labelsExtraHeight={20}
-            barBorderRadius={3}
-            yAxisThickness={1}
-            xAxisThickness={1}
-            xAxisColor='#ccc'
-            yAxisColor='#CCC'
-            maxValue={locationMaxValue ? locationMaxValue + 1 : 10}
-          />
-        </View>
-      )}
+      <BarChartComponent
+        title='Sintomas associados à dor'
+        dataset={symptoms}
+        maxValue={symptomsMaxValue}
+      />
 
-      <View className='m-auto p-4 rounded-[6px] bg-blue-four/40 w-full mt-4 mb-2'>
-        <Text className='m-auto font-bold'>Sintomas associados à dor </Text>
-      </View>
+      <BarChartComponent
+        title='Fatores desencadeantes da dor'
+        dataset={triggers}
+        maxValue={triggersMaxValue}
+      />
 
-      {symptoms && (
-        <View
-          style={{
-            backgroundColor: '#fff',
-            paddingBottom: 40,
-            borderRadius: 10,
-            marginVertical: 40,
-            overflow: 'hidden',
-          }}
-        >
-          <BarChart
-            verticalLinesZIndex={20}
-            showXAxisIndices
-            barWidth={18}
-            spacing={10}
-            data={symptoms}
-            width={Dimensions.get('window').width - 32}
-            showValuesAsTopLabel
-            xAxisLabelsVerticalShift={60}
-            xAxisLabelTextStyle={{
-              transform: 'rotate(50deg) translate(-20px,10px)',
-            }}
-            labelWidth={110}
-            hideYAxisText
-            labelsExtraHeight={20}
-            barBorderRadius={3}
-            yAxisThickness={1}
-            xAxisThickness={1}
-            xAxisColor='#ccc'
-            yAxisColor='#CCC'
-            maxValue={symptomsMaxValue ? symptomsMaxValue + 1 : 10}
-          />
-        </View>
-      )}
+      <PieChartComponent assets={acuteness} title='Intensidade da dor' />
+      <PieChartComponent assets={painType} title='Característica da dor' />
 
-      <View className='m-auto p-4 rounded-[6px] bg-blue-four/40 w-full mt-4 mb-2'>
-        <Text className='m-auto font-bold'>Fatores desencadeantes da dor </Text>
-      </View>
-
-      {triggers && (
-        <View
-          style={{
-            backgroundColor: '#fff',
-            paddingBottom: 40,
-            borderRadius: 10,
-            marginVertical: 40,
-            overflow: 'hidden',
-          }}
-        >
-          <BarChart
-            verticalLinesZIndex={20}
-            showXAxisIndices
-            barWidth={18}
-            spacing={12}
-            data={triggers}
-            width={Dimensions.get('window').width - 32}
-            showValuesAsTopLabel
-            xAxisLabelsVerticalShift={40}
-            xAxisLabelTextStyle={{
-              transform: 'rotate(40deg) translate(-20px,10px)',
-            }}
-            labelWidth={130}
-            hideYAxisText
-            labelsExtraHeight={20}
-            barBorderRadius={3}
-            yAxisThickness={1}
-            xAxisThickness={1}
-            xAxisColor='#ccc'
-            yAxisColor='#CCC'
-            maxValue={triggersMaxValue ? triggersMaxValue + 1 : 10}
-          />
-        </View>
-      )}
-
-      <PieCharComponent assets={acuteness} title='Intensidade da dor' />
-      <PieCharComponent assets={painType} title='Característica da dor' />
-
-      {/* {[
-        { chart: acuteness, title: 'Intensidade da dor' },
-        { chart: painType, title: 'Característica da dor' },
-      ].map((data, i) => (
-        <View key={i}>
-          <Text className='mt-4 mb-2 pl-2 font-medium '>{data.title}</Text>
-          <PieChart
-            data={data.chart}
-            width={Dimensions.get('window').width - 32} // from react-native
-            height={220}
-            chartConfig={{
-              backgroundColor: '#fff',
-              backgroundGradientFrom: '#fff',
-              backgroundGradientTo: '#f7f7f7',
-              decimalPlaces: 0, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              style: {
-                backgroundColor: '#C8F7E1',
-                borderRadius: 30,
-                padding: 24,
-              },
-            }}
-            style={{
-              borderRadius: 16,
-              shadowColor: '#ccc',
-              shadowOffset: { width: 0, height: 3 },
-              shadowOpacity: 0.1,
-            }}
-            accessor='population'
-            backgroundColor='#fff'
-            paddingLeft='15'
-            absolute
-          />
-        </View>
-      ))}
-
-      <Text className='mt-4 mb-2 pl-2 font-medium '>Localização da dor </Text> */}
-      {/* <StackedBarChart
-        hideLegend={true}
-        data={{
-          legend: [],
-          labels: months,
-          data: location,
-          barColors: [
-            '#C8F7E1',
-            '#FFCBA6',
-            '#FFCACD',
-            '#C8F7E1',
-            '#FFCBA6',
-            '#FFCACD',
-            '#C8F7E1',
-            '#FFCBA6',
-            '#FFCACD',
-          ],
-        }}
-        formatYLabel={(label) => parseInt(label).toString()}
-        width={Dimensions.get('window').width - 32} // from react-native
-        height={220}
-        chartConfig={{
-          backgroundGradientFrom: '#fff',
-          backgroundGradientTo: '#f7f7f7',
-          decimalPlaces: 0, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          propsForDots: {
-            stroke: 'transparent',
-          },
-          style: {
-            backgroundColor: '#C8F7E1',
-            borderRadius: 30,
-            padding: 24,
-          },
-        }}
-        style={{
-          borderRadius: 16,
-          shadowColor: '#fff',
-          shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: 0.1,
-        }}
-      /> */}
-      {foodImprovement && (
+      {foodImprovement.length && (
         <ReportCard
           title='Alimentos que ajudaram a melhorar'
           description={foodImprovement}
         />
       )}
-      {foodImpair && (
+
+      {foodImpair.length && (
         <ReportCard
           title='Alimentos que foram gatilhos para a dor'
           description={foodImpair}
         />
       )}
-      <ReportCard title='Observações' description={report.notes.split(',')} />
+
+      {report.notes && (
+        <ReportCard
+          title='Observações'
+          description={
+            report.notes.includes(',')
+              ? report.notes.split(',')
+              : [report.notes]
+          }
+        />
+      )}
       {report.periodNotes && (
         <ReportCard
           title='Período menstrual'
-          description={report.periodNotes.split(',')}
+          description={
+            report.periodNotes.includes(',')
+              ? report.periodNotes.split(',')
+              : [report.periodNotes]
+          }
         />
       )}
-      {/* <BarChart
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
-        chartConfig={{
-          backgroundColor: '#8FD7FF',
-          backgroundGradientFrom: '#A5D1EA',
-          backgroundGradientTo: '#B4CFE6',
-          decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          style: {
-            borderRadius: 30,
-            paddingTop: 20,
-          },
-          propsForDots: {
-            r: '6',
-            strokeWidth: '2',
-            stroke: '#F7F7F7',
-          },
-        }}
-        yAxisLabel=''
-        yAxisSuffix=''
-        data={{
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-          datasets: [
-            {
-              data: [20, 45, 28, 80, 99, 43],
-            },
-          ],
-        }}
-        width={Dimensions.get('window').width - 32} // from react-native
-        height={220}
-        verticalLabelRotation={30}
-      /> */}
-      {/* <PieChart
-        data={[
-          {
-            name: 'Seoul',
-            population: 21500000,
-            color: 'rgba(131, 167, 234, 1)',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-          },
-          {
-            name: 'Toronto',
-            population: 2800000,
-            color: '#F00',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-          },
-          {
-            name: 'Beijing',
-            population: 527612,
-            color: 'red',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-          },
-          {
-            name: 'New York',
-            population: 8538000,
-            color: '#ffffff',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-          },
-          {
-            name: 'Moscow',
-            population: 11920000,
-            color: 'rgb(0, 0, 255)',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-          },
-        ]}
-        width={Dimensions.get('window').width - 32} // from react-native
-        height={220}
-        chartConfig={{
-          backgroundColor: '#8FD7FF',
-          backgroundGradientFrom: '#A5D1EA',
-          backgroundGradientTo: '#B4CFE6',
-          decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          style: {
-            borderRadius: 30,
-            paddingTop: 20,
-          },
-          propsForDots: {
-            r: '6',
-            strokeWidth: '2',
-            stroke: '#F7F7F7',
-          },
-        }}
-        accessor={'population'}
-        backgroundColor={'transparent'}
-        paddingLeft={'15'}
-        center={[10, 50]}
-        absolute
-      /> */}
+
       <PhysicianEmailModal
         isOpen={emailModalOpen}
         report={report}

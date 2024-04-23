@@ -14,7 +14,7 @@ const data = [
   {
     label: 'Moderado - A criança reclama e para de brincar, mas não se deita.',
     value: AcutenessType.MILD,
-    img: require('assets/kid_reading.png'),
+    img: require('assets/arthur_lego.png'),
   },
   {
     label: 'Forte - A criança reclama, deita e pode chorar de dor.',

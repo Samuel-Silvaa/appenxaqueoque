@@ -153,10 +153,6 @@ const TabsRoutes = () => {
               height: '100%',
               borderRadius: 50,
               alignSelf: 'center',
-              shadowColor: '#C5C5C5',
-              shadowOpacity: 0.3,
-              shadowOffset: { height: 3, width: 3 },
-              shadowRadius: 50,
               overflow: 'visible',
             }}
           />
@@ -164,11 +160,17 @@ const TabsRoutes = () => {
         tabBarStyle: {
           display: route.name == 'Episode' ? 'none' : 'flex',
           borderWidth: 0,
+          borderColor: 'transparent',
+          borderRadius: 50,
           height: 60,
           borderStyle: 'dashed',
-          backgroundColor: '#transparent',
+          backgroundColor: 'transparent',
           position: 'absolute',
           bottom: 15,
+          shadowColor: '#C5C5C5',
+          shadowOpacity: 0.3,
+          shadowOffset: { height: 10, width: 10 },
+          shadowRadius: 50,
         },
       })}
     >

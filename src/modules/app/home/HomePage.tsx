@@ -28,7 +28,7 @@ const stylesheet = {
     innerCardCategory:
       'bg-white w-[45%] h-[45%] rounded-[30px] p-2 pt-4 box-border m-1',
     innerCardImage: 'm-2 w-[24px] h-[24px]',
-    kidsImg: 'absolute top-[-90px]',
+    kidsImg: 'absolute top-[-120px]',
   },
 };
 
@@ -71,14 +71,14 @@ const CountingDaysTitle = () => {
           Você está a{' '}
           {episodes?.length > 0
             ? differenceInDays(
-                format(new Date(), 'yyyy-MM-dd', {
-                  locale: ptBR,
-                }),
                 new Date(
                   format(episodes[0].dateTime, 'yyyy-MM-dd', {
                     locale: ptBR,
                   })
-                )
+                ),
+                format(new Date(), 'yyyy-MM-dd', {
+                  locale: ptBR,
+                })
               )
             : 0}{' '}
           dias sem crises!

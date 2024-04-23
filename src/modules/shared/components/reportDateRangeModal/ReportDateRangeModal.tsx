@@ -1,4 +1,4 @@
-import { createRef, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -48,7 +48,7 @@ const Range = ({
   returnSelectedDaysRange: (days: number) => void;
 }) => {
   const { validateStepForward } = useApp();
-  const { currentStep } = useApp();
+  const [currentStep, setCurrentStep] = useState(0);
   const flatList = createRef<FlatList>();
 
   const DATA: { value: string; title: string }[] = [
@@ -69,6 +69,18 @@ const Range = ({
       title: 'Últimos 90 dias',
     },
   ];
+
+  useEffect(() => {
+    return () => {
+      if (flatList.current) {
+        flatList.current.scrollToIndex({
+          index: 0,
+          animated: true,
+        });
+      }
+      setCurrentStep(0);
+    };
+  }, []);
   return (
     <View className={sharedEpisodeStyleSheet.topic.container}>
       <FlatList
@@ -78,6 +90,7 @@ const Range = ({
         renderItem={({ item, index }: HeadListProps) => (
           <TouchableOpacity
             onPress={() => {
+              setCurrentStep(index);
               if (validateStepForward(index)) {
                 if (flatList.current) {
                   flatList.current.scrollToIndex({
@@ -135,13 +148,20 @@ const ReportDateRangeModal = ({
     setValue,
     formState: { errors },
     getValues,
+    reset,
     handleSubmit,
   } = useForm({
-    defaultValues: { startDate: new Date(), endDate: new Date() },
+    defaultValues: { startDate: subDays(new Date(), 7), endDate: new Date() },
   });
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [inputSelect, setInputSelect] = useState('');
+
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, []);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);

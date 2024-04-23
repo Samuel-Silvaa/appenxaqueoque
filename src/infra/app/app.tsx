@@ -20,6 +20,7 @@ import {
 import { AppActions } from './actions';
 import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
+import { addHours } from 'date-fns';
 
 const episodeInitialForm = {
   id: '',
@@ -48,7 +49,7 @@ const AppContext = createContext<AppContextDefaultValues>({
   validateStepForward: () => false,
   handleFormChange: () => null,
   episodeFormState: episodeInitialForm,
-  submitEpisode: () => null,
+  submitEpisode: () => new Promise(() => {}),
   clearEpisodeFormState: () => null,
   dispatch: () => new Promise(() => {}),
   patient: undefined,
@@ -129,13 +130,19 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const submitEpisode = () => {
+  const submitEpisode = (): Promise<Episode> => {
     const parsedObject: any = Object.assign(episodeFormState, {
-      dateTime: new Date(Object.keys(episodeFormState.dates)[0]),
+      dateTime: addHours(new Date(Object.keys(episodeFormState.dates)[0]), 9),
       location: Location.FRONTALRIGHT,
-      triggers: episodeFormState.triggers.join(','),
-      improvementFactor: episodeFormState.improvementFactor.join(','),
-      symptoms: episodeFormState.symptoms.join(','),
+      triggers: Array.isArray(episodeFormState.triggers)
+        ? episodeFormState.triggers.join(',')
+        : episodeFormState.triggers,
+      improvementFactor: Array.isArray(episodeFormState.improvementFactor)
+        ? episodeFormState.improvementFactor.join(',')
+        : episodeFormState.improvementFactor,
+      symptoms: Array.isArray(episodeFormState.symptoms)
+        ? episodeFormState.symptoms.join(',')
+        : episodeFormState.symptoms,
     });
 
     Object.keys(parsedObject).map((key) => {
@@ -147,11 +154,15 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 
     if (parsedObject.isEdition) {
       delete parsedObject.isEdition;
-      dispatch(AppActions.REQUEST_UPDATE_EPISODE, parsedObject);
+      return dispatch(
+        AppActions.REQUEST_UPDATE_EPISODE,
+        parsedObject,
+        episodeFormState.id
+      );
     } else {
       delete parsedObject.id;
       delete parsedObject.isEdition;
-      dispatch(AppActions.REQUEST_CREATE_EPISODE, parsedObject);
+      return dispatch(AppActions.REQUEST_CREATE_EPISODE, parsedObject);
     }
   };
 
@@ -198,6 +209,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const handleFitEpisodeData = (ep: Episode): Episode => {
     return {
       ...ep,
+      period: Number(ep.period) == 1 ? true : false,
       triggers: String(ep.triggers).split(','),
       improvementFactor: String(ep.improvementFactor).split(','),
       symptoms: String(ep.symptoms).split(','),
@@ -213,17 +225,18 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     switch (action) {
       case AppActions.REQUEST_CREATE_EPISODE:
         if (userId) {
-          return handlePromise({
+          handlePromise({
             promiseFromService: requestCreateEpisode(payload, userId),
             payload,
             successCallbackAction: (res) => {
+              console.log(res);
               dispatch(AppActions.REQUEST_FETCH_EPISODES);
-              navigation.navigate('Success', handleFitEpisodeData(res));
               setCurrentStep(0);
-              setEpisodeFormState(handleFitEpisodeData(res));
+              setEpisodeFormState(handleFitEpisodeData(res.data));
             },
             isShowingToast: true,
           });
+          return requestCreateEpisode(payload, userId);
         }
         break;
       case AppActions.REQUEST_CREATE_REPORT:
@@ -249,26 +262,28 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           }),
           payload,
           successCallbackAction: (res) => {
-            toast.show('Um pdf do relátorio foi enviado ao médico!', {
-              type: 'success',
-            });
+            toast.show(
+              'Um pdf do relátorio foi enviado ao médico! Verifique sua caixa de spam',
+              {
+                type: 'success',
+              }
+            );
           },
           isShowingToast: true,
         });
-        break;
       case AppActions.REQUEST_UPDATE_EPISODE:
-        return handlePromise({
-          promiseFromService: requestUpdateEpisode(payload, payload.id),
-          payload,
-          successCallbackAction: (res) => {
-            dispatch(AppActions.REQUEST_FETCH_EPISODES);
-            navigation.navigate('Success', res);
-            setCurrentStep(0);
-            setEpisodeFormState(handleFitEpisodeData(res));
-          },
-          isShowingToast: true,
-        });
-        break;
+        if (assetId)
+          handlePromise({
+            promiseFromService: requestUpdateEpisode(payload, assetId),
+            payload,
+            successCallbackAction: (res) => {
+              dispatch(AppActions.REQUEST_FETCH_EPISODES);
+              setCurrentStep(0);
+              setEpisodeFormState(handleFitEpisodeData(res.data));
+            },
+            isShowingToast: true,
+          });
+        if (assetId) return requestUpdateEpisode(payload, assetId);
       case AppActions.REQUEST_FETCH_PATIENT:
         if (userId) {
           handlePromise({
