@@ -31,16 +31,10 @@ const Card = ({
     )}
     {image && (
       <View className='w-full min-h-[120px] max-h-2/3 flex items-center border-b border-gray-light py-4'>
-        <Image resizeMode='cover' source={image} />
+        <Image resizeMode='contain' className='w-[90%]' source={image} />
       </View>
     )}
-    <View
-      className={` ${
-        !image ? ' w-full' : ' w-3/4 py-4 my-auto'
-      } overflow-hidden flex flex-wrap`}
-    >
-      {children}
-    </View>
+    <View className='w-full my-auto flex flex-wrap p-2'>{children}</View>
   </Pressable>
 );
 

@@ -13,7 +13,6 @@ interface AppPageScaffoldProps {
   hasArrowBack?: boolean;
   displayBg?: boolean;
   children: ReactNode;
-  title?: string;
 }
 
 const AppPageScaffold = ({
@@ -21,7 +20,6 @@ const AppPageScaffold = ({
   children,
   alignment = 'start',
   displayBg = true,
-  title = '',
   ...res
 }: AppPageScaffoldProps) => {
   return (

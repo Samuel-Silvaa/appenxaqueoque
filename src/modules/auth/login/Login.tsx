@@ -35,6 +35,7 @@ const Login = () => {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
@@ -57,7 +58,7 @@ const Login = () => {
         keyboardType='email-address'
         label='E-mail'
         name='email'
-        control={control}
+        setValue={setValue}
         errors={errors}
       ></InputContainer>
 
@@ -66,7 +67,7 @@ const Login = () => {
         secureTextEntry={true}
         label='Senha'
         name='password'
-        control={control}
+        setValue={setValue}
         errors={errors}
       ></InputContainer>
 

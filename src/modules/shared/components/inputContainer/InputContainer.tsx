@@ -1,18 +1,27 @@
-import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { Text, TextInput, TextInputProps, View } from 'react-native';
+import { Control, FieldErrors, UseFormSetValue } from 'react-hook-form';
+import {
+  Image,
+  ImageSourcePropType,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from 'react-native';
 
 const stylesheet = {
   view: 'w-full my-1 ',
-  input: 'flex h-[60px] bg-gray-light rounded rounded-3xl p-4 ',
-  label: 'pl-2 text-black',
+  input: 'flex h-[60px] bg-gray-light rounded rounded-3xl p-4 z-20',
+  label: 'pl-2 text-black text-[15px]',
   error: 'text-error pl-2 font-medium',
 };
 
 interface InputContainerProps extends TextInputProps {
   label?: string;
   name: string;
-  control: Control<any>;
+  labelicon?: ImageSourcePropType;
+  control?: Control<any>;
   errors: FieldErrors<any>;
+  setValue: UseFormSetValue<any>;
 }
 
 const InputContainer = ({
@@ -20,22 +29,28 @@ const InputContainer = ({
   control,
   name,
   errors,
+  labelicon,
+  setValue,
   ...rest
 }: InputContainerProps) => {
   return (
     <View className={stylesheet.view}>
-      {label && <Text className={stylesheet.label}>{label}</Text>}
-      <Controller
-        control={control}
-        name={name}
-        render={({ field }) => (
-          <TextInput
-            {...field}
-            {...rest}
-            className={stylesheet.input}
-          ></TextInput>
+      <View className='w-full flex-row justify-between items-end my-2'>
+        {label && <Text className={stylesheet.label}>{label}</Text>}
+        {labelicon && (
+          <Image
+            source={labelicon}
+            className='w-14 h-14'
+            resizeMode='contain'
+          ></Image>
         )}
-      ></Controller>
+      </View>
+      <TextInput
+        onChangeText={(text) => setValue(name, text)}
+        id={name}
+        className={stylesheet.input}
+        {...rest}
+      ></TextInput>
       {errors[name] && (
         <Text className={stylesheet.error}>
           {errors[name]?.message?.toString()}

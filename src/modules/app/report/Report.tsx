@@ -97,7 +97,7 @@ const ReportPage = ({ navigation }) => {
   return (
     <AppPageScaffold title='Relatórios'>
       <View className='flex-col items-center justify-between my-4 gap-y-4'>
-        <View className='w-full pr-2 h-[45px]'>
+        <View className='w-full pr-2 h-[45px] mb-4'>
           <InputContainer
             className='bg-[#FAFAFA] rounded-[16px] h-[45px]'
             placeholder='Pesquisar'

@@ -1,4 +1,4 @@
-import { Image, Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { sharedEpisodeStyleSheet } from '../episode/shared/SharedEpisodeStyleSheet';
 import { useAuth } from 'src/infra/auth/auth';
@@ -12,17 +12,26 @@ const stylesheet = {
     'w-full flex-row items-center p-4 bg-white rounded-[30px]',
 };
 
-const CustomActionButton = ({ title }: { title: string }) => {
+const CustomActionButton = ({
+  title,
+  onPress,
+}: {
+  title: string;
+  onPress?: () => void;
+}) => {
   return (
-    <View className={stylesheet.customActionButton}>
+    <TouchableOpacity
+      onPress={onPress}
+      className={stylesheet.customActionButton}
+    >
       <Image className='mr-3' source={require('assets/out.png')}></Image>
       <Text>{title}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const ProfilePage = () => {
-  const { session } = useAuth();
+  const { session, signOut } = useAuth();
 
   return (
     <AppPageScaffold displayBg={session?.userType == 'PATIENT'}>
@@ -44,7 +53,7 @@ const ProfilePage = () => {
           <CustomActionButton title='Meus relatórios' />
           <CustomActionButton title='Contas vinculadas' />
           <CustomActionButton title='Ajuda' />
-          <CustomActionButton title='Sair' />
+          <CustomActionButton title='Sair' onPress={signOut} />
         </View>
       </View>
     </AppPageScaffold>

@@ -13,26 +13,33 @@ const data: {
   {
     label:
       'Aura - A criança enxerga pontos ou formas brilhantes antes ou durante os episódios de dor.',
+    img: require('assets/halo.png'),
     value: SymptomType.HALO,
   },
   {
     label: 'Sensibilidade à luz - A criança busca um lugar escuro.',
+    img: require('assets/photo.png'),
     value: SymptomType.PHOTOSENSIBILITY,
   },
   {
     label: 'Sensibilidade ao barulho - A criança busca um lugar silencioso.',
+    img: require('assets/hiperacusis.png'),
     value: SymptomType.HYPERACUSIS,
   },
   {
     label: 'Náusea - A criança deixa de comer.',
+    img: require('assets/nausea.png'),
     value: SymptomType.NAUSEA,
   },
   {
     label: 'Dor de barriga.',
+    img: require('assets/sickness.png'),
+
     value: SymptomType.SICKNESS,
   },
   {
     label: 'Vômito.',
+    img: require('assets/vomit.png'),
     value: SymptomType.VOMIT,
   },
 ];
@@ -62,7 +69,7 @@ const Symptoms = () => {
               handleSetSymptomsValues(act.value);
             }}
             children={
-              <View className='flex-row items-center'>
+              <View className='flex-row items-center w-[80%]'>
                 <BouncyCheckbox
                   size={22}
                   fillColor='#CEB0FA'

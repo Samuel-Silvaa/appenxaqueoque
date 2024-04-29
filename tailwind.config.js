@@ -13,6 +13,7 @@ module.exports = {
         lg: '20px',
       },
       colors: {
+        'snow-white': '#f5f8fd',
         black: '#2E3E4B',
         primary: '#F7F7F7',
         'blue-primary': '#8FD7FF',

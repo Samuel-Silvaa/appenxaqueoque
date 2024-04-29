@@ -37,8 +37,7 @@ const data = [
 ];
 
 const stylesheet = {
-  calendarWrapper: 'flex-col w-full items-center overflow-hidden',
-
+  calendarWrapper: 'flex-col w-full items-center overflow-hidden ',
   calendar: {
     wrapper: 'h-full pt-14',
     img: 'absolute right-5 top-[-18px] z-30',
@@ -126,12 +125,10 @@ const Datetime = () => {
           source={require('assets/victor_bear.png')}
         />
       </View>
-      <View className={stylesheet.calendarWrapper}>
-        <CalendarComponent
-          markedDates={episodeFormState.dates}
-          onDayPress={(date) => handleSelectDate(date)}
-        />
-      </View>
+      <CalendarComponent
+        markedDates={episodeFormState.dates}
+        onDayPress={(date) => handleSelectDate(date)}
+      />
       <Timepicker />
     </View>
   );

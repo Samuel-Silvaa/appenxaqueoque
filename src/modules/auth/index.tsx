@@ -5,6 +5,7 @@ import UserType from './registration/userType/UserType';
 import Tenant from './registration/tenant/Tenant';
 import Welcome from './welcome/Welcome';
 import { Image, TouchableOpacity, View } from 'react-native';
+import Patient from './registration/patient/Patient';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,7 @@ const AuthRoutes = () => {
       <Stack.Screen name='login' component={Login}></Stack.Screen>
       <Stack.Screen name='userType' component={UserType}></Stack.Screen>
       <Stack.Screen name='tenant' component={Tenant}></Stack.Screen>
+      <Stack.Screen name='patient' component={Patient}></Stack.Screen>
       <Stack.Screen name='welcome' component={Welcome}></Stack.Screen>
     </Stack.Navigator>
   );

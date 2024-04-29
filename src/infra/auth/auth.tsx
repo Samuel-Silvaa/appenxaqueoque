@@ -10,6 +10,7 @@ import { AuthenticationActions } from './auth.actions';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
 import { AuthContextDefaultValues, LogInResponse } from '../@types/auth.types';
 import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from '@react-navigation/native';
 
 const AuthContext = createContext<AuthContextDefaultValues>({
   dispatch: () => null,
@@ -18,16 +19,31 @@ const AuthContext = createContext<AuthContextDefaultValues>({
   signOut: () => null,
   session: undefined,
   isLogged: false,
+  setIsLoggedTrue: () => null,
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [formState, setFormState] = useState<object>({});
-  const [isLogged, setIsLogged] = useState(false);
+  const [formState, setFormState] = useState<{
+    token?: string;
+    refreshToken?: string;
+    user?: { email: string; password: string; userType?: string };
+  }>({
+    token: undefined,
+    refreshToken: undefined,
+    user: undefined,
+  });
+  const [isLogged, setIsLogged] = useState<boolean>(false);
   const [session, setSession] = useState<LogInResponse>();
   const toast = useToast();
+  const navigation = useNavigation();
 
   const signOut = () => {
     setFormState({});
+    setIsLogged(false);
+  };
+
+  const setIsLoggedTrue = () => {
+    setIsLogged(true);
   };
 
   const setLocalStorageWelcomeAttr = async () => {
@@ -88,16 +104,32 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         break;
       case AuthenticationActions.REQUEST_SIGNUP:
         handlePromise({
-          promiseFromService: requestHandleSingUp(payload),
+          promiseFromService: requestHandleSingUp({
+            email: payload.email,
+            password: payload.password,
+            userType: 'PATIENT',
+          }),
           payload,
-          successCallbackAction: (res) => reducer(action, payload, res),
+          successCallbackAction: (res) => {
+            dispatch(AuthenticationActions.REQUEST_LOGIN, {
+              email: payload.email,
+              password: payload.password,
+            });
+          },
         });
         break;
       case AuthenticationActions.REQUEST_CREATE_PATIENT:
         handlePromise({
           promiseFromService: requestHandleCreatePatient(payload),
           payload,
-          successCallbackAction: (res) => reducer(action, payload, res),
+          successCallbackAction: (res) => {
+            if (formState.user)
+              dispatch(AuthenticationActions.REQUEST_LOGIN, {
+                email: payload.email,
+                password: formState?.user.password,
+              });
+            return reducer(action, payload, res);
+          },
         });
         break;
       case AuthenticationActions.REQUEST_CREATE_PHYSICIAN:
@@ -130,23 +162,42 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { user, token, refreshToken } = response;
 
     if (token || refreshToken) {
-      handleSetLocalHeaderData({ token, refreshToken, userId: user.id });
+      handleSetLocalHeaderData({
+        token,
+        refreshToken,
+        userId: user ? user.id : null,
+      });
     }
 
     switch (type) {
       case AuthenticationActions.REQUEST_LOGIN:
-        delete payload.password;
-        setIsLogged(true);
-        setSession(response);
-        handleFormChange({ id: user.id, session: response });
+        if (user) {
+          setSession(response);
+          handleFormChange({ id: user.id, session: response });
+          if (SecureStore.getItem('welcome')) {
+            navigation.navigate('welcome' as any as never);
+            delete payload.password;
+          } else {
+            setIsLogged(true);
+            delete payload.password;
+          }
+        } else {
+          handleFormChange({
+            user: { email: payload.email, password: payload.password },
+            session: response,
+          });
+
+          navigation.navigate('patient' as any as never);
+        }
         break;
       case AuthenticationActions.REQUEST_SIGNUP:
         delete payload.password;
-        handleFormChange({ ...payload, id: user.id });
+        handleFormChange({ ...payload });
         break;
       case AuthenticationActions.REQUEST_CREATE_PATIENT:
         setLocalStorageWelcomeAttr();
         handleFormChange({ ...payload, user: response });
+
         break;
       case AuthenticationActions.REQUEST_CREATE_PHYSICIAN:
         setLocalStorageWelcomeAttr();
@@ -164,6 +215,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         signOut,
         session,
         isLogged,
+        setIsLoggedTrue,
       }}
     >
       {children}

@@ -18,52 +18,13 @@ import PhysicianEmailModal from 'src/modules/shared/components/physicianEmailMod
 import PieChartComponent from './components/PieChartComponent';
 import { BarChartComponent } from './components/BarChartComponent';
 import { SummedUpReport } from './components/SummedUpRepost';
+import { ReportCard } from './components/ReportCard';
 
 const stylesheet = {
-  wrapper:
-    'min-h-[200px] h-[300px] w-full rounded-[25px] bg-white shadow-sm my-4 ',
-  header:
-    'bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4',
-  status: 'w-[26px] h-[26px] rounded-full',
-  contentWrapper:
-    'h-[85%] w-full p-[28px] flex-col justify-between items-center',
-  content: 'bg-primary w-full rounded-[16px] p-6 flex-col justify-around ',
-  summaryItem: 'flex-row gap-x-4 my-1',
   footer: 'w-full h-[50px] ',
   footerBtn: 'bg-[#F8ECDE] w-ful h-full rounded-full p-2 my-2',
   footerBtnInner:
     'bg-white w-ful h-full rounded-full p-1 flex-row items-center justify-center',
-};
-
-const ReportCard = ({
-  title,
-  description,
-}: {
-  title: string;
-  description: string[];
-}) => {
-  return (
-    <View className={stylesheet.wrapper}>
-      <View className={stylesheet.header + ' bg-beige-primary/50 h-[50px]'}>
-        <Text className='font-semibold text-black py-5 text-md'>{title}</Text>
-      </View>
-      <View className={stylesheet.contentWrapper}>
-        <View className={stylesheet.content}>
-          {description &&
-            description.map((desc, index) =>
-              !!desc ? (
-                <View key={index} className={stylesheet.summaryItem}>
-                  <Text>•</Text>
-                  <Text className='m-y-4 font-xs'>{desc} </Text>
-                </View>
-              ) : (
-                <></>
-              )
-            )}
-        </View>
-      </View>
-    </View>
-  );
 };
 
 const colorList = [
@@ -258,14 +219,15 @@ const ChartsPage = () => {
   }, [triggers]);
 
   const foodImprovement = useMemo(
-    () => episodes.map((ep: Episode) => ep.foodImprovement),
+    () => episodes.map((ep: Episode) => ep.foodImprovement).filter((e) => !!e),
     [episodes]
   );
 
   const foodImpair = useMemo(
-    () => episodes.map((ep: Episode) => ep.foodImpair),
+    () => episodes.map((ep: Episode) => ep.foodImpair).filter((e) => !!e),
     [episodes]
   );
+  console.log(foodImpair);
   return (
     <AppPageScaffold>
       <View className={stylesheet.footer}>
@@ -305,14 +267,14 @@ const ChartsPage = () => {
       <PieChartComponent assets={acuteness} title='Intensidade da dor' />
       <PieChartComponent assets={painType} title='Característica da dor' />
 
-      {foodImprovement.length && (
+      {foodImprovement.length > 0 && (
         <ReportCard
           title='Alimentos que ajudaram a melhorar'
           description={foodImprovement}
         />
       )}
 
-      {foodImpair.length && (
+      {foodImpair.length > 0 && (
         <ReportCard
           title='Alimentos que foram gatilhos para a dor'
           description={foodImpair}
@@ -323,19 +285,18 @@ const ChartsPage = () => {
         <ReportCard
           title='Observações'
           description={
-            report.notes.includes(',')
-              ? report.notes.split(',')
-              : [report.notes]
+            report.notes.includes(',') ? report.notes.split(',') : report.notes
           }
         />
       )}
+
       {report.periodNotes && (
         <ReportCard
           title='Período menstrual'
           description={
             report.periodNotes.includes(',')
               ? report.periodNotes.split(',')
-              : [report.periodNotes]
+              : report.periodNotes
           }
         />
       )}

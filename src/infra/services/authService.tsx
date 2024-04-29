@@ -13,7 +13,7 @@ const requestHandleLogIn = async (payload: LogInDTO): Promise<LogInResponse> =>
 
 const requestHandleSingUp = async (
   payload: SignUpDTO
-): Promise<SignUpResponse> => post('session/sign-up', payload);
+): Promise<SignUpResponse> => post('session/sign-in', payload);
 
 const requestHandleCreatePatient = async (
   payload: PatientDTO

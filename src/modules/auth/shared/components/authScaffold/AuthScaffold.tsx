@@ -5,8 +5,7 @@ import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
 
 const stylesheet = {
-  view: 'flex-col flex-grow bg-primary p-4 gap-y-4 pb-14',
-  header: 'my-6 self-start',
+  view: 'flex-col flex-grow bg-primary px-4 gap-y-4 pb-14',
 };
 
 interface AuthScaffoldProps {

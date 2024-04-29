@@ -6,14 +6,17 @@ import Card from '../form/card/Card';
 import { RadioButton } from 'react-native-paper';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useApp } from 'src/infra/app/app';
+import Wrapper from '../form/wrapper/Wrapper';
 
 const stylesheet = {
   wrapper: 'flex-col w-full items-center ',
   cardWrapper: 'flex-row items-center justify-center w-full ',
-  cardOption: 'flex-row items-center bg-white rounded-full w-1/3 mx-1',
+  cardOption:
+    'flex-row items-center bg-white rounded-full w-[45%] mx-1 shadow-sm',
   notesLabel: 'text-md font-semibold text-black self-start mt-14 pl-4',
-  notesWrapper: 'flex-row items-center justify-center w-full',
-  notesInput: 'bg-white w-full p-4 min-h-[140px]',
+  notesWrapper:
+    'flex-row w-full min-h-[140px] p-2 bg-blue-four rounded-[28px] mt-1 relative',
+  notesInput: 'bg-white w-full p-4 flex-grow',
 };
 
 interface PeriodSchema {
@@ -39,44 +42,42 @@ const Period = () => {
       value={episodeFormState.period}
     >
       <View className={stylesheet.wrapper}>
-        <Card
-          title='Menstruação'
-          className='bg-[#000571]/10'
-          children={
-            <View className={stylesheet.cardWrapper}>
-              <View className={stylesheet.cardOption}>
-                <RadioButton value={true} color='#CEB0FA' />
-                <Text>Sim</Text>
+        <Wrapper title='Você está no período menstrual? '>
+          <Card
+            title='Menstruação'
+            children={
+              <View className={stylesheet.cardWrapper}>
+                <View className={stylesheet.cardOption}>
+                  <RadioButton value={true} color='#CEB0FA' />
+                  <Text>Sim</Text>
+                </View>
+                <View className={stylesheet.cardOption}>
+                  <RadioButton value={false} color='#CEB0FA' />
+                  <Text>Não</Text>
+                </View>
               </View>
-              <View className={stylesheet.cardOption}>
-                <RadioButton value={false} color='#CEB0FA' />
-                <Text>Não</Text>
-              </View>
-            </View>
-          }
-        />
+            }
+          />
+        </Wrapper>
 
         <Text className={stylesheet.notesLabel}>Anotações:</Text>
 
-        <Card
-          className='bg-[#680071]/10 mt-2'
-          children={
-            <View className={stylesheet.notesWrapper}>
-              <InputContainer
-                name='notes'
-                control={control}
-                errors={errors}
-                className={stylesheet.notesInput}
-                numberOfLines={4}
-                multiline={true}
-                defaultValue={episodeFormState.periodNotes}
-                onChange={(e) =>
-                  handleFormChange({ periodNotes: e.target.value })
-                }
-              ></InputContainer>
-            </View>
-          }
-        />
+        <View className={stylesheet.notesWrapper}>
+          <Image
+            className='absolute top-[-110px] right-0'
+            source={require('assets/girl_laptop.png')}
+          ></Image>
+          <InputContainer
+            name='notes'
+            control={control}
+            errors={errors}
+            className={stylesheet.notesInput}
+            numberOfLines={4}
+            multiline={true}
+            defaultValue={episodeFormState.periodNotes}
+            onChange={(e) => handleFormChange({ periodNotes: e.target.value })}
+          ></InputContainer>
+        </View>
       </View>
     </RadioButton.Group>
   );

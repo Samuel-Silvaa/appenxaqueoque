@@ -18,7 +18,6 @@ import {
   requestUpdateEpisode,
 } from '../services/appService';
 import { AppActions } from './actions';
-import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import { addHours } from 'date-fns';
 
@@ -60,7 +59,6 @@ const AppContext = createContext<AppContextDefaultValues>({
 });
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
-  const navigation = useNavigation();
   const [steps, _] = useState(9);
   const [currentStep, setCurrentStep] = useState(0);
   const [episodeFormState, setEpisodeFormState] = useState(episodeInitialForm);
@@ -72,47 +70,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const clearEpisodeFormState = () => {
     setEpisodeFormState(episodeInitialForm);
-  };
-
-  // const ValidateFormEnabledAndReturnBehavior = (
-  //   condition = true,
-  //   nextStep = currentStep + 1,
-  //   showToast = true
-  // ): boolean => {
-  //   if (condition) {
-  //     setCurrentStep(nextStep);
-  //     debugger;
-  //     return true;
-  //   }
-  //   if (showToast)
-  //     handleToast(
-  //       'Preencha todos os campos obrigatórios antes de continuar!',
-  //       'danger'
-  //     );
-  //   return false;
-  // };
-
-  const episodeTitle = () => {
-    switch (currentStep) {
-      case 0:
-        return 'Data e horário';
-      case 1:
-        return 'Localização';
-      case 2:
-        return 'Intensidade';
-      case 3:
-        return 'Característica da dor';
-      case 4:
-        return 'Sintomas associados';
-      case 5:
-        return 'Gatilhos';
-      case 6:
-        return 'Fatores de melhora';
-      case 7:
-        return 'Período menstrual';
-      case 8:
-        return 'Observações';
-    }
   };
 
   const validateStepForward = (nextStep: number): boolean => {
@@ -130,39 +87,47 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const submitEpisode = (): Promise<Episode> => {
-    const parsedObject: any = Object.assign(episodeFormState, {
-      dateTime: addHours(new Date(Object.keys(episodeFormState.dates)[0]), 9),
-      location: Location.FRONTALRIGHT,
-      triggers: Array.isArray(episodeFormState.triggers)
-        ? episodeFormState.triggers.join(',')
-        : episodeFormState.triggers,
-      improvementFactor: Array.isArray(episodeFormState.improvementFactor)
-        ? episodeFormState.improvementFactor.join(',')
-        : episodeFormState.improvementFactor,
-      symptoms: Array.isArray(episodeFormState.symptoms)
-        ? episodeFormState.symptoms.join(',')
-        : episodeFormState.symptoms,
-    });
-
-    Object.keys(parsedObject).map((key) => {
-      if (typeof parsedObject[key] === 'string' && parsedObject[key] === '') {
-        parsedObject[key] = null;
-      }
-    });
-    delete parsedObject.dates;
-
-    if (parsedObject.isEdition) {
-      delete parsedObject.isEdition;
-      return dispatch(
-        AppActions.REQUEST_UPDATE_EPISODE,
-        parsedObject,
-        episodeFormState.id
+  const submitEpisode = (): Promise<Episode> | boolean => {
+    if (!episodeFormState.dates) {
+      handleToast(
+        'Preencha ao menos a data do episódio para continuar!',
+        'danger'
       );
+      return false;
     } else {
-      delete parsedObject.id;
-      delete parsedObject.isEdition;
-      return dispatch(AppActions.REQUEST_CREATE_EPISODE, parsedObject);
+      const parsedObject: any = Object.assign(episodeFormState, {
+        dateTime: addHours(new Date(Object.keys(episodeFormState.dates)[0]), 9),
+        location: Location.FRONTALRIGHT,
+        triggers: Array.isArray(episodeFormState.triggers)
+          ? episodeFormState.triggers.join(',')
+          : episodeFormState.triggers,
+        improvementFactor: Array.isArray(episodeFormState.improvementFactor)
+          ? episodeFormState.improvementFactor.join(',')
+          : episodeFormState.improvementFactor,
+        symptoms: Array.isArray(episodeFormState.symptoms)
+          ? episodeFormState.symptoms.join(',')
+          : episodeFormState.symptoms,
+      });
+
+      Object.keys(parsedObject).map((key) => {
+        if (typeof parsedObject[key] === 'string' && parsedObject[key] === '') {
+          parsedObject[key] = null;
+        }
+      });
+      delete parsedObject.dates;
+
+      if (parsedObject.isEdition) {
+        delete parsedObject.isEdition;
+        return dispatch(
+          AppActions.REQUEST_UPDATE_EPISODE,
+          parsedObject,
+          episodeFormState.id
+        );
+      } else {
+        delete parsedObject.id;
+        delete parsedObject.isEdition;
+        return dispatch(AppActions.REQUEST_CREATE_EPISODE, parsedObject);
+      }
     }
   };
 

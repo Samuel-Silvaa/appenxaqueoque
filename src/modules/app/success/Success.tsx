@@ -4,7 +4,6 @@ import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/Ex
 import EpisodeModal from 'src/modules/shared/components/episodemodal/EpisodeModal';
 import { useState } from 'react';
 import { useApp } from 'src/infra/app/app';
-import { format } from 'date-fns';
 
 const stylesheet = {
   wrapper: 'w-full h-full gap-y-4 flex justify-center items-center mt-[10%]',
@@ -16,7 +15,7 @@ const stylesheet = {
 const Success = ({ navigation }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { episodeFormState, clearEpisodeFormState } = useApp();
-
+  
   return (
     <AppPageScaffold alignment='center'>
       <View className={stylesheet.wrapper}>

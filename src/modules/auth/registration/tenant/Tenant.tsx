@@ -6,6 +6,8 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from 'src/infra/auth/auth';
+import { AuthenticationActions } from 'src/infra/auth/auth.actions';
 
 interface TenantSchema {
   email: string;
@@ -14,24 +16,32 @@ interface TenantSchema {
 }
 
 const tenantSchema = yup.object<TenantSchema>().shape({
-  email: yup.string().email('Email inválido').required('Preencha seu email'),
-  password: yup.string().required('Preencha sua senha'),
-  confirmPassword: yup.string().required('Preencha sua senha'),
+  email: yup
+    .string()
+    .email('Email inválido')
+    .required('Preencha seu email')
+    .default('mari38@gmail.com'),
+  password: yup.string().required('Preencha sua senha').default('123123'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Senhas não coincidem')
+    .required('Preencha sua senha')
+    .default('123123'),
 });
 
-const Tenant = ({ navigation }) => {
+const Tenant = () => {
+  const { dispatch } = useAuth();
+
   const {
     handleSubmit,
-    control,
     formState: { errors },
-    reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(tenantSchema),
   });
 
   const onSubmitHandler = (data: TenantSchema) => {
-    navigation.navigate('welcome');
-    reset();
+    dispatch(AuthenticationActions.REQUEST_SIGNUP, data);
   };
 
   return (
@@ -49,21 +59,21 @@ const Tenant = ({ navigation }) => {
         keyboardType='email-address'
         label='E-mail'
         name='email'
-        control={control}
+        setValue={setValue}
         errors={errors}
       ></InputContainer>
       <InputContainer
         keyboardType='email-address'
         label='Crie uma senha'
+        setValue={setValue}
         name='password'
-        control={control}
         errors={errors}
       ></InputContainer>
       <InputContainer
         keyboardType='email-address'
         label='Repita sua senha'
+        setValue={setValue}
         name='confirmPassword'
-        control={control}
         errors={errors}
       ></InputContainer>
     </AuthScaffold>

@@ -14,21 +14,10 @@ NativeWindStyleSheet.setOutput({
 
 const ActiveRoutes = () => {
   const { isLogged, session } = useAuth();
-  return useMemo(
-    () =>
-      isLogged && !!session ? (
-        session?.userType == 'PATIENT' ? (
-          <TabsRoutes />
-        ) : (
-          <PhysicianTabRoutes />
-        )
-      ) : (
-        <AuthRoutes />
-      ),
-    [isLogged, session]
-  );
-};
+  console.log(isLogged);
 
+  return isLogged && !!session ? <TabsRoutes /> : <AuthRoutes />;
+};
 const App = () => {
   return (
     <NavigationContainer>

@@ -12,10 +12,12 @@ const data: {
 }[] = [
   {
     label: 'Pulsátil: como um coração batendo na cabeça.',
+    img: require('assets/throb.png'),
     value: PainTypeEnum.THROB,
   },
   {
     label: 'Em aperto: como um capacete muito apertado.',
+    img: require('assets/helmet.png'),
     value: PainTypeEnum.TIGHT,
   },
 ];
