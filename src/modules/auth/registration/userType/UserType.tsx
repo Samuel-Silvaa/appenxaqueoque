@@ -6,10 +6,14 @@ import { useState } from 'react';
 
 const UserType = ({ navigation }) => {
   const [users, setUsers] = useState([
-    { title: 'Paciente', icon: require('assets/scale.svg'), selected: false },
+    {
+      title: 'Paciente',
+      icon: require('src/assets/scale.svg'),
+      selected: false,
+    },
     {
       title: 'Médico',
-      icon: require('assets/stethoscope.svg'),
+      icon: require('src/assets/stethoscope.svg'),
       selected: false,
     },
   ]);
@@ -24,7 +28,7 @@ const UserType = ({ navigation }) => {
       <Text className={sharedStyleSheet.subtitle}>Nos informe quem você é</Text>
       <Image
         className='self-center'
-        source={require('assets/doctorchild.png')}
+        source={require('src/assets/doctorchild.png')}
       />
       {users.map((userType) => (
         <ExPressable

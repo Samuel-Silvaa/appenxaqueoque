@@ -9,17 +9,17 @@ const data = [
   {
     label: 'Leve - A criança reclama, mas continua brincando.',
     value: AcutenessType.LIGHT,
-    img: require('assets/kid_playing_cubes.png'),
+    img: require('src/assets/kid_playing_cubes.png'),
   },
   {
     label: 'Moderado - A criança reclama e para de brincar, mas não se deita.',
     value: AcutenessType.MILD,
-    img: require('assets/arthur_lego.png'),
+    img: require('src/assets/arthur_lego.png'),
   },
   {
     label: 'Forte - A criança reclama, deita e pode chorar de dor.',
     value: AcutenessType.SEVERE,
-    img: require('assets/kid_crying.png'),
+    img: require('src/assets/kid_crying.png'),
   },
 ];
 
@@ -42,7 +42,7 @@ const Acuteness = () => {
               children={
                 <View className='flex-row items-center'>
                   <RadioButton value={act.value} color='#CEB0FA' />
-                  <Text className=''>{act.label}</Text>
+                  <Text className='dark:text-d-text-gray'>{act.label}</Text>
                 </View>
               }
               image={act.img}

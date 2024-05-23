@@ -15,7 +15,7 @@ const stylesheet = {
 const Success = ({ navigation }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { episodeFormState, clearEpisodeFormState } = useApp();
-  
+
   return (
     <AppPageScaffold alignment='center'>
       <View className={stylesheet.wrapper}>
@@ -24,9 +24,9 @@ const Success = ({ navigation }) => {
             Cadastro finalizado com sucesso!
           </Text>
         </View>
-        <Image source={require('assets/success.png')}></Image>
+        <Image source={require('src/assets/success.png')}></Image>
         <ExPressable
-          title='Ver relatório'
+          title='Ver episódio'
           colorScheme='light'
           onPress={() => {
             setIsModalOpen(true);

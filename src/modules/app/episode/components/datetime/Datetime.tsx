@@ -17,29 +17,30 @@ const data = [
   {
     label: 'De manhã',
     value: Time.MORNING,
-    img: require('assets/morning.png'),
+    img: require('src/assets/morning.png'),
   },
   {
     label: 'De tarde',
     value: Time.EVENING,
-    img: require('assets/evening.png'),
+    img: require('src/assets/evening.png'),
   },
   {
     label: 'De noite',
     value: Time.NIGHT,
-    img: require('assets/night.png'),
+    img: require('src/assets/night.png'),
   },
   {
     label: 'De madrugada',
     value: Time.MIDNIGHT,
-    img: require('assets/midnight.png'),
+    img: require('src/assets/midnight.png'),
   },
 ];
 
 const stylesheet = {
-  calendarWrapper: 'flex-col w-full items-center overflow-hidden ',
+  calendarWrapper:
+    'flex-col w-full items-center overflow-hidden dark:bg-d-blue-primary',
   calendar: {
-    wrapper: 'h-full pt-14',
+    wrapper: 'h-full pt-14 ',
     img: 'absolute right-5 top-[-18px] z-30',
   },
 };
@@ -122,7 +123,7 @@ const Datetime = () => {
           width={38}
           height={38}
           resizeMode='cover'
-          source={require('assets/victor_bear.png')}
+          source={require('src/assets/victor_bear.png')}
         />
       </View>
       <CalendarComponent

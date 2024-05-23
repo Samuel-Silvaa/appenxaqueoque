@@ -309,13 +309,14 @@ const FormScaffold = () => {
 };
 
 const EpisodePage = () => {
-  const { setPageTitle } = useApp();
+  const { setPageTitle, clearEpisodeFormState } = useApp();
 
   useEffect(() => {
     return () => {
       if (setPageTitle) setPageTitle('');
+      clearEpisodeFormState();
     };
-  }, [this]);
+  }, []);
   return (
     <AppPageScaffold>
       <FormScaffold />

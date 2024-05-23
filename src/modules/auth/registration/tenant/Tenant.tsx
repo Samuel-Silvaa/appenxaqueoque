@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { KeyboardAvoidingView, Text } from 'react-native';
 import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
@@ -20,7 +20,7 @@ const tenantSchema = yup.object<TenantSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('mari38@gmail.com'),
+    .default('mari41@gmail.com'),
   password: yup.string().required('Preencha sua senha').default('123123'),
   confirmPassword: yup
     .string()

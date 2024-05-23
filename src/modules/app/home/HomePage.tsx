@@ -14,19 +14,18 @@ import { differenceInDays, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 const stylesheet = {
-  userName: 'text-2xl font-bold p-4',
+  userName: 'text-2xl font-bold px-4 pb-4 dark:text-d-blue-title',
   countingDays: {
-    card: 'w-full bg-whgite rounded-[30px] flex justify-center items-center sticky top-0',
-    title:
-      'text-start bg-white rounded-[30px] w-full h-[56px] flex  items-center p-4 font-semibold mb-14 mt-4',
+    card: 'w-full bg-white dark:bg-d-blue-primary-dark rounded-[20px] flex justify-center items-start h-[52px] mb-14 mt-4 px-4',
+    title: 'text-start font-semibold dark:text-d-text-gray',
   },
   innerHomeContainer: {
     container:
-      'relative w-full h-[100vw] bg-beige-primary flex-row flex-wrap justify-between rounded-[30px] mt-[80px] p-2',
+      'relative w-full h-[100vw] bg-beige-primary dark:bg-d-blue-primary-dark flex-row flex-wrap justify-between rounded-[30px] mt-[80px] p-2',
     header: 'w-full h-[20%] flex items-center ',
     body: 'flex-row flex-wrap justify-evenly items-end w-full h-[80%] p-1',
     innerCardCategory:
-      'bg-white w-[45%] h-[45%] rounded-[30px] p-2 pt-4 box-border m-1',
+      'bg-white w-[45%] h-[45%] rounded-[30px] p-2 pt-4 box-border m-1 dark:bg-d-blue-primary',
     innerCardImage: 'm-2 w-[24px] h-[24px]',
     kidsImg: 'absolute top-[-120px]',
   },
@@ -41,22 +40,22 @@ interface HomeCategory {
 const categories: Array<HomeCategory> = [
   {
     title: 'Cadastro de episódios',
-    icon: require('assets/plus-dark.png'),
+    icon: require('src/assets/plus-dark.png'),
     path: 'Episode',
   },
   {
-    title: 'Relatórios',
-    icon: require('assets/stats.png'),
+    title: 'Enviar relatórios',
+    icon: require('src/assets/stats.png'),
     path: 'Report',
   },
   {
     title: 'Calendário de episódios',
-    icon: require('assets/calendar.png'),
+    icon: require('src/assets/calendar.png'),
     path: 'Calendar',
   },
   {
     title: 'Perfil',
-    icon: require('assets/user.png'),
+    icon: require('src/assets/user.png'),
     path: 'Profile',
   },
 ];
@@ -101,7 +100,11 @@ const InnerCardCategory = ({ title, icon, path }: HomeCategory) => {
           source={icon}
           tintColor='#262D33'
         ></Image>
-        <Text className={sharedStyleSheet.subtitle + ' mx-2 w-3/4'}>
+        <Text
+          className={
+            sharedStyleSheet.subtitle + ' mx-2 w-3/4 dark:text-d-text-gray'
+          }
+        >
           {title}
         </Text>
       </View>
@@ -115,7 +118,7 @@ const InnerHomeContainer = () => {
       <View className={stylesheet.innerHomeContainer.header}>
         <Image
           className={stylesheet.innerHomeContainer.kidsImg}
-          source={require('assets/calendar_kids.png')}
+          source={require('src/assets/calendar_kids.png')}
         ></Image>
       </View>
       <View className={stylesheet.innerHomeContainer.body}>

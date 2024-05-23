@@ -14,7 +14,7 @@ const AuthRoutes = () => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: '#F7F7F7' },
-        headerBackImageSource: require('assets/arrowback.png'),
+        headerBackImageSource: require('src/assets/arrowback.png'),
         headerShadowVisible: false,
         header: (bottomTabsProps) => {
           return (
@@ -25,7 +25,7 @@ const AuthRoutes = () => {
                     bottomTabsProps.navigation.goBack();
                   }}
                 >
-                  <Image source={require('assets/arrowback.png')} />
+                  <Image source={require('src/assets/arrowback.png')} />
                 </TouchableOpacity>
               ) : (
                 <Image></Image>

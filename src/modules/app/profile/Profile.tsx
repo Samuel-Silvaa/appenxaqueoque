@@ -24,7 +24,7 @@ const CustomActionButton = ({
       onPress={onPress}
       className={stylesheet.customActionButton}
     >
-      <Image className='mr-3' source={require('assets/out.png')}></Image>
+      <Image className='mr-3' source={require('src/assets/out.png')}></Image>
       <Text>{title}</Text>
     </TouchableOpacity>
   );
@@ -36,7 +36,7 @@ const ProfilePage = () => {
   return (
     <AppPageScaffold displayBg={session?.userType == 'PATIENT'}>
       <View className={stylesheet.profile.wrapper}>
-        <Image source={require('assets/pietra.png')}></Image>
+        <Image source={require('src/assets/pietra.png')}></Image>
         <Text className='my-1'>Pietra Menezes</Text>
         <View className={stylesheet.profile.infoRow}>
           <Text>8 anos</Text>

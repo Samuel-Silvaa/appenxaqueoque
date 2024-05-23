@@ -1,11 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import {
-  AppContextDefaultValues,
-  Episode,
-  Location,
-  Patient,
-} from '../@types/app.types';
+import { AppContextDefaultValues, Episode, Patient } from '../@types/app.types';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
 import {
   requestCreateEpisode,
@@ -29,7 +24,7 @@ const episodeInitialForm = {
   foodImprovement: '',
   improvementFactor: [],
   isEdition: false,
-  location: '',
+  location: [],
   medicine: '',
   medicineDosage: 0,
   medicineImprovement: '',
@@ -43,6 +38,7 @@ const episodeInitialForm = {
 };
 
 const AppContext = createContext<AppContextDefaultValues>({
+  isLoading: false,
   steps: 9,
   currentStep: 0,
   validateStepForward: () => false,
@@ -66,6 +62,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [episodes, setEpisodes] = useState<Episode[] | null>(null);
   const [reports, setReports] = useState<Report[] | undefined>();
   const [pageTitle, setPageTitle] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
   const clearEpisodeFormState = () => {
@@ -97,7 +94,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     } else {
       const parsedObject: any = Object.assign(episodeFormState, {
         dateTime: addHours(new Date(Object.keys(episodeFormState.dates)[0]), 9),
-        location: Location.FRONTALRIGHT,
+        location: Array.isArray(episodeFormState.location)
+          ? episodeFormState.location.join(',')
+          : episodeFormState.location,
         triggers: Array.isArray(episodeFormState.triggers)
           ? episodeFormState.triggers.join(',')
           : episodeFormState.triggers,
@@ -134,10 +133,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const handleToast = (message: string, type: string) => {
     toast.hideAll();
     const toastOptions: ToastOptions = {
-      animationDuration: 400,
-      animationType: 'slide-in',
-      placement: 'top',
-      duration: 2000,
       type: type,
     };
     toast.show(message, toastOptions);
@@ -154,20 +149,22 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     successCallbackAction?: (payload: any) => void;
     isShowingToast?: boolean;
   }) => {
-    if (isShowingToast) handleToast('Processando...', 'warning');
+    setIsLoading(true);
     return promiseFromService
       .then((res) => {
         successCallbackAction(res);
         if (isShowingToast) handleToast('Tudo certo!', 'success');
       })
       .catch((err) => {
-        console.log(err);
         handleToast(
           err.response.data.message != 'Validation failed'
             ? err.response.data.message
             : 'Tivemos um problema. Tente novamente mais tarde!',
           'danger'
         );
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -194,10 +191,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             promiseFromService: requestCreateEpisode(payload, userId),
             payload,
             successCallbackAction: (res) => {
-              console.log(res);
               dispatch(AppActions.REQUEST_FETCH_EPISODES);
               setCurrentStep(0);
-              setEpisodeFormState(handleFitEpisodeData(res.data));
+              setEpisodeFormState(handleFitEpisodeData(res.data) as any);
             },
             isShowingToast: true,
           });
@@ -244,7 +240,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             successCallbackAction: (res) => {
               dispatch(AppActions.REQUEST_FETCH_EPISODES);
               setCurrentStep(0);
-              setEpisodeFormState(handleFitEpisodeData(res.data));
+              setEpisodeFormState(handleFitEpisodeData(res.data) as any);
             },
             isShowingToast: true,
           });
@@ -260,20 +256,24 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         }
         break;
       case AppActions.REQUEST_FETCH_EPISODES:
-        if (userId)
-          return handlePromise({
+        if (userId) {
+          handlePromise({
             promiseFromService: requestFetchEpisodes(userId),
             payload,
             successCallbackAction: (res) => reducer(action, payload, res),
           });
-        break;
+          return requestFetchEpisodes(userId);
+        }
       case AppActions.REQUEST_FETCH_REPORTS:
-        if (userId)
-          return handlePromise({
+        if (userId) {
+          handlePromise({
             promiseFromService: requestFetchReports(userId, payload),
             payload,
             successCallbackAction: (res) => reducer(action, payload, res),
           });
+          return requestFetchReports(userId, payload);
+        }
+
       case AppActions.REQUEST_FETCH_REPORTS_EPISODES_RANGE:
         if (userId) {
           handlePromise({
@@ -316,6 +316,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         reports: reports,
         setPageTitle: setPageTitle,
         clearEpisodeFormState,
+        isLoading,
       }}
     >
       {children}

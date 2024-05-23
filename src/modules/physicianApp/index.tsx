@@ -57,7 +57,7 @@ const PhysicianTabsRoutes = () => {
                 <>
                   <Image
                     tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/home.png')}
+                    source={require('src/assets/home.png')}
                   />
                   <Text
                     className={
@@ -75,7 +75,7 @@ const PhysicianTabsRoutes = () => {
                 <>
                   <Image
                     tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/user.png')}
+                    source={require('src/assets/user.png')}
                   />
                   <Text
                     className={
@@ -93,7 +93,7 @@ const PhysicianTabsRoutes = () => {
                 <>
                   <Image
                     tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/user.png')}
+                    source={require('src/assets/user.png')}
                   />
                   <Text
                     className={

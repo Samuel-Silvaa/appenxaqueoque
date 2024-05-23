@@ -13,6 +13,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 
 const AuthContext = createContext<AuthContextDefaultValues>({
+  isAuthLoading: false,
   dispatch: () => null,
   form: {},
   handleFormChange: () => null,
@@ -34,10 +35,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [session, setSession] = useState<LogInResponse>();
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
   const toast = useToast();
   const navigation = useNavigation();
 
-  const signOut = () => {
+  const signOut = async () => {
+    await SecureStore.deleteItemAsync('welcome');
     setFormState({});
     setIsLogged(false);
   };
@@ -59,10 +62,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const handleToast = (message: string, type: string) => {
     toast.hideAll();
     const toastOptions: ToastOptions = {
-      animationDuration: 400,
-      animationType: 'slide-in',
-      placement: 'top',
-      duration: 2000,
       type: type,
     };
     toast.show(message, toastOptions);
@@ -72,16 +71,18 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     promiseFromService,
     payload,
     successCallbackAction = () => {},
+    showToast = false,
   }: {
     promiseFromService: Promise<any>;
     payload: any;
     successCallbackAction?: (payload: any) => void;
+    showToast?: boolean;
   }) => {
-    handleToast('Processando...', 'warning');
+    setIsAuthLoading(true);
     await promiseFromService
       .then((res) => {
         successCallbackAction(res.data);
-        handleToast('Tudo certo!', 'success');
+        if (showToast) handleToast('Tudo certo!', 'success');
       })
       .catch((err) => {
         handleToast(
@@ -90,6 +91,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
             : 'Tivemos um problema. Tente novamente mais tarde!',
           'danger'
         );
+      })
+      .finally(() => {
+        setIsAuthLoading(false);
       });
   };
 
@@ -116,6 +120,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
               password: payload.password,
             });
           },
+          showToast: true,
         });
         break;
       case AuthenticationActions.REQUEST_CREATE_PATIENT:
@@ -130,6 +135,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
               });
             return reducer(action, payload, res);
           },
+          showToast: true,
         });
         break;
       case AuthenticationActions.REQUEST_CREATE_PHYSICIAN:
@@ -154,7 +160,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (userId) await SecureStore.setItemAsync('userId', userId);
   };
 
-  const reducer = (
+  const reducer = async (
     type: AuthenticationActions,
     payload: any,
     response: any
@@ -174,7 +180,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (user) {
           setSession(response);
           handleFormChange({ id: user.id, session: response });
-          if (SecureStore.getItem('welcome')) {
+
+          const isWelcome = await SecureStore.getItemAsync('welcome');
+          if (isWelcome) {
             navigation.navigate('welcome' as any as never);
             delete payload.password;
           } else {
@@ -216,6 +224,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         session,
         isLogged,
         setIsLoggedTrue,
+        isAuthLoading,
       }}
     >
       {children}

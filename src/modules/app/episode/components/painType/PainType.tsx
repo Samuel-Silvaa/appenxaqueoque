@@ -12,12 +12,12 @@ const data: {
 }[] = [
   {
     label: 'Pulsátil: como um coração batendo na cabeça.',
-    img: require('assets/throb.png'),
+    img: require('src/assets/throb.png'),
     value: PainTypeEnum.THROB,
   },
   {
     label: 'Em aperto: como um capacete muito apertado.',
-    img: require('assets/helmet.png'),
+    img: require('src/assets/helmet.png'),
     value: PainTypeEnum.TIGHT,
   },
 ];
@@ -41,7 +41,7 @@ const PainType = () => {
               children={
                 <View className='flex-row items-center'>
                   <RadioButton value={act.value} color='#CEB0FA' />
-                  <Text className=''>{act.label}</Text>
+                  <Text className='dark:text-d-text-gray'>{act.label}</Text>
                 </View>
               }
               image={act?.img}

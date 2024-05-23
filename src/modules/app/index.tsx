@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './home/HomePage';
-import { Image, Text, View } from 'react-native';
+import { Appearance, Image, Text, View } from 'react-native';
 import EpisodePage from './episode/Episode';
 import CalendarPage from './calendar/Calendar';
 import ProfilePage from './profile/Profile';
@@ -14,19 +14,22 @@ import Success from './success/Success';
 
 const stylesheet = {
   calendarBtnContainer:
-    'bg-blue-secondary rounded-full w-16 h-16 flex items-center justify-center translate-y-[-20px]',
+    'bg-blue-secondary dark:bg-d-blue-primary rounded-full w-16 h-16 flex items-center justify-center translate-y-[-20px]',
 };
 
 const Tab = createBottomTabNavigator();
 
 const TabsRoutes = () => {
   const { patient, dispatch, setPageTitle, validateStepForward } = useApp();
+  const [colorScheme, setColorScheme] = React.useState(
+    Appearance.getColorScheme()
+  );
 
   React.useEffect(() => {
+    Appearance.addChangeListener((a) => {
+      setColorScheme(a.colorScheme);
+    });
     if (!patient) dispatch(AppActions.REQUEST_FETCH_PATIENT, {});
-  }, []);
-
-  React.useEffect(() => {
     dispatch(AppActions.REQUEST_FETCH_EPISODES);
   }, []);
 
@@ -43,6 +46,18 @@ const TabsRoutes = () => {
     }
   };
 
+  const colorSchemeApproachHex = (focused: boolean) => {
+    if (colorScheme == 'light') return focused ? '#8FD7FF' : '#262D33';
+    if (colorScheme == 'dark') return focused ? '#8FD7FF' : '#9DA3A9';
+  };
+
+  const tabTextStyle = (focused: boolean) => {
+    if (colorScheme == 'light')
+      return focused ? 'text-[#8FD7FF]' : 'text-[#262D33]' + ' text-[9px]';
+    if (colorScheme == 'dark')
+      return focused ? 'text-[#8FD7FF]' : 'text-[#9DA3A9]' + ' text-[9px]';
+  };
+
   return (
     <Tab.Navigator
       screenListeners={{
@@ -53,7 +68,9 @@ const TabsRoutes = () => {
         },
       }}
       screenOptions={({ route }) => ({
-        headerStyle: { backgroundColor: '#edf1f8' },
+        headerStyle: {
+          backgroundColor: colorScheme == 'light' ? '#edf1f8' : '#23263F',
+        },
         headerShadowVisible: false,
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
@@ -62,78 +79,46 @@ const TabsRoutes = () => {
               return (
                 <>
                   <Image
-                    tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/home.png')}
+                    tintColor={colorSchemeApproachHex(focused)}
+                    source={require('src/assets/home.png')}
                   />
-                  <Text
-                    className={
-                      focused
-                        ? 'text-[#8FD7FF]'
-                        : 'text-[#262D33]' + ' text-[9px]'
-                    }
-                  >
-                    Início
-                  </Text>
+                  <Text className={tabTextStyle(focused)}>Início</Text>
                 </>
               );
             case 'Report':
               return (
                 <>
                   <Image
-                    tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/stats.png')}
+                    tintColor={colorSchemeApproachHex(focused)}
+                    source={require('src/assets/stats.png')}
                   />
-                  <Text
-                    className={
-                      focused
-                        ? 'text-[#8FD7FF]'
-                        : 'text-[#262D33]' + ' text-[9px]'
-                    }
-                  >
-                    Relatório
-                  </Text>
+                  <Text className={tabTextStyle(focused)}>Relatório</Text>
                 </>
               );
             case 'Episode':
               return (
                 <View className={stylesheet.calendarBtnContainer}>
-                  <Image source={require('assets/plus-white.png')} />
+                  <Image source={require('src/assets/plus-white.png')} />
                 </View>
               );
             case 'Calendar':
               return (
                 <>
                   <Image
-                    tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/calendar.png')}
+                    tintColor={colorSchemeApproachHex(focused)}
+                    source={require('src/assets/calendar.png')}
                   />
-                  <Text
-                    className={
-                      focused
-                        ? 'text-[#8FD7FF]'
-                        : 'text-[#262D33]' + ' text-[9px]'
-                    }
-                  >
-                    Calenário
-                  </Text>
+                  <Text className={tabTextStyle(focused)}>Calenário</Text>
                 </>
               );
             case 'Profile':
               return (
                 <>
                   <Image
-                    tintColor={focused ? '#8FD7FF' : '#262D33'}
-                    source={require('assets/user.png')}
+                    tintColor={colorSchemeApproachHex(focused)}
+                    source={require('src/assets/user.png')}
                   />
-                  <Text
-                    className={
-                      focused
-                        ? 'text-[#8FD7FF]'
-                        : 'text-[#262D33]' + ' text-[9px]'
-                    }
-                  >
-                    Perfil
-                  </Text>
+                  <Text className={tabTextStyle(focused)}>Perfil</Text>
                 </>
               );
           }
@@ -148,7 +133,7 @@ const TabsRoutes = () => {
         tabBarBackground: () => (
           <Image
             style={{
-              backgroundColor: '#fff',
+              backgroundColor: colorScheme == 'light' ? '#fff' : '#1F2035',
               width: '95%',
               height: '100%',
               borderRadius: 50,

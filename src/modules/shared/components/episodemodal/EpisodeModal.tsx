@@ -47,53 +47,55 @@ const EpisodeModal = ({
 
   const fullDetails = [
     {
-      icon: require('assets/timer.png'),
+      icon: require('src/assets/timer.png'),
       title: 'Horário do episódio',
       desc: episode.time,
     },
     {
-      icon: require('assets/chart-header-location.png'),
+      icon: require('src/assets/chart-header-location.png'),
       title: 'Localização',
-      desc: episode.location,
+      desc: Array.isArray(episode.location)
+        ? Array.from(episode.location).join(' - ')
+        : episode.location,
     },
     {
-      icon: require('assets/chart-acuteness.png'),
+      icon: require('src/assets/chart-acuteness.png'),
       title: 'Intensidade',
       desc: episode.acuteness,
     },
     {
-      icon: require('assets/chart-sad.png'),
+      icon: require('src/assets/chart-sad.png'),
       title: 'Característica da dor',
       desc: episode.painType,
     },
     {
-      icon: require('assets/chart-symptoms.png'),
+      icon: require('src/assets/chart-symptoms.png'),
       title: 'Sintomas associados',
       desc: Array.isArray(episode.symptoms)
         ? Array.from(episode.symptoms).join(' - ')
         : episode.symptoms,
     },
     {
-      icon: require('assets/chart-trigger.png'),
+      icon: require('src/assets/chart-trigger.png'),
       title: 'Gatilhos',
       desc: Array.isArray(episode.triggers)
         ? Array.from(episode.triggers).join(' - ')
         : episode.triggers,
     },
     {
-      icon: require('assets/chart-improvement.png'),
+      icon: require('src/assets/chart-improvement.png'),
       title: 'Fatores de melhora',
       desc: Array.isArray(episode.improvementFactor)
         ? Array.from(episode.improvementFactor).join(' - ')
         : episode.improvementFactor,
     },
     {
-      icon: require('assets/chart-period.png'),
+      icon: require('src/assets/chart-period.png'),
       title: 'Período menstrual',
       desc: episode.periodNotes,
     },
     {
-      icon: require('assets/chart-notes.png'),
+      icon: require('src/assets/chart-notes.png'),
       title: 'Observações',
       desc: episode.notes,
     },
@@ -164,7 +166,7 @@ const EpisodeModal = ({
               style={{ backgroundColor: pinColor(episode.acuteness) }}
               className={stylesheet.edition}
             >
-              <Image source={require('assets/pencil.png')}></Image>
+              <Image source={require('src/assets/pencil.png')}></Image>
               <Text className={stylesheet.editText}>Editar</Text>
             </TouchableOpacity>
             {episode?.dateTime && (
@@ -178,7 +180,7 @@ const EpisodeModal = ({
             >
               <Image
                 className={stylesheet.arrowdown}
-                source={require('assets/arrowdown.png')}
+                source={require('src/assets/arrowdown.png')}
               ></Image>
             </TouchableOpacity>
           </View>

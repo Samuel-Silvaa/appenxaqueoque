@@ -14,9 +14,9 @@ const LandingPage = ({ navigation }) => {
       ctaSecondaryText='Cadastrar'
     >
       <Image
-        className='h-[50%] '
+        className='h-[45%] '
         resizeMode='contain'
-        source={require('assets/welcome.png')}
+        source={require('src/assets/welcome.png')}
       />
       <Text className={sharedStyleSheet.title}>Bem vindo! </Text>
       <Text className={sharedStyleSheet.subtitle + ' text-center '}>

@@ -1,8 +1,10 @@
 export const sharedEpisodeStyleSheet = {
   timepicker: {
-    container: 'w-full bg-white rounded-[44px] p-4 items-center',
-    title: 'font-semibold text-lg',
-    divider: 'w-1/5 border border-gray-light h-[1px] my-3',
+    container:
+      'w-full bg-white rounded-[44px] p-4 items-center dark:bg-d-blue-primary-dark/75 dark:text-d-text-gray',
+    title: 'font-semibold text-lg dark:text-d-blue-title',
+    divider:
+      'w-1/5 border border-gray-light h-[1px] my-3 dark:text-d-text-gray',
     timeIndicatorContainer: 'w-full h-[100px] flex',
     timeIndicatorBg: 'w-full h-full bg-contain',
     timeIndicatorRadioContainer:

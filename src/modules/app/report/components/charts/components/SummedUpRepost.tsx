@@ -48,49 +48,49 @@ export const SummedUpReport = (data: { report: Report }) => {
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
-              source={require('assets/chart-doc.png')}
+              source={require('src/assets/chart-doc.png')}
             />
             <Text>{report.episodeAmount} episódios</Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
-              source={require('assets/chart-clock.png')}
+              source={require('src/assets/chart-clock.png')}
             />
             <Text>{parseTime(report.time)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
-              source={require('assets/chart-header-location.png')}
+              source={require('src/assets/chart-header-location.png')}
             />
             <Text>{parseLocation(report.location)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
-              source={require('assets/chart-acuteness.png')}
+              source={require('src/assets/chart-acuteness.png')}
             />
             <Text>{parseAcuteness(report.acuteness)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
-              source={require('assets/chart-sad.png')}
+              source={require('src/assets/chart-sad.png')}
             />
             <Text>{parsePainType(report.painType)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
-              source={require('assets/chart-symptom.png')}
+              source={require('src/assets/chart-symptom.png')}
             />
             <Text>{parseSymptoms(report.symptoms)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
-              source={require('assets/chart-trigger.png')}
+              source={require('src/assets/chart-trigger.png')}
             />
             <Text>{parseTriggers(report.triggers)} </Text>
           </View>

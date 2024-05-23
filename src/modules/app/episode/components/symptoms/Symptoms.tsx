@@ -1,4 +1,4 @@
-import { ImageSourcePropType, View } from 'react-native';
+import { Appearance, ImageSourcePropType, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
 import Card from '../form/card/Card';
 import { useApp } from 'src/infra/app/app';
@@ -13,33 +13,33 @@ const data: {
   {
     label:
       'Aura - A criança enxerga pontos ou formas brilhantes antes ou durante os episódios de dor.',
-    img: require('assets/halo.png'),
+    img: require('src/assets/halo.png'),
     value: SymptomType.HALO,
   },
   {
     label: 'Sensibilidade à luz - A criança busca um lugar escuro.',
-    img: require('assets/photo.png'),
+    img: require('src/assets/photo.png'),
     value: SymptomType.PHOTOSENSIBILITY,
   },
   {
     label: 'Sensibilidade ao barulho - A criança busca um lugar silencioso.',
-    img: require('assets/hiperacusis.png'),
+    img: require('src/assets/hiperacusis.png'),
     value: SymptomType.HYPERACUSIS,
   },
   {
     label: 'Náusea - A criança deixa de comer.',
-    img: require('assets/nausea.png'),
+    img: require('src/assets/nausea.png'),
     value: SymptomType.NAUSEA,
   },
   {
     label: 'Dor de barriga.',
-    img: require('assets/sickness.png'),
+    img: require('src/assets/sickness.png'),
 
     value: SymptomType.SICKNESS,
   },
   {
     label: 'Vômito.',
-    img: require('assets/vomit.png'),
+    img: require('src/assets/vomit.png'),
     value: SymptomType.VOMIT,
   },
 ];
@@ -69,12 +69,18 @@ const Symptoms = () => {
               handleSetSymptomsValues(act.value);
             }}
             children={
-              <View className='flex-row items-center w-[80%]'>
+              <View className='flex-row items-center w-[80%] '>
                 <BouncyCheckbox
                   size={22}
                   fillColor='#CEB0FA'
                   unfillColor='#FFFFFF'
-                  textStyle={{ textDecorationLine: 'none' }}
+                  textStyle={{
+                    textDecorationLine: 'none',
+                    color:
+                      Appearance.getColorScheme() == 'dark'
+                        ? '#9DA3A9'
+                        : '#2E3E4B',
+                  }}
                   text={act.label}
                   isChecked={episodeFormState.symptoms?.includes(act.value)}
                   onPress={(isChecked: boolean) => {

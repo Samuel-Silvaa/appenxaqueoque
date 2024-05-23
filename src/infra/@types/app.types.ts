@@ -50,7 +50,7 @@ export interface EpisodeModalDTO {
   id?: string;
   improvementFactor: string | string[];
   isEdition?: boolean;
-  location: string;
+  location: string | string[];
   medicine: string;
   medicineDosage: number;
   medicineImprovement: string;
@@ -81,6 +81,7 @@ export interface Report {
 }
 
 export interface AppContextDefaultValues {
+  isLoading: boolean;
   dispatch: (action: any, payload?: any, assetId?: string) => Promise<any>;
   steps: number;
   currentStep: number;

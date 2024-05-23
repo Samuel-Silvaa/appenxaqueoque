@@ -5,8 +5,8 @@ import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { sharedEpisodeStyleSheet } from 'src/modules/app/episode/shared/SharedEpisodeStyleSheet';
 
 const stylesheet = {
-  container: 'bg-white rounded-[32px] m-2',
-  body: 'flex-row flex-wrap justify-evenly items-start w-full rounded-[28px] p-1 bg-white',
+  container: 'bg-white rounded-[32px] m-2 ',
+  body: 'flex-row flex-wrap justify-evenly items-start w-full rounded-[28px] p-1 bg-white ',
 };
 
 const CalendarComponent = ({
@@ -18,7 +18,7 @@ const CalendarComponent = ({
 }) => {
   return (
     <View className='relative w-full'>
-      <View className='bg-blue-tertiary rounded-[28px] absolute top-0 h-2/5 w-full'></View>
+      <View className='bg-blue-tertiary dark:bg-d-blue-primary rounded-[28px] absolute top-0 h-2/5 w-full'></View>
       <View className={stylesheet.container}>
         <View className={stylesheet.body}>
           <Calendar
@@ -31,7 +31,7 @@ const CalendarComponent = ({
           <View className={sharedEpisodeStyleSheet.timepicker.divider}></View>
 
           <View className='rounded-full w-full h-[50px] bg-beige-primary/50 flex-row justify-center items-center p-2 m-auto mb-4'>
-            <Image source={require('assets/arrowup.png')}></Image>
+            <Image source={require('src/assets/arrowup.png')}></Image>
             <Text className='font-xs'>
               Escolha a data do episódio que deseja vizualizar ou editar
             </Text>

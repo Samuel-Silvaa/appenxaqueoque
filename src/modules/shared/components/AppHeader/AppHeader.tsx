@@ -1,10 +1,9 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
-import { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { useApp } from 'src/infra/app/app';
-import { useAuth } from 'src/infra/auth/auth';
+import { Appearance } from 'react-native';
 
 const stylesheet = {
   header: 'w-full p-4 pt-8 flex flex-row grow-0 justify-between items-center',
@@ -15,13 +14,21 @@ const AppHeader = ({
   route,
 }: BottomTabHeaderProps | NativeStackHeaderProps | any) => {
   const { pageTitle } = useApp();
-  const { session } = useAuth();
+
+  const toggleColorScheme = () => {
+    if (Appearance.getColorScheme() == 'light') {
+      Appearance.setColorScheme('dark');
+    } else {
+      Appearance.setColorScheme('light');
+    }
+  };
 
   return (
     <View
       className={stylesheet.header}
       style={{
-        backgroundColor: session?.userType == 'PATIENT' ? '#edf1f8' : '',
+        backgroundColor:
+          Appearance.getColorScheme() == 'light' ? '#edf1f8' : '#23263F',
       }}
     >
       {navigation.canGoBack() ? (
@@ -30,21 +37,37 @@ const AppHeader = ({
             navigation.goBack();
           }}
         >
-          <Image source={require('assets/arrowback.png')} />
+          <Image source={require('src/assets/arrowback.png')} />
         </TouchableOpacity>
       ) : (
         <Image></Image>
       )}
       {pageTitle && (
-        <Text className='text-2xl text-black font-extrabold ml-8'>
+        <Text
+          className={`text-2xl ${
+            Appearance.getColorScheme() == 'light'
+              ? 'text-black '
+              : 'text-d-blue-title'
+          } font-extrabold ml-8`}
+        >
           {pageTitle}
         </Text>
       )}
-      <Image
-        className='w-14 h-14 bg-red'
-        resizeMode='contain'
-        source={require('assets/moon.png')}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          toggleColorScheme();
+        }}
+      >
+        <Image
+          className='w-14 h-14 bg-red'
+          resizeMode='contain'
+          source={
+            Appearance.getColorScheme() == 'light'
+              ? require('src/assets/moon.png')
+              : require('src/assets/sun.png')
+          }
+        />
+      </TouchableOpacity>
     </View>
   );
 };

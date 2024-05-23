@@ -4,6 +4,7 @@
 module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   important: true,
+  darkMode: 'selector',
   corePlugins: {
     blur: true,
   },
@@ -15,7 +16,12 @@ module.exports = {
       colors: {
         'snow-white': '#f5f8fd',
         black: '#2E3E4B',
+        'd-blue-title': '#6E8DBB',
+        'd-text-gray': '#9DA3A9',
         primary: '#F7F7F7',
+        'd-primary': '#23263F',
+        'd-blue-primary': '#373D59',
+        'd-blue-primary-dark': '#1F2035',
         'blue-primary': '#8FD7FF',
         'blue-secondary': '#A5D1EA',
         'blue-tertiary': '#B4CFE6',

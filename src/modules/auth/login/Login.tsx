@@ -1,7 +1,6 @@
 import { Text, View } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
-import ExPressable from '../shared/components/buttons/pressable/ExPressable';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 
@@ -33,7 +32,6 @@ const Login = () => {
   const { dispatch } = useAuth();
   const {
     handleSubmit,
-    control,
     formState: { errors },
     setValue,
   } = useForm({
@@ -54,6 +52,7 @@ const Login = () => {
       <Text className={sharedStyleSheet.subtitle}>
         Com e-mail e senha para entrar
       </Text>
+
       <InputContainer
         keyboardType='email-address'
         label='E-mail'
@@ -73,13 +72,13 @@ const Login = () => {
 
       <View className={stylesheet.checkboxContainer}>
         <BouncyCheckbox
-          size={24}
+          size={16}
           fillColor='#F1F1F1'
           unfillColor='#F7F7F7'
           text='Lembrar minha senha'
-          textStyle={{ textDecorationLine: 'none' }}
+          textStyle={{ textDecorationLine: 'none', fontSize: 14 }}
         />
-        <Text>Esqueci minha senha</Text>
+        <Text className='text-xs'>Esqueci minha senha</Text>
       </View>
     </AuthScaffold>
   );

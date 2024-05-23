@@ -99,7 +99,7 @@ const ImprovementFactor = () => {
             <View className='w-full flex-col items-center'>
               <InputContainer
                 label='Nome do medicamento'
-                labelicon={require('assets/medicine.png')}
+                labelicon={require('src/assets/medicine.png')}
                 name='medicine'
                 control={control}
                 errors={errors}
@@ -163,7 +163,7 @@ const ImprovementFactor = () => {
           ImprovementFactorType.FOOD
         )}
         label='Qual alimento ajudou a melhorar?'
-        labelicon={require('assets/avocado.png')}
+        labelicon={require('src/assets/avocado.png')}
         name='foodImprovement'
         control={control}
         errors={errors}

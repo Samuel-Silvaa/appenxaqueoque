@@ -16,7 +16,6 @@ const requestGeneratePdfReport = async (payload: {
   id: string;
   physicianEmail: string;
 }): Promise<Episode> => {
-  console.log(payload);
   return get(
     `report/chart/generate/${payload.id}`,
     {},
@@ -33,7 +32,6 @@ const requestUpdateEpisode = async (
   payload: EpisodeModalDTO,
   episodeId: string
 ): Promise<Episode> => {
-  console.log('pay: =', payload);
   const ep = Object.assign({}, payload);
   delete ep.id;
   delete ep.createdAt;

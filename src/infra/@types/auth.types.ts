@@ -1,6 +1,7 @@
 import { AuthenticationActions } from '../auth/auth.actions';
 
 export interface AuthContextDefaultValues {
+  isAuthLoading: boolean;
   dispatch: (action: AuthenticationActions, payload: any) => void;
   form: {
     token?: string;

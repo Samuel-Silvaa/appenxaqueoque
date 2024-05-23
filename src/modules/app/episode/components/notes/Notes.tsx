@@ -51,7 +51,7 @@ const Notes = () => {
       <Image
         className='absolute top-[20px] right-[-20px] w-[148px] h-[148px] z-40'
         resizeMode='contain'
-        source={require('assets/boy_magnifier.png')}
+        source={require('src/assets/boy_magnifier.png')}
       ></Image>
       <Text className={stylesheet.title}>Estamos quase lá</Text>
 

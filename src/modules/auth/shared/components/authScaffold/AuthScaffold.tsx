@@ -1,6 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { ReactNode } from 'react';
-import { ImageSourcePropType, View } from 'react-native';
+import {
+  ImageSourcePropType,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+} from 'react-native';
 import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
 
@@ -32,12 +37,17 @@ const AuthScaffold = ({
   ctaSecondaryLeftIcon,
 }: AuthScaffoldProps) => {
   return (
-    <View className={`${stylesheet.view} ${getAlignment(alignment)}`}>
+    <KeyboardAvoidingView
+      className={`${stylesheet.view} ${getAlignment(alignment)}`}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={200}
+      enabled
+    >
       <StatusBar />
 
       {children}
 
-      <View className='w-full gap-y-2'>
+      <View className='w-full gap-y-2 mb-8'>
         {ctaPrimary && ctaPrimaryText && (
           <ExPressable
             title={ctaPrimaryText}
@@ -54,7 +64,7 @@ const AuthScaffold = ({
           ></ExPressable>
         )}
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

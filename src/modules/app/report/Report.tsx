@@ -69,7 +69,7 @@ const ResourceCard = ({
 
       <Image
         className='self-center'
-        source={require('assets/arrowright.png')}
+        source={require('src/assets/arrowright.png')}
       ></Image>
     </Pressable>
   );
@@ -86,7 +86,7 @@ const ReportPage = ({ navigation }) => {
   });
 
   const {
-    control,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -103,7 +103,7 @@ const ReportPage = ({ navigation }) => {
             placeholder='Pesquisar'
             label=''
             name='search'
-            control={control}
+            setValue={setValue}
             errors={errors}
           ></InputContainer>
         </View>
@@ -121,9 +121,15 @@ const ReportPage = ({ navigation }) => {
             onPress={() => setIsFilterModalOpen(true)}
           />
         </View>
+
         <View className='self-start px-2'>
           <Text>
             {selectedDate.start} à {selectedDate.end}
+          </Text>
+        </View>
+        <View className='bg-snow-white mb-4 rounded-[44px] w-full'>
+          <Text className='font-semibold text-black  mx-auto text-md m-auto'>
+            Visualize e envie um relatório ao seu médico
           </Text>
         </View>
       </View>

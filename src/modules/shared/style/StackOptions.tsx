@@ -3,7 +3,7 @@ import AppHeader from '../components/appHeader/AppHeader';
 
 const screenOptions: NativeStackNavigationOptions = {
   headerStyle: { backgroundColor: '#F7F7F7' },
-  headerBackImageSource: require('assets/arrowback.png'),
+  headerBackImageSource: require('src/assets/arrowback.png'),
   headerShadowVisible: false,
   headerTitle: () => '',
   header: (props) => <AppHeader {...props} />,

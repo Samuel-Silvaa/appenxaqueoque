@@ -224,7 +224,7 @@ const ReportDateRangeModal = ({
           <TouchableOpacity onPress={() => onClose()}>
             <Image
               className={stylesheet.arrowdown}
-              source={require('assets/arrowdown.png')}
+              source={require('src/assets/arrowdown.png')}
             ></Image>
           </TouchableOpacity>
         </View>

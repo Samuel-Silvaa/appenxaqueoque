@@ -227,7 +227,6 @@ const ChartsPage = () => {
     () => episodes.map((ep: Episode) => ep.foodImpair).filter((e) => !!e),
     [episodes]
   );
-  console.log(foodImpair);
   return (
     <AppPageScaffold>
       <View className={stylesheet.footer}>
@@ -239,7 +238,10 @@ const ChartsPage = () => {
             }}
           >
             <Text>Enviar relatório para o médico </Text>
-            <Image className='ml-4' source={require('assets/send.png')}></Image>
+            <Image
+              className='ml-4'
+              source={require('src/assets/send.png')}
+            ></Image>
           </Pressable>
         </Pressable>
       </View>

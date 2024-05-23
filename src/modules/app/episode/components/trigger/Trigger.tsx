@@ -88,7 +88,7 @@ const Trigger = () => {
       </Wrapper>
       <InputContainer
         label='Qual alimento foi o gatilho?'
-        labelicon={require('assets/cupcake.png')}
+        labelicon={require('src/assets/cupcake.png')}
         name='foodImpair'
         control={control}
         errors={errors}

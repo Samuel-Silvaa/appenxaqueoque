@@ -65,7 +65,7 @@ const Period = () => {
         <View className={stylesheet.notesWrapper}>
           <Image
             className='absolute top-[-110px] right-0'
-            source={require('assets/girl_laptop.png')}
+            source={require('src/assets/girl_laptop.png')}
           ></Image>
           <InputContainer
             name='notes'

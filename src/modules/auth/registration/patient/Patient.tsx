@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from 'src/infra/auth/auth';
 import { AuthenticationActions } from 'src/infra/auth/auth.actions';
-import SelectContainer from 'src/modules/shared/components/SelectContainer/SelectContainer';
+import SelectContainer from 'src/modules/shared/components/selectContainer/SelectContainer';
 import { useEffect } from 'react';
 
 interface PatientSchemaProps {
@@ -49,7 +49,6 @@ const Patient = () => {
   });
 
   const onSubmitHandler = (data: PatientSchemaProps) => {
-    console.log(data);
     dispatch(AuthenticationActions.REQUEST_CREATE_PATIENT, data);
   };
 
@@ -69,7 +68,7 @@ const Patient = () => {
         className='w-full p-4 pt-[40px] h-[70%]'
       >
         <InputContainer
-          className='opacity-25 bg-white drop-shadow-sm'
+          className='opacity-45 bg-white drop-shadow-sm'
           keyboardType='email-address'
           label='E-mail'
           defaultValue={(form as { user: any; session: object }).user.email}
