@@ -34,6 +34,7 @@ const Period = () => {
   const {
     control,
     formState: { errors },
+    setValue,
   } = useForm({ resolver: yupResolver(periodSchema) });
 
   return (
@@ -42,7 +43,7 @@ const Period = () => {
       value={episodeFormState.period}
     >
       <View className={stylesheet.wrapper}>
-        <Wrapper title='Você está no período menstrual? '>
+        <Wrapper title='A criança está em período menstrual? '>
           <Card
             title='Menstruação'
             children={
@@ -70,6 +71,7 @@ const Period = () => {
           <InputContainer
             name='notes'
             control={control}
+            setValue={setValue}
             errors={errors}
             className={stylesheet.notesInput}
             numberOfLines={4}

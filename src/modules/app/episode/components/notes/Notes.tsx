@@ -7,6 +7,7 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import { useApp } from 'src/infra/app/app';
 import { useNavigation } from '@react-navigation/native';
+import { id } from 'date-fns/locale';
 
 const stylesheet = {
   wrapper: 'flex-col w-full items-center justify-between',
@@ -31,17 +32,21 @@ const Notes = () => {
   const {
     control,
     formState: { errors },
+    setValue,
   } = useForm({ resolver: yupResolver(notesSchema) });
 
   const handleSubmit = async () => {
     submitEpisode().then((ep) => {
       const { data } = ep;
-      navigation.setOptions({
-        ...data,
-        triggers: String(data.triggers).split(','),
-        improvementFactor: String(data.improvementFactor).split(','),
-        symptoms: String(data.symptoms).split(','),
-      });
+      if (data)
+        navigation.setOptions({
+          ...data,
+          triggers: String(data.triggers).split(','),
+          improvementFactor: String(data.improvementFactor).split(','),
+          symptoms: String(data.symptoms).split(','),
+          haloSymptoms: String(data.haloSymptoms).split(','),
+          impairFactor: String(data.impairFactor).split(','),
+        });
       navigation.navigate('Success');
     });
   };
@@ -61,6 +66,7 @@ const Notes = () => {
         <InputContainer
           className={stylesheet.notesInput}
           name='notes'
+          setValue={setValue}
           control={control}
           errors={errors}
           defaultValue={episodeFormState.notes}
@@ -72,7 +78,7 @@ const Notes = () => {
 
       <ExPressable
         onPress={handleSubmit}
-        title='Salvar cadastro'
+        title='Salvar episódio'
         className='bg-[#8FD7FF] '
       />
     </View>

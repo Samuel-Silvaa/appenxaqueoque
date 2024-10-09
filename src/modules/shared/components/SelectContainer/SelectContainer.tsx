@@ -16,6 +16,7 @@ interface SelectContainerProps {
   options: Array<{ title: string; value: string | number }>;
   errors: FieldErrors<any>;
   setValue: UseFormSetValue<any>;
+  placeholder?: string;
 }
 
 const SelectContainer = ({
@@ -25,6 +26,7 @@ const SelectContainer = ({
   options,
   labelicon,
   setValue,
+  placeholder,
 }: SelectContainerProps) => {
   return (
     <View className={stylesheet.view}>
@@ -47,7 +49,9 @@ const SelectContainer = ({
           return (
             <View>
               <Text className={stylesheet.input}>
-                {(selectedItem && selectedItem.title) || 'Selecione o sexo'}
+                {(selectedItem && selectedItem.title) ||
+                  placeholder ||
+                  'Selecione uma opção'}
               </Text>
             </View>
           );

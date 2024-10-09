@@ -9,19 +9,19 @@ const Location = () => {
   const { episodeFormState, handleFormChange } = useApp();
 
   const handleSelectLocation = (location: string) => {
-    const isLocationSet = episodeFormState.location.includes(location);
+    const isLocationSet = episodeFormState.location?.includes(location);
     let locations;
     if (isLocationSet) {
       if (Array.isArray(episodeFormState.location)) {
-        locations = episodeFormState.location.filter((l) => l !== location);
+        locations = episodeFormState.location?.filter((l) => l !== location);
       } else {
-        locations = episodeFormState.location.replace(location, '');
+        locations = episodeFormState.location?.replace(location, '');
       }
     } else {
       if (Array.isArray(episodeFormState.location)) {
         locations = episodeFormState.location;
         locations.push(location);
-      } else if (episodeFormState.location.includes(',')) {
+      } else if (episodeFormState.location?.includes(',')) {
         locations = episodeFormState.location.split(',');
         locations.push(location);
       } else {
@@ -36,10 +36,10 @@ const Location = () => {
   ): string => {
     if (
       Array.isArray(episodeFormState.location) &&
-      Array.from(episodeFormState.location).includes(location)
+      Array.from(episodeFormState.location)?.includes(location)
     )
       return '#FF7383';
-    if (episodeFormState.location.includes(location)) return '#FF7383';
+    if (episodeFormState.location?.includes(location)) return '#FF7383';
 
     return '#eedfc6';
   };
@@ -53,7 +53,7 @@ const Location = () => {
               <Text className='dark:text-d-text-gray absolute top-0 w-full ellipsis h-[36px]'>
                 {Array.isArray(episodeFormState.location)
                   ? Array.from(episodeFormState.location).join(' - ')
-                  : episodeFormState.location.includes(',')
+                  : episodeFormState.location?.includes(',')
                   ? episodeFormState.location.split(',').join(' - ')
                   : episodeFormState.location}
               </Text>

@@ -120,6 +120,7 @@ const EpisodeModal = ({
     });
     return parsedDetails;
   }, []);
+
   return (
     <Modal
       animationType='slide'

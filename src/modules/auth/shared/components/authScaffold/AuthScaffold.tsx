@@ -10,7 +10,7 @@ import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
 
 const stylesheet = {
-  view: 'flex-col flex-grow bg-primary px-4 gap-y-4 pb-14',
+  view: 'flex-col flex-grow bg-primary px-4 gap-y-2 pb-14',
 };
 
 interface AuthScaffoldProps {
@@ -39,7 +39,6 @@ const AuthScaffold = ({
   return (
     <KeyboardAvoidingView
       className={`${stylesheet.view} ${getAlignment(alignment)}`}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={200}
       enabled
     >

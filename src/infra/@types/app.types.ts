@@ -13,11 +13,17 @@ export interface Patient {
 
 export interface Episode {
   acuteness: string;
+  anotherImpairFactor: string;
+  anotherImprovementFactor: string;
+  anotherPainType: string;
+  anotherTrigger: string;
   dates?: object | any;
   dateTime?: string;
   foodImpair: string;
   foodImprovement: string;
+  haloSymptoms: string | string[];
   id?: string;
+  impairFactor: string | string[];
   improvementFactor: string | string[];
   isEdition?: boolean;
   location: string;
@@ -60,6 +66,7 @@ export interface EpisodeModalDTO {
   periodNotes: string;
   symptoms: string | string[];
   time: string;
+  impairFactor: string | string[];
   triggers: string | string[];
 }
 
@@ -72,8 +79,10 @@ export interface Report {
   location: number;
   acuteness: number;
   painType: number;
+  haloSymptom: number;
   symptoms: number;
   triggers: number;
+  impairFactor: number;
   improvementFactor: number;
   episodesIds: string;
   notes: string;
@@ -110,6 +119,12 @@ export enum Location {
   BACKSIDE = 'Posterior/nuca',
 }
 
+export enum ImpairFactor {
+  JUMP = 'Pular',
+  CROUCH = 'Agachar',
+  ANOTHER = 'Outros',
+}
+
 export enum Acuteness {
   LIGHT = 'Leve',
   MILD = 'Moderada',
@@ -119,27 +134,38 @@ export enum Acuteness {
 export enum PainType {
   THROB = 'Pulsátil',
   TIGHT = 'Aperto',
+  ANOTHER = 'Outros',
+}
+
+export enum HaloSymptom {
+  VISUAL_DISTORTIONS = 'Alterações visuais',
+  TINGLING = 'Formigamento',
+  SPEECH_DISTORTIONS = 'Alterações na fala',
 }
 
 export enum Symptom {
-  HALO = 'Aura',
   PHOTOSENSIBILITY = 'Sensibilidade à luz',
-  HYPERACUSIS = 'Sensibilidade ao barulho',
   NAUSEA = 'Náusea',
-  SICKNESS = 'Dor de barriga',
   VOMIT = 'Vômito',
+  SICKNESS = 'Dor de barriga',
+  HYPERACUSIS = 'Sensibilidade ao barulho',
+  DIZZINESS = 'Tontura',
 }
 
 export enum Trigger {
-  FOOD = 'Alimentação',
   JAGGEDSLEEP = 'Sono irregular',
   EMOTIONAL = 'Fatores emocionais',
+  VISUALEFFORT = 'Esforço visual',
+  FASTING = 'Jejum prolongado',
+  FOOD = 'Alimentação',
+  ANOTHER = 'Outros',
 }
 
 export enum ImprovementFactor {
   MEDICINE = 'Medicamento',
   SLEEP = 'Sono ou descanso',
   FOOD = 'Alimentação',
+  ANOTHER = 'Outros',
 }
 
 export enum Time {

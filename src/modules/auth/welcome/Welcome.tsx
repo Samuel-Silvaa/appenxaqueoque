@@ -17,23 +17,22 @@ const data: {
   effetcMessage?: string;
 }[] = [
   {
-    // title: ' Seja bem vindo(a) ao',
-    title: '',
+    title: 'Seja bem-vindo',
     subtitle:
-      'Aqui temos médicos especializados e capacitados para cuidar de você!',
+      'Registre seus episódios de dor de cabeça de forma descomplicada e divertida!',
     logo: require('src/assets/logo.png'),
-    image: require('src/assets/doc_boy.png'),
+    image: require('src/assets/armchair_kid.png'),
   },
   {
     subtitle:
-      'Você terá acompanhamento médico para tratar a enxaqueca de uma forma descomplicada.',
+      ' Você poderá enviar o relatório dos episódios para o seu médico acompanhar!',
     image: require('src/assets/group_doc_kids.png'),
   },
   {
     // title: ' Seja bem vindo(a) ao',
     title: '',
     subtitle:
-      'Você só precisa anotar os episódios da dor quando estiver em crise.',
+      'Você só precisa registrar os episódios de dor quando estiver em crise.',
     image: require('src/assets/lunar_kid.png'),
     effetcMessage: 'Vamos começar?',
   },

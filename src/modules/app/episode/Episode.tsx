@@ -1,8 +1,6 @@
 import {
   Dimensions,
   FlatList,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   Text,
   TouchableOpacity,
   View,
@@ -18,7 +16,7 @@ import _ from 'lodash';
 
 const stylesheet = {
   steps: {
-    container: 'flex-row w-full justify-center items-center',
+    container: 'flex-row w-full justify-evenly items-center ',
   },
   form: {
     wrapper: 'flex-col w-full ',
@@ -43,7 +41,7 @@ const Steps = () => {
                 currentStep == index
                   ? 'bg-blue-dark-secondary border border-blue-dark-primary '
                   : 'bg-white border border-gray-opacity'
-              } mx-2`}
+              }`}
             ></View>
           );
         })}
@@ -69,43 +67,19 @@ const Topic = ({
   const { currentStep } = useApp();
 
   const DATA: { id: string; title: string }[] = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'Data e horário',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Localização',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Intensidade',
-    },
-    {
-      id: '1oj12b3o-3da1-471f-bd96-145571e29d72',
-      title: 'Características da dor',
-    },
-    {
-      id: '102830hu1-3da1-471f-bd96-145571e29d72',
-      title: 'Sintomas associados',
-    },
-    {
-      id: '1o273g091b72-3da1-471f-bd96-145571e29d72',
-      title: 'Gatilhos',
-    },
-    {
-      id: '1027hd01ud-3da1-471f-bd96-145571e29d72',
-      title: 'Fatores de melhora',
-    },
-    {
-      id: '01h01n2-3da1-471f-bd96-145571e29d72',
-      title: 'Período mestrual',
-    },
-    {
-      id: 'c0710d1d-3da1-471f-bd96-145571e29d72',
-      title: 'Observações',
-    },
-  ];
+    'Data e horário',
+    'Duração da dor',
+    'Localização',
+    'Intensidade',
+    'Características da dor',
+    'Sintomas associados',
+    'Sintomas da aura',
+    'Fatores de piora',
+    'Fatores desencadentes',
+    'Fatores de melhora',
+    'Periodo menstrual',
+    'Observações',
+  ].map((item, indx) => ({ title: item, id: item + indx }));
 
   useEffect(() => {
     if (setPageTitle && currentStep > 0) setPageTitle(DATA[currentStep].title);
@@ -160,83 +134,36 @@ const Topic = ({
 };
 const pages = [
   { page: <FormSteps.Datetime /> },
+  { page: <FormSteps.EpisodeDuration /> },
   { page: <FormSteps.Location /> },
   { page: <FormSteps.Acuteness /> },
   { page: <FormSteps.PainType /> },
   { page: <FormSteps.Symptoms /> },
+  { page: <FormSteps.HaloSymptom /> },
+  { page: <FormSteps.ImpairFactor /> },
   { page: <FormSteps.Trigger /> },
   { page: <FormSteps.ImprovementFactor /> },
   { page: <FormSteps.Period /> },
   { page: <FormSteps.Notes /> },
 ];
 
-const FormContent = ({
-  episodePagesFlatListRef,
-  headerStepsFlatListRef,
-}: EpisodeScaffold) => {
-  const { currentStep, validateStepForward } = useApp();
-  const [screenOfffset, setScreenOffset] = useState(0);
-
-  const handleHeaderAndEpisodeSlidesAction = (direction: number) => {
-    if (direction == 0 && currentStep < pages.length - 1) {
-      if (validateStepForward(currentStep + 1)) {
-        if (headerStepsFlatListRef?.current) {
-          headerStepsFlatListRef?.current.scrollToIndex({
-            index: currentStep + 1,
-            animated: true,
-          });
-        }
-        if (episodePagesFlatListRef?.current) {
-          episodePagesFlatListRef?.current.scrollToIndex({
-            index: currentStep + 1,
-            animated: true,
-          });
-        }
-      }
-    } else if (direction == 1) {
-      if (validateStepForward(currentStep - 1)) {
-        if (headerStepsFlatListRef?.current) {
-          headerStepsFlatListRef?.current.scrollToIndex({
-            index: currentStep - 1,
-            animated: true,
-          });
-        }
-        if (episodePagesFlatListRef?.current) {
-          episodePagesFlatListRef?.current.scrollToIndex({
-            index: currentStep - 1,
-            animated: true,
-          });
-        }
-      }
-    }
-  };
-
-  const handleScrollBeginDrag = (
-    event: NativeSyntheticEvent<NativeScrollEvent>
-  ) => {
-    setScreenOffset(event.nativeEvent.contentOffset.x);
-  };
-
-  const handleScrollEndDrag = (
-    event: NativeSyntheticEvent<NativeScrollEvent>
-  ) => {
-    const endOffset = event.nativeEvent.contentOffset.x;
-    handleHeaderAndEpisodeSlidesAction(endOffset > screenOfffset ? 0 : 1);
-  };
+const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
+  const { currentStep } = useApp();
 
   return (
     <FlatList
       ref={episodePagesFlatListRef}
+      scrollEnabled={false}
       windowSize={3}
       initialNumToRender={pages.length}
       initialScrollIndex={currentStep}
       maxToRenderPerBatch={0}
       horizontal
-      pagingEnabled={true}
+      pagingEnabled={false}
       decelerationRate='fast'
       bounces={true}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ item, index }) => (
+      renderItem={({ item }) => (
         <View
           style={{
             width: Dimensions.get('screen').width - 32,
@@ -248,8 +175,6 @@ const FormContent = ({
       )}
       onScrollToIndexFailed={() => {}}
       keyExtractor={(item, index) => item.toString() + index}
-      onScrollBeginDrag={handleScrollBeginDrag}
-      onScrollEndDrag={handleScrollEndDrag}
       scrollEventThrottle={1} // Adjust as needed
       data={pages}
     />

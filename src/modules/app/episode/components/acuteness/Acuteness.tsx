@@ -28,7 +28,7 @@ const Acuteness = () => {
 
   return (
     <View className='h-full w-full'>
-      <Wrapper title='Nos diga qual é a intensidade da dor :'>
+      <Wrapper title='Qual foi a intensidade da dor ?'>
         <RadioButton.Group
           onValueChange={(value) => handleFormChange({ acuteness: value })}
           value={episodeFormState.acuteness}

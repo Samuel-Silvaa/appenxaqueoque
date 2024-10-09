@@ -9,6 +9,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from 'src/infra/auth/auth';
 import { AuthenticationActions } from 'src/infra/auth/auth.actions';
+import { useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',
@@ -38,6 +40,10 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   });
 
+  useEffect(() => {
+    SecureStore.deleteItemAsync('welcome');
+  }, []);
+
   const onSubmitHandler = (data: LoginSchema) => {
     dispatch(AuthenticationActions.REQUEST_LOGIN, data);
   };
@@ -59,6 +65,7 @@ const Login = () => {
         name='email'
         setValue={setValue}
         errors={errors}
+        placeholder='Digite seu e-mail'
       ></InputContainer>
 
       <InputContainer
@@ -68,17 +75,24 @@ const Login = () => {
         name='password'
         setValue={setValue}
         errors={errors}
+        placeholder='Digite sua senha'
       ></InputContainer>
 
       <View className={stylesheet.checkboxContainer}>
         <BouncyCheckbox
-          size={16}
+          iconImageStyle={{ tintColor: '#2E3E4B' }}
+          size={24}
           fillColor='#F1F1F1'
           unfillColor='#F7F7F7'
+          iconStyle={{ borderRadius: 8, marginRight: -5 }}
           text='Lembrar minha senha'
-          textStyle={{ textDecorationLine: 'none', fontSize: 14 }}
+          textStyle={{
+            textDecorationLine: 'none',
+            fontSize: 12,
+            color: '#2E3E4B',
+          }}
         />
-        <Text className='text-xs'>Esqueci minha senha</Text>
+        <Text className='text-xs text-black'>Esqueci minha senha</Text>
       </View>
     </AuthScaffold>
   );

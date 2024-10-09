@@ -81,19 +81,18 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAuthLoading(true);
     await promiseFromService
       .then((res) => {
+        setIsAuthLoading(false);
         successCallbackAction(res.data);
         if (showToast) handleToast('Tudo certo!', 'success');
       })
       .catch((err) => {
+        setIsAuthLoading(false);
         handleToast(
           err.response.data.message != 'Validation failed'
             ? err.response.data.message
             : 'Tivemos um problema. Tente novamente mais tarde!',
           'danger'
         );
-      })
-      .finally(() => {
-        setIsAuthLoading(false);
       });
   };
 

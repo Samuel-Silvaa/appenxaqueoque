@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useApp } from 'src/infra/app/app';
 import { Trigger as TriggerType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 
 interface TriggerSchema {
   foodImpair: string;
@@ -24,16 +24,35 @@ const data: {
   img?: ImageSourcePropType;
 }[] = [
   {
-    label: 'Alimentação',
-    value: TriggerType.FOOD,
-  },
-  {
-    label: 'Sono irregular',
+    label:
+      'Sono irregular - A criança dormiu pouco ou dormiu mais do que o habitual',
+    img: require('src/assets/duck.png'),
     value: TriggerType.JAGGEDSLEEP,
   },
   {
-    label: 'Fatores emocionais',
+    label: 'Fatores emocionais - Agitação, ansiedade, tristeza.',
+    img: require('src/assets/duck.png'),
     value: TriggerType.EMOTIONAL,
+  },
+  {
+    label: 'Esforço visual - Uso excessivo de tela.',
+    img: require('src/assets/duck.png'),
+    value: TriggerType.VISUALEFFORT,
+  },
+  {
+    label: 'Jejum prolongado - A criança ficou um longo período sem comer.',
+    img: require('src/assets/duck.png'),
+    value: TriggerType.FASTING,
+  },
+  {
+    label: 'Alimentação',
+    img: require('src/assets/duck.png'),
+    value: TriggerType.FOOD,
+  },
+  {
+    label: 'Outros',
+    img: require('src/assets/duck.png'),
+    value: TriggerType.ANOTHER,
   },
 ];
 
@@ -42,6 +61,7 @@ const Trigger = () => {
   const {
     control,
     formState: { errors },
+    setValue,
   } = useForm({ resolver: yupResolver(triggerSchema) });
 
   const handleSetTriggersValues = (value: string) => {
@@ -62,45 +82,75 @@ const Trigger = () => {
     <View className='h-full w-full'>
       <Wrapper title='Nos diga quais foram os gatilhos : '>
         {data.map((act, index) => (
-          <Card
-            key={index}
-            onPress={() => {
-              handleSetTriggersValues(act.value);
-            }}
-            children={
-              <View className='flex-row items-center'>
-                <BouncyCheckbox
-                  size={22}
-                  fillColor='#CEB0FA'
-                  unfillColor='#FFFFFF'
-                  textStyle={{ textDecorationLine: 'none' }}
-                  text={act.label}
-                  isChecked={episodeFormState.triggers?.includes(act.value)}
-                  onPress={(isChecked: boolean) => {
-                    handleSetTriggersValues(act.value);
-                  }}
-                />
-              </View>
-            }
-            image={act?.img}
-          />
+          <Fragment key={index}>
+            <Card
+              key={index}
+              onPress={() => {
+                handleSetTriggersValues(act.value);
+              }}
+              children={
+                <View className='flex-row items-center'>
+                  <BouncyCheckbox
+                    size={22}
+                    fillColor='#CEB0FA'
+                    unfillColor='#FFFFFF'
+                    textStyle={{ textDecorationLine: 'none' }}
+                    text={act.label}
+                    isChecked={episodeFormState.triggers?.includes(act.value)}
+                    onPress={(isChecked: boolean) => {
+                      handleSetTriggersValues(act.value);
+                    }}
+                  />
+                </View>
+              }
+              image={act?.img}
+            />
+            {act.value == TriggerType.FOOD && (
+              <InputContainer
+                label='Qual alimento?'
+                labelicon={require('src/assets/cupcake.png')}
+                name='foodImpair'
+                placeholder='Descreva brevemente'
+                setValue={setValue}
+                control={control}
+                errors={errors}
+                editable={episodeFormState.triggers?.includes(TriggerType.FOOD)}
+                className={`${
+                  episodeFormState.triggers?.includes(TriggerType.FOOD)
+                    ? ' opacity-100'
+                    : ' opacity-25'
+                } bg-white drop-shadow-sm`}
+                defaultValue={episodeFormState.foodImpair}
+                onChange={(e) =>
+                  handleFormChange({ foodImpair: e.target.value })
+                }
+              />
+            )}
+            {act.value == TriggerType.ANOTHER && (
+              <InputContainer
+                label='Qual outro fator desencadeou a dor?'
+                name='anotherTrigger'
+                setValue={setValue}
+                control={control}
+                errors={errors}
+                placeholder='Descreva brevemente'
+                editable={episodeFormState.triggers?.includes(
+                  TriggerType.ANOTHER
+                )}
+                className={`${
+                  episodeFormState.triggers?.includes(TriggerType.ANOTHER)
+                    ? ' opacity-100 '
+                    : ' opacity-25'
+                } bg-white drop-shadow-sm`}
+                defaultValue={episodeFormState.anotherTrigger}
+                onChange={(e) =>
+                  handleFormChange({ anotherTrigger: e.target.value })
+                }
+              />
+            )}
+          </Fragment>
         ))}
       </Wrapper>
-      <InputContainer
-        label='Qual alimento foi o gatilho?'
-        labelicon={require('src/assets/cupcake.png')}
-        name='foodImpair'
-        control={control}
-        errors={errors}
-        editable={episodeFormState.triggers?.includes(TriggerType.FOOD)}
-        className={`${
-          episodeFormState.triggers?.includes(TriggerType.FOOD)
-            ? 'opacity-100'
-            : ' opacity-25'
-        } bg-white drop-shadow-sm`}
-        defaultValue={episodeFormState.foodImpair}
-        onChange={(e) => handleFormChange({ foodImpair: e.target.value })}
-      ></InputContainer>
     </View>
   );
 };

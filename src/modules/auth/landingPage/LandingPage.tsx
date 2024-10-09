@@ -9,8 +9,8 @@ const LandingPage = ({ navigation }) => {
       justify='justify-center'
       hasArrowBack={false}
       ctaPrimary={() => navigation.navigate('login')}
-      ctaPrimaryText='Login'
-      ctaSecondary={() => navigation.navigate('tenant')}
+      ctaPrimaryText='Entrar'
+      ctaSecondary={() => navigation.navigate('welcome')}
       ctaSecondaryText='Cadastrar'
     >
       <Image
@@ -20,7 +20,7 @@ const LandingPage = ({ navigation }) => {
       />
       <Text className={sharedStyleSheet.title}>Bem vindo! </Text>
       <Text className={sharedStyleSheet.subtitle + ' text-center '}>
-        Faça seu login ou cadastre-se para iniciarmos seu acompanhamento médico.
+        Entre ou cadastre-se para registrar seus episódios de dor de cabeça.
       </Text>
     </AuthScaffold>
   );

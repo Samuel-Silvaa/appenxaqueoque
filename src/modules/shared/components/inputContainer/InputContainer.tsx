@@ -37,7 +37,7 @@ const InputContainer = ({
     <View className={stylesheet.view}>
       <View className='w-full flex-row justify-between items-end my-2'>
         {label && <Text className={stylesheet.label}>{label}</Text>}
-        {labelicon && (
+        {labelicon && rest.editable && (
           <Image
             source={labelicon}
             className='w-14 h-14'

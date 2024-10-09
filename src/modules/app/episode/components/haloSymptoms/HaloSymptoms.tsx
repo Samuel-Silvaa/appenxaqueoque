@@ -2,8 +2,8 @@ import { Appearance, ImageSourcePropType, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
 import Card from '../form/card/Card';
 import { useApp } from 'src/infra/app/app';
-import { Symptom as SymptomType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { HaloSymptom } from 'src/infra/@types/app.types';
 
 const data: {
   label: string;
@@ -11,56 +11,43 @@ const data: {
   img?: ImageSourcePropType;
 }[] = [
   {
-    label: 'Sensibilidade à luz - A criança busca um lugar escuro.',
-    img: require('src/assets/photo.png'),
-    value: SymptomType.PHOTOSENSIBILITY,
+    label:
+      'Alterações visuais - A criança enxerga linhas ou manchas brilhantes antes ou durante os episódios de dor.',
+    img: require('src/assets/halo.png'),
+    value: HaloSymptom.VISUAL_DISTORTIONS,
   },
   {
-    label: 'Náusea - A criança deixa de comer.',
-    img: require('src/assets/nausea.png'),
-    value: SymptomType.NAUSEA,
+    label: 'Formigamento',
+    img: require('src/assets/halo.png'),
+    value: HaloSymptom.TINGLING,
   },
   {
-    label: 'Vômito.',
-    img: require('src/assets/vomit.png'),
-    value: SymptomType.VOMIT,
-  },
-  {
-    label: 'Sensibilidade ao barulho - A criança busca um lugar silencioso.',
-    img: require('src/assets/hiperacusis.png'),
-    value: SymptomType.HYPERACUSIS,
-  },
-  {
-    label: 'Dor de barriga.',
-    img: require('src/assets/sickness.png'),
-
-    value: SymptomType.SICKNESS,
-  },
-  {
-    label: 'Tontura.',
-    img: require('src/assets/vomit.png'),
-    value: SymptomType.DIZZINESS,
+    label: 'Alterações na fala',
+    img: require('src/assets/halo.png'),
+    value: HaloSymptom.SPEECH_DISTORTIONS,
   },
 ];
 
-const Symptoms = () => {
+const HaloSymptoms = () => {
   const { episodeFormState, handleFormChange } = useApp();
 
   const handleSetSymptomsValues = (value: string) => {
     if (episodeFormState.symptoms?.includes(value)) {
       handleFormChange({
-        symptoms: Array.from(episodeFormState.symptoms).filter(
+        haloSymptoms: Array.from(episodeFormState.haloSymptoms).filter(
           (tr) => tr !== value
         ),
       });
     } else {
-      handleFormChange({ symptoms: [...episodeFormState.symptoms, value] });
+      handleFormChange({
+        haloSymptoms: [...episodeFormState.haloSymptoms, value],
+      });
     }
   };
 
   return (
     <View className='h-full w-full'>
-      <Wrapper title='Quais foram os sintomas associados ? '>
+      <Wrapper title='Quais foram os sintomas da aura? '>
         {data.map((act, index) => (
           <Card
             key={index}
@@ -96,4 +83,4 @@ const Symptoms = () => {
   );
 };
 
-export default Symptoms;
+export default HaloSymptoms;

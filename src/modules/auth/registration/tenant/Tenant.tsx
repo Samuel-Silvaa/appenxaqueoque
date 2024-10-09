@@ -20,7 +20,7 @@ const tenantSchema = yup.object<TenantSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('mari41@gmail.com'),
+    .default('mari465@gmail.com'),
   password: yup.string().required('Preencha sua senha').default('123123'),
   confirmPassword: yup
     .string()
@@ -61,6 +61,7 @@ const Tenant = () => {
         name='email'
         setValue={setValue}
         errors={errors}
+        placeholder='Digite seu e-mail'
       ></InputContainer>
       <InputContainer
         keyboardType='email-address'
@@ -68,6 +69,7 @@ const Tenant = () => {
         setValue={setValue}
         name='password'
         errors={errors}
+        placeholder='Digite sua senha'
       ></InputContainer>
       <InputContainer
         keyboardType='email-address'
@@ -75,6 +77,7 @@ const Tenant = () => {
         setValue={setValue}
         name='confirmPassword'
         errors={errors}
+        placeholder='Repita sua senha'
       ></InputContainer>
     </AuthScaffold>
   );

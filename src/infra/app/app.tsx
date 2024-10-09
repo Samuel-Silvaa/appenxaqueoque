@@ -1,6 +1,11 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { AppContextDefaultValues, Episode, Patient } from '../@types/app.types';
+import {
+  AppContextDefaultValues,
+  Episode,
+  HaloSymptom,
+  Patient,
+} from '../@types/app.types';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
 import {
   requestCreateEpisode,
@@ -17,11 +22,17 @@ import * as SecureStore from 'expo-secure-store';
 import { addHours } from 'date-fns';
 
 const episodeInitialForm = {
-  id: '',
   acuteness: '',
+  anotherImpairFactor: '',
+  anotherImprovementFactor: '',
+  anotherPainType: '',
+  anotherTrigger: '',
   dates: {},
   foodImpair: '',
   foodImprovement: '',
+  haloSymptoms: [],
+  id: '',
+  impairFactor: [],
   improvementFactor: [],
   isEdition: false,
   location: [],
@@ -39,7 +50,7 @@ const episodeInitialForm = {
 
 const AppContext = createContext<AppContextDefaultValues>({
   isLoading: false,
-  steps: 9,
+  steps: 11,
   currentStep: 0,
   validateStepForward: () => false,
   handleFormChange: () => null,
@@ -55,7 +66,7 @@ const AppContext = createContext<AppContextDefaultValues>({
 });
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [steps, _] = useState(9);
+  const [steps, _] = useState(12);
   const [currentStep, setCurrentStep] = useState(0);
   const [episodeFormState, setEpisodeFormState] = useState(episodeInitialForm);
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -85,7 +96,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const submitEpisode = (): Promise<Episode> | boolean => {
-    if (!episodeFormState.dates) {
+    if (!Object.keys(episodeFormState.dates).length) {
       handleToast(
         'Preencha ao menos a data do episódio para continuar!',
         'danger'
@@ -100,12 +111,18 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         triggers: Array.isArray(episodeFormState.triggers)
           ? episodeFormState.triggers.join(',')
           : episodeFormState.triggers,
+        haloSymptoms: Array.isArray(episodeFormState.haloSymptoms)
+          ? episodeFormState.haloSymptoms.join(',')
+          : episodeFormState.haloSymptoms,
         improvementFactor: Array.isArray(episodeFormState.improvementFactor)
           ? episodeFormState.improvementFactor.join(',')
           : episodeFormState.improvementFactor,
         symptoms: Array.isArray(episodeFormState.symptoms)
           ? episodeFormState.symptoms.join(',')
           : episodeFormState.symptoms,
+        impairFactor: Array.isArray(episodeFormState.impairFactor)
+          ? episodeFormState.impairFactor.join(',')
+          : episodeFormState.impairFactor,
       });
 
       Object.keys(parsedObject).map((key) => {
@@ -152,19 +169,18 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     return promiseFromService
       .then((res) => {
+        setIsLoading(false);
         successCallbackAction(res);
         if (isShowingToast) handleToast('Tudo certo!', 'success');
       })
       .catch((err) => {
+        setIsLoading(false);
         handleToast(
           err.response.data.message != 'Validation failed'
             ? err.response.data.message
             : 'Tivemos um problema. Tente novamente mais tarde!',
           'danger'
         );
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   };
 
@@ -173,6 +189,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       ...ep,
       period: Number(ep.period) == 1 ? true : false,
       triggers: String(ep.triggers).split(','),
+      haloSymptoms: String(ep.haloSymptoms),
       improvementFactor: String(ep.improvementFactor).split(','),
       symptoms: String(ep.symptoms).split(','),
     };

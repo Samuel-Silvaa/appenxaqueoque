@@ -1,5 +1,8 @@
 import Acuteness from './acuteness/Acuteness';
 import Datetime from './datetime/Datetime';
+import EpisodeDuration from './episodeDuration/EpisodeDuration';
+import HaloSymptoms from './haloSymptoms/HaloSymptoms';
+import ImpairFactor from './impairFactor/ImpairFactor';
 import ImprovementFactor from './improvementFactor/ImprovementFactor';
 import Location from './location/Location';
 import Notes from './notes/Notes';
@@ -10,6 +13,7 @@ import Trigger from './trigger/Trigger';
 
 const FormSteps = {
   Datetime: Datetime,
+  EpisodeDuration: EpisodeDuration,
   Location: Location,
   Acuteness: Acuteness,
   Notes: Notes,
@@ -18,6 +22,8 @@ const FormSteps = {
   PainType: PainType,
   Trigger: Trigger,
   Symptoms: Symptoms,
+  ImpairFactor: ImpairFactor,
+  HaloSymptom: HaloSymptoms,
 };
 
 export default FormSteps;

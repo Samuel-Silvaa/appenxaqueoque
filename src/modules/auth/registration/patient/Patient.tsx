@@ -55,7 +55,7 @@ const Patient = () => {
   return (
     <AuthScaffold
       alignment='start'
-      ctaPrimaryText='Continuar'
+      ctaPrimaryText='Cadastrar'
       ctaPrimary={handleSubmit(onSubmitHandler)}
     >
       <Text className={sharedStyleSheet.title}>Informações da conta</Text>
@@ -93,6 +93,7 @@ const Patient = () => {
         ></InputContainer>
         <SelectContainer
           label='Gênero'
+          placeholder='Selecione o sexo'
           name='gender'
           options={[
             { title: 'Masculino', value: 'male' },
@@ -103,6 +104,7 @@ const Patient = () => {
         ></SelectContainer>
         <SelectContainer
           label='Parentesco'
+          placeholder='Escolha o parentesco do responsável'
           setValue={setValue}
           options={[
             { title: 'Pai', value: 'father' },

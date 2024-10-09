@@ -62,7 +62,6 @@ const categories: Array<HomeCategory> = [
 
 const CountingDaysTitle = () => {
   const { episodes } = useApp();
-
   return (
     <View className={stylesheet.countingDays.card}>
       {episodes && (
@@ -70,14 +69,14 @@ const CountingDaysTitle = () => {
           Você está a{' '}
           {episodes?.length > 0
             ? differenceInDays(
+                format(new Date(), 'yyyy-MM-dd', {
+                  locale: ptBR,
+                }),
                 new Date(
                   format(episodes[0].dateTime, 'yyyy-MM-dd', {
                     locale: ptBR,
                   })
-                ),
-                format(new Date(), 'yyyy-MM-dd', {
-                  locale: ptBR,
-                })
+                )
               )
             : 0}{' '}
           dias sem crises!

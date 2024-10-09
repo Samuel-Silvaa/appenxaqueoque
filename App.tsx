@@ -43,7 +43,7 @@ const App = () => {
         <AuthProvider>
           <AppProvider>
             <ActiveRoutes />
-            <Loader></Loader>
+            {/* <Loader></Loader> */}
           </AppProvider>
         </AuthProvider>
       </ToastProvider>

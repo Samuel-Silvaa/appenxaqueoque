@@ -12,8 +12,8 @@ api.interceptors.request.use(
     return config;
   },
   (error: AxiosError) => {
-    console.log(error);
-    Promise.reject(error);
+    debugger;
+    Promise.reject(error).then(alert);
   }
 );
 

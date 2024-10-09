@@ -26,7 +26,7 @@ const Success = ({ navigation }) => {
         </View>
         <Image source={require('src/assets/success.png')}></Image>
         <ExPressable
-          title='Ver episódio'
+          title='Ver resumo do episódio'
           colorScheme='light'
           onPress={() => {
             setIsModalOpen(true);
