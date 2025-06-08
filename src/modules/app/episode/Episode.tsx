@@ -93,6 +93,7 @@ const Topic = ({
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }: HeadListProps) => (
           <TouchableOpacity
+          key={`t-${index}`}
             onPress={() => {
               if (validateStepForward(index))
                 if (episodePagesFlatListRef?.current) {
@@ -118,6 +119,7 @@ const Topic = ({
             }
           >
             <Text
+              key={index}
               className={`${
                 currentStep == index ? 'text-[#fff]' : 'text-black '
               }`}
@@ -165,6 +167,7 @@ const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
       showsHorizontalScrollIndicator={false}
       renderItem={({ item }) => (
         <View
+        key={`list-view-${item.index}`}
           style={{
             width: Dimensions.get('screen').width - 32,
             paddingTop: 20,

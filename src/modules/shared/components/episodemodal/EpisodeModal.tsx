@@ -16,7 +16,7 @@ import { pinColor } from 'src/infra/utils/appUtils';
 import { Episode } from 'src/infra/@types/app.types';
 
 const stylesheet = {
-  wrapper: 'w-full',
+  wrapper: 'w-full pt-4',
   header: 'w-full flex-row items-center justify-between mb-4',
   arrowdown: 'flex items-center justify-center p-2',
   edition:

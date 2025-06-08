@@ -36,7 +36,7 @@ const App = () => {
         animationDuration={400}
         animationType='slide-in'
         placement='top'
-        offsetTop={20}
+        offsetTop={40}
         duration={2000}
         renderToast={(toastOptions) => <Toast toastOptions={toastOptions} />}
       >

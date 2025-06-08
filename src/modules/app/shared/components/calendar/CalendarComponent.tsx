@@ -30,9 +30,9 @@ const CalendarComponent = ({
 
           <View className={sharedEpisodeStyleSheet.timepicker.divider}></View>
 
-          <View className='rounded-full w-full h-[50px] bg-beige-primary/50 flex-row justify-center items-center p-2 m-auto mb-4'>
+          <View className='rounded-full w-full bg-beige-primary/50 flex-row justify-center items-center p-2 m-auto mb-4'>
             <Image source={require('src/assets/arrowup.png')}></Image>
-            <Text className='font-xs'>
+            <Text className='font-xs p-2'>
               Escolha a data do episódio que deseja vizualizar ou editar
             </Text>
           </View>

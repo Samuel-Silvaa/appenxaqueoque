@@ -20,7 +20,7 @@ import { AppActions } from 'src/infra/app/actions';
 
 const stylesheet = {
   wrapper: 'w-full',
-  header: 'w-full flex-row items-center justify-between mb-4',
+  header: 'w-full flex-row items-center justify-between mb-4 pt-4',
   arrowdown: 'flex items-center justify-center p-2',
   edition:
     'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 ',
@@ -224,6 +224,7 @@ const ReportDateRangeModal = ({
           <TouchableOpacity onPress={() => onClose()}>
             <Image
               className={stylesheet.arrowdown}
+              
               source={require('src/assets/arrowdown.png')}
             ></Image>
           </TouchableOpacity>

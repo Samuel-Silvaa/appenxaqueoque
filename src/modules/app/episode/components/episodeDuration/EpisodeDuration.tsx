@@ -24,7 +24,7 @@ const EpisodeDuration = () => {
       <Wrapper title='Quanto tempo durou a dor ?'>
         <Card
           children={
-            <>
+            <View className="w-full">
               <InputContainer
                 keyboardType='numeric'
                 label='Início da dor:'
@@ -42,7 +42,7 @@ const EpisodeDuration = () => {
                 errors={errors}
                 placeholder='16:00'
               ></InputContainer>
-            </>
+            </View>
           }
         ></Card>
       </Wrapper>

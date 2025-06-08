@@ -59,8 +59,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+
+
   const handleToast = (message: string, type: string) => {
-    toast.hideAll();
     const toastOptions: ToastOptions = {
       type: type,
     };
@@ -103,6 +104,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
           promiseFromService: requestHandleLogIn(payload),
           payload,
           successCallbackAction: (res) => reducer(action, payload, res),
+          showToast: true
         });
         break;
       case AuthenticationActions.REQUEST_SIGNUP:
