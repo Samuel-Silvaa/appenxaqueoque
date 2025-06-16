@@ -99,14 +99,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const dispatch = async (action: string, payload: any): Promise<void> => {
     switch (action) {
-      case AuthenticationActions.REQUEST_LOGIN:
-        handlePromise({
-          promiseFromService: requestHandleLogIn(payload),
-          payload,
-          successCallbackAction: (res) => reducer(action, payload, res),
-          showToast: true
-        });
-        break;
+
       case AuthenticationActions.REQUEST_SIGNUP:
         handlePromise({
           promiseFromService: requestHandleSingUp({
@@ -116,29 +109,29 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
           }),
           payload,
           successCallbackAction: (res) => {
-            dispatch(AuthenticationActions.REQUEST_LOGIN, {
-              email: payload.email,
-              password: payload.password,
-            });
+            // dispatch(AuthenticationActions.REQUEST_LOGIN, {
+            //   email: payload.email,
+            //   password: payload.password,
+            // });
           },
           showToast: true,
         });
         break;
-      case AuthenticationActions.REQUEST_CREATE_PATIENT:
-        handlePromise({
-          promiseFromService: requestHandleCreatePatient(payload),
-          payload,
-          successCallbackAction: (res) => {
-            if (formState.user)
-              dispatch(AuthenticationActions.REQUEST_LOGIN, {
-                email: payload.email,
-                password: formState?.user.password,
-              });
-            return reducer(action, payload, res);
-          },
-          showToast: true,
-        });
-        break;
+      // case AuthenticationActions.REQUEST_CREATE_PATIENT:
+      //   handlePromise({
+      //     promiseFromService: requestHandleCreatePatient(payload),
+      //     payload,
+      //     successCallbackAction: (res) => {
+      //       if (formState.user)
+      //         dispatch(AuthenticationActions.REQUEST_LOGIN, {
+      //           email: payload.email,
+      //           password: formState?.user.password,
+      //         });
+      //       return reducer(action, payload, res);
+      //     },
+      //     showToast: true,
+      //   });
+      //   break;
       case AuthenticationActions.REQUEST_CREATE_PHYSICIAN:
         handlePromise({
           promiseFromService: requestHandleCreatePhysician(payload),
@@ -177,28 +170,28 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     switch (type) {
-      case AuthenticationActions.REQUEST_LOGIN:
-        if (user) {
-          setSession(response);
-          handleFormChange({ id: user.id, session: response });
+      // case AuthenticationActions.REQUEST_LOGIN:
+      //   if (user) {
+      //     setSession(response);
+      //     handleFormChange({ id: user.id, session: response });
 
-          const isWelcome = await SecureStore.getItemAsync('welcome');
-          if (isWelcome) {
-            navigation.navigate('welcome' as any as never);
-            delete payload.password;
-          } else {
-            setIsLogged(true);
-            delete payload.password;
-          }
-        } else {
-          handleFormChange({
-            user: { email: payload.email, password: payload.password },
-            session: response,
-          });
+      //     const isWelcome = await SecureStore.getItemAsync('welcome');
+      //     if (isWelcome) {
+      //       navigation.navigate('welcome' as any as never);
+      //       delete payload.password;
+      //     } else {
+      //       setIsLogged(true);
+      //       delete payload.password;
+      //     }
+      //   } else {
+      //     handleFormChange({
+      //       user: { email: payload.email, password: payload.password },
+      //       session: response,
+      //     });
 
-          navigation.navigate('patient' as any as never);
-        }
-        break;
+      //     navigation.navigate('patient' as any as never);
+      //   }
+      //   break;
       case AuthenticationActions.REQUEST_SIGNUP:
         delete payload.password;
         handleFormChange({ ...payload });

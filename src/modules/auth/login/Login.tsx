@@ -7,10 +7,10 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuth } from 'src/infra/auth/auth';
-import { AuthenticationActions } from 'src/infra/auth/auth.actions';
 import { useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import { requestLogin } from "src/infra/app/reducers/auth.reducer";
+import { useAsyncAppDispatch } from "src/infra/app/store";
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',
@@ -26,12 +26,13 @@ const loginSchema = yup.object<LoginSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('bruna@gmail.com'),
+    .default('sam62266@gmail.com'),
   password: yup.string().required('Preencha sua senha').default('123123'),
 });
 
 const Login = () => {
-  const { dispatch } = useAuth();
+  const dispatch = useAsyncAppDispatch();
+
   const {
     handleSubmit,
     formState: { errors },
@@ -44,8 +45,8 @@ const Login = () => {
     SecureStore.deleteItemAsync('welcome');
   }, []);
 
-  const onSubmitHandler = (data: LoginSchema) => {
-    dispatch(AuthenticationActions.REQUEST_LOGIN, data);
+  const onSubmitHandler = async (data: LoginSchema) => {
+     await dispatch(requestLogin(data));
   };
 
   return (

@@ -8,8 +8,10 @@ import {
   SignUpResponse,
 } from '../@types/auth.types';
 
-const requestHandleLogIn = async (payload: LogInDTO): Promise<LogInResponse> =>
-  post('session/log-in', payload);
+const requestHandleLogIn = async (payload: LogInDTO): Promise<LogInResponse> => {
+   const res= await post('session/log-in', payload);
+   return {...res, email: payload.email}
+}
 
 const requestHandleSingUp = async (
   payload: SignUpDTO

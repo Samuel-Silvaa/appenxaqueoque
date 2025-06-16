@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Text } from 'react-native';
+import {  Text } from 'react-native';
 import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
@@ -6,8 +6,11 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuth } from 'src/infra/auth/auth';
-import { AuthenticationActions } from 'src/infra/auth/auth.actions';
+import { useAsyncAppDispatch } from "src/infra/app/store";
+import {  requestLogin, requestSignup } from "src/infra/app/reducers/auth.reducer";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { authSelector } from "src/infra/app/selectors";
 
 interface TenantSchema {
   email: string;
@@ -20,7 +23,7 @@ const tenantSchema = yup.object<TenantSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('mari465@gmail.com'),
+    .default('samuelsilva666@gmail.com'),
   password: yup.string().required('Preencha sua senha').default('123123'),
   confirmPassword: yup
     .string()
@@ -30,8 +33,9 @@ const tenantSchema = yup.object<TenantSchema>().shape({
 });
 
 const Tenant = () => {
-  const { dispatch } = useAuth();
-
+  const dispatch = useAsyncAppDispatch();
+  const auth = useSelector(authSelector);
+  const navigation = useNavigation();
   const {
     handleSubmit,
     formState: { errors },
@@ -40,8 +44,17 @@ const Tenant = () => {
     resolver: yupResolver(tenantSchema),
   });
 
-  const onSubmitHandler = (data: TenantSchema) => {
-    dispatch(AuthenticationActions.REQUEST_SIGNUP, data);
+  const onSubmitHandler = async (data: TenantSchema) => {
+
+    const res = await dispatch(requestSignup({email: data.email, password: data.password, userType: 'PATIENT'}));
+
+      if(res.meta.requestStatus == 'fulfilled') {
+            dispatch(requestLogin({
+            email: res.meta.arg.email,
+            password: res.meta.arg.password,
+          }))
+        navigation.navigate('patient' as never);
+      }
   };
 
   return (
