@@ -1,7 +1,8 @@
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
-import { sharedEpisodeStyleSheet } from '../episode/shared/SharedEpisodeStyleSheet';
-import { useAuth } from 'src/infra/auth/auth';
+import { useDispatch, useSelector } from "react-redux";
+import { authSelector } from "src/infra/app/selectors";
+import { signOut } from "src/infra/app/reducers/auth.reducer";
 
 const stylesheet = {
   profile: {
@@ -31,10 +32,11 @@ const CustomActionButton = ({
 };
 
 const ProfilePage = () => {
-  const { session, signOut } = useAuth();
+  const auth = useSelector(authSelector);
+  const dispatch = useDispatch();
 
   return (
-    <AppPageScaffold displayBg={session?.userType == 'PATIENT'}>
+    <AppPageScaffold displayBg={auth.userType == 'PATIENT'}>
       <View className={stylesheet.profile.wrapper}>
         <Image source={require('src/assets/pietra.png')}></Image>
         <Text className='my-1'>Pietra Menezes</Text>
@@ -53,7 +55,9 @@ const ProfilePage = () => {
           <CustomActionButton title='Meus relatórios' />
           <CustomActionButton title='Contas vinculadas' />
           <CustomActionButton title='Ajuda' />
-          <CustomActionButton title='Sair' onPress={signOut} />
+          <CustomActionButton title='Sair' onPress={() => {
+            dispatch(signOut())
+          }} />
         </View>
       </View>
     </AppPageScaffold>

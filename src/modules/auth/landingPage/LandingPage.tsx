@@ -10,7 +10,7 @@ const LandingPage = ({ navigation }) => {
       hasArrowBack={false}
       ctaPrimary={() => navigation.navigate('login')}
       ctaPrimaryText='Entrar'
-      ctaSecondary={() => navigation.navigate('welcome')}
+      ctaSecondary={() => navigation.navigate('tenant')}
       ctaSecondaryText='Cadastrar'
     >
       <Image

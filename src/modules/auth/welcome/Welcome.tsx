@@ -4,6 +4,8 @@ import { sharedStyleSheet } from '../shared/style/stylesheet';
 import { useCallback, useState } from 'react';
 import { useAuth } from 'src/infra/auth/auth';
 import * as SecureStore from 'expo-secure-store';
+import { setWelcomeJourneyDone } from "src/infra/app/reducers/auth.reducer";
+import { useDispatch } from "react-redux";
 
 const stylesheet = {
   subtitle: ' w-3/4 text-center text-center text-lg mt-4 ',
@@ -39,14 +41,14 @@ const data: {
 ];
 
 const Welcome = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [welcomeIndex, setWelcomeIndex] = useState(0);
-  const { setIsLoggedTrue } = useAuth();
 
   const handleCtaButton = async () => {
     if (welcomeIndex < data.length - 1) {
       setWelcomeIndex((prevState) => prevState + 1);
     } else {
-      setIsLoggedTrue();
+      dispatch(setWelcomeJourneyDone());
     }
   };
 

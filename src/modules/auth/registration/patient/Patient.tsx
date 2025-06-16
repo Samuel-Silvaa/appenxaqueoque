@@ -10,6 +10,11 @@ import { useAuth } from 'src/infra/auth/auth';
 import { AuthenticationActions } from 'src/infra/auth/auth.actions';
 import SelectContainer from 'src/modules/shared/components/selectContainer/SelectContainer';
 import { useEffect } from 'react';
+import { useSelector } from "react-redux";
+import { authSelector } from "src/infra/app/selectors";
+import { useAsyncAppDispatch } from "src/infra/app/store";
+import { requestCreatePatient } from "src/infra/app/reducers/auth.reducer";
+import { useNavigation } from "@react-navigation/native";
 
 interface PatientSchemaProps {
   name: string;
@@ -22,7 +27,7 @@ interface PatientSchemaProps {
 }
 
 const patientSchema = yup.object<PatientSchemaProps>().shape({
-  name: yup.string().required('Preencha seu nome').default('Mariana'),
+  name: yup.string().required('Preencha seu nome').default('Samuel'),
   email: yup.string().email().required('Preencha seu email'),
   birthDate: yup
     .string()
@@ -35,7 +40,9 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
 });
 
 const Patient = () => {
-  const { dispatch, form } = useAuth();
+  const dispatch   = useAsyncAppDispatch();
+  const auth = useSelector(authSelector);
+  const navigation = useNavigation();
   const {
     handleSubmit,
     formState: { errors },
@@ -45,11 +52,16 @@ const Patient = () => {
   });
 
   useEffect(() => {
-    if (form.user) setValue('email', form.user.email);
-  });
+    if (auth.sessionEmail) setValue('email', auth.sessionEmail);
+  }, [auth.sessionEmail]);
 
-  const onSubmitHandler = (data: PatientSchemaProps) => {
-    dispatch(AuthenticationActions.REQUEST_CREATE_PATIENT, data);
+  const onSubmitHandler =  async (data: PatientSchemaProps) => {
+    const res = await dispatch(requestCreatePatient(data));
+
+    if(res.meta.requestStatus == 'fulfilled') {
+      navigation.navigate('welcome' as any as never);
+    } 
+
   };
 
   return (
@@ -71,7 +83,7 @@ const Patient = () => {
           className='opacity-45 bg-white drop-shadow-sm'
           keyboardType='email-address'
           label='E-mail'
-          defaultValue={(form as { user: any; session: object }).user.email}
+          defaultValue={auth?.sessionEmail ?? ''}
           name='email'
           editable={false}
           setValue={setValue}

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse, AxiosResponseHeaders } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 const api = axios.create({
@@ -43,8 +43,16 @@ const get = async <T>(
   }
 };
 
-const post = async <T>(url: string, payload: object): Promise<T> => {
-  return await api.post(url, payload);
+const post = async (url: string, payload: object): Promise<any> => {
+ 
+    try {
+    const { data } =  await api.post(url, payload);
+    return data;
+  } catch (error) {
+    const err = error as AxiosError;
+
+    throw err.response?.data ;
+  }
 };
 
 const put = async <T>(url: string, payload: object): Promise<T> => {

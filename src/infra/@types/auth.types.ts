@@ -21,6 +21,7 @@ export interface LogInDTO {
 }
 
 export interface LogInResponse {
+  email: string;
   token: string;
   userType: string;
   user: PatientDTO | PhysicianDTO;
@@ -35,6 +36,7 @@ export interface SignUpDTO {
 export interface SignUpResponse {
   email: string;
   userType: string;
+  password: string ;
 }
 
 export interface PatientDTO {

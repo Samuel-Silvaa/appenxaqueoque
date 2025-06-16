@@ -10,6 +10,7 @@ import Patient from './registration/patient/Patient';
 const Stack = createNativeStackNavigator();
 
 const AuthRoutes = () => {
+
   return (
     <Stack.Navigator
       screenOptions={{
