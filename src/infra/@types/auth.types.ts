@@ -1,18 +1,12 @@
-import { AuthenticationActions } from '../auth/auth.actions';
 
 export interface AuthContextDefaultValues {
-  isAuthLoading: boolean;
-  dispatch: (action: AuthenticationActions, payload: any) => void;
   form: {
     token?: string;
     refreshToken?: string;
     user?: { email: string; password: string; userType?: string };
   };
   handleFormChange: (payload: any) => void;
-  isLogged: boolean;
-  signOut: () => void;
   session: LogInResponse | undefined;
-  setIsLoggedTrue: () => void;
 }
 
 export interface LogInDTO {

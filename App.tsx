@@ -7,7 +7,6 @@ import { ToastProvider, useToast } from 'react-native-toast-notifications';
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast';
 import { AppProvider } from 'src/infra/app/app';
 import store from 'src/infra/app/store';
-import { AuthProvider } from 'src/infra/auth/auth';
 import TabsRoutes from 'src/modules/app';
 import AuthRoutes from 'src/modules/auth';
 import { authSelector } from 'src/infra/app/selectors';
@@ -44,7 +43,7 @@ const ActiveRoutes = () => {
 
   return (
     <Fragment>
-      {auth.loading ?? <Loader></Loader>}
+      <Loader></Loader>
       {auth.token && auth.user && !auth.isFirstAccess ? <TabsRoutes /> : <AuthRoutes />}
     </Fragment>
   );
@@ -73,11 +72,9 @@ const App = () => {
           duration={2000}
           renderToast={(toastOptions) => <Toast toastOptions={toastOptions} />}
         >
-          <AuthProvider>
             <AppProvider>
               <ActiveRoutes />
             </AppProvider>
-          </AuthProvider>
         </ToastProvider>
       </NavigationContainer>
     </Provider>

@@ -14,7 +14,6 @@ import {
 } from 'src/infra/services/authService';
 import * as SecureStore from 'expo-secure-store';
 
-
 // Define initial state type
 export interface AuthReducer {
   token: string | null;
@@ -24,7 +23,7 @@ export interface AuthReducer {
   loading: boolean;
   error: string | null;
   isFirstAccess: boolean;
-  userType: string | null
+  userType: string | null;
 }
 
 const initialState: AuthReducer = {
@@ -35,7 +34,7 @@ const initialState: AuthReducer = {
   loading: false,
   error: null,
   isFirstAccess: false,
-  userType : null
+  userType: null,
 };
 
 // Create slice
@@ -50,10 +49,10 @@ const authSlice = createSlice({
       state.error = null;
     },
     clearErrorMessage: (state) => {
-      return state = { ...state, error: null };
+      return (state = { ...state, error: null });
     },
     setWelcomeJourneyDone: (state) => {
-      return state = {...state, isFirstAccess: false};
+      return (state = { ...state, isFirstAccess: false });
     },
   },
   extraReducers: (builder) => {
@@ -65,6 +64,8 @@ const authSlice = createSlice({
       requestLogin.fulfilled,
       (state, action: PayloadAction<LogInResponse>) => {
         SecureStore.setItem('token', action.payload.token);
+        if (action.payload.user)
+          SecureStore.setItemAsync('userId', action.payload.user.id!);
 
         return (state = {
           ...state,
@@ -113,7 +114,12 @@ const authSlice = createSlice({
       requestCreatePatient.fulfilled,
       (state, action: PayloadAction<PatientDTO>) => {
         try {
-          return (state = { ...state, user: action.payload, loading: false, isFirstAccess: true});
+          return (state = {
+            ...state,
+            user: action.payload,
+            loading: false,
+            isFirstAccess: true,
+          });
         } catch (err) {
           console.log(err);
           return (state = { ...state, error: 'Erro inesperado!' });
@@ -133,7 +139,6 @@ const authSlice = createSlice({
 export const requestLogin = createAsyncThunk(
   'auth/requestLogin',
   async (payload: LogInDTO) => await requestHandleLogIn(payload)
-  
 );
 export const requestSignup = createAsyncThunk(
   'auth/requestSignup',
@@ -150,5 +155,6 @@ export const requestCreatePatient = createAsyncThunk(
 );
 
 // Export actions and reducer
-export const { signOut, clearErrorMessage, setWelcomeJourneyDone } = authSlice.actions;
+export const { signOut, clearErrorMessage, setWelcomeJourneyDone } =
+  authSlice.actions;
 export default authSlice.reducer;
