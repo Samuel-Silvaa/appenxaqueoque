@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { Animated, Image } from 'react-native';
 import { Modal, Text, View } from 'react-native';
+import { useSelector } from "react-redux";
 import { useApp } from 'src/infra/app/app';
-import { useAuth } from 'src/infra/auth/auth';
+import { authSelector } from "src/infra/app/selectors";
 
 export const Loader = () => {
   const { isLoading } = useApp();
-  const { isAuthLoading } = useAuth();
+  const auth = useSelector(authSelector);
   const state = {
     animatedValue: new Animated.Value(0),
   };
@@ -16,7 +17,7 @@ export const Loader = () => {
     return () => {
       state.animatedValue.stopAnimation();
     };
-  }, [isLoading, isAuthLoading]);
+  }, [isLoading, auth.loading]);
 
   const startAnimation = () => {
     Animated.sequence([
@@ -50,7 +51,7 @@ export const Loader = () => {
       transparent={true}
       animationType='slide'
       statusBarTranslucent={true}
-      visible={isLoading || isAuthLoading}
+      visible={isLoading || auth.loading}
       onRequestClose={() => {
         console.log('close modal');
       }}

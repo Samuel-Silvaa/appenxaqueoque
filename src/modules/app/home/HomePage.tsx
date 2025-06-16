@@ -7,11 +7,12 @@ import {
 } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
-import { useAuth } from 'src/infra/auth/auth';
 import { useNavigation } from '@react-navigation/native';
 import { useApp } from 'src/infra/app/app';
 import { differenceInDays, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useSelector } from "react-redux";
+import { authSelector } from "src/infra/app/selectors";
 
 const stylesheet = {
   userName: 'text-2xl font-bold px-4 pb-4 dark:text-d-blue-title',
@@ -135,11 +136,10 @@ const InnerHomeContainer = () => {
 };
 
 const HomePage = () => {
-  const { session } = useAuth();
-
+  const auth = useSelector(authSelector);
   return (
     <AppPageScaffold>
-      <Text className={stylesheet.userName}>Olá, {session?.user.name}...</Text>
+      <Text className={stylesheet.userName}>Olá, {auth!.user!.name}...</Text>
       <CountingDaysTitle />
       <InnerHomeContainer />
     </AppPageScaffold>
