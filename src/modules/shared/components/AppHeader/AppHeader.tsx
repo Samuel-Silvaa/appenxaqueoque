@@ -2,8 +2,9 @@ import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { TouchableOpacity } from 'react-native';
 import { Image, Text, View } from 'react-native';
-import { useApp } from 'src/infra/app/app';
 import { Appearance } from 'react-native';
+import { useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
 
 const stylesheet = {
   header: 'w-full p-4 pt-8 flex flex-row grow-0 justify-between items-center',
@@ -13,7 +14,7 @@ const AppHeader = ({
   navigation,
   route,
 }: BottomTabHeaderProps | NativeStackHeaderProps | any) => {
-  const { pageTitle } = useApp();
+  const appState = useSelector(appStateSelector);
 
   const toggleColorScheme = () => {
     if (Appearance.getColorScheme() == 'light') {
@@ -42,7 +43,7 @@ const AppHeader = ({
       ) : (
         <Image></Image>
       )}
-      {pageTitle && (
+      {appState.pageTitle && (
         <Text
           className={`text-2xl ${
             Appearance.getColorScheme() == 'light'
@@ -50,7 +51,7 @@ const AppHeader = ({
               : 'text-d-blue-title'
           } font-extrabold ml-8`}
         >
-          {pageTitle}
+          {appState.pageTitle}
         </Text>
       )}
       <TouchableOpacity

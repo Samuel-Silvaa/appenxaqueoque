@@ -12,30 +12,30 @@ export interface Patient {
 }
 
 export interface Episode {
-  acuteness: string;
-  anotherImpairFactor: string;
-  anotherImprovementFactor: string;
-  anotherPainType: string;
-  anotherTrigger: string;
+  acuteness: string | null;
+  anotherImpairFactor: string | null;
+  anotherImprovementFactor: string | null;
+  anotherPainType: string | null;
+  anotherTrigger: string | null;
   dates?: object | any;
-  dateTime?: string;
-  foodImpair: string;
-  foodImprovement: string;
+  dateTime?: string | null;
+  foodImpair: string | null;
+  foodImprovement: string | null;
   haloSymptoms: string | string[];
-  id?: string;
+  id?: string | null;
   impairFactor: string | string[];
   improvementFactor: string | string[];
   isEdition?: boolean;
-  location: string;
-  medicine: string;
+  location: string | string[];
+  medicine: string | null;
   medicineDosage: number;
-  medicineImprovement: string;
-  notes: string;
-  painType: string;
-  period: boolean;
-  periodNotes: string;
+  medicineImprovement: string | null;
+  notes: string | null;
+  painType: string | null;
+  period: string;
+  periodNotes: string | null;
   symptoms: string | string[];
-  time: string;
+  time: string | null;
   triggers: string | string[];
 }
 
@@ -92,18 +92,12 @@ export interface Report {
 export interface AppContextDefaultValues {
   isLoading: boolean;
   dispatch: (action: any, payload?: any, assetId?: string) => Promise<any>;
-  steps: number;
-  currentStep: number;
   validateStepForward: (step: number) => boolean;
   handleFormChange: (payload: object) => void;
   submitEpisode: () => Promise<any>;
-  clearEpisodeFormState: () => void;
-  episodeFormState: Episode;
   episodes?: Episode[];
   patient?: Patient;
   reports?: Report[];
-  pageTitle?: string;
-  setPageTitle?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 export enum Location {

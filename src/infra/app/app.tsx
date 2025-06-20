@@ -20,6 +20,11 @@ import {
 import { AppActions } from './actions';
 import * as SecureStore from 'expo-secure-store';
 import { addHours } from 'date-fns';
+import { handleCreateEpisode, handleStepForward } from './reducers/app.reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector, authSelector } from './selectors';
+import { useAsyncAppDispatch } from './store';
+import { useNavigation } from '@react-navigation/native';
 
 const episodeInitialForm = {
   acuteness: '',
@@ -50,100 +55,116 @@ const episodeInitialForm = {
 
 const AppContext = createContext<AppContextDefaultValues>({
   isLoading: false,
-  steps: 11,
-  currentStep: 0,
   validateStepForward: () => false,
-  handleFormChange: () => null,
-  episodeFormState: episodeInitialForm,
   submitEpisode: () => new Promise(() => {}),
-  clearEpisodeFormState: () => null,
   dispatch: () => new Promise(() => {}),
   patient: undefined,
   episodes: undefined,
   reports: undefined,
-  pageTitle: '',
-  setPageTitle: undefined,
 });
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [steps, _] = useState(12);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [episodeFormState, setEpisodeFormState] = useState(episodeInitialForm);
   const [patient, setPatient] = useState<Patient | null>(null);
   const [episodes, setEpisodes] = useState<Episode[] | null>(null);
   const [reports, setReports] = useState<Report[] | undefined>();
-  const [pageTitle, setPageTitle] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
 
-  const clearEpisodeFormState = () => {
-    setEpisodeFormState(episodeInitialForm);
-  };
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const asyncDispatch = useAsyncAppDispatch();
+  const auth = useSelector(authSelector);
+  const appState = useSelector(appStateSelector);
+
 
   const validateStepForward = (nextStep: number): boolean => {
+    console.log(nextStep);
     if (nextStep >= 0) {
-      setCurrentStep(nextStep);
+      dispatch(handleStepForward(nextStep));
       return true;
     }
 
     return false;
   };
 
-  const handleFormChange = (payload: any) => {
-    setEpisodeFormState((prevState: any) => {
-      return Object.assign({ ...prevState, ...payload });
-    });
-  };
-
-  const submitEpisode = (): Promise<Episode> | boolean => {
-    if (!Object.keys(episodeFormState.dates).length) {
-      handleToast(
-        'Preencha ao menos a data do episódio para continuar!',
-        'danger'
-      );
-      return false;
-    } else {
-      const parsedObject: any = Object.assign(episodeFormState, {
-        dateTime: addHours(new Date(Object.keys(episodeFormState.dates)[0]), 9),
-        location: Array.isArray(episodeFormState.location)
-          ? episodeFormState.location.join(',')
-          : episodeFormState.location,
-        triggers: Array.isArray(episodeFormState.triggers)
-          ? episodeFormState.triggers.join(',')
-          : episodeFormState.triggers,
-        haloSymptoms: Array.isArray(episodeFormState.haloSymptoms)
-          ? episodeFormState.haloSymptoms.join(',')
-          : episodeFormState.haloSymptoms,
-        improvementFactor: Array.isArray(episodeFormState.improvementFactor)
-          ? episodeFormState.improvementFactor.join(',')
-          : episodeFormState.improvementFactor,
-        symptoms: Array.isArray(episodeFormState.symptoms)
-          ? episodeFormState.symptoms.join(',')
-          : episodeFormState.symptoms,
-        impairFactor: Array.isArray(episodeFormState.impairFactor)
-          ? episodeFormState.impairFactor.join(',')
-          : episodeFormState.impairFactor,
-      });
-
-      Object.keys(parsedObject).map((key) => {
-        if (typeof parsedObject[key] === 'string' && parsedObject[key] === '') {
-          parsedObject[key] = null;
-        }
-      });
-      delete parsedObject.dates;
-
-      if (parsedObject.isEdition) {
-        delete parsedObject.isEdition;
-        return dispatch(
-          AppActions.REQUEST_UPDATE_EPISODE,
-          parsedObject,
-          episodeFormState.id
+  const submitEpisode = async () => {
+    try {
+      if (!Object.keys(appState.episode.dates).length) {
+        handleToast(
+          'Preencha ao menos a data do episódio para continuar!',
+          'danger'
         );
+        return false;
       } else {
-        delete parsedObject.id;
-        delete parsedObject.isEdition;
-        return dispatch(AppActions.REQUEST_CREATE_EPISODE, parsedObject);
+        const parsedObject: any = {
+          ...appState.episode,
+          dateTime: addHours(
+            new Date(Object.keys(appState.episode.dates)[0]),
+            9
+          ),
+          location: Array.isArray(appState.episode.location)
+            ? appState.episode.location.join(',')
+            : appState.episode.location,
+          triggers: Array.isArray(appState.episode.triggers)
+            ? appState.episode.triggers.join(',')
+            : appState.episode.triggers,
+          haloSymptoms: Array.isArray(appState.episode.haloSymptoms)
+            ? appState.episode.haloSymptoms.join(',')
+            : appState.episode.haloSymptoms,
+          improvementFactor: Array.isArray(appState.episode.improvementFactor)
+            ? appState.episode.improvementFactor.join(',')
+            : appState.episode.improvementFactor,
+          symptoms: Array.isArray(appState.episode.symptoms)
+            ? appState.episode.symptoms.join(',')
+            : appState.episode.symptoms,
+          impairFactor: Array.isArray(appState.episode.impairFactor)
+            ? appState.episode.impairFactor.join(',')
+            : appState.episode.impairFactor,
+        };
+
+        Object.keys(parsedObject).map((key) => {
+          if (
+            typeof parsedObject[key] === 'string' &&
+            parsedObject[key] === ''
+          ) {
+            parsedObject[key] = null;
+          }
+        });
+        delete parsedObject.dates;
+
+        if (parsedObject.isEdition) {
+          delete parsedObject.isEdition;
+          return appDispatch(
+            AppActions.REQUEST_UPDATE_EPISODE,
+            parsedObject,
+            appState.episode.id!
+          );
+        } else {
+          delete parsedObject.id;
+          delete parsedObject.isEdition;
+          const res = await asyncDispatch(
+            handleCreateEpisode({
+              payload: parsedObject,
+              id: auth.user?.id ?? '',
+            })
+          );
+
+          if (res.meta.requestStatus == 'fulfilled') {
+            const data = res.payload as Episode;
+
+            return {
+              ...data,
+              triggers: String(data.triggers).split(','),
+              improvementFactor: String(data.improvementFactor).split(','),
+              symptoms: String(data.symptoms).split(','),
+              haloSymptoms: String(data.haloSymptoms).split(','),
+              impairFactor: String(data.impairFactor).split(','),
+            };
+          }
+        }
       }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -187,7 +208,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const handleFitEpisodeData = (ep: Episode): Episode => {
     return {
       ...ep,
-      period: Number(ep.period) == 1 ? true : false,
+      period: Number(ep.period) == 1 ? 'true' : 'false',
       triggers: String(ep.triggers).split(','),
       haloSymptoms: String(ep.haloSymptoms),
       improvementFactor: String(ep.improvementFactor).split(','),
@@ -195,28 +216,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     };
   };
 
-  const dispatch = async (
+  const appDispatch = async (
     action: string,
     payload?: any,
     assetId?: string
   ): Promise<any> => {
     const userId = await SecureStore.getItemAsync('userId');
     switch (action) {
-      case AppActions.REQUEST_CREATE_EPISODE:
-        if (userId) {
-          handlePromise({
-            promiseFromService: requestCreateEpisode(payload, userId),
-            payload,
-            successCallbackAction: (res) => {
-              dispatch(AppActions.REQUEST_FETCH_EPISODES);
-              setCurrentStep(0);
-              setEpisodeFormState(handleFitEpisodeData(res.data) as any);
-            },
-            isShowingToast: true,
-          });
-          return requestCreateEpisode(payload, userId);
-        }
-        break;
       case AppActions.REQUEST_CREATE_REPORT:
         if (userId) {
           return handlePromise({
@@ -226,7 +232,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             }),
             payload,
             successCallbackAction: (res) => {
-              dispatch(AppActions.REQUEST_FETCH_REPORTS, {});
+              appDispatch(AppActions.REQUEST_FETCH_REPORTS, {});
             },
             isShowingToast: true,
           });
@@ -249,19 +255,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           },
           isShowingToast: true,
         });
-      case AppActions.REQUEST_UPDATE_EPISODE:
-        if (assetId)
-          handlePromise({
-            promiseFromService: requestUpdateEpisode(payload, assetId),
-            payload,
-            successCallbackAction: (res) => {
-              dispatch(AppActions.REQUEST_FETCH_EPISODES);
-              setCurrentStep(0);
-              setEpisodeFormState(handleFitEpisodeData(res.data) as any);
-            },
-            isShowingToast: true,
-          });
-        if (assetId) return requestUpdateEpisode(payload, assetId);
       case AppActions.REQUEST_FETCH_PATIENT:
         if (userId) {
           handlePromise({
@@ -320,19 +313,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AppContext.Provider
       value={{
-        currentStep,
-        dispatch,
-        episodeFormState,
-        handleFormChange,
+        dispatch: appDispatch,
         patient: patient || undefined,
         validateStepForward,
         steps,
         submitEpisode,
         episodes: episodes || undefined,
-        pageTitle: pageTitle || undefined,
         reports: reports,
-        setPageTitle: setPageTitle,
-        clearEpisodeFormState,
         isLoading,
       }}
     >

@@ -4,6 +4,9 @@ import Card from '../form/card/Card';
 import { useApp } from 'src/infra/app/app';
 import { Symptom as SymptomType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector } from 'src/infra/app/selectors';
+import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 
 const data: {
   label: string;
@@ -44,17 +47,22 @@ const data: {
 ];
 
 const Symptoms = () => {
-  const { episodeFormState, handleFormChange } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
 
   const handleSetSymptomsValues = (value: string) => {
-    if (episodeFormState.symptoms?.includes(value)) {
-      handleFormChange({
-        symptoms: Array.from(episodeFormState.symptoms).filter(
-          (tr) => tr !== value
-        ),
-      });
+    if (appState.episode.symptoms?.includes(value)) {
+      dispatch(
+        handleFormChanging({
+          symptoms: Array.from(appState.episode.symptoms).filter(
+            (tr) => tr !== value
+          ),
+        })
+      );
     } else {
-      handleFormChange({ symptoms: [...episodeFormState.symptoms, value] });
+      dispatch(
+        handleFormChanging({ symptoms: [...appState.episode.symptoms, value] })
+      );
     }
   };
 
@@ -72,7 +80,7 @@ const Symptoms = () => {
                 <BouncyCheckbox
                   size={22}
                   fillColor='#CEB0FA'
-                  unfillColor='#FFFFFF'
+                  unfillColor='#FFFFFF00'
                   textStyle={{
                     textDecorationLine: 'none',
                     color:
@@ -81,7 +89,7 @@ const Symptoms = () => {
                         : '#2E3E4B',
                   }}
                   text={act.label}
-                  isChecked={episodeFormState.symptoms?.includes(act.value)}
+                  isChecked={appState.episode.symptoms?.includes(act.value)}
                   onPress={(isChecked: boolean) => {
                     handleSetSymptomsValues(act.value);
                   }}

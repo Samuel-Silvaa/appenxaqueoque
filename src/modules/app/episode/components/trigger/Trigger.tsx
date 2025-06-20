@@ -5,10 +5,12 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useApp } from 'src/infra/app/app';
 import { Trigger as TriggerType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Fragment, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 interface TriggerSchema {
   foodImpair: string;
@@ -57,7 +59,9 @@ const data: {
 ];
 
 const Trigger = () => {
-  const { episodeFormState, handleFormChange } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
+
   const {
     control,
     formState: { errors },
@@ -65,18 +69,18 @@ const Trigger = () => {
   } = useForm({ resolver: yupResolver(triggerSchema) });
 
   const handleSetTriggersValues = (value: string) => {
-    if (episodeFormState.triggers?.includes(value)) {
-      handleFormChange({
-        triggers: Array.from(episodeFormState.triggers).filter(
+    if (appState.episode.triggers?.includes(value)) {
+      dispatch(handleFormChanging({
+        triggers: Array.from(appState.episode.triggers).filter(
           (tr) => tr !== value
         ),
-      });
+      }));
     } else {
-      handleFormChange({ triggers: [...episodeFormState.triggers, value] });
+      dispatch(handleFormChanging({ triggers: [...appState.episode.triggers, value] }));
     }
   };
 
-  useEffect(() => {}, [episodeFormState.triggers]);
+  useEffect(() => {}, [appState.episode.triggers]);
 
   return (
     <View className='h-full w-full'>
@@ -93,10 +97,10 @@ const Trigger = () => {
                   <BouncyCheckbox
                     size={22}
                     fillColor='#CEB0FA'
-                    unfillColor='#FFFFFF'
+                    unfillColor='#FFFFFF00'
                     textStyle={{ textDecorationLine: 'none' }}
                     text={act.label}
-                    isChecked={episodeFormState.triggers?.includes(act.value)}
+                    isChecked={appState.episode.triggers?.includes(act.value)}
                     onPress={(isChecked: boolean) => {
                       handleSetTriggersValues(act.value);
                     }}
@@ -114,15 +118,15 @@ const Trigger = () => {
                 setValue={setValue}
                 control={control}
                 errors={errors}
-                editable={episodeFormState.triggers?.includes(TriggerType.FOOD)}
+                editable={appState.episode.triggers?.includes(TriggerType.FOOD)}
                 className={`${
-                  episodeFormState.triggers?.includes(TriggerType.FOOD)
+                  appState.episode.triggers?.includes(TriggerType.FOOD)
                     ? ' opacity-100'
                     : ' opacity-25'
                 } bg-white drop-shadow-sm`}
-                defaultValue={episodeFormState.foodImpair}
+                defaultValue={appState.episode.foodImpair!}
                 onChange={(e) =>
-                  handleFormChange({ foodImpair: e.target.value })
+                  handleFormChanging({ foodImpair: e.nativeEvent.text })
                 }
               />
             )}
@@ -134,17 +138,17 @@ const Trigger = () => {
                 control={control}
                 errors={errors}
                 placeholder='Descreva brevemente'
-                editable={episodeFormState.triggers?.includes(
+                editable={appState.episode.triggers?.includes(
                   TriggerType.ANOTHER
                 )}
                 className={`${
-                  episodeFormState.triggers?.includes(TriggerType.ANOTHER)
+                  appState.episode.triggers?.includes(TriggerType.ANOTHER)
                     ? ' opacity-100 '
                     : ' opacity-25'
                 } bg-white drop-shadow-sm`}
-                defaultValue={episodeFormState.anotherTrigger}
+                defaultValue={appState.episode.anotherTrigger!}
                 onChange={(e) =>
-                  handleFormChange({ anotherTrigger: e.target.value })
+                  handleFormChanging({ anotherTrigger: e.nativeEvent.text })
                 }
               />
             )}

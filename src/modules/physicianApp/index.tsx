@@ -8,6 +8,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomePage from './home/HomePage';
 import PatientPage from './patient/PatientPage';
 import ProfilePage from '../app/profile/Profile';
+import { useDispatch } from "react-redux";
+import { setPageTitle } from "src/infra/app/reducers/app.reducer";
 
 const stylesheet = {
   calendarBtnContainer:
@@ -17,14 +19,15 @@ const stylesheet = {
 const Tab = createBottomTabNavigator();
 
 const PhysicianTabsRoutes = () => {
-  const { patient, dispatch, setPageTitle, validateStepForward } = useApp();
+  const { patient, dispatch: appdispatch, validateStepForward } = useApp();
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    if (!patient) dispatch(AppActions.REQUEST_FETCH_PATIENT, {});
+    if (!patient) appdispatch(AppActions.REQUEST_FETCH_PATIENT, {});
   }, []);
 
   React.useEffect(() => {
-    dispatch(AppActions.REQUEST_FETCH_EPISODES);
+    appdispatch(AppActions.REQUEST_FETCH_EPISODES);
   }, []);
 
   const getHeaderName = (routeIndex: number) => {
@@ -43,8 +46,8 @@ const PhysicianTabsRoutes = () => {
       screenListeners={{
         state: (e) => {
           validateStepForward(0);
-          if (setPageTitle && e.data?.state)
-            setPageTitle(getHeaderName(e.data?.state.index));
+          if ( e.data?.state)
+            dispatch(setPageTitle(getHeaderName(e.data?.state.index)));
         },
       }}
       screenOptions={({ route }) => ({

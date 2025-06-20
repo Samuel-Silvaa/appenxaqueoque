@@ -3,11 +3,12 @@ import { Animated, Image } from 'react-native';
 import { Modal, Text, View } from 'react-native';
 import { useSelector } from "react-redux";
 import { useApp } from 'src/infra/app/app';
-import { authSelector } from "src/infra/app/selectors";
+import { appStateSelector, authSelector } from "src/infra/app/selectors";
 
 export const Loader = () => {
   const { isLoading } = useApp();
   const auth = useSelector(authSelector);
+  const app = useSelector(appStateSelector);
   const state = {
     animatedValue: new Animated.Value(0),
   };
@@ -17,7 +18,7 @@ export const Loader = () => {
     return () => {
       state.animatedValue.stopAnimation();
     };
-  }, [isLoading, auth.loading]);
+  }, [isLoading, auth.loading, app.loading]);
 
   const startAnimation = () => {
     Animated.sequence([

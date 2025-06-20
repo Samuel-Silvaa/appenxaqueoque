@@ -11,6 +11,8 @@ import { useApp } from 'src/infra/app/app';
 import { AppActions } from 'src/infra/app/actions';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Success from './success/Success';
+import { setPageTitle } from "src/infra/app/reducers/app.reducer";
+import { useDispatch } from "react-redux";
 
 const stylesheet = {
   calendarBtnContainer:
@@ -20,7 +22,8 @@ const stylesheet = {
 const Tab = createBottomTabNavigator();
 
 const TabsRoutes = () => {
-  const { patient, dispatch, setPageTitle, validateStepForward } = useApp();
+  const { patient, dispatch: appdispatch, validateStepForward } = useApp();
+  const dispatch = useDispatch();
   const [colorScheme, setColorScheme] = React.useState(
     Appearance.getColorScheme()
   );
@@ -29,8 +32,8 @@ const TabsRoutes = () => {
     Appearance.addChangeListener((a) => {
       setColorScheme(a.colorScheme);
     });
-    if (!patient) dispatch(AppActions.REQUEST_FETCH_PATIENT, {});
-    dispatch(AppActions.REQUEST_FETCH_EPISODES);
+    if (!patient) appdispatch(AppActions.REQUEST_FETCH_PATIENT, {});
+    appdispatch(AppActions.REQUEST_FETCH_EPISODES);
   }, []);
 
   const getHeaderName = (routeIndex: number) => {
@@ -63,8 +66,8 @@ const TabsRoutes = () => {
       screenListeners={{
         state: (e) => {
           validateStepForward(0);
-          if (setPageTitle && e.data?.state)
-            setPageTitle(getHeaderName(e.data?.state.index));
+          if (e.data?.state)
+            dispatch(setPageTitle(getHeaderName(e.data?.state.index)));
         },
       }}
       screenOptions={({ route }) => ({

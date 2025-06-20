@@ -2,8 +2,10 @@ import { Text, View } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import Card from '../form/card/Card';
 import Wrapper from '../form/wrapper/Wrapper';
-import { useApp } from 'src/infra/app/app';
 import { Acuteness as AcutenessType } from 'src/infra/@types/app.types';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 const data = [
   {
@@ -24,20 +26,21 @@ const data = [
 ];
 
 const Acuteness = () => {
-  const { episodeFormState, handleFormChange } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
 
   return (
     <View className='h-full w-full'>
       <Wrapper title='Qual foi a intensidade da dor ?'>
         <RadioButton.Group
-          onValueChange={(value) => handleFormChange({ acuteness: value })}
-          value={episodeFormState.acuteness}
+          onValueChange={(value) => dispatch(handleFormChanging({ acuteness: value }))}
+          value={appState.episode.acuteness!}
         >
           {data.map((act, index) => (
             <Card
               key={index}
               onPress={() => {
-                handleFormChange({ acuteness: act.value });
+                dispatch(handleFormChanging({ acuteness: act.value }));
               }}
               children={
                 <View className='flex-row items-center'>

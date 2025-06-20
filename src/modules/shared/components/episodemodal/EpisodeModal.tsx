@@ -14,6 +14,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useApp } from 'src/infra/app/app';
 import { pinColor } from 'src/infra/utils/appUtils';
 import { Episode } from 'src/infra/@types/app.types';
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { useDispatch } from "react-redux";
 
 const stylesheet = {
   wrapper: 'w-full pt-4',
@@ -42,8 +44,8 @@ const EpisodeModal = ({
   onClose: () => void;
   episode: Episode;
 }) => {
-  const { handleFormChange } = useApp();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const fullDetails = [
     {
@@ -137,7 +139,7 @@ const EpisodeModal = ({
             <TouchableOpacity
               onPress={() => {
                 onClose();
-                handleFormChange({
+                dispatch(handleFormChanging({
                   ...episode,
                   isEdition: true,
                   dates: {
@@ -147,24 +149,24 @@ const EpisodeModal = ({
                     ).toString()]: {
                       selected: true,
                       marked: true,
-                      selectedColor: pinColor(episode.acuteness),
-                      dotColor: pinColor(episode.acuteness),
+                      selectedColor: pinColor(episode.acuteness!),
+                      dotColor: pinColor(episode.acuteness!),
                     },
                   },
-                });
+                }));
                 navigation.setOptions({
                   ...episode,
                   isEdition: true,
                   dates: {
                     selected: true,
                     marked: true,
-                    selectedColor: pinColor(episode.acuteness),
-                    dotColor: pinColor(episode.acuteness),
+                    selectedColor: pinColor(episode.acuteness!),
+                    dotColor: pinColor(episode.acuteness!),
                   },
                 });
                 navigation.navigate('Episode');
               }}
-              style={{ backgroundColor: pinColor(episode.acuteness) }}
+              style={{ backgroundColor: pinColor(episode.acuteness!) }}
               className={stylesheet.edition}
             >
               <Image source={require('src/assets/pencil.png')}></Image>

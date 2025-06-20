@@ -5,7 +5,6 @@ export interface AuthContextDefaultValues {
     refreshToken?: string;
     user?: { email: string; password: string; userType?: string };
   };
-  handleFormChange: (payload: any) => void;
   session: LogInResponse | undefined;
 }
 

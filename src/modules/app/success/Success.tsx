@@ -4,6 +4,9 @@ import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/Ex
 import EpisodeModal from 'src/modules/shared/components/episodemodal/EpisodeModal';
 import { useState } from 'react';
 import { useApp } from 'src/infra/app/app';
+import { clearEpisodeState } from "src/infra/app/reducers/app.reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
 
 const stylesheet = {
   wrapper: 'w-full h-full gap-y-4 flex justify-center items-center mt-[10%]',
@@ -14,7 +17,8 @@ const stylesheet = {
 
 const Success = ({ navigation }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { episodeFormState, clearEpisodeFormState } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
 
   return (
     <AppPageScaffold alignment='center'>
@@ -35,14 +39,14 @@ const Success = ({ navigation }) => {
         <ExPressable
           title='Voltar ao início'
           onPress={() => {
-            clearEpisodeFormState();
+           dispatch( clearEpisodeState())
             navigation.navigate('Home');
           }}
         />
       </View>
       {isModalOpen && (
         <EpisodeModal
-          episode={episodeFormState}
+          episode={appState.episode}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         />

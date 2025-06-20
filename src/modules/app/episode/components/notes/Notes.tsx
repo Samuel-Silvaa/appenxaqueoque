@@ -8,6 +8,9 @@ import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/Ex
 import { useApp } from 'src/infra/app/app';
 import { useNavigation } from '@react-navigation/native';
 import { id } from 'date-fns/locale';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 const stylesheet = {
   wrapper: 'flex-col w-full items-center justify-between',
@@ -27,8 +30,11 @@ const notesSchema = yup.object<NotesSchema>().shape({
 });
 
 const Notes = () => {
-  const { episodeFormState, handleFormChange, submitEpisode } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
   const navigation = useNavigation();
+
+  const {  submitEpisode } = useApp();
   const {
     control,
     formState: { errors },
@@ -36,19 +42,9 @@ const Notes = () => {
   } = useForm({ resolver: yupResolver(notesSchema) });
 
   const handleSubmit = async () => {
-    submitEpisode().then((ep) => {
-      const { data } = ep;
-      if (data)
-        navigation.setOptions({
-          ...data,
-          triggers: String(data.triggers).split(','),
-          improvementFactor: String(data.improvementFactor).split(','),
-          symptoms: String(data.symptoms).split(','),
-          haloSymptoms: String(data.haloSymptoms).split(','),
-          impairFactor: String(data.impairFactor).split(','),
-        });
-      navigation.navigate('Success');
-    });
+    const res = await submitEpisode();
+              navigation.setOptions(res);
+        navigation.navigate('Success' as never);
   };
 
   return (
@@ -69,10 +65,10 @@ const Notes = () => {
           setValue={setValue}
           control={control}
           errors={errors}
-          defaultValue={episodeFormState.notes}
+          defaultValue={appState.episode.notes!}
           numberOfLines={4}
           multiline={true}
-          onChange={(e) => handleFormChange({ notes: e.target.value })}
+          onChange={(e) => dispatch(handleFormChanging({ notes: e.nativeEvent.text }))}
         ></InputContainer>
       </View>
 

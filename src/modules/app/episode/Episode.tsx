@@ -7,12 +7,15 @@ import {
 } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { useApp } from 'src/infra/app/app';
-import FormSteps from './components';
 import { RefObject, createRef, useEffect, useState } from 'react';
+import FormSteps from './components';
 
 import { sharedEpisodeStyleSheet } from './shared/SharedEpisodeStyleSheet';
 import React from 'react';
 import _ from 'lodash';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { clearEpisodeState, setPageTitle } from "src/infra/app/reducers/app.reducer";
 
 const stylesheet = {
   steps: {
@@ -27,18 +30,18 @@ const stylesheet = {
 };
 
 const Steps = () => {
-  const { steps, currentStep } = useApp();
+ const appState = useSelector(appStateSelector);
 
   return (
     <View className={stylesheet.steps.container}>
-      {Array(steps)
+      {Array(pages.length)
         .fill(0)
         .map((_, index) => {
           return (
             <View
               key={index}
               className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${
-                currentStep == index
+                appState.currentEpStep == index
                   ? 'bg-blue-dark-secondary border border-blue-dark-primary '
                   : 'bg-white border border-gray-opacity'
               }`}
@@ -63,8 +66,9 @@ const Topic = ({
   headerStepsFlatListRef,
   episodePagesFlatListRef,
 }: EpisodeScaffold) => {
-  const { validateStepForward, setPageTitle } = useApp();
-  const { currentStep } = useApp();
+  const { validateStepForward } = useApp();
+  const  appState  = useSelector(appStateSelector);
+  const dispatch = useDispatch();
 
   const DATA: { id: string; title: string }[] = [
     'Data e horário',
@@ -82,8 +86,8 @@ const Topic = ({
   ].map((item, indx) => ({ title: item, id: item + indx }));
 
   useEffect(() => {
-    if (setPageTitle && currentStep > 0) setPageTitle(DATA[currentStep].title);
-  }, [currentStep]);
+    if ( appState.currentEpStep > 0) dispatch(setPageTitle(DATA[appState.currentEpStep].title));
+  }, [appState.currentEpStep]);
 
   return (
     <View className={sharedEpisodeStyleSheet.topic.container}>
@@ -112,7 +116,7 @@ const Topic = ({
             className={
               sharedEpisodeStyleSheet.topic.item +
               `${
-                currentStep == index
+                appState.currentEpStep == index
                   ? ' bg-purple-dark-primary '
                   : ' bg-purple-dark-secondary'
               }`
@@ -121,7 +125,7 @@ const Topic = ({
             <Text
               key={index}
               className={`${
-                currentStep == index ? 'text-[#fff]' : 'text-black '
+                appState.currentEpStep == index ? 'text-[#fff]' : 'text-black '
               }`}
             >
               {item.title}
@@ -134,6 +138,7 @@ const Topic = ({
     </View>
   );
 };
+
 const pages = [
   { page: <FormSteps.Datetime /> },
   { page: <FormSteps.EpisodeDuration /> },
@@ -150,7 +155,8 @@ const pages = [
 ];
 
 const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
-  const { currentStep } = useApp();
+  const appState = useSelector(appStateSelector)
+  const appSelector = useSelector(appStateSelector);
 
   return (
     <FlatList
@@ -158,7 +164,7 @@ const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
       scrollEnabled={false}
       windowSize={3}
       initialNumToRender={pages.length}
-      initialScrollIndex={currentStep}
+      initialScrollIndex={appState.currentEpStep}
       maxToRenderPerBatch={0}
       horizontal
       pagingEnabled={false}
@@ -200,12 +206,12 @@ const FormHeader = ({
 };
 
 const FormScaffold = () => {
-  const { currentStep } = useApp();
+  const appState = useSelector(appStateSelector);
   const headerStepsFlatListRef = createRef<FlatList>();
   const episodePagesFlatListRef = createRef<FlatList>();
 
   useEffect(() => {
-    if (currentStep == 0) {
+    if (appState.currentEpStep == 0) {
       if (headerStepsFlatListRef?.current) {
         headerStepsFlatListRef?.current.scrollToIndex({
           index: 0,
@@ -220,7 +226,7 @@ const FormScaffold = () => {
         });
       }
     }
-  }, [currentStep]);
+  }, [appState.currentEpStep]);
 
   return (
     <View className='w-full'>
@@ -237,12 +243,11 @@ const FormScaffold = () => {
 };
 
 const EpisodePage = () => {
-  const { setPageTitle, clearEpisodeFormState } = useApp();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     return () => {
-      if (setPageTitle) setPageTitle('');
-      clearEpisodeFormState();
+      dispatch(setPageTitle(''));
+      dispatch(clearEpisodeState());
     };
   }, []);
   return (

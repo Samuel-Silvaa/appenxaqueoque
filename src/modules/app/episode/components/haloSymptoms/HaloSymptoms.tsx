@@ -4,6 +4,9 @@ import Card from '../form/card/Card';
 import { useApp } from 'src/infra/app/app';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { HaloSymptom } from 'src/infra/@types/app.types';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 const data: {
   label: string;
@@ -29,19 +32,20 @@ const data: {
 ];
 
 const HaloSymptoms = () => {
-  const { episodeFormState, handleFormChange } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
 
   const handleSetSymptomsValues = (value: string) => {
-    if (episodeFormState.symptoms?.includes(value)) {
-      handleFormChange({
-        haloSymptoms: Array.from(episodeFormState.haloSymptoms).filter(
+    if (appState.episode.symptoms?.includes(value)) {
+      dispatch(handleFormChanging({
+        haloSymptoms: Array.from(appState.episode.haloSymptoms).filter(
           (tr) => tr !== value
         ),
-      });
+      }));
     } else {
-      handleFormChange({
-        haloSymptoms: [...episodeFormState.haloSymptoms, value],
-      });
+     dispatch( handleFormChanging({
+        haloSymptoms: [...appState.episode.haloSymptoms, value],
+      }));
     }
   };
 
@@ -59,7 +63,7 @@ const HaloSymptoms = () => {
                 <BouncyCheckbox
                   size={22}
                   fillColor='#CEB0FA'
-                  unfillColor='#FFFFFF'
+                  unfillColor='#FFFFFF00'
                   textStyle={{
                     textDecorationLine: 'none',
                     color:
@@ -68,7 +72,7 @@ const HaloSymptoms = () => {
                         : '#2E3E4B',
                   }}
                   text={act.label}
-                  isChecked={episodeFormState.symptoms?.includes(act.value)}
+                  isChecked={appState.episode.symptoms?.includes(act.value)}
                   onPress={(isChecked: boolean) => {
                     handleSetSymptomsValues(act.value);
                   }}

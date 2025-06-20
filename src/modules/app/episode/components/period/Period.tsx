@@ -7,6 +7,9 @@ import { RadioButton } from 'react-native-paper';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useApp } from 'src/infra/app/app';
 import Wrapper from '../form/wrapper/Wrapper';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 const stylesheet = {
   wrapper: 'flex-col w-full items-center ',
@@ -16,7 +19,7 @@ const stylesheet = {
   notesLabel: 'text-md font-semibold text-black self-start mt-14 pl-4',
   notesWrapper:
     'flex-row w-full min-h-[140px] p-2 bg-blue-four rounded-[28px] mt-1 relative',
-  notesInput: 'bg-white w-full p-4 flex-grow',
+  notesInput: 'w-full p-4 flex-grow',
 };
 
 interface PeriodSchema {
@@ -30,7 +33,8 @@ const periodSchema = yup.object<PeriodSchema>().shape({
 });
 
 const Period = () => {
-  const { episodeFormState, handleFormChange } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
   const {
     control,
     formState: { errors },
@@ -39,8 +43,8 @@ const Period = () => {
 
   return (
     <RadioButton.Group
-      onValueChange={(value) => handleFormChange({ period: value })}
-      value={episodeFormState.period}
+      onValueChange={(value) => dispatch(handleFormChanging({ period: value }))}
+      value={appState.episode.period!}
     >
       <View className={stylesheet.wrapper}>
         <Wrapper title='A criança está em período menstrual? '>
@@ -49,11 +53,11 @@ const Period = () => {
             children={
               <View className={stylesheet.cardWrapper}>
                 <View className={stylesheet.cardOption}>
-                  <RadioButton value={true} color='#CEB0FA' />
+                  <RadioButton value='true' color='#CEB0FA' />
                   <Text>Sim</Text>
                 </View>
                 <View className={stylesheet.cardOption}>
-                  <RadioButton value={false} color='#CEB0FA' />
+                  <RadioButton value='false' color='#CEB0FA' />
                   <Text>Não</Text>
                 </View>
               </View>
@@ -69,15 +73,16 @@ const Period = () => {
             source={require('src/assets/girl_laptop.png')}
           ></Image>
           <InputContainer
+            editable={appState.episode.period != 'false'}
             name='notes'
             control={control}
             setValue={setValue}
             errors={errors}
-            className={stylesheet.notesInput}
+            className={stylesheet.notesInput.concat(appState.episode.period == 'false' ? ' bg-gray-opacity' : ' bg-white')}
             numberOfLines={4}
             multiline={true}
-            defaultValue={episodeFormState.periodNotes}
-            onChange={(e) => handleFormChange({ periodNotes: e.target.value })}
+            defaultValue={appState.episode.periodNotes!}
+            onChange={(e) => dispatch(handleFormChanging({ periodNotes: e.nativeEvent.text}))}
           ></InputContainer>
         </View>
       </View>

@@ -10,8 +10,10 @@ import { RadioButton } from 'react-native-paper';
 import CalendarComponent from 'src/modules/app/shared/components/calendar/CalendarComponent';
 import { sharedEpisodeStyleSheet } from '../../shared/SharedEpisodeStyleSheet';
 import { DateData } from 'react-native-calendars';
-import { useApp } from 'src/infra/app/app';
 import { Time } from 'src/infra/@types/app.types';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 const data = [
   {
@@ -46,12 +48,14 @@ const stylesheet = {
 };
 
 const Timepicker = () => {
-  const { episodeFormState, handleFormChange } = useApp();
+
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
 
   return (
     <RadioButton.Group
-      onValueChange={(value) => handleFormChange({ time: value })}
-      value={episodeFormState.time}
+      onValueChange={(value) => dispatch(handleFormChanging({ time: value }))}
+      value={appState.episode.time!}
     >
       <View className={sharedEpisodeStyleSheet.timepicker.container}>
         <Text className={sharedEpisodeStyleSheet.timepicker.title}>
@@ -61,7 +65,7 @@ const Timepicker = () => {
 
         {data.map((time, index) => (
           <TouchableOpacity
-            onPress={() => handleFormChange({ time: time.value })}
+            onPress={() => dispatch(handleFormChanging(({ time: time.value })))}
             key={index}
             className={
               sharedEpisodeStyleSheet.timepicker.timeIndicatorContainer
@@ -99,20 +103,21 @@ const Timepicker = () => {
 };
 
 const Datetime = () => {
-  const { episodeFormState, handleFormChange } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector)
 
   const handleSelectDate = useCallback((date: DateData) => {
-    if (!Object.keys(episodeFormState.dates).includes(date.dateString)) {
-      handleFormChange({
+    if (!Object.keys(appState.episode.dates).includes(date.dateString)) {
+      dispatch(handleFormChanging(({
         dates: {
-          ...episodeFormState.dates,
+          ...appState.episode.dates,
           [date.dateString]: {
             selected: true,
             marked: true,
             selectedColor: '#9194E9',
           },
         },
-      });
+      })));
     }
   }, []);
 
@@ -127,7 +132,7 @@ const Datetime = () => {
         />
       </View>
       <CalendarComponent
-        markedDates={episodeFormState.dates}
+        markedDates={appState.episode.dates}
         onDayPress={(date) => handleSelectDate(date)}
       />
       <Timepicker />

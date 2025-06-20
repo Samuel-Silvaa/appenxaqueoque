@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Card from '../form/card/Card';
+import { useDispatch } from "react-redux";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 const durationSchema = yup.object<{ start: string; end: string }>().shape({
   start: yup.string(),
@@ -12,12 +14,15 @@ const durationSchema = yup.object<{ start: string; end: string }>().shape({
 });
 
 const EpisodeDuration = () => {
+  const dispatch = useDispatch();
   const {
     formState: { errors },
     setValue,
   } = useForm({
-    resolver: yupResolver(durationSchema),
+    resolver: yupResolver(durationSchema), 
+    
   });
+
 
   return (
     <View className='h-full w-full'>

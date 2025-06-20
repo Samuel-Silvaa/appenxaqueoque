@@ -6,10 +6,12 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useApp } from 'src/infra/app/app';
 import { ImprovementFactor as ImprovementFactorType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Fragment } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 const data: {
   label: string;
@@ -46,8 +48,9 @@ const improvementSchema = yup.object<ImprovementSchema>().shape({
 });
 
 const ImprovementFactor = () => {
-  const { episodeFormState, handleFormChange } = useApp();
-  const isMedicineEditable = !episodeFormState.improvementFactor?.includes(
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
+  const isMedicineEditable = !appState.episode.improvementFactor?.includes(
     ImprovementFactorType.MEDICINE
   );
   const {
@@ -57,16 +60,16 @@ const ImprovementFactor = () => {
   } = useForm({ resolver: yupResolver(improvementSchema) });
 
   const handleSetImprovementFactorValues = (value: string) => {
-    if (episodeFormState.improvementFactor.includes(value)) {
-      handleFormChange({
+    if (appState.episode.improvementFactor.includes(value)) {
+      dispatch(handleFormChanging({
         improvementFactor: Array.from(
-          episodeFormState.improvementFactor
+          appState.episode.improvementFactor
         ).filter((tr) => tr !== value),
-      });
+      }));
     } else {
-      handleFormChange({
-        improvementFactor: [...episodeFormState.improvementFactor, value],
-      });
+      dispatch(handleFormChanging({
+        improvementFactor: [...appState.episode.improvementFactor, value],
+      }));
     }
   };
 
@@ -85,10 +88,10 @@ const ImprovementFactor = () => {
                   <BouncyCheckbox
                     size={22}
                     fillColor='#CEB0FA'
-                    unfillColor='#FFFFFF'
+                    unfillColor='#FFFFFF00'
                     textStyle={{ textDecorationLine: 'none' }}
                     text={act.label}
-                    isChecked={episodeFormState.triggers?.includes(act.value)}
+                    isChecked={appState.episode.triggers?.includes(act.value)}
                     onPress={(isChecked: boolean) => {
                       handleSetImprovementFactorValues(act.value);
                     }}
@@ -114,9 +117,9 @@ const ImprovementFactor = () => {
                       errors={errors}
                       className='bg-tertiary w-full'
                       editable={!isMedicineEditable}
-                      defaultValue={episodeFormState.medicine}
+                      defaultValue={appState.episode.medicine!}
                       onChange={(e) =>
-                        handleFormChange({ medicine: e.target.value })
+                        handleFormChanging({ medicine: e.nativeEvent.text })
                       }
                     ></InputContainer>
                     <InputContainer
@@ -127,9 +130,9 @@ const ImprovementFactor = () => {
                       errors={errors}
                       className='bg-tertiary w-full'
                       editable={!isMedicineEditable}
-                      defaultValue={episodeFormState.medicineDosage?.toString()}
+                      defaultValue={appState.episode.medicineDosage?.toString()}
                       onChange={(e) =>
-                        handleFormChange({ medicineDosage: e.target.value })
+                        handleFormChanging({ medicineDosage: e.nativeEvent.text })
                       }
                     ></InputContainer>
                     <Text className='font-semibold text-black my-4 text-lg'>
@@ -137,9 +140,9 @@ const ImprovementFactor = () => {
                     </Text>
                     <RadioButton.Group
                       onValueChange={(value) =>
-                        handleFormChange({ medicineImprovement: value })
+                        handleFormChanging({ medicineImprovement: value })
                       }
-                      value={episodeFormState.medicineImprovement}
+                      value={appState.episode.medicineImprovement!}
                     >
                       <View className='flex-row items-center bg-tertiary w-full rounded-full'>
                         <RadioButton
@@ -171,11 +174,11 @@ const ImprovementFactor = () => {
               />
             )}
             {act.value == ImprovementFactorType.FOOD &&
-              !episodeFormState.improvementFactor?.includes(
+              !appState.episode.improvementFactor?.includes(
                 ImprovementFactorType.FOOD
               ) && (
                 <InputContainer
-                  editable={episodeFormState.improvementFactor?.includes(
+                  editable={appState.episode.improvementFactor?.includes(
                     ImprovementFactorType.FOOD
                   )}
                   setValue={setValue}
@@ -186,24 +189,24 @@ const ImprovementFactor = () => {
                   errors={errors}
                   placeholder='Descreva brevemente'
                   className={
-                    !episodeFormState.improvementFactor?.includes(
+                    !appState.episode.improvementFactor?.includes(
                       ImprovementFactorType.FOOD
                     )
                       ? 'opacity-25' + ' bg-white drop-shadow-sm'
                       : 'opacity-100' + ' bg-white drop-shadow-sm'
                   }
-                  defaultValue={episodeFormState.foodImprovement}
+                  defaultValue={appState.episode.foodImprovement!}
                   onChange={(e) =>
-                    handleFormChange({ foodImprovement: e.target.value })
+                    handleFormChanging({ foodImprovement: e.nativeEvent.text })
                   }
                 />
               )}
             {act.value == ImprovementFactorType.ANOTHER &&
-              !episodeFormState.improvementFactor?.includes(
+              !appState.episode.improvementFactor?.includes(
                 ImprovementFactorType.ANOTHER
               ) && (
                 <InputContainer
-                  editable={episodeFormState.improvementFactor?.includes(
+                  editable={appState.episode.improvementFactor?.includes(
                     ImprovementFactorType.ANOTHER
                   )}
                   setValue={setValue}
@@ -213,16 +216,16 @@ const ImprovementFactor = () => {
                   errors={errors}
                   placeholder='Descreva brevemente'
                   className={
-                    !episodeFormState.improvementFactor?.includes(
+                    !appState.episode.improvementFactor?.includes(
                       ImprovementFactorType.ANOTHER
                     )
                       ? 'opacity-25' + ' bg-white drop-shadow-sm'
                       : 'opacity-100' + ' bg-white drop-shadow-sm'
                   }
-                  defaultValue={episodeFormState.anotherImprovementFactor}
+                  defaultValue={appState.episode.anotherImprovementFactor!}
                   onChange={(e) =>
-                    handleFormChange({
-                      anotherImprovementFactor: e.target.value,
+                    handleFormChanging({
+                      anotherImprovementFactor: e.nativeEvent.text,
                     })
                   }
                 />

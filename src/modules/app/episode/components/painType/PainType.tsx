@@ -1,4 +1,4 @@
-import { ImageSourcePropType, Text, View } from 'react-native';
+import { ImageSourcePropType, NativeSyntheticEvent, Text, TextInputChangeEventData, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
 import { RadioButton } from 'react-native-paper';
 import Card from '../form/card/Card';
@@ -9,6 +9,9 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
 
 const data: {
   label: string;
@@ -36,7 +39,8 @@ const painTypeSchema = yup.object<{ anotherPainType: string }>().shape({
 });
 
 const PainType = () => {
-  const { episodeFormState, handleFormChange } = useApp();
+  const dispatch = useDispatch();
+  const appState = useSelector(appStateSelector);
 
   const {
     control,
@@ -48,15 +52,15 @@ const PainType = () => {
     <View className='h-full w-full'>
       <Wrapper title='Qual a característica da dor ?'>
         <RadioButton.Group
-          onValueChange={(value) => handleFormChange({ painType: value })}
-          value={episodeFormState.painType}
+          onValueChange={(value) => dispatch(handleFormChanging({ painType: value }))}
+          value={appState.episode.painType!}
         >
           {data.map((act, index) => (
             <Fragment>
               <Card
                 key={index}
                 onPress={() => {
-                  handleFormChange({ painType: act.value });
+                  dispatch(handleFormChanging({ painType: act.value }));
                 }}
                 children={
                   <View className='flex-row items-center'>
@@ -68,7 +72,7 @@ const PainType = () => {
               />
               {act.value == PainTypeEnum.ANOTHER && (
                 <InputContainer
-                  editable={episodeFormState.painType?.includes(
+                  editable={appState.episode.painType?.includes(
                     PainTypeEnum.ANOTHER
                   )}
                   setValue={setValue}
@@ -78,13 +82,16 @@ const PainType = () => {
                   control={control}
                   errors={errors}
                   className={
-                    !episodeFormState.painType?.includes(PainTypeEnum.ANOTHER)
+                    !appState.episode.painType?.includes(PainTypeEnum.ANOTHER)
                       ? 'opacity-25' + ' bg-white drop-shadow-sm'
                       : 'opacity-100' + ' bg-white drop-shadow-sm'
                   }
-                  defaultValue={episodeFormState.anotherPainType}
-                  onChange={(e) =>
-                    handleFormChange({ anotherPainType: e.target.value })
+                  defaultValue={appState.episode.anotherPainType!}
+                  onChange={(e) => {
+                    console.log(e);
+                    dispatch(handleFormChanging({ anotherPainType: e.nativeEvent.text  }))
+
+                  }
                   }
                 />
               )}

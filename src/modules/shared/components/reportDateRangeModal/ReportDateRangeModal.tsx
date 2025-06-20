@@ -247,6 +247,7 @@ const ReportDateRangeModal = ({
             errors={errors}
             editable={false}
             value={format(getValues('startDate'), 'dd/MM/yyyy')}
+            setValue={()=>{}}
             onPressOut={() => {
               showDatePicker();
               setInputSelect('startDate');
@@ -260,6 +261,7 @@ const ReportDateRangeModal = ({
             errors={errors}
             editable={true}
             value={format(getValues('endDate'), 'dd/MM/yyyy')}
+            setValue={()=>{}}
             onPressOut={() => {
               showDatePicker();
               setInputSelect('endDate');
