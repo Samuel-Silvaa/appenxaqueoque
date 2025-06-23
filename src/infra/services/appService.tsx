@@ -2,7 +2,7 @@ import { get, patch, post } from '../api';
 import { Episode, EpisodeModalDTO, Patient, Report } from '../@types/app.types';
 import { format, subDays } from 'date-fns';
 
-interface CreateReportDTO {
+export interface CreateReportDTO {
   startDate: string;
   endDate: string;
   patientId: string;
