@@ -6,8 +6,6 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuth } from 'src/infra/auth/auth';
-import { AuthenticationActions } from 'src/infra/auth/auth.actions';
 import SelectContainer from 'src/modules/shared/components/selectContainer/SelectContainer';
 import { useEffect } from 'react';
 import { useSelector } from "react-redux";

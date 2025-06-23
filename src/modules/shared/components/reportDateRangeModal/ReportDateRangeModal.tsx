@@ -16,7 +16,10 @@ import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
 import { sharedEpisodeStyleSheet } from 'src/modules/app/episode/shared/SharedEpisodeStyleSheet';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format, subDays } from 'date-fns';
-import { AppActions } from 'src/infra/app/actions';
+import {  useSelector } from "react-redux";
+import { useAsyncAppDispatch } from "src/infra/app/store";
+import { handleCreateReport, handleFecthReports } from "src/infra/app/reducers/app.reducer";
+import { appStateSelector } from "src/infra/app/selectors";
 
 const stylesheet = {
   wrapper: 'w-full',
@@ -81,6 +84,7 @@ const Range = ({
       setCurrentStep(0);
     };
   }, []);
+
   return (
     <View className={sharedEpisodeStyleSheet.topic.container}>
       <FlatList
@@ -142,7 +146,8 @@ const ReportDateRangeModal = ({
   onClose: (dates?: { start: Date; end: Date }) => void;
   filter?: boolean;
 }) => {
-  const { dispatch } = useApp();
+  const dispatch  = useAsyncAppDispatch();
+  const appState = useSelector(appStateSelector);
   const {
     control,
     setValue,
@@ -190,15 +195,16 @@ const ReportDateRangeModal = ({
     endDate: Date;
   }) => {
     if (filter) {
-      dispatch(AppActions.REQUEST_FETCH_REPORTS, {
+      dispatch(handleFecthReports({patientId: appState.patient!.id!, date: { date: {
         startDate: format(payload.startDate, 'yyyy-MM-dd'),
         endDate: format(payload.endDate, 'yyyy-MM-dd'),
-      });
+      }}}));
     } else {
-      dispatch(AppActions.REQUEST_CREATE_REPORT, {
+      dispatch(handleCreateReport({
+        patientId: appState.patient!.id!,
         startDate: format(payload.startDate, 'yyyy-MM-dd'),
         endDate: format(payload.endDate, 'yyyy-MM-dd'),
-      });
+      }));
     }
     onClose({ start: getValues('startDate'), end: getValues('endDate') });
   };
@@ -209,7 +215,7 @@ const ReportDateRangeModal = ({
       animationType='slide'
       visible={isOpen}
       onRequestClose={() => {
-        dispatch(AppActions.REQUEST_FETCH_REPORTS, {});
+        dispatch(handleFecthReports({patientId: appState.patient!.id!, date: { date : null}}) );
         onClose();
       }}
     >

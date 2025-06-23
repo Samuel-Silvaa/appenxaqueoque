@@ -12,7 +12,7 @@ import { useApp } from 'src/infra/app/app';
 import { differenceInDays, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useSelector } from "react-redux";
-import { authSelector } from "src/infra/app/selectors";
+import { appStateSelector, authSelector } from "src/infra/app/selectors";
 
 const stylesheet = {
   userName: 'text-2xl font-bold px-4 pb-4 dark:text-d-blue-title',
@@ -62,22 +62,22 @@ const categories: Array<HomeCategory> = [
 ];
 
 const CountingDaysTitle = () => {
-  const { episodes } = useApp();
+  const appState = useSelector(appStateSelector);
   return (
     <View className={stylesheet.countingDays.card}>
-      {episodes && (
+      {appState.episodes && (
         <Text className={stylesheet.countingDays.title}>
           Você está a{' '}
-          {episodes?.length > 0
+          {appState.episodes?.length > 0
             ? differenceInDays(
                 format(new Date(), 'yyyy-MM-dd', {
                   locale: ptBR,
                 }),
-                new Date(
-                  format(episodes[0].dateTime, 'yyyy-MM-dd', {
+                
+                  format(new Date(appState.episodes[0].dateTime!), 'yyyy-MM-dd', {
                     locale: ptBR,
                   })
-                )
+                
               )
             : 0}{' '}
           dias sem crises!

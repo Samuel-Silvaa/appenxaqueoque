@@ -15,7 +15,7 @@ import React from 'react';
 import _ from 'lodash';
 import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
-import { clearEpisodeState, setPageTitle } from "src/infra/app/reducers/app.reducer";
+import { clearEpisodeState, handleStepForward, setLoadingState, setPageTitle } from "src/infra/app/reducers/app.reducer";
 
 const stylesheet = {
   steps: {
@@ -62,11 +62,12 @@ interface EpisodeScaffold {
   episodePagesFlatListRef: RefObject<FlatList>;
 }
 
+
+
 const Topic = ({
   headerStepsFlatListRef,
   episodePagesFlatListRef,
 }: EpisodeScaffold) => {
-  const { validateStepForward } = useApp();
   const  appState  = useSelector(appStateSelector);
   const dispatch = useDispatch();
 
@@ -86,7 +87,19 @@ const Topic = ({
   ].map((item, indx) => ({ title: item, id: item + indx }));
 
   useEffect(() => {
-    if ( appState.currentEpStep > 0) dispatch(setPageTitle(DATA[appState.currentEpStep].title));
+    dispatch(setPageTitle(DATA[appState.currentEpStep].title));
+                if (episodePagesFlatListRef?.current) {
+                  episodePagesFlatListRef?.current.scrollToIndex({
+                    index: appState.currentEpStep,
+                    animated: true,
+                  });
+                }
+              if (headerStepsFlatListRef?.current) {
+                headerStepsFlatListRef?.current.scrollToIndex({
+                  index: appState.currentEpStep,
+                  animated: true,
+                });
+              }
   }, [appState.currentEpStep]);
 
   return (
@@ -99,19 +112,7 @@ const Topic = ({
           <TouchableOpacity
           key={`t-${index}`}
             onPress={() => {
-              if (validateStepForward(index))
-                if (episodePagesFlatListRef?.current) {
-                  episodePagesFlatListRef?.current.scrollToIndex({
-                    index: index,
-                    animated: true,
-                  });
-                }
-              if (headerStepsFlatListRef?.current) {
-                headerStepsFlatListRef?.current.scrollToIndex({
-                  index: index,
-                  animated: true,
-                });
-              }
+                dispatch(handleStepForward(index));
             }}
             className={
               sharedEpisodeStyleSheet.topic.item +
@@ -156,7 +157,6 @@ const pages = [
 
 const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
   const appState = useSelector(appStateSelector)
-  const appSelector = useSelector(appStateSelector);
 
   return (
     <FlatList
@@ -245,6 +245,7 @@ const FormScaffold = () => {
 const EpisodePage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(setLoadingState(false));
     return () => {
       dispatch(setPageTitle(''));
       dispatch(clearEpisodeState());

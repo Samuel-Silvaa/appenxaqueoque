@@ -13,7 +13,7 @@ const Location = () => {
 
   const handleSelectLocation = (location: string) => {
     try {
-        const isLocationSet = appState.episode.location?.includes(location);
+        const isLocationSet = appState.episode.location!.includes(location);
     let locations;
     if (isLocationSet) {
       if (Array.isArray(appState.episode.location)) {
@@ -23,19 +23,16 @@ const Location = () => {
       }
     } else {
       if (Array.isArray(appState.episode.location)) {
-        console.log('1')
         dispatch(handleFormChanging({ location: [...appState.episode.location, location] }));
 
         return
       } else if (appState.episode.location!.includes(',')) {
-        console.log('2')
         dispatch(handleFormChanging({ location: [...appState.episode.location.split(','), location] }));
         return
       } else {
         locations = [location];
       }
     }
-    console.log({ location: locations })
     dispatch(handleFormChanging({ location: locations }));
       } catch(err) {
         console.log(err);
@@ -92,7 +89,7 @@ const Location = () => {
                 <Path
                   strokeWidth={4}
                   stroke='#1d1d1d'
-                  onPressIn={() => handleSelectLocation(ILocation.FRONTALLEFT)}
+                  onPress={() => handleSelectLocation(ILocation.FRONTALLEFT)}
                   fill={validateLocationSelectedAndReturnColorScheme(
                     ILocation.FRONTALLEFT
                   )}
@@ -107,7 +104,7 @@ const Location = () => {
                   fill={validateLocationSelectedAndReturnColorScheme(
                     ILocation.FRONTALRIGHT
                   )}
-                  onPressIn={() => handleSelectLocation(ILocation.FRONTALRIGHT)}
+                  onPress={() => handleSelectLocation(ILocation.FRONTALRIGHT)}
                   d='M46.51,123.55c16.22,23.92,21.92,51.7,15.27,82.61,24.47,7.12,67.91,14.36,94.2,14.36.03,0,.06,0,.09,0v-81.33c-36.99-.28-73.93-5.63-109.56-15.63Z'
                 />
                 <Path
@@ -116,7 +113,7 @@ const Location = () => {
                   fill={validateLocationSelectedAndReturnColorScheme(
                     ILocation.PARIETALLEFT
                   )}
-                  onPressIn={() => handleSelectLocation(ILocation.PARIETALLEFT)}
+                  onPress={() => handleSelectLocation(ILocation.PARIETALLEFT)}
                   strokeDasharray='0 0 11.57 11.57'
                   d='M261.93,125.54c4.91-7.63,10.95-14.89,18.08-21.75-9.62-47.64-43.31-91.06-123.94-91.15v126.53c35.6.27,71.26-4.15,105.85-13.64Z'
                 />
@@ -126,7 +123,7 @@ const Location = () => {
                   fill={validateLocationSelectedAndReturnColorScheme(
                     ILocation.TEMPLELEFT
                   )}
-                  onPressIn={() => handleSelectLocation(ILocation.TEMPLELEFT)}
+                  onPress={() => handleSelectLocation(ILocation.TEMPLELEFT)}
                   strokeDasharray='0 0 11.57 11.57'
                   d='M283.1,136.84c0-.31.01-.63.01-.94,0-10.62-.95-21.47-3.1-32.1-7.13,6.86-13.17,14.12-18.08,21.75.69-.19,1.37-.36,2.06-.56-.69.19-1.37.37-2.06.56-15.15,23.53-19.6,50.64-12.48,80.89.48-.14.96-.28,1.43-.42-.47.14-.95.28-1.43.42,3.26,13.86,8.96,28.37,17.17,43.51,3.27-8.52,5.83-18.26,7.82-28.51,15.58,1.45,48.62-68.36,8.66-84.59Z'
                 />
@@ -143,7 +140,7 @@ const Location = () => {
                   fill={validateLocationSelectedAndReturnColorScheme(
                     ILocation.PARIETALRIGHT
                   )}
-                  onPressIn={() => handleSelectLocation(ILocation.PARIETALRIGHT)}
+                  onPress={() => handleSelectLocation(ILocation.PARIETALRIGHT)}
                   d='M156.08,139.18V12.65c-.08,0-.16,0-.25,0-75.05,0-114.3,38.42-124.53,92.58,5.8,5.82,10.88,11.93,15.22,18.32,35.63,10,72.57,15.35,109.56,15.63Z'
                 />
                 <Path
@@ -152,7 +149,7 @@ const Location = () => {
                   fill={validateLocationSelectedAndReturnColorScheme(
                     ILocation.TEMPLERIGHT
                   )}
-                  onPressIn={() => handleSelectLocation(ILocation.TEMPLERIGHT)}
+                  onPress={() => handleSelectLocation(ILocation.TEMPLERIGHT)}
                   strokeDasharray='0 0 11.57 11.57'
                   d='M61.27,206.01c.17.05.35.1.52.15,6.64-30.91.94-58.69-15.27-82.61-.27-.08-.55-.15-.83-.23.27.08.55.15.83.23-4.33-6.39-9.42-12.5-15.22-18.32-1.84,9.76-2.75,20.02-2.75,30.67,0,.31,0,.63.01.94-39.96,16.23-6.92,86.04,8.66,84.59,1.99,10.25,4.55,19.99,7.82,28.51,8.22-15.19,13.75-29.8,16.75-43.78-.17-.05-.35-.1-.52-.15Z'
                 />
@@ -193,7 +190,7 @@ const Location = () => {
                   fill={validateLocationSelectedAndReturnColorScheme(
                     ILocation.BACKSIDE
                   )}
-                  onPressIn={() => handleSelectLocation(ILocation.BACKSIDE)}
+                  onPress={() => handleSelectLocation(ILocation.BACKSIDE)}
                   d='M155.95,9.74c-88.57,0-127.28,53.51-127.28,123.25,42.69,12.54,85.11,18.91,127.28,19.14V9.74Z'
                 />
                 <Path
@@ -203,7 +200,7 @@ const Location = () => {
                   fill={validateLocationSelectedAndReturnColorScheme(
                     ILocation.BACKSIDE
                   )}
-                  onPressIn={() => handleSelectLocation(ILocation.BACKSIDE)}
+                  onPress={() => handleSelectLocation(ILocation.BACKSIDE)}
                   d='M283.22,133.93c0-.31.01-.63.01-.94,0-58.24-28.45-123.25-127.28-123.25v142.39c42.69.23,85.11-5.83,127.27-18.2Z'
                 />
 

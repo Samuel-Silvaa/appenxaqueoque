@@ -8,11 +8,17 @@ import ProfilePage from './profile/Profile';
 import AppHeader from '../shared/components/appHeader/AppHeader';
 import ReportStackNavigation from './report/Report';
 import { useApp } from 'src/infra/app/app';
-import { AppActions } from 'src/infra/app/actions';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Success from './success/Success';
-import { setPageTitle } from "src/infra/app/reducers/app.reducer";
-import { useDispatch } from "react-redux";
+import {
+  handleFecthPatient,
+  handleFetchEpisodes,
+  setLoadingState,
+  setPageTitle,
+} from 'src/infra/app/reducers/app.reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAsyncAppDispatch } from 'src/infra/app/store';
+import { appStateSelector, authSelector } from 'src/infra/app/selectors';
 
 const stylesheet = {
   calendarBtnContainer:
@@ -22,19 +28,29 @@ const stylesheet = {
 const Tab = createBottomTabNavigator();
 
 const TabsRoutes = () => {
-  const { patient, dispatch: appdispatch, validateStepForward } = useApp();
+  const { validateStepForward } = useApp();
   const dispatch = useDispatch();
+  const asyncDispatch = useAsyncAppDispatch();
+  const auth = useSelector(authSelector);
+  const appState = useSelector(appStateSelector);
   const [colorScheme, setColorScheme] = React.useState(
     Appearance.getColorScheme()
   );
 
   React.useEffect(() => {
-    Appearance.addChangeListener((a) => {
-      setColorScheme(a.colorScheme);
-    });
-    if (!patient) appdispatch(AppActions.REQUEST_FETCH_PATIENT, {});
-    appdispatch(AppActions.REQUEST_FETCH_EPISODES);
+    try {
+      Appearance.addChangeListener((a) => {
+        setColorScheme(a.colorScheme);
+      });
+      if (auth.user) asyncDispatch(handleFecthPatient(auth.user!.id!));
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
+
+  React.useEffect(() => {
+      if (appState.patient) asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
+  },[appState.patient]);
 
   const getHeaderName = (routeIndex: number) => {
     switch (routeIndex) {
@@ -65,9 +81,9 @@ const TabsRoutes = () => {
     <Tab.Navigator
       screenListeners={{
         state: (e) => {
-          validateStepForward(0);
           if (e.data?.state)
             dispatch(setPageTitle(getHeaderName(e.data?.state.index)));
+          console.log(e.data.state.index)
         },
       }}
       screenOptions={({ route }) => ({
@@ -99,7 +115,7 @@ const TabsRoutes = () => {
                 </>
               );
             case 'Episode':
-              return (
+              return  (
                 <View className={stylesheet.calendarBtnContainer}>
                   <Image source={require('src/assets/plus-white.png')} />
                 </View>

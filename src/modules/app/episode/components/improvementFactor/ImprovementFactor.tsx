@@ -60,7 +60,7 @@ const ImprovementFactor = () => {
   } = useForm({ resolver: yupResolver(improvementSchema) });
 
   const handleSetImprovementFactorValues = (value: string) => {
-    if (appState.episode.improvementFactor.includes(value)) {
+    if (appState.episode.improvementFactor!.includes(value)) {
       dispatch(handleFormChanging({
         improvementFactor: Array.from(
           appState.episode.improvementFactor
@@ -77,7 +77,9 @@ const ImprovementFactor = () => {
     <View className='h-full w-full'>
       <Wrapper title='O que ajudou a melhorar?'>
         {data.map((act, index) => (
-          <Fragment>
+          <Fragment 
+              key={index}
+          >
             <Card
               key={index}
               onPress={() => {

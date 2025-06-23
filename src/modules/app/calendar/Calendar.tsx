@@ -10,28 +10,30 @@ import EpisodeModal from 'src/modules/shared/components/episodemodal/EpisodeModa
 import { pinColor } from 'src/infra/utils/appUtils';
 import AcutenessLegend from '../shared/components/calendar/AcutenessLegend';
 import { Episode } from 'src/infra/@types/app.types';
+import { useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
 
 const InnerHomeContainer = () => {
-  const { episodes } = useApp();
+  const appState = useSelector(appStateSelector);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState<Episode>();
 
   const parsedEpisodes = useMemo(() => {
-    if (Array.isArray(episodes)) {
+    if (Array.isArray(appState.episodes)) {
       const markedDates: any = {};
-      episodes.map((ep) => {
-        markedDates[format(ep?.dateTime, 'yyyy-MM-dd')] = {
+      appState.episodes.map((ep) => {
+        markedDates[format(ep.dateTime! , 'yyyy-MM-dd')] = {
           selected: true,
           marked: true,
-          selectedColor: pinColor(ep.acuteness),
-          dotColor: pinColor(ep.acuteness),
+          selectedColor: pinColor(ep.acuteness!),
+          dotColor: pinColor(ep.acuteness!),
         };
       });
       return markedDates;
     } else {
       return {};
     }
-  }, [episodes]);
+  }, [appState.episodes]);
 
   return (
     <View className='flex-grow'>
@@ -40,9 +42,9 @@ const InnerHomeContainer = () => {
           if (Object.keys(parsedEpisodes).includes(date.dateString)) {
             setIsModalOpen(true);
             setSelectedEpisode(
-              episodes?.find(
-                (ep) => format(ep.dateTime, 'yyyy-MM-dd') == date.dateString
-              ) || null
+              appState.episodes?.find(
+                (ep) => format(ep.dateTime!, 'yyyy-MM-dd') == date.dateString
+              )! || null
             );
           }
         }}
@@ -52,7 +54,7 @@ const InnerHomeContainer = () => {
         <EpisodeModal
           episode={{
             ...(selectedEpisode as Episode),
-            period: Number(selectedEpisode?.period) == 1 ? true : false,
+            period: Number(selectedEpisode?.period) == 1 ? 'true' : 'false',
             dates: {
               [format(selectedEpisode.dateTime, 'yyyy-MM-dd').toString()]:
                 parsedEpisodes[format(selectedEpisode.dateTime, 'yyyy-MM-dd')],

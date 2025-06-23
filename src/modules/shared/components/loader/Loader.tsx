@@ -6,7 +6,6 @@ import { useApp } from 'src/infra/app/app';
 import { appStateSelector, authSelector } from "src/infra/app/selectors";
 
 export const Loader = () => {
-  const { isLoading } = useApp();
   const auth = useSelector(authSelector);
   const app = useSelector(appStateSelector);
   const state = {
@@ -18,7 +17,7 @@ export const Loader = () => {
     return () => {
       state.animatedValue.stopAnimation();
     };
-  }, [isLoading, auth.loading, app.loading]);
+  }, [ auth.loading, app.loading]);
 
   const startAnimation = () => {
     Animated.sequence([
@@ -39,7 +38,7 @@ export const Loader = () => {
 
   const interpolateScale = state.animatedValue.interpolate({
     inputRange: [0, 0.5, 1],
-    outputRange: [1, 1.2, 1],
+    outputRange: [1, 0.5, 1],
   });
 
   const animatedStyle = {
@@ -52,7 +51,7 @@ export const Loader = () => {
       transparent={true}
       animationType='slide'
       statusBarTranslucent={true}
-      visible={isLoading || auth.loading}
+      visible={ auth.loading || app.loading}
       onRequestClose={() => {
         console.log('close modal');
       }}

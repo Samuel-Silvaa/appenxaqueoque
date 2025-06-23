@@ -9,10 +9,11 @@ import { AppProvider } from 'src/infra/app/app';
 import store from 'src/infra/app/store';
 import TabsRoutes from 'src/modules/app';
 import AuthRoutes from 'src/modules/auth';
-import { authSelector } from 'src/infra/app/selectors';
+import { appStateSelector, authSelector } from 'src/infra/app/selectors';
 import { Loader } from 'src/modules/shared/components/loader/Loader';
 import { Fragment, useEffect } from 'react';
 import { clearErrorMessage } from "src/infra/app/reducers/auth.reducer";
+import { clearAppErrorMessage } from "src/infra/app/reducers/app.reducer";
 
 NativeWindStyleSheet.setOutput({
   default: 'native',
@@ -20,9 +21,19 @@ NativeWindStyleSheet.setOutput({
 
 const ActiveRoutes = () => {
   const auth = useSelector((state) => authSelector(state));
+  const app = useSelector(appStateSelector);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const toast = useToast();
+
+  useEffect(() => {
+
+    if(app.error != null) {
+        toast.show(app.error!, {type: 'danger', dangerColor: 'danger', onClose() {
+          dispatch(clearAppErrorMessage());
+        },});
+    }
+  }, [app])
 
   useEffect(() => {
 
@@ -40,6 +51,8 @@ const ActiveRoutes = () => {
     }
 
   }, [auth.token])
+
+
 
   return (
     <Fragment>

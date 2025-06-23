@@ -1,5 +1,5 @@
 import { get, patch, post } from '../api';
-import { Episode, EpisodeModalDTO, Patient } from '../@types/app.types';
+import { Episode, EpisodeModalDTO, Patient, Report } from '../@types/app.types';
 import { format, subDays } from 'date-fns';
 
 interface CreateReportDTO {
@@ -54,7 +54,7 @@ const requestFetchEpisodes = async (patientId: string): Promise<Episode[]> =>
 const requestFetchReports = async (
   patientId: string,
   payload: { startDate: string; endDate: string }
-): Promise<Episode[]> =>
+): Promise<Report[]> =>
   get(
     `report/list/${patientId}`,
     {},

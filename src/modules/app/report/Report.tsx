@@ -3,9 +3,7 @@ import { Dimensions, Image, Pressable, Text, View } from 'react-native';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import screenOptions from 'src/modules/shared/style/StackOptions';
-import { useApp } from 'src/infra/app/app';
 import { useEffect, useState } from 'react';
-import { AppActions } from 'src/infra/app/actions';
 import { format, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { parseAcuteness, pinColor } from 'src/infra/utils/appUtils';
@@ -15,6 +13,10 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import { useForm } from 'react-hook-form';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import ReportDateRangeModal from 'src/modules/shared/components/reportDateRangeModal/ReportDateRangeModal';
+import { useAsyncAppDispatch } from "src/infra/app/store";
+import { useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
+import { handleFecthReports } from "src/infra/app/reducers/app.reducer";
 
 const stylesheet = {
   reportCard:
@@ -76,7 +78,8 @@ const ResourceCard = ({
 };
 
 const ReportPage = ({ navigation }) => {
-  const { dispatch, reports } = useApp();
+  const dispatch = useAsyncAppDispatch();
+  const appState = useSelector(appStateSelector);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const dateStringFormat = 'PPP';
@@ -91,7 +94,8 @@ const ReportPage = ({ navigation }) => {
   } = useForm();
 
   useEffect(() => {
-    dispatch(AppActions.REQUEST_FETCH_REPORTS, {});
+    if(appState.patient?.id)
+    dispatch(handleFecthReports({patientId:appState.patient!.id, date: {date: null}}));
   }, []);
 
   return (
@@ -134,8 +138,8 @@ const ReportPage = ({ navigation }) => {
         </View>
       </View>
 
-      {reports &&
-        reports.map((report) => (
+      {appState.reports &&
+        appState.reports.map((report) => (
           <ResourceCard
             key={report.id}
             reportDetails={report}
@@ -143,7 +147,7 @@ const ReportPage = ({ navigation }) => {
           />
         ))}
 
-      {reports?.length == 0 && (
+      {appState.reports?.length == 0 && (
         <View className='rounded-[16px] h-[45px] bg-blue-primary/30 flex items-center justify-center m-auto m-4'>
           <Text className='font-semibold'>
             Nenhum relatório foi gerado para este período.

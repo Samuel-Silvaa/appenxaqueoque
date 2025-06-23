@@ -93,7 +93,6 @@ export interface AppContextDefaultValues {
   isLoading: boolean;
   dispatch: (action: any, payload?: any, assetId?: string) => Promise<any>;
   validateStepForward: (step: number) => boolean;
-  handleFormChange: (payload: object) => void;
   submitEpisode: () => Promise<any>;
   episodes?: Episode[];
   patient?: Patient;

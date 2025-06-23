@@ -7,10 +7,10 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import { useApp } from 'src/infra/app/app';
 import { useNavigation } from '@react-navigation/native';
-import { id } from 'date-fns/locale';
 import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
-import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { handleFetchEpisodes, handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { useAsyncAppDispatch } from "src/infra/app/store";
 
 const stylesheet = {
   wrapper: 'flex-col w-full items-center justify-between',
@@ -33,7 +33,7 @@ const Notes = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
   const navigation = useNavigation();
-
+  const asyncDispatch = useAsyncAppDispatch();
   const {  submitEpisode } = useApp();
   const {
     control,
@@ -43,8 +43,12 @@ const Notes = () => {
 
   const handleSubmit = async () => {
     const res = await submitEpisode();
-              navigation.setOptions(res);
-        navigation.navigate('Success' as never);
+
+    if(res) {
+      asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
+      navigation.setOptions(res);
+      navigation.navigate('Success' as never);
+    }
   };
 
   return (

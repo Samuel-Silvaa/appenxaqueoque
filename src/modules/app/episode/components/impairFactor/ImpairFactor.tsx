@@ -62,7 +62,9 @@ const ImpairFactor = () => {
     <View className='h-full w-full'>
       <Wrapper title='O que piora a dor?'>
         {data.map((act, index) => (
-          <Fragment>
+          <Fragment 
+              key={index}
+          >
             <Card
               key={index}
               onPress={() => {

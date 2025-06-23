@@ -56,9 +56,10 @@ const PainType = () => {
           value={appState.episode.painType!}
         >
           {data.map((act, index) => (
-            <Fragment>
-              <Card
+            <Fragment 
                 key={index}
+            >
+              <Card
                 onPress={() => {
                   dispatch(handleFormChanging({ painType: act.value }));
                 }}
