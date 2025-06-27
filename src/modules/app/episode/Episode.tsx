@@ -134,19 +134,20 @@ const Topic = ({
     </View>
   );
 };
-const pages = [
-  { page: <FormSteps.Datetime /> },
-  { page: <FormSteps.EpisodeDuration /> },
-  { page: <FormSteps.Location /> },
-  { page: <FormSteps.Acuteness /> },
-  { page: <FormSteps.PainType /> },
-  { page: <FormSteps.Symptoms /> },
-  { page: <FormSteps.HaloSymptom /> },
-  { page: <FormSteps.ImpairFactor /> },
-  { page: <FormSteps.Trigger /> },
-  { page: <FormSteps.ImprovementFactor /> },
-  { page: <FormSteps.Period /> },
-  { page: <FormSteps.Notes /> },
+
+const pageComponents = [
+  FormSteps.Datetime,
+  FormSteps.EpisodeDuration,
+  FormSteps.Location,
+  FormSteps.Acuteness,
+  FormSteps.PainType,
+  FormSteps.Symptoms,
+  FormSteps.HaloSymptom,
+  FormSteps.ImpairFactor,
+  FormSteps.Trigger,
+  FormSteps.ImprovementFactor,
+  FormSteps.Period,
+  FormSteps.Notes,
 ];
 
 const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
@@ -157,29 +158,31 @@ const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
       ref={episodePagesFlatListRef}
       scrollEnabled={false}
       windowSize={3}
-      initialNumToRender={pages.length}
-      initialScrollIndex={currentStep}
-      maxToRenderPerBatch={0}
+      initialNumToRender={1}
+      maxToRenderPerBatch={1}
       horizontal
       pagingEnabled={false}
       decelerationRate='fast'
       bounces={true}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => (
-        <View
-        key={`list-view-${item.index}`}
-          style={{
-            width: Dimensions.get('screen').width - 32,
-            paddingTop: 20,
-          }}
-        >
-          {item.page}
-        </View>
-      )}
+      renderItem={({ index }) => {
+        const PageComponent = pageComponents[index];
+        return (
+          <View
+            key={`list-view-${index}`}
+            style={{
+              width: Dimensions.get('screen').width - 32,
+              paddingTop: 20,
+            }}
+          >
+            <PageComponent />
+          </View>
+        );
+      }}
       onScrollToIndexFailed={() => {}}
-      keyExtractor={(item, index) => item.toString() + index}
+      keyExtractor={(_, index) => index.toString()}
       scrollEventThrottle={1} // Adjust as needed
-      data={pages}
+      data={pageComponents}
     />
   );
 };
