@@ -18,11 +18,11 @@ import ReportDateRangeModal from 'src/modules/shared/components/reportDateRangeM
 
 const stylesheet = {
   reportCard:
-    'w-full flex-row items-start p-3 my-1 bg-white rounded-[30px] h-[90px]',
+    'w-full flex-row items-start p-3 my-1 bg-white dark:bg-d-blue-primary rounded-[30px] h-[90px]',
   reportCardColor: 'h-[80%] rounded-full w-2 mr-4 py-2 self-center',
   reportCardHeader: 'flex-col h-full w-[80%]',
   reportCardDesc:
-    'mt-2 w-3/4 h-3/4 text-ellipsis overflow-hidden ... opacity-50',
+    'mt-2 w-3/4 h-3/4 text-ellipsis overflow-hidden ... opacity-50 dark:text-d-text-gray',
 };
 
 const ResourceCard = ({
@@ -44,10 +44,10 @@ const ResourceCard = ({
         style={{ backgroundColor: pinColor(reportDetails.acuteness) }}
       ></View>
       <View className={stylesheet.reportCardHeader}>
-        <Text className='font-semibold capitalize'>
+        <Text className='font-semibold capitalize dark:text-d-text-gray'>
           {format(reportDetails.startDate, 'dd MMM', { locale: ptBR })} -
           {format(reportDetails.endDate, 'dd MMM', { locale: ptBR })} -
-          <Text className='ml-2 font-medium'>
+          <Text className='ml-2 font-medium dark:text-d-text-gray'>
             {' '}
             {parseAcuteness(reportDetails.acuteness)}
           </Text>
@@ -123,12 +123,12 @@ const ReportPage = ({ navigation }) => {
         </View>
 
         <View className='self-start px-2'>
-          <Text>
+          <Text className='dark:text-d-text-gray'>
             {selectedDate.start} à {selectedDate.end}
           </Text>
         </View>
-        <View className='bg-snow-white mb-4 rounded-[44px] w-full'>
-          <Text className='font-semibold text-black  mx-auto text-md m-auto'>
+        <View className='bg-snow-white dark:bg-d-blue-primary mb-4 rounded-[44px] w-full h-[45px]'>
+          <Text className='font-semibold text-black dark:text-d-text-gray mx-auto text-md m-auto '>
             Visualize e envie um relatório ao seu médico
           </Text>
         </View>

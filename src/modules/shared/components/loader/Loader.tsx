@@ -59,14 +59,14 @@ export const Loader = () => {
       <View className='flex flex-grow  items-center justify-center m-auto bg-black/30 w-full z-300'>
         <Animated.View
           style={[animatedStyle]}
-          className='rounded-full w-[180px] h-[180px] items-center justify-center bg-snow-white shadow-xl shadow-black'
+          className='rounded-full w-[180px] h-[180px] items-center justify-center bg-snow-white dark:bg-d-blue-primary shadow-xl shadow-black'
         >
           <Image
             resizeMode='contain'
             className='w-[150px] h-[110px]'
             source={require('src/assets/duck.png')}
           ></Image>
-          <Text className='text-xs text-black/40'> Carregando ...</Text>
+          <Text className='text-xs text-black/40 dark:text-d-text-gray/40'> Carregando ...</Text>
         </Animated.View>
       </View>
     </Modal>

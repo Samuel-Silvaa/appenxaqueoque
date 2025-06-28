@@ -24,8 +24,8 @@ const stylesheet = {
   arrowdown: 'flex items-center justify-center p-2',
   edition:
     'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 ',
-  editText: 'text-[8px] text-black',
-  headerDate: 'font-bold text-black',
+  editText: 'text-[8px] text-black dark:text-d-text-gray',
+  headerDate: 'font-bold text-black dark:text-d-text-gray',
   contentWrapper:
     'my-2 w-full flex-row flex-wrap justify-start overflow-hidden gap-1',
   longInfo: ' w-[98%] shadow-sm rounded-[16px] bg-blue-baby',
@@ -34,7 +34,7 @@ const stylesheet = {
   smallInfoTitle: 'font-bold',
   smallInfoImgContainer: 'flex-col justify-start items-start py-3',
   rangeCard:
-    'w-4/5 bg-white shadow-sm rounded-[16px] flex-col items-center jusitfy-center p-6 gap-y-2 m-auto self-center z-20 overflow-hidden',
+    'w-4/5 bg-white dark:bg-d-blue-primary shadow-sm rounded-[16px] flex-col items-center jusitfy-center p-6 gap-y-2 m-auto self-center z-20 overflow-hidden',
 };
 
 interface HeadListProps {
@@ -119,7 +119,7 @@ const Range = ({
           >
             <Text
               className={`${
-                currentStep == index ? 'text-[#fff]' : 'text-black '
+                currentStep == index ? 'text-[#fff]' : 'text-black dark:text-d-text-gray '
               }`}
             >
               {item.title}

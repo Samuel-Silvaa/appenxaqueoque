@@ -52,8 +52,8 @@ const ActiveRoutes = () => {
 const Toast = ({ toastOptions }: { toastOptions: ToastProps }) => {
   return (
     <Fragment>
-      <View className='bg-snow-white w-3/4 h-[56px] rounded-[8px] flex items-start justify-center p-2'>
-        <Text className='text-black text-md'>{toastOptions.message}</Text>
+      <View className='bg-snow-white dark:bg-d-blue-primary w-3/4 h-[56px] rounded-[8px] flex items-start justify-center p-2'>
+        <Text className='text-black dark:text-d-text-gray text-md'>{toastOptions.message}</Text>
       </View>
     </Fragment>
   );

@@ -21,15 +21,15 @@ const stylesheet = {
   arrowdown: 'flex items-center justify-center p-2',
   edition:
     'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 ',
-  editText: 'text-[8px] text-black',
-  headerDate: 'font-bold text-black',
+  editText: 'text-[8px] text-black dark:text-d-text-gray',
+  headerDate: 'font-bold text-black dark:text-d-text-gray',
   contentWrapper:
     'my-2 w-full flex-row flex-wrap justify-start overflow-hidden gap-1 pb-2',
   longInfo: ' w-[98%] shadow-sm rounded-[16px] bg-blue-baby',
-  smallInfoBlock: 'w-[48%] shadow-sm rounded-[16px] bg-primary',
+  smallInfoBlock: 'w-[48%] shadow-sm rounded-[16px] bg-primary dark:bg-d-blue-primary',
   smallInfoContainer: 'w-full flex-col justify-start items-start p-4',
-  smallInfoTitle: 'font-bold',
-  smallInfoDesc: 'w-3/4',
+  smallInfoTitle: 'font-bold dark:text-d-text-gray',
+  smallInfoDesc: 'w-3/4 dark:text-d-text-gray',
   smallInfoImgContainer: 'flex-row gap-x-2 justify-start items-start py-3',
 };
 
@@ -212,7 +212,7 @@ const EpisodeModal = ({
               })}
           </View>
           {nullDetails.length > 0 && (
-            <Text className='font-semibold pl-2 font-black my-'>
+            <Text className='font-semibold pl-2 font-black my- dark:text-d-text-gray'>
               Campos não preenchidos
             </Text>
           )}
@@ -230,15 +230,10 @@ const EpisodeModal = ({
                         {dtl.title}
                       </Text>
                       <View className={stylesheet.smallInfoImgContainer}>
-                        <Text>Informação não preenchida</Text>
+                        <Text className='dark:text-d-text-gray'>Informação não preenchida</Text>
                       </View>
                     </View>
                   </Pressable>
-                  // <Pressable className='my-2'>
-                  //   <View className='w-full h-[55px] bg-blue-baby flex-row justify-start items-center p-4 rounded-[16px]'>
-                  //     <Text>{dtl.title}</Text>
-                  //   </View>
-                  // </Pressable>
                 );
               })}
           </View>

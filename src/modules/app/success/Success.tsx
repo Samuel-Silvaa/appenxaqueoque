@@ -9,7 +9,7 @@ const stylesheet = {
   wrapper: 'w-full h-full gap-y-4 flex justify-center items-center mt-[10%]',
   titleconainer:
     'rounded-[16px] h-[45px] bg-blue-primary w-3/4 flex items-center justify-center',
-  title: 'text-black font-bold',
+  title: 'text-black dark:text-d-text-gray font-bold',
 };
 
 const Success = ({ navigation }) => {

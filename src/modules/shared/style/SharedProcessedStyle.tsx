@@ -32,8 +32,8 @@ export const getBtnColorScheme = (
       };
     default:
       return {
-        pressable: `${stylesheet.pressable} bg-white`,
-        title: `${stylesheet.title} `,
+        pressable: `${stylesheet.pressable} bg-white `,
+        title: `${stylesheet.title} dark:text-d-text-gray`,
       };
   }
 };

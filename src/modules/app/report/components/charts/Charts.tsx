@@ -22,9 +22,9 @@ import { ReportCard } from './components/ReportCard';
 
 const stylesheet = {
   footer: 'w-full h-[50px] ',
-  footerBtn: 'bg-[#F8ECDE] w-ful h-full rounded-full p-2 my-2',
+  footerBtn: 'bg-[#F8ECDE] dark:bg-d-blue-primary w-ful h-full rounded-full p-2 my-2',
   footerBtnInner:
-    'bg-white w-ful h-full rounded-full p-1 flex-row items-center justify-center',
+    'bg-white dark:bg-d-blue-primary-dark w-ful h-full rounded-full p-1 flex-row items-center justify-center',
 };
 
 const colorList = [
@@ -237,7 +237,7 @@ const ChartsPage = () => {
               setEmailModalOpen(true);
             }}
           >
-            <Text>Enviar relatório para o médico </Text>
+            <Text className='dark:text-d-text-gray'>Enviar relatório para o médico </Text>
             <Image
               className='ml-4'
               source={require('src/assets/send.png')}

@@ -22,7 +22,7 @@ const stylesheet = {
   header: 'w-full flex-row items-center justify-between mb-4',
   arrowdown: 'flex items-center justify-center p-2',
   inputCard:
-    'w-4/5 bg-white shadow-sm rounded-[16px] flex-col items-center jusitfy-center p-6 gap-y-2 m-auto self-center z-20 overflow-hidden',
+    'w-4/5 bg-white dark:bg-d-blue-primary shadow-sm rounded-[16px] flex-col items-center jusitfy-center p-6 gap-y-2 m-auto self-center z-20 overflow-hidden',
 };
 
 const PhysicianEmailModal = ({
