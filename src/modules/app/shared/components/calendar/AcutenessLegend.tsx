@@ -10,21 +10,21 @@ const AcutenessLegend = () => {
           style={{ backgroundColor: pinColor(Acuteness.SEVERE) }}
           className='w-[8px] h-[8px] rounded-full mx-2'
         ></View>
-        <Text>Forte</Text>
+        <Text className='dark:text-d-text-gray'>Forte</Text>
       </View>
       <View className='flex-row items-center justify-center gapx-2'>
         <View
           style={{ backgroundColor: pinColor(Acuteness.MILD) }}
           className='w-[8px] h-[8px] rounded-full mx-2'
         ></View>
-        <Text>Moderada</Text>
+        <Text className='dark:text-d-text-gray'>Moderada</Text>
       </View>
       <View className='flex-row items-center justify-center gapx-2'>
         <View
           style={{ backgroundColor: pinColor(Acuteness.LIGHT) }}
           className='w-[8px] h-[8px] rounded-full mx-2'
         ></View>
-        <Text>Leve</Text>
+        <Text className='dark:text-d-text-gray'>Leve</Text>
       </View>
     </View>
   );

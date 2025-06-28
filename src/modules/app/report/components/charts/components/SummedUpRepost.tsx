@@ -14,7 +14,7 @@ import {
 
 const stylesheet = {
   wrapper:
-    'min-h-[200px] h-[300px] w-full rounded-[25px] bg-white shadow-sm my-4 ',
+    'min-h-[200px] h-[300px] w-full rounded-[25px] bg-white dark:bg-d-blue-primary shadow-sm my-4 ',
   header:
     'bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4',
   status: 'w-[26px] h-[26px] rounded-full',
@@ -33,12 +33,12 @@ export const SummedUpReport = (data: { report: Report }) => {
           className={stylesheet.status}
           style={{ backgroundColor: pinColor(report.acuteness) }}
         ></View>
-        <Text className='font-semibold text-black'>
+        <Text className='font-semibold text-black dark:text-d-text-gray'>
           De {format(new Date(report.startDate), 'dd MMM', { locale: ptBR })} à{' '}
           {format(new Date(report.endDate), 'dd MMM', { locale: ptBR })}
         </Text>
         <View>
-          <Text className='font-semibold text-black'>
+          <Text className='font-semibold text-black dark:text-d-text-gray'>
             {differenceInDays(report.endDate, report.startDate)} dias
           </Text>
         </View>
@@ -50,49 +50,49 @@ export const SummedUpReport = (data: { report: Report }) => {
               className='w-4 h-4'
               source={require('src/assets/chart-doc.png')}
             />
-            <Text>{report.episodeAmount} episódios</Text>
+            <Text className='dark:text-d-text-gray'>{report.episodeAmount} episódios</Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-clock.png')}
             />
-            <Text>{parseTime(report.time)} </Text>
+            <Text className='dark:text-d-text-gray'>{parseTime(report.time)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-header-location.png')}
             />
-            <Text>{parseLocation(report.location)} </Text>
+            <Text className='dark:text-d-text-gray'>{parseLocation(report.location)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-acuteness.png')}
             />
-            <Text>{parseAcuteness(report.acuteness)} </Text>
+            <Text className='dark:text-d-text-gray'>{parseAcuteness(report.acuteness)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-sad.png')}
             />
-            <Text>{parsePainType(report.painType)} </Text>
+            <Text className='dark:text-d-text-gray'>{parsePainType(report.painType)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-symptom.png')}
             />
-            <Text>{parseSymptoms(report.symptoms)} </Text>
+            <Text className='dark:text-d-text-gray'>{parseSymptoms(report.symptoms)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-trigger.png')}
             />
-            <Text>{parseTriggers(report.triggers)} </Text>
+            <Text className='dark:text-d-text-gray'>{parseTriggers(report.triggers)} </Text>
           </View>
         </View>
       </View>

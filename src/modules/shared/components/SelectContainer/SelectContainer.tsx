@@ -4,8 +4,8 @@ import SelectDropdown from 'react-native-select-dropdown';
 
 const stylesheet = {
   view: 'w-full my-1 ',
-  input: 'flex h-[60px] bg-gray-light rounded rounded-3xl p-5 ',
-  label: 'pl-2 text-black text-[15px]',
+  input: 'flex h-[60px] bg-gray-light dark:bg-d-blue-primary rounded rounded-3xl p-5 dark:text-d-text-gray',
+  label: 'pl-2 text-black dark:text-d-text-gray text-[15px]',
   error: 'text-error pl-2 font-medium',
 };
 
@@ -62,7 +62,7 @@ const SelectContainer = ({
               <Text
                 className={
                   stylesheet.input +
-                  ' text-md capitalize font-bold bg-beige-tertiary rounded-none'
+                  ' text-md capitalize font-bold bg-beige-tertiary dark:bg-d-blue-primary-dark rounded-none dark:text-d-text-gray'
                 }
               >
                 {item.title}

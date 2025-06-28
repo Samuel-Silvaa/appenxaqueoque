@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 const stylesheet = {
   wrapper:
-    'min-h-[200px] h-[300px] w-full rounded-[25px] bg-white shadow-sm my-4 ',
+    'min-h-[200px] h-[300px] w-full rounded-[25px] bg-white dark:bg-d-blue-primary shadow-sm my-4 ',
   header:
     'bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4',
   status: 'w-[26px] h-[26px] rounded-full',
@@ -20,8 +20,8 @@ export const ReportCard = ({
 }) => {
   return (
     <View className={stylesheet.wrapper}>
-      <View className={stylesheet.header + ' bg-beige-primary/50 h-[50px]'}>
-        <Text className='font-semibold text-black py-5 text-md'>{title}</Text>
+      <View className={stylesheet.header + ' bg-beige-primary/50 dark:bg-d-blue-primary/50 h-[50px]'}>
+        <Text className='font-semibold text-black dark:text-d-text-gray py-5 text-md'>{title}</Text>
       </View>
       <View className={stylesheet.contentWrapper}>
         <View className={stylesheet.content}>
@@ -29,8 +29,8 @@ export const ReportCard = ({
             description.map((desc, index) =>
               desc ? (
                 <View key={index} className={stylesheet.summaryItem}>
-                  <Text>•</Text>
-                  <Text className='m-y-4 font-xs'> {desc} </Text>
+                  <Text className='dark:text-d-text-gray'>•</Text>
+                  <Text className='m-y-4 font-xs dark:text-d-text-gray'> {desc} </Text>
                 </View>
               ) : (
                 <Text></Text>
@@ -38,8 +38,8 @@ export const ReportCard = ({
             )}
           {typeof description == 'string' && (
             <View key='desc@' className={stylesheet.summaryItem}>
-              <Text>•</Text>
-              <Text className='m-y-4 font-xs'> {description} </Text>
+              <Text className='dark:text-d-text-gray'>•</Text>
+              <Text className='m-y-4 font-xs dark:text-d-text-gray'> {description} </Text>
             </View>
           )}
         </View>

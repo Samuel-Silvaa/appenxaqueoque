@@ -10,7 +10,7 @@ const stylesheet = {
     infoRow: 'flex-row justify-between items-center w-2/4 my-1',
   },
   customActionButton:
-    'w-full flex-row items-center p-4 bg-white rounded-[30px]',
+    'w-full flex-row items-center p-4 bg-white dark:bg-d-blue-primary rounded-[30px]',
 };
 
 const CustomActionButton = ({
@@ -26,7 +26,7 @@ const CustomActionButton = ({
       className={stylesheet.customActionButton}
     >
       <Image className='mr-3' source={require('src/assets/out.png')}></Image>
-      <Text>{title}</Text>
+      <Text className='dark:text-d-text-gray'>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -39,15 +39,15 @@ const ProfilePage = () => {
     <AppPageScaffold displayBg={auth.userType == 'PATIENT'}>
       <View className={stylesheet.profile.wrapper}>
         <Image source={require('src/assets/pietra.png')}></Image>
-        <Text className='my-1'>Pietra Menezes</Text>
+        <Text className='my-1 dark:text-d-text-gray'>Pietra Menezes</Text>
         <View className={stylesheet.profile.infoRow}>
-          <Text>8 anos</Text>
-          <Text>1,30cm</Text>
-          <Text>30kg</Text>
+          <Text className='dark:text-d-text-gray'>8 anos</Text>
+          <Text className='dark:text-d-text-gray'>1,30cm</Text>
+          <Text className='dark:text-d-text-gray'>30kg</Text>
         </View>
       </View>
-      <View className='bg-blue-tertiary w-full flex-grow rounded-[33px] p-4'>
-        <View className='bg-white w-full flex-grow rounded-[33px]'>
+      <View className='bg-blue-tertiary dark:bg-d-blue-primary w-full flex-grow rounded-[33px] p-4'>
+        <View className='bg-white dark:bg-d-blue-primary-dark w-full flex-grow rounded-[33px]'>
           <CustomActionButton title='Editar perfil' />
           <CustomActionButton title='Notificações' />
           <CustomActionButton title='Privacidade' />
