@@ -22,6 +22,8 @@ const AuthRoutes = () => {
             <View className='w-full py-8 pl-4 flex flex-row justify-between items-center bg-primary'>
               {bottomTabsProps.navigation.canGoBack() ? (
                 <TouchableOpacity
+                  className='p-3'
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   onPress={() => {
                     bottomTabsProps.navigation.goBack();
                   }}

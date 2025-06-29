@@ -75,21 +75,21 @@ const Toast = ({ toastOptions }: { toastOptions: ToastProps }) => {
 const App = () => {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <ToastProvider
-          swipeEnabled={true}
-          animationDuration={400}
-          animationType='slide-in'
-          placement='top'
-          offsetTop={40}
-          duration={2000}
-          renderToast={(toastOptions) => <Toast toastOptions={toastOptions} />}
-        >
-            <AppProvider>
-              <ActiveRoutes />
-            </AppProvider>
-        </ToastProvider>
-      </NavigationContainer>
+        <NavigationContainer>
+          <ToastProvider
+            swipeEnabled={true}
+            animationDuration={400}
+            animationType='slide-in'
+            placement='top'
+            offsetTop={40}
+            duration={2000}
+            renderToast={(toastOptions) => <Toast toastOptions={toastOptions} />}
+          >
+              <AppProvider>
+                <ActiveRoutes />
+              </AppProvider>
+          </ToastProvider>
+        </NavigationContainer>
     </Provider>
   );
 };

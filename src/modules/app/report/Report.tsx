@@ -47,8 +47,8 @@ const ResourceCard = ({
       ></View>
       <View className={stylesheet.reportCardHeader}>
         <Text className='font-semibold capitalize dark:text-d-text-gray'>
-          {format(reportDetails.startDate, 'dd MMM', { locale: ptBR })} -
-          {format(reportDetails.endDate, 'dd MMM', { locale: ptBR })} -
+          {format(reportDetails.startDate || new Date(), 'dd MMM', { locale: ptBR })} -
+          {format(reportDetails.endDate || new Date(), 'dd MMM', { locale: ptBR })} -
           <Text className='ml-2 font-medium dark:text-d-text-gray'>
             {' '}
             {parseAcuteness(reportDetails.acuteness)}
@@ -113,7 +113,7 @@ const ReportPage = ({ navigation }) => {
         </View>
         <View className='flex-row justify-between items-center w-full '>
           <ExPressable
-            className='rounded-full w-2/4 h-[45px] bg-blue-primary/70'
+            className='rounded-full w-2/4 h-[45px] bg-blue-primary/70 dark:text-d-text-gray'
             title='Gerar relatório'
             colorScheme='light'
             onPress={() => setIsModalOpen(true)}
@@ -167,11 +167,18 @@ const ReportPage = ({ navigation }) => {
           isOpen={isFilterModalOpen}
           onClose={(dates) => {
             setIsFilterModalOpen(false);
-            if (dates)
+            if (dates && dates.start && dates.end && appState.patient?.id) 
+            {
               setSelectedDate({
                 start: format(dates.start, dateStringFormat, { locale: ptBR }),
                 end: format(dates.end, dateStringFormat, { locale: ptBR }),
               });
+          dispatch(handleFecthReports({patientId: appState.patient.id, date: {date: {
+            startDate: format(dates.start, 'YYYY-mm-dd', { locale: ptBR }),
+            endDate: format(dates.end, 'YYYY-mm-dd', { locale: ptBR }),
+          }}}));
+
+            }
           }}
         />
       )}

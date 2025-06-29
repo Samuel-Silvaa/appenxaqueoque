@@ -1,5 +1,6 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import { useCallback } from "react";
 import { TouchableOpacity } from 'react-native';
 import { Image, Text, View } from 'react-native';
 import { Appearance } from 'react-native';
@@ -8,6 +9,8 @@ import { appStateSelector } from "src/infra/app/selectors";
 
 const stylesheet = {
   header: 'w-full p-4 pt-8 flex flex-row grow-0 justify-between items-center',
+  backButton: 'p-3',
+  themeButton: 'p-3',
 };
 
 const AppHeader = ({
@@ -16,13 +19,13 @@ const AppHeader = ({
 }: BottomTabHeaderProps | NativeStackHeaderProps | any) => {
   const appState = useSelector(appStateSelector);
 
-  const toggleColorScheme = () => {
+  const toggleColorScheme = useCallback(() => {
     if (Appearance.getColorScheme() == 'light') {
       Appearance.setColorScheme('dark');
     } else {
       Appearance.setColorScheme('light');
     }
-  };
+  }, [Appearance]);
 
   return (
     <View
@@ -34,6 +37,8 @@ const AppHeader = ({
     >
       {navigation.canGoBack() ? (
         <TouchableOpacity
+          className={stylesheet.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           onPress={() => {
             navigation.goBack();
           }}
@@ -55,6 +60,8 @@ const AppHeader = ({
         </Text>
       )}
       <TouchableOpacity
+        className={stylesheet.themeButton}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         onPress={() => {
           toggleColorScheme();
         }}

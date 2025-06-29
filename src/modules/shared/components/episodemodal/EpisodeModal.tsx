@@ -21,6 +21,7 @@ const stylesheet = {
   wrapper: 'w-full pt-4',
   header: 'w-full flex-row items-center justify-between mb-4',
   arrowdown: 'flex items-center justify-center p-2',
+  closeButton: 'p-3',
   edition:
     'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 ',
   editText: 'text-[8px] text-black dark:text-d-text-gray',
@@ -179,7 +180,8 @@ const EpisodeModal = ({
             )}
             <TouchableOpacity
               onPress={onClose}
-              className='fw-8 h-8 flex items-end justify-center'
+              className={stylesheet.closeButton}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <Image
                 className={stylesheet.arrowdown}

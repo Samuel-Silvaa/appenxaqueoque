@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { useApp } from 'src/infra/app/app';
-import { RefObject, createRef, useEffect, useState } from 'react';
+import { RefObject, createRef, useEffect, useMemo } from 'react';
 import FormSteps from './components';
 
 import { sharedEpisodeStyleSheet } from './shared/SharedEpisodeStyleSheet';
@@ -56,7 +56,7 @@ const Steps = () => {
         .map((_, index) => {
           return (
             <View
-              key={index}
+              key={`step-${index}`}
               className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${
                 appState.currentEpStep == index
                   ? 'bg-blue-dark-secondary border border-blue-dark-primary '
@@ -88,7 +88,7 @@ const Topic = ({
   const  appState  = useSelector(appStateSelector);
   const dispatch = useDispatch();
 
-  const DATA: { id: string; title: string }[] = [
+  const DATA: { id: string; title: string }[] = useMemo(() => [
     'Data e horário',
     'Duração da dor',
     'Localização',
@@ -101,7 +101,7 @@ const Topic = ({
     'Fatores de melhora',
     'Periodo menstrual',
     'Observações',
-  ].map((item, indx) => ({ title: item, id: item + indx }));
+  ].map((item, indx) => ({ title: item, id: item + indx })),[]);
 
   useEffect(() => {
     dispatch(setPageTitle(DATA[appState.currentEpStep].title));
@@ -127,7 +127,7 @@ const Topic = ({
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }: HeadListProps) => (
           <TouchableOpacity
-          key={`t-${index}`}
+            key={`topic-${item.id}`}
             onPress={() => {
                 dispatch(handleStepForward(index));
             }}
@@ -141,7 +141,7 @@ const Topic = ({
             }
           >
             <Text
-              key={index}
+              key={`topic-text-${item.id}`}
               className={`${
                 appState.currentEpStep == index ? 'text-[#fff]' : 'text-black '
               }`}
@@ -167,7 +167,7 @@ const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
       scrollEnabled={false}
       windowSize={3}
       initialNumToRender={1}
-      maxToRenderPerBatch={1}
+      maxToRenderPerBatch={11}
       horizontal
       pagingEnabled={false}
       decelerationRate='fast'
@@ -177,19 +177,19 @@ const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
         const PageComponent = pageComponents[index];
         return (
           <View
-            key={`list-view-${index}`}
+            key={`form-page-${index}`}
             style={{
               width: Dimensions.get('screen').width - 32,
               paddingTop: 20,
             }}
           >
-            <PageComponent />
+            <PageComponent key={`page-component-${index}`} />
           </View>
         );
       }}
       onScrollToIndexFailed={() => {}}
       keyExtractor={(_, index) => index.toString()}
-      scrollEventThrottle={1} // Adjust as needed
+      scrollEventThrottle={120} // Adjust as needed
       data={pageComponents}
     />
   );

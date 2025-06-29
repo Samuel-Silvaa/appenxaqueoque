@@ -21,6 +21,7 @@ const stylesheet = {
   wrapper: 'w-full',
   header: 'w-full flex-row items-center justify-between mb-4',
   arrowdown: 'flex items-center justify-center p-2',
+  closeButton: 'p-3',
   inputCard:
     'w-4/5 bg-white dark:bg-d-blue-primary shadow-sm rounded-[16px] flex-col items-center jusitfy-center p-6 gap-y-2 m-auto self-center z-20 overflow-hidden',
 };
@@ -74,7 +75,11 @@ const PhysicianEmailModal = ({
           <Text className={sharedStyleSheet.title}>
             Envie um pdf do seu relatório de episódios para o seu médico.
           </Text>
-          <TouchableOpacity onPress={() => onClose()}>
+          <TouchableOpacity 
+            onPress={() => onClose()}
+            className={stylesheet.closeButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Image
               className={stylesheet.arrowdown}
               source={require('src/assets/arrowdown.png')}
@@ -90,10 +95,11 @@ const PhysicianEmailModal = ({
             label='E-mail do médico'
             inputMode='email'
             name='email'
-            onTextInput={(
-              ev: NativeSyntheticEvent<TextInputTextInputEventData>
+            setValue={setEmail}
+            onChangeText={(
+              value: string
             ) => {
-              setEmail(ev.nativeEvent.previousText + ev.nativeEvent.text);
+              setEmail(value);
             }}
             control={control}
             errors={errors}

@@ -23,8 +23,9 @@ import { appStateSelector } from "src/infra/app/selectors";
 
 const stylesheet = {
   wrapper: 'w-full',
-  header: 'w-full flex-row items-center justify-between mb-4 pt-4',
+  header: 'w-full flex-row items-center justify-between mb-4',
   arrowdown: 'flex items-center justify-center p-2',
+  closeButton: 'p-3',
   edition:
     'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 ',
   editText: 'text-[8px] text-black dark:text-d-text-gray',
@@ -37,6 +38,8 @@ const stylesheet = {
   smallInfoTitle: 'font-bold',
   smallInfoImgContainer: 'flex-col justify-start items-start py-3',
   rangeCard:
+    'w-4/5 bg-white dark:bg-d-blue-primary shadow-sm rounded-[16px] flex-col items-center jusitfy-center p-6 gap-y-2 m-auto self-center z-20 overflow-hidden',
+  inputCard:
     'w-4/5 bg-white dark:bg-d-blue-primary shadow-sm rounded-[16px] flex-col items-center jusitfy-center p-6 gap-y-2 m-auto self-center z-20 overflow-hidden',
 };
 
@@ -227,7 +230,11 @@ const ReportDateRangeModal = ({
           <Text className={sharedStyleSheet.title}>
             {filter ? 'Filtrar relatórios por período' : 'Gerar relátorio'}
           </Text>
-          <TouchableOpacity onPress={() => onClose()}>
+          <TouchableOpacity 
+            onPress={() => onClose()}
+            className={stylesheet.closeButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Image
               className={stylesheet.arrowdown}
               

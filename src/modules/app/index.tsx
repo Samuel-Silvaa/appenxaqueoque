@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './home/HomePage';
-import { Appearance, Image, Text, View } from 'react-native';
+import { Appearance, Image, Text, View, Animated } from 'react-native';
 import EpisodePage from './episode/Episode';
 import CalendarPage from './calendar/Calendar';
 import ProfilePage from './profile/Profile';
@@ -36,6 +36,53 @@ const TabsRoutes = () => {
   const [colorScheme, setColorScheme] = React.useState(
     Appearance.getColorScheme()
   );
+
+  // Animated values for each tab
+  const homeScale = React.useRef(new Animated.Value(1)).current;
+  const reportScale = React.useRef(new Animated.Value(1)).current;
+  const episodeScale = React.useRef(new Animated.Value(1)).current;
+  const calendarScale = React.useRef(new Animated.Value(1)).current;
+  const profileScale = React.useRef(new Animated.Value(1)).current;
+
+  // Animated opacity values for each tab
+  const homeOpacity = React.useRef(new Animated.Value(1)).current;
+  const reportOpacity = React.useRef(new Animated.Value(1)).current;
+  const episodeOpacity = React.useRef(new Animated.Value(1)).current;
+  const calendarOpacity = React.useRef(new Animated.Value(1)).current;
+  const profileOpacity = React.useRef(new Animated.Value(1)).current;
+
+  // Enhanced animation function for tab press
+  const animateTabPress = React.useMemo(() => {
+    return (scaleValue: Animated.Value, opacityValue: Animated.Value) => {
+      Animated.parallel([
+        Animated.sequence([
+          Animated.timing(scaleValue, {
+            toValue: 0.85,
+            duration: 40,
+            useNativeDriver: true,
+          }),
+          Animated.spring(scaleValue, {
+            toValue: 1,
+            useNativeDriver: true,
+            tension: 100,
+            friction: 8,
+          }),
+        ]),
+        Animated.sequence([
+          Animated.timing(opacityValue, {
+            toValue: 0.7,
+            duration: 40,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacityValue, {
+            toValue: 1,
+            duration: 70,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]).start();
+    };
+  }, []); // Empty dependency array since the function doesn't depend on any props or state
 
   React.useEffect(() => {
     try {
@@ -81,9 +128,31 @@ const TabsRoutes = () => {
     <Tab.Navigator
       screenListeners={{
         state: (e) => {
-          if (e.data?.state)
-            dispatch(setPageTitle(getHeaderName(e.data?.state.index)));
-          console.log(e.data.state.index)
+          if (e.data?.state) {
+            const currentIndex = e.data.state.index;
+            dispatch(setPageTitle(getHeaderName(currentIndex)));
+          }
+        },
+        tabPress: (e) => {
+          const routeName = e.target?.split('-')[0]; 
+
+          switch (routeName) {
+            case 'Home':
+              animateTabPress(homeScale, homeOpacity);
+              break;
+            case 'Report':
+              animateTabPress(reportScale, reportOpacity);
+              break;
+            case 'Episode':
+              animateTabPress(episodeScale, episodeOpacity);
+              break;
+            case 'Calendar':
+              animateTabPress(calendarScale, calendarOpacity);
+              break;
+            case 'Profile':
+              animateTabPress(profileScale, profileOpacity);
+              break;
+          }
         },
       }}
       screenOptions={({ route }) => ({
@@ -93,52 +162,83 @@ const TabsRoutes = () => {
         headerShadowVisible: false,
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
-          switch (route.name) {
+          switch (route.name) { 
             case 'Home':
               return (
-                <>
+                <Animated.View
+                  style={{
+                    transform: [{ scale: homeScale }],
+                    opacity: homeOpacity,
+                    alignItems: 'center',
+                  }}
+                >
                   <Image
                     tintColor={colorSchemeApproachHex(focused)}
                     source={require('src/assets/home.png')}
                   />
                   <Text className={tabTextStyle(focused)}>Início</Text>
-                </>
+                </Animated.View>
               );
             case 'Report':
               return (
-                <>
+                <Animated.View
+                  style={{
+                    transform: [{ scale: reportScale }],
+                    opacity: reportOpacity,
+                    alignItems: 'center',
+                  }}
+                >
                   <Image
                     tintColor={colorSchemeApproachHex(focused)}
                     source={require('src/assets/stats.png')}
                   />
                   <Text className={tabTextStyle(focused)}>Relatório</Text>
-                </>
+                </Animated.View>
               );
             case 'Episode':
-              return  (
-                <View className={stylesheet.calendarBtnContainer}>
-                  <Image source={require('src/assets/plus-white.png')} />
-                </View>
+              return (
+                <Animated.View
+                  style={{
+                    transform: [{ scale: episodeScale }],
+                    opacity: episodeOpacity,
+                  }}
+                >
+                  <View className={stylesheet.calendarBtnContainer}>
+                    <Image source={require('src/assets/plus-white.png')} />
+                  </View>
+                </Animated.View>
               );
             case 'Calendar':
               return (
-                <>
+                <Animated.View
+                  style={{
+                    transform: [{ scale: calendarScale }],
+                    opacity: calendarOpacity,
+                    alignItems: 'center',
+                  }}
+                >
                   <Image
                     tintColor={colorSchemeApproachHex(focused)}
                     source={require('src/assets/calendar.png')}
                   />
                   <Text className={tabTextStyle(focused)}>Calenário</Text>
-                </>
+                </Animated.View>
               );
             case 'Profile':
               return (
-                <>
+                <Animated.View
+                  style={{
+                    transform: [{ scale: profileScale }],
+                    opacity: profileOpacity,
+                    alignItems: 'center',
+                  }}
+                >
                   <Image
                     tintColor={colorSchemeApproachHex(focused)}
                     source={require('src/assets/user.png')}
                   />
                   <Text className={tabTextStyle(focused)}>Perfil</Text>
-                </>
+                </Animated.View>
               );
           }
         },
@@ -175,6 +275,7 @@ const TabsRoutes = () => {
           shadowOpacity: 0.3,
           shadowOffset: { height: 10, width: 10 },
           shadowRadius: 50,
+          
         },
       })}
     >
