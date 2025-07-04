@@ -25,7 +25,7 @@ const AppHeader = ({
     } else {
       Appearance.setColorScheme('light');
     }
-  }, [Appearance]);
+  }, []);
 
   return (
     <View

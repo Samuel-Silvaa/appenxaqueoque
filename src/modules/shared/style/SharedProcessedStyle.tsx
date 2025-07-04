@@ -27,12 +27,12 @@ export const getBtnColorScheme = (
   switch (scheme) {
     case 'primary':
       return {
-        pressable: `${stylesheet.pressable} bg-blue-primary`,
+        pressable: `${stylesheet.pressable} bg-blue-primary dark:bg-d-blue-primary`,
         title: `${stylesheet.title} text-primary`,
       };
     default:
       return {
-        pressable: `${stylesheet.pressable} bg-white `,
+        pressable: `${stylesheet.pressable} bg-white dark:bg-d-blue-primary-dark`,
         title: `${stylesheet.title} dark:text-d-text-gray`,
       };
   }

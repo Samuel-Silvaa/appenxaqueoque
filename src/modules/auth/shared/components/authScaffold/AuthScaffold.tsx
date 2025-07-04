@@ -3,14 +3,14 @@ import { ReactNode } from 'react';
 import {
   ImageSourcePropType,
   KeyboardAvoidingView,
-  Platform,
   View,
+  Appearance,
 } from 'react-native';
 import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
 
 const stylesheet = {
-  view: 'flex-col flex-grow bg-primary px-4 gap-y-2 pb-14',
+  view: 'flex-col flex-grow bg-primary px-4 gap-y-2 pb-14 dark:bg-d-blue-primary-dark',
 };
 
 interface AuthScaffoldProps {
@@ -42,7 +42,7 @@ const AuthScaffold = ({
       keyboardVerticalOffset={200}
       enabled
     >
-      <StatusBar />
+      <StatusBar style={Appearance.getColorScheme() == 'dark' ? 'light' : 'dark'} />
 
       {children}
 

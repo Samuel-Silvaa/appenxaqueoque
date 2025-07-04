@@ -1,4 +1,3 @@
-
 export interface AuthContextDefaultValues {
   form: {
     token?: string;
@@ -18,6 +17,7 @@ export interface LogInResponse {
   token: string;
   userType: string;
   user: PatientDTO | PhysicianDTO;
+  isEmailConfirmed: boolean;
 }
 
 export interface SignUpDTO {
@@ -30,6 +30,24 @@ export interface SignUpResponse {
   email: string;
   userType: string;
   password: string ;
+}
+
+export interface SendEmailConfirmationDTO {
+  email: string;
+}
+
+export interface SendEmailConfirmationResponse {
+  message: string;
+}
+
+export interface ConfirmEmailDTO {
+  token: string;
+  email: string;
+}
+
+export interface ConfirmEmailResponse {
+  message: string;
+  isEmailConfirmed: boolean;
 }
 
 export interface PatientDTO {

@@ -16,6 +16,18 @@ import _ from 'lodash';
 import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
 import { clearEpisodeState, handleStepForward, setLoadingState, setPageTitle } from "src/infra/app/reducers/app.reducer";
+import Datetime from "./components/datetime/Datetime";
+import EpisodeDuration from "./components/episodeDuration/EpisodeDuration";
+import Acuteness from "./components/acuteness/Acuteness";
+import PainType from "./components/painType/PainType";
+import Symptoms from "./components/symptoms/Symptoms";
+import ImpairFactor from "./components/impairFactor/ImpairFactor";
+import ImprovementFactor from "./components/improvementFactor/ImprovementFactor";
+import Trigger from "./components/trigger/Trigger";
+import Period from "./components/period/Period";
+import Notes from "./components/notes/Notes";
+import HaloSymptoms from "./components/haloSymptoms/HaloSymptoms";
+import Location from "./components/location/Location";
 
 const stylesheet = {
   steps: {
@@ -30,23 +42,24 @@ const stylesheet = {
 };
 
 
-const pageComponents = [
-  FormSteps.Datetime,
-  FormSteps.EpisodeDuration,
-  FormSteps.Location,
-  FormSteps.Acuteness,
-  FormSteps.PainType,
-  FormSteps.Symptoms,
-  FormSteps.HaloSymptom,
-  FormSteps.ImpairFactor,
-  FormSteps.Trigger,
-  FormSteps.ImprovementFactor,
-  FormSteps.Period,
-  FormSteps.Notes,
-];
+
 
 
 const Steps = () => {
+  const pageComponents = useMemo(() => ([
+    FormSteps.Datetime,
+    FormSteps.EpisodeDuration,
+    FormSteps.Location,
+    FormSteps.Acuteness,
+    FormSteps.PainType,
+    FormSteps.Symptoms,
+    FormSteps.HaloSymptom,
+    FormSteps.ImpairFactor,
+    FormSteps.Trigger,
+    FormSteps.ImprovementFactor,
+    FormSteps.Period,
+    FormSteps.Notes,
+  ]), []); 
  const appState = useSelector(appStateSelector);
 
   return (
@@ -90,7 +103,7 @@ const Topic = ({
 
   const DATA: { id: string; title: string }[] = useMemo(() => [
     'Data e horário',
-    'Duração da dor',
+    'Duração da crise',
     'Localização',
     'Intensidade',
     'Características da dor',
@@ -103,20 +116,42 @@ const Topic = ({
     'Observações',
   ].map((item, indx) => ({ title: item, id: item + indx })),[]);
 
+  const handleScrollToIndexFailed = (info: {
+    index: number;
+    highestMeasuredFrameIndex: number;
+    averageItemLength: number;
+  }) => {
+    const wait = new Promise(resolve => setTimeout(resolve, 500));
+    wait.then(() => {
+      if (episodePagesFlatListRef.current) {
+        episodePagesFlatListRef.current.scrollToIndex({
+          index: info.index,
+          animated: true,
+        });
+      }
+      if (headerStepsFlatListRef.current) {
+        headerStepsFlatListRef.current.scrollToIndex({
+          index: info.index,
+          animated: true,
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     dispatch(setPageTitle(DATA[appState.currentEpStep].title));
-                if (episodePagesFlatListRef?.current) {
-                  episodePagesFlatListRef?.current.scrollToIndex({
-                    index: appState.currentEpStep,
-                    animated: true,
-                  });
-                }
-              if (headerStepsFlatListRef?.current) {
-                headerStepsFlatListRef?.current.scrollToIndex({
-                  index: appState.currentEpStep,
-                  animated: true,
-                });
-              }
+    if (episodePagesFlatListRef?.current) {
+      episodePagesFlatListRef?.current.scrollToIndex({
+        index: appState.currentEpStep,
+        animated: true,
+      });
+    }
+    if (headerStepsFlatListRef?.current) {
+      headerStepsFlatListRef?.current.scrollToIndex({
+        index: appState.currentEpStep,
+        animated: true,
+      });
+    }
   }, [appState.currentEpStep]);
 
   return (
@@ -125,6 +160,7 @@ const Topic = ({
         ref={headerStepsFlatListRef}
         data={DATA}
         showsHorizontalScrollIndicator={false}
+        onScrollToIndexFailed={handleScrollToIndexFailed}
         renderItem={({ item, index }: HeadListProps) => (
           <TouchableOpacity
             key={`topic-${item.id}`}
@@ -155,43 +191,34 @@ const Topic = ({
       />
     </View>
   );
-};
 
+  
+};
+  const pageComponents = [
+  Datetime,
+  EpisodeDuration,
+  Location,
+  Acuteness,
+  PainType,
+  Symptoms,
+  HaloSymptoms,
+  ImpairFactor,
+  Trigger,
+  ImprovementFactor,
+  Period,
+  Notes,
+];
 
 const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
-  const appState = useSelector(appStateSelector)
+  const appState = useSelector(appStateSelector);
+  const PageComponent = pageComponents[appState.currentEpStep];
+
+
 
   return (
-    <FlatList
-      ref={episodePagesFlatListRef}
-      scrollEnabled={false}
-      windowSize={3}
-      initialNumToRender={1}
-      maxToRenderPerBatch={11}
-      horizontal
-      pagingEnabled={false}
-      decelerationRate='fast'
-      bounces={true}
-      showsHorizontalScrollIndicator={false}
-      renderItem={({ index }) => {
-        const PageComponent = pageComponents[index];
-        return (
-          <View
-            key={`form-page-${index}`}
-            style={{
-              width: Dimensions.get('screen').width - 32,
-              paddingTop: 20,
-            }}
-          >
-            <PageComponent key={`page-component-${index}`} />
-          </View>
-        );
-      }}
-      onScrollToIndexFailed={() => {}}
-      keyExtractor={(_, index) => index.toString()}
-      scrollEventThrottle={120} // Adjust as needed
-      data={pageComponents}
-    />
+    <View style={{ flex: 1, width: Dimensions.get('screen').width - 32, paddingTop: 20 }}>
+      <PageComponent />
+    </View>
   );
 };
 
@@ -214,6 +241,7 @@ const FormScaffold = () => {
   const appState = useSelector(appStateSelector);
   const headerStepsFlatListRef = createRef<FlatList>();
   const episodePagesFlatListRef = createRef<FlatList>();
+
 
   useEffect(() => {
     if (appState.currentEpStep == 0) {

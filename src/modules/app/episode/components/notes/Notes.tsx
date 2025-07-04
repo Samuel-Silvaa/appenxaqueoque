@@ -22,14 +22,14 @@ const stylesheet = {
 };
 
 interface NotesSchema {
-  notes: number;
+  notes: string;
 }
 
 const notesSchema = yup.object<NotesSchema>().shape({
-  notes: yup.number(),
+  notes: yup.string(),
 });
 
-const Notes = () => {
+const Notes = () => { 
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
   const navigation = useNavigation();

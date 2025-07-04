@@ -14,6 +14,7 @@ import { Loader } from 'src/modules/shared/components/loader/Loader';
 import { Fragment, useEffect } from 'react';
 import { clearErrorMessage } from "src/infra/app/reducers/auth.reducer";
 import { clearAppErrorMessage } from "src/infra/app/reducers/app.reducer";
+import { Linking } from 'react-native';
 
 NativeWindStyleSheet.setOutput({
   default: 'native',
@@ -25,6 +26,37 @@ const ActiveRoutes = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const toast = useToast();
+
+  useEffect(() => {
+    // Handle deeplinks
+    const handleDeepLink = (url: string) => {
+      if (url.includes('/confirm-email')) {
+        const urlObj = new URL(url);
+        const token = urlObj.searchParams.get('token');
+        const email = urlObj.searchParams.get('email');
+        
+        if (token && email) {
+          (navigation as any).navigate('confirmEmail', { token, email });
+        }
+      }
+    };
+
+    // Handle initial URL
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleDeepLink(url);
+      }
+    });
+
+    // Handle URL changes
+    const subscription = Linking.addEventListener('url', (event) => {
+      handleDeepLink(event.url);
+    });
+
+    return () => {
+      subscription?.remove();
+    };
+  }, [navigation]);
 
   useEffect(() => {
 
@@ -47,7 +79,7 @@ const ActiveRoutes = () => {
   useEffect(() => {
       if(auth.token && !auth.user ){
       toast.show('Bem vindo de volta! Finalize o cadastro do paciente para continuar.', {type: 'warning', dangerColor: 'danger', duration: 5000});
-      navigation.navigate('patient' as never);
+      (navigation as any).navigate('patient');
     }
 
   }, [auth.token])

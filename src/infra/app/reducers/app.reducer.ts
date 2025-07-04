@@ -40,6 +40,8 @@ const initialEpisodeState: Episode = {
     symptoms: [],
     time: null,
     triggers: [],
+    start: null,
+    end: null,  
   }
 
 const initialState: AppReducer = {

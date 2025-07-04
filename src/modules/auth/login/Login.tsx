@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity, Appearance } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -14,6 +14,7 @@ import { useAsyncAppDispatch } from "src/infra/app/store";
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',
+  forgotPasswordText: 'text-xs text-black underline dark:text-d-text-gray',
 };
 
 interface LoginSchema {
@@ -30,7 +31,7 @@ const loginSchema = yup.object<LoginSchema>().shape({
   password: yup.string().required('Preencha sua senha').default('123123'),
 });
 
-const Login = () => {
+const Login = ({ navigation }: any) => {
   const dispatch = useAsyncAppDispatch();
 
   const {
@@ -47,6 +48,10 @@ const Login = () => {
 
   const onSubmitHandler = async (data: LoginSchema) => {
      await dispatch(requestLogin(data));
+  };
+
+  const handleForgotPassword = () => {
+    navigation.navigate('sendEmailConfirmation');
   };
 
   return (
@@ -90,10 +95,12 @@ const Login = () => {
           textStyle={{
             textDecorationLine: 'none',
             fontSize: 12,
-            color: '#2E3E4B',
+            color: Appearance.getColorScheme() == 'dark' ? '#9DA3A9' : '#2E3E4B',
           }}
         />
-        <Text className='text-xs text-black'>Esqueci minha senha</Text>
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text className={stylesheet.forgotPasswordText}>Esqueci minha senha</Text>
+        </TouchableOpacity>
       </View>
     </AuthScaffold>
   );

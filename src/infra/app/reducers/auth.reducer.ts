@@ -6,11 +6,17 @@ import {
   PhysicianDTO,
   SignUpDTO,
   SignUpResponse,
+  SendEmailConfirmationDTO,
+  SendEmailConfirmationResponse,
+  ConfirmEmailDTO,
+  ConfirmEmailResponse,
 } from './../../@types/auth.types';
 import {
   requestHandleCreatePatient,
   requestHandleLogIn,
   requestHandleSingUp,
+  requestHandleSendEmailConfirmation,
+  requestHandleConfirmEmail,
 } from 'src/infra/services/authService';
 import * as SecureStore from 'expo-secure-store';
 
@@ -24,6 +30,7 @@ export interface AuthReducer {
   error: string | null;
   isFirstAccess: boolean;
   userType: string | null;
+  isEmailConfirmed: boolean;
 }
 
 const initialState: AuthReducer = {
@@ -35,6 +42,7 @@ const initialState: AuthReducer = {
   error: null,
   isFirstAccess: false,
   userType: null,
+  isEmailConfirmed: false,
 };
 
 // Create slice
@@ -133,6 +141,55 @@ const authSlice = createSlice({
         loading: false,
       });
     });
+    //REQUEST_SEND_EMAIL_CONFIRMATION
+    builder.addCase(requestSendEmailConfirmation.pending, (state) => {
+      return (state = { ...state, loading: true });
+    });
+    builder.addCase(
+      requestSendEmailConfirmation.fulfilled,
+      (state, action: PayloadAction<SendEmailConfirmationResponse>) => {
+        try {
+          return (state = { ...state, loading: false, error: null });
+        } catch (err) {
+          console.log(err);
+          return (state = { ...state, error: 'Erro inesperado!' });
+        }
+      }
+    );
+    builder.addCase(requestSendEmailConfirmation.rejected, (state, action) => {
+      return (state = {
+        ...state,
+        error: action.error.message ?? 'Erro inesperado',
+        loading: false,
+      });
+    });
+    //REQUEST_CONFIRM_EMAIL
+    builder.addCase(requestConfirmEmail.pending, (state) => {
+      return (state = { ...state, loading: true });
+    });
+    builder.addCase(
+      requestConfirmEmail.fulfilled,
+      (state, action: PayloadAction<ConfirmEmailResponse>) => {
+        try {
+          return (state = { 
+            ...state, 
+            isEmailConfirmed: action.payload.isEmailConfirmed,
+            loading: false, 
+            error: null 
+          });
+        } catch (err) {
+          console.log(err);
+          return (state = { ...state, error: 'Erro inesperado!' });
+        }
+      }
+    );
+    builder.addCase(requestConfirmEmail.rejected, (state, action) => {
+      return (state = {
+        ...state,
+        error: action.error.message ?? 'Erro inesperado',
+        loading: false,
+      });
+    });
   },
 });
 
@@ -152,6 +209,14 @@ export const requestSignup = createAsyncThunk(
 export const requestCreatePatient = createAsyncThunk(
   'auth/requestCreatePatient',
   async (payload: PatientDTO) => await requestHandleCreatePatient(payload)
+);
+export const requestSendEmailConfirmation = createAsyncThunk(
+  'auth/requestSendEmailConfirmation',
+  async (payload: SendEmailConfirmationDTO) => await requestHandleSendEmailConfirmation(payload)
+);
+export const requestConfirmEmail = createAsyncThunk(
+  'auth/requestConfirmEmail',
+  async (payload: ConfirmEmailDTO) => await requestHandleConfirmEmail(payload)
 );
 
 // Export actions and reducer

@@ -6,6 +6,8 @@ import Tenant from './registration/tenant/Tenant';
 import Welcome from './welcome/Welcome';
 import { Image, TouchableOpacity, View } from 'react-native';
 import Patient from './registration/patient/Patient';
+import SendEmailConfirmation from './emailConfirmation/SendEmailConfirmation';
+import ConfirmEmail from './emailConfirmation/ConfirmEmail';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +21,7 @@ const AuthRoutes = () => {
         headerShadowVisible: false,
         header: (bottomTabsProps) => {
           return (
-            <View className='w-full py-8 pl-4 flex flex-row justify-between items-center bg-primary'>
+            <View className='w-full py-8 pl-4 flex flex-row justify-between items-center bg-primary dark:bg-d-blue-primary-dark'>
               {bottomTabsProps.navigation.canGoBack() ? (
                 <TouchableOpacity
                   className='p-3'
@@ -44,6 +46,8 @@ const AuthRoutes = () => {
       <Stack.Screen name='tenant' component={Tenant}></Stack.Screen>
       <Stack.Screen name='patient' component={Patient}></Stack.Screen>
       <Stack.Screen name='welcome' component={Welcome}></Stack.Screen>
+      <Stack.Screen name='sendEmailConfirmation' component={SendEmailConfirmation}></Stack.Screen>
+      <Stack.Screen name='confirmEmail' component={ConfirmEmail}></Stack.Screen>
     </Stack.Navigator>
   );
 };

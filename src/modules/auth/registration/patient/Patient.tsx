@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
@@ -57,9 +57,13 @@ const Patient = () => {
     const res = await dispatch(requestCreatePatient(data));
 
     if(res.meta.requestStatus == 'fulfilled') {
-      navigation.navigate('welcome' as any as never);
+      (navigation as any).navigate('welcome');
     } 
 
+  };
+
+  const handleEmailConfirmation = () => {
+    (navigation as any).navigate('sendEmailConfirmation');
   };
 
   return (
@@ -87,6 +91,11 @@ const Patient = () => {
           setValue={setValue}
           errors={errors}
         ></InputContainer>
+        
+        <TouchableOpacity onPress={handleEmailConfirmation} className="mb-4">
+          <Text className="text-blue-500 text-sm underline">Confirmar email</Text>
+        </TouchableOpacity>
+
         <InputContainer
           keyboardType='default'
           label='Nome da criança'

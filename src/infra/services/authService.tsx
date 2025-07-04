@@ -6,6 +6,10 @@ import {
   PhysicianDTO,
   SignUpDTO,
   SignUpResponse,
+  SendEmailConfirmationDTO,
+  SendEmailConfirmationResponse,
+  ConfirmEmailDTO,
+  ConfirmEmailResponse,
 } from '../@types/auth.types';
 
 const requestHandleLogIn = async (payload: LogInDTO): Promise<LogInResponse> => {
@@ -25,9 +29,19 @@ const requestHandleCreatePhysician = async (
   payload: PhysicianDTO
 ): Promise<PhysicianDTO> => post('physician', payload);
 
+const requestHandleSendEmailConfirmation = async (
+  payload: SendEmailConfirmationDTO
+): Promise<SendEmailConfirmationResponse> => post('session/send-email-confirmation', payload);
+
+const requestHandleConfirmEmail = async (
+  payload: ConfirmEmailDTO
+): Promise<ConfirmEmailResponse> => post('session/confirm-email', payload);
+
 export {
   requestHandleLogIn,
   requestHandleSingUp,
   requestHandleCreatePatient,
   requestHandleCreatePhysician,
+  requestHandleSendEmailConfirmation,
+  requestHandleConfirmEmail,
 };

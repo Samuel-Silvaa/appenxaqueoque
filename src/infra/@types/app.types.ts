@@ -37,6 +37,8 @@ export interface Episode {
   symptoms: string | string[];
   time: string | null;
   triggers: string | string[];
+  start?: string | null;
+  end?: string | null;
 }
 
 export interface EpisodeModalDTO {
@@ -72,8 +74,8 @@ export interface EpisodeModalDTO {
 
 export interface Report {
   id?: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   episodeAmount: number;
   time: number;
   location: number;
