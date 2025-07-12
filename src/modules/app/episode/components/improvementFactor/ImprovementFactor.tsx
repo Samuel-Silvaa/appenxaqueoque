@@ -91,7 +91,12 @@ const ImprovementFactor = () => {
                     size={22}
                     fillColor='#CEB0FA'
                     unfillColor='#FFFFFF00'
-                    textStyle={{ textDecorationLine: 'none' }}
+                    textStyle={{ 
+                      textDecorationLine: 'none',
+                      flexWrap: 'wrap',
+                      flex: 1,
+                      flexShrink: 1,
+                    }}
                     text={act.label}
                     isChecked={appState.episode.triggers?.includes(act.value)}
                     onPress={(isChecked: boolean) => {
@@ -152,7 +157,7 @@ const ImprovementFactor = () => {
                           value='Melhorou'
                           color='#CEB0FA'
                         />
-                        <Text>Melhorou</Text>
+                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>Melhorou</Text>
                       </View>
                       <View className='flex-row items-center bg-tertiary w-full rounded-full '>
                         <RadioButton
@@ -160,7 +165,7 @@ const ImprovementFactor = () => {
                           value='Melhorou parcialmente'
                           color='#CEB0FA'
                         />
-                        <Text>Melhorou parcialmente</Text>
+                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>Melhorou parcialmente</Text>
                       </View>
                       <View className='flex-row items-center bg-tertiary w-full rounded-full'>
                         <RadioButton
@@ -168,7 +173,7 @@ const ImprovementFactor = () => {
                           value='Não melhorou'
                           color='#CEB0FA'
                         />
-                        <Text>Não melhorou</Text>
+                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>Não melhorou</Text>
                       </View>
                     </RadioButton.Group>
                   </View>

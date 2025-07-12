@@ -20,13 +20,13 @@ const data: {
     value: HaloSymptom.VISUAL_DISTORTIONS,
   },
   {
-    label: 'Formigamento',
-    img: require('src/assets/halo.png'),
+    label: 'Formigamento - A criança pode sentir dormência nos braços, na face ou na língua.',
+    img: require('src/assets/formigamento.png'),
     value: HaloSymptom.TINGLING,
   },
   {
-    label: 'Alterações na fala',
-    img: require('src/assets/halo.png'),
+    label: 'Alterações na fala - A criança pode emitir sons incompreensíveis ou ter dificuldade em pronunciar algumas palavras.',
+    img: require('src/assets/fala.png'),
     value: HaloSymptom.SPEECH_DISTORTIONS,
   },
 ];
@@ -70,6 +70,9 @@ const HaloSymptoms = () => {
                       Appearance.getColorScheme() == 'dark'
                         ? '#9DA3A9'
                         : '#2E3E4B',
+                    flexWrap: 'wrap',
+                    flex: 1,
+                    flexShrink: 1,
                   }}
                   text={act.label}
                   isChecked={appState.episode.symptoms?.includes(act.value)}

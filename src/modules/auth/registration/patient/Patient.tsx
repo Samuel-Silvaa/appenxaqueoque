@@ -109,6 +109,8 @@ const Patient = () => {
           setValue={setValue}
           name='birthDate'
           errors={errors}
+          mask='99/99/9999'
+          placeholder='DD/MM/AAAA'
         ></InputContainer>
         <SelectContainer
           label='Gênero'
@@ -141,6 +143,8 @@ const Patient = () => {
               setValue={setValue}
               name='weight'
               errors={errors}
+              mask='999.9'
+              placeholder='0.0'
             ></InputContainer>
           </View>
 
@@ -151,6 +155,8 @@ const Patient = () => {
               setValue={setValue}
               name='height'
               errors={errors}
+              mask='9.99'
+              placeholder='0.00'
             ></InputContainer>
           </View>
         </View>

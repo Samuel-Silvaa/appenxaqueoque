@@ -30,7 +30,7 @@ const Card = ({
       </Text>
     )}
     {image && (
-      <View className='w-full min-h-[120px] max-h-2/3 flex items-center border-b border-gray-light py-4 dark:border-d-text-gray'>
+      <View className='w-full min-h-[120px] max-h-2/3 flex items-center border-b border-gray-light pt-4 dark:border-d-text-gray'>
         <Image resizeMode='contain' className='w-[90%]' source={image} />
       </View>
     )}

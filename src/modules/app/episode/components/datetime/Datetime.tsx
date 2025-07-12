@@ -90,6 +90,7 @@ const Timepicker = () => {
                   className={
                     sharedEpisodeStyleSheet.timepicker.timeIndicatorRadioLabel
                   }
+                  style={{ flexWrap: 'wrap', flex: 1, flexShrink: 1 }}
                 >
                   {time.label}
                 </Text>

@@ -77,7 +77,7 @@ const Tenant = () => {
         placeholder='Digite seu e-mail'
       ></InputContainer>
       <InputContainer
-        keyboardType='email-address'
+        secureTextEntry={true}
         label='Crie uma senha'
         setValue={setValue}
         name='password'
@@ -85,7 +85,7 @@ const Tenant = () => {
         placeholder='Digite sua senha'
       ></InputContainer>
       <InputContainer
-        keyboardType='email-address'
+        secureTextEntry={true}
         label='Repita sua senha'
         setValue={setValue}
         name='confirmPassword'

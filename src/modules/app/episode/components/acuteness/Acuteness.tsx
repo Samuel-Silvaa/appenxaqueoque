@@ -11,7 +11,7 @@ const data = [
   {
     label: 'Leve - A criança reclama, mas continua brincando.',
     value: AcutenessType.LIGHT,
-    img: require('src/assets/kid_playing_cubes.png'),
+    img: require('src/assets/escorregador.png'),
   },
   {
     label: 'Moderado - A criança reclama e para de brincar, mas não se deita.',
@@ -45,7 +45,12 @@ const Acuteness = () => {
               children={
                 <View className='flex-row items-center'>
                   <RadioButton value={act.value} color='#CEB0FA' />
-                  <Text className='dark:text-d-text-gray'>{act.label}</Text>
+                  <Text 
+                    className='dark:text-d-text-gray'
+                    style={{ flexWrap: 'wrap', flex: 1, flexShrink: 1 }}
+                  >
+                    {act.label}
+                  </Text>
                 </View>
               }
               image={act.img}

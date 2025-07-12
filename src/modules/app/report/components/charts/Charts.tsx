@@ -28,12 +28,12 @@ const stylesheet = {
 };
 
 const colorList = [
-  '#C8F7E1',
-  '#FFCBA6',
-  '#FFCACD',
-  '#9194E9',
-  '#EFE6FD',
-  '#FFDCF1',
+  '#C8F7E1', // Soft mint green
+  '#FFCBA6', // Soft peach
+  '#FFCACD', // Soft pink
+  '#9193E8', // Soft purple
+  '#F1E3FF', // Soft lavender
+  '#F1F1F1', // Light gray
 ];
 
 const ChartsPage = () => {
@@ -111,7 +111,7 @@ const ChartsPage = () => {
       locationList.push({
         value: count,
         label: location,
-        frontColor: '#177AD5',
+        frontColor: colorList[locationList.length % colorList.length],
       });
       count = 0;
     });
@@ -147,7 +147,7 @@ const ChartsPage = () => {
       symptomsList.push({
         value: count,
         label: symptom,
-        frontColor: '#177AD5',
+        frontColor: colorList[symptomsList.length % colorList.length],
       });
       count = 0;
     });
@@ -177,7 +177,7 @@ const ChartsPage = () => {
         triggersList.push({
           value: count,
           label: trigger,
-          frontColor: '#177AD5',
+          frontColor: colorList[triggersList.length % colorList.length],
         });
         count = 0;
       }
@@ -249,28 +249,32 @@ const ChartsPage = () => {
       {!!report && <SummedUpReport report={report} />}
 
       <BarChartComponent
+        key="location-bar"
         title='Localização da dor'
         dataset={location}
         maxValue={locationMaxValue}
       />
 
       <BarChartComponent
+        key="symptoms-bar"
         title='Sintomas associados à dor'
         dataset={symptoms}
         maxValue={symptomsMaxValue}
       />
 
       <BarChartComponent
+        key="triggers-bar"
         title='Fatores desencadeantes da dor'
         dataset={triggers}
         maxValue={triggersMaxValue}
       />
 
-      <PieChartComponent assets={acuteness} title='Intensidade da dor' />
-      <PieChartComponent assets={painType} title='Característica da dor' />
+      <PieChartComponent assets={acuteness} title='Intensidade da dor' key="acuteness-pie" />
+      <PieChartComponent assets={painType} title='Característica da dor' key="painType-pie" />
 
       {foodImprovement.length > 0 && (
         <ReportCard
+          key="food-improvement"
           title='Alimentos que ajudaram a melhorar'
           description={foodImprovement}
         />
@@ -278,6 +282,7 @@ const ChartsPage = () => {
 
       {foodImpair.length > 0 && (
         <ReportCard
+          key="food-impair"
           title='Alimentos que foram gatilhos para a dor'
           description={foodImpair}
         />
@@ -285,6 +290,7 @@ const ChartsPage = () => {
 
       {report.notes && (
         <ReportCard
+          key="notes"
           title='Observações'
           description={
             report.notes.includes(',') ? report.notes.split(',') : report.notes
@@ -294,6 +300,7 @@ const ChartsPage = () => {
 
       {report.periodNotes && (
         <ReportCard
+          key="period-notes"
           title='Período menstrual'
           description={
             report.periodNotes.includes(',')

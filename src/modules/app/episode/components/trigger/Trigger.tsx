@@ -27,33 +27,27 @@ const data: {
 }[] = [
   {
     label:
-      'Sono irregular - A criança dormiu pouco ou dormiu mais do que o habitual',
-    img: require('src/assets/duck.png'),
+      'Sono irregular',
     value: TriggerType.JAGGEDSLEEP,
   },
   {
-    label: 'Fatores emocionais - Agitação, ansiedade, tristeza.',
-    img: require('src/assets/duck.png'),
+    label: 'Fatores emocionais',
     value: TriggerType.EMOTIONAL,
   },
   {
-    label: 'Esforço visual - Uso excessivo de tela.',
-    img: require('src/assets/duck.png'),
+    label: 'Excesso de tela.',
     value: TriggerType.VISUALEFFORT,
   },
   {
-    label: 'Jejum prolongado - A criança ficou um longo período sem comer.',
-    img: require('src/assets/duck.png'),
+    label: 'Jejum prolongado',
     value: TriggerType.FASTING,
   },
   {
     label: 'Alimentação',
-    img: require('src/assets/duck.png'),
     value: TriggerType.FOOD,
   },
   {
     label: 'Outros',
-    img: require('src/assets/duck.png'),
     value: TriggerType.ANOTHER,
   },
 ];
@@ -93,12 +87,16 @@ const Trigger = () => {
                 handleSetTriggersValues(act.value);
               }}
               children={
-                <View className='flex-row items-center'>
+                <View className='flex-row items-center '>
                   <BouncyCheckbox
                     size={22}
                     fillColor='#CEB0FA'
                     unfillColor='#FFFFFF00'
-                    textStyle={{ textDecorationLine: 'none' }}
+                    textStyle={{ 
+                      flexWrap: 'wrap',
+                      overflow: 'hidden',
+                      padding: 4
+                    }}
                     text={act.label}
                     isChecked={appState.episode.triggers?.includes(act.value)}
                     onPress={(isChecked: boolean) => {

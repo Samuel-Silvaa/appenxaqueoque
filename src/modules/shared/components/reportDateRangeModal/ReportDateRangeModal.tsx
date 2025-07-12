@@ -1,5 +1,6 @@
 import { createRef, useEffect, useState } from 'react';
 import {
+  Appearance,
   FlatList,
   Image,
   Modal,
@@ -23,7 +24,7 @@ import { appStateSelector } from "src/infra/app/selectors";
 
 const stylesheet = {
   wrapper: 'w-full',
-  header: 'w-full flex-row items-center justify-between mb-4',
+  header: 'w-full flex-row items-center justify-between mb-4 pt-[8vh]',
   arrowdown: 'flex items-center justify-center p-2',
   closeButton: 'p-3',
   edition:
@@ -164,6 +165,7 @@ const ReportDateRangeModal = ({
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [inputSelect, setInputSelect] = useState('');
+  const colorScheme = Appearance.getColorScheme();
 
   useEffect(() => {
     return () => {
@@ -217,6 +219,7 @@ const ReportDateRangeModal = ({
       transparent={false}
       animationType='slide'
       visible={isOpen}
+      
       onRequestClose={() => {
         dispatch(handleFecthReports({patientId: appState.patient!.id!, date: { date : null}}) );
         onClose();
@@ -237,8 +240,7 @@ const ReportDateRangeModal = ({
           >
             <Image
               className={stylesheet.arrowdown}
-              
-              source={require('src/assets/arrowdown.png')}
+              source={ colorScheme == 'dark' ? require( 'src/assets/arrowdown.png') : require( 'src/assets/arrowdown.png')}
             ></Image>
           </TouchableOpacity>
         </View>

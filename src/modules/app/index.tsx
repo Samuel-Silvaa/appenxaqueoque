@@ -19,6 +19,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { appStateSelector, authSelector } from 'src/infra/app/selectors';
+import ProfileStackNavigation from "./profile/ProfileStack";
 
 const stylesheet = {
   calendarBtnContainer:
@@ -283,7 +284,7 @@ const TabsRoutes = () => {
       <Tab.Screen name='Report' component={ReportStackNavigation} />
       <Tab.Screen name='Episode' component={EpisodePage} />
       <Tab.Screen name='Calendar' component={CalendarPage} />
-      <Tab.Screen name='Profile' component={ProfilePage} />
+      <Tab.Screen name='Profile' component={ProfileStackNavigation} />
     </Tab.Navigator>
   );
 };

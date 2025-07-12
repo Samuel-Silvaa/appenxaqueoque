@@ -16,17 +16,16 @@ const data = [
   {
     label: 'Pular',
     value: ImpairFactorType.JUMP,
-    img: require('src/assets/duck.png'),
+    img: require('src/assets/kid_playing_cubes.png'),
   },
   {
     label: 'Agachar',
     value: ImpairFactorType.CROUCH,
-    img: require('src/assets/duck.png'),
+    img: require('src/assets/agachar.png'),
   },
   {
     label: 'Outros',
     value: ImpairFactorType.ANOTHER,
-    img: require('src/assets/duck.png'),
   },
 ];
 
@@ -82,6 +81,9 @@ const ImpairFactor = () => {
                         Appearance.getColorScheme() == 'dark'
                           ? '#9DA3A9'
                           : '#2E3E4B',
+                      flexWrap: 'wrap',
+                      flex: 1,
+                      flexShrink: 1,
                     }}
                     text={act.label}
                     isChecked={appState.episode.symptoms?.includes(act.value)}

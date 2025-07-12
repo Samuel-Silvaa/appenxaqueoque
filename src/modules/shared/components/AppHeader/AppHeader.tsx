@@ -54,7 +54,7 @@ const AppHeader = ({
             Appearance.getColorScheme() == 'light'
               ? 'text-black '
               : 'text-d-blue-title'
-          } font-extrabold ml-8`}
+          } font-extrabold ml-8 w-2/4 align-center text-center `}
         >
           {appState.pageTitle}
         </Text>

@@ -19,6 +19,11 @@ const data: {
     value: SymptomType.PHOTOSENSIBILITY,
   },
   {
+    label: 'Sensibilidade ao barulho - A criança busca um lugar silencioso.',
+    img: require('src/assets/hiperacusis.png'),
+    value: SymptomType.HYPERACUSIS,
+  },
+  {
     label: 'Náusea - A criança deixa de comer.',
     img: require('src/assets/nausea.png'),
     value: SymptomType.NAUSEA,
@@ -28,20 +33,16 @@ const data: {
     img: require('src/assets/vomit.png'),
     value: SymptomType.VOMIT,
   },
-  {
-    label: 'Sensibilidade ao barulho - A criança busca um lugar silencioso.',
-    img: require('src/assets/hiperacusis.png'),
-    value: SymptomType.HYPERACUSIS,
-  },
+ 
   {
     label: 'Dor de barriga.',
-    img: require('src/assets/sickness.png'),
+    img: require('src/assets/barriga.png'),
 
     value: SymptomType.SICKNESS,
   },
   {
     label: 'Tontura.',
-    img: require('src/assets/vomit.png'),
+    img: require('src/assets/tontura.png'),
     value: SymptomType.DIZZINESS,
   },
 ];
@@ -87,6 +88,9 @@ const Symptoms = () => {
                       Appearance.getColorScheme() == 'dark'
                         ? '#9DA3A9'
                         : '#2E3E4B',
+                    flexWrap: 'wrap',
+                    flex: 1,
+                    flexShrink: 1,
                   }}
                   text={act.label}
                   isChecked={appState.episode.symptoms?.includes(act.value)}

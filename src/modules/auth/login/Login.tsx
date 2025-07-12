@@ -75,7 +75,6 @@ const Login = ({ navigation }: any) => {
       ></InputContainer>
 
       <InputContainer
-        keyboardType='visible-password'
         secureTextEntry={true}
         label='Senha'
         name='password'

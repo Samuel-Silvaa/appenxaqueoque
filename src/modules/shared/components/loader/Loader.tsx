@@ -56,7 +56,7 @@ export const Loader = () => {
         console.log('close modal');
       }}
     >
-      <View className='flex flex-grow  items-center justify-center m-auto bg-black/30 w-full z-300'>
+      <View style={{ height: '80%', marginTop: 20 }} className='flex items-center justify-center m-auto bg-black/30 w-full z-300'>
         <Animated.View
           style={[animatedStyle]}
           className='rounded-full w-[180px] h-[180px] items-center justify-center bg-snow-white dark:bg-d-blue-primary shadow-xl shadow-black'

@@ -48,7 +48,7 @@ const ResourceCard = ({
       <View className={stylesheet.reportCardHeader}>
         <Text className='font-semibold capitalize dark:text-d-text-gray'>
           {format(reportDetails.startDate || new Date(), 'dd MMM', { locale: ptBR })} -
-          {format(reportDetails.endDate || new Date(), 'dd MMM', { locale: ptBR })} -
+          {format(reportDetails.endDate! || subDays(new Date(), 15), 'dd MMM', { locale: ptBR })} -
           <Text className='ml-2 font-medium dark:text-d-text-gray'>
             {' '}
             {parseAcuteness(reportDetails.acuteness)}
@@ -95,7 +95,10 @@ const ReportPage = ({ navigation }) => {
 
   useEffect(() => {
     if(appState.patient?.id)
-    dispatch(handleFecthReports({patientId:appState.patient!.id, date: {date: null}}));
+    dispatch(handleFecthReports({patientId:appState.patient!.id, date: {date: {
+      startDate: format(subDays(new Date(), 15), 'yyyy-MM-dd', { locale: ptBR }),
+      endDate: format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
+    }}}));
   }, []);
 
   return (

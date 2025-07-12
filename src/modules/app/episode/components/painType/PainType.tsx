@@ -24,7 +24,7 @@ const data: {
     value: PainTypeEnum.THROB,
   },
   {
-    label: 'Em aperto: como um capacete apertando.',
+    label: 'Em aperto: como um capacete apertado.',
     img: require('src/assets/helmet.png'),
     value: PainTypeEnum.TIGHT,
   },
@@ -66,7 +66,12 @@ const PainType = () => {
                 children={
                   <View className='flex-row items-center'>
                     <RadioButton value={act.value} color='#CEB0FA' />
-                    <Text className='dark:text-d-text-gray'>{act.label}</Text>
+                    <Text 
+                      className='dark:text-d-text-gray'
+                      style={{ flexWrap: 'wrap', flex: 1, flexShrink: 1 }}
+                    >
+                      {act.label}
+                    </Text>
                   </View>
                 }
                 image={act?.img}
