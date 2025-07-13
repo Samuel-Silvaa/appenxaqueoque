@@ -60,10 +60,10 @@ const initialState: AppReducer = {
     return {
       ...ep,
       period: Number(ep.period) == 1 ? 'true' : 'false',
-      triggers: String(ep.triggers).split(','),
-      haloSymptoms: String(ep.haloSymptoms),
-      improvementFactor: String(ep.improvementFactor).split(','),
-      symptoms: String(ep.symptoms).split(','),
+      triggers: ep.triggers ? String(ep.triggers).split(',').filter(item => item && item.trim()) : [],
+      haloSymptoms: ep.haloSymptoms ? String(ep.haloSymptoms).split(',').filter(item => item && item.trim()) : [],
+      improvementFactor: ep.improvementFactor ? String(ep.improvementFactor).split(',').filter(item => item && item.trim()) : [],
+      symptoms: ep.symptoms ? String(ep.symptoms).split(',').filter(item => item && item.trim()) : [],
     };
   };
 

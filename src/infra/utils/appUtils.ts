@@ -62,17 +62,17 @@ export const parseImprovementFactor = (acuteness: number) => {
 export const parseSymptoms = (acuteness: number) => {
   switch (acuteness) {
     case 0:
-      return Symptom.HALO;
-    case 1:
       return Symptom.PHOTOSENSIBILITY;
-    case 2:
-      return Symptom.HYPERACUSIS;
-    case 3:
+    case 1:
       return Symptom.NAUSEA;
-    case 4:
-      return Symptom.SICKNESS;
-    default:
+    case 2:
       return Symptom.VOMIT;
+    case 3:
+      return Symptom.HYPERACUSIS;
+    case 4:
+    return Symptom.SICKNESS;
+    default:
+      return Symptom.DIZZINESS;
   }
 };
 
@@ -118,5 +118,35 @@ export const parseTriggers = (acuteness: number) => {
       return Trigger.JAGGEDSLEEP;
     default:
       return Trigger.EMOTIONAL;
+  }
+};
+
+export const parseArrayField = (field: any): string[] => {
+  if (!field || field === null || field === undefined) {
+    return [];
+  }
+  
+  try {
+    // Try to parse as JSON first
+    if (typeof field === 'string' && field.startsWith('[')) {
+      const parsed = JSON.parse(field);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+    
+    // Fallback to string split for backward compatibility
+    if (typeof field === 'string') {
+      const split = field.split(',');
+      return split.filter(item => item && item.trim() !== 'null' && item.trim() !== 'undefined');
+    }
+    
+    // If it's already an array, return it
+    if (Array.isArray(field)) {
+      return field;
+    }
+    
+    return [];
+  } catch (error) {
+    console.warn('Error parsing array field:', error);
+    return [];
   }
 };

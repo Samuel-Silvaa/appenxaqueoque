@@ -63,14 +63,17 @@ const Trigger = () => {
   } = useForm({ resolver: yupResolver(triggerSchema) });
 
   const handleSetTriggersValues = (value: string) => {
-    if (appState.episode.triggers?.includes(value)) {
+    // Ensure triggers is always an array
+    const currentTriggers = Array.isArray(appState.episode.triggers) 
+      ? appState.episode.triggers 
+      : [];
+    
+    if (currentTriggers.includes(value)) {
       dispatch(handleFormChanging({
-        triggers: Array.from(appState.episode.triggers).filter(
-          (tr) => tr !== value
-        ),
+        triggers: currentTriggers.filter((tr) => tr !== value),
       }));
     } else {
-      dispatch(handleFormChanging({ triggers: [...appState.episode.triggers, value] }));
+      dispatch(handleFormChanging({ triggers: [...currentTriggers, value] }));
     }
   };
 
@@ -98,7 +101,7 @@ const Trigger = () => {
                       padding: 4
                     }}
                     text={act.label}
-                    isChecked={appState.episode.triggers?.includes(act.value)}
+                    isChecked={Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(act.value)}
                     onPress={(isChecked: boolean) => {
                       handleSetTriggersValues(act.value);
                     }}
@@ -116,9 +119,9 @@ const Trigger = () => {
                 setValue={setValue}
                 control={control}
                 errors={errors}
-                editable={appState.episode.triggers?.includes(TriggerType.FOOD)}
+                editable={Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(TriggerType.FOOD)}
                 className={`${
-                  appState.episode.triggers?.includes(TriggerType.FOOD)
+                  Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(TriggerType.FOOD)
                     ? ' opacity-100'
                     : ' opacity-25'
                 } bg-white drop-shadow-sm`}
@@ -136,11 +139,11 @@ const Trigger = () => {
                 control={control}
                 errors={errors}
                 placeholder='Descreva brevemente'
-                editable={appState.episode.triggers?.includes(
+                editable={Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(
                   TriggerType.ANOTHER
                 )}
                 className={`${
-                  appState.episode.triggers?.includes(TriggerType.ANOTHER)
+                  Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(TriggerType.ANOTHER)
                     ? ' opacity-100 '
                     : ' opacity-25'
                 } bg-white drop-shadow-sm`}

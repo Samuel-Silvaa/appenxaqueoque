@@ -13,30 +13,24 @@ const Location = () => {
 
   const handleSelectLocation = (location: string) => {
     try {
-        const isLocationSet = appState.episode.location!.includes(location);
-    let locations;
-    if (isLocationSet) {
-      if (Array.isArray(appState.episode.location)) {
-        locations = appState.episode.location!.filter((l) => l !== location);
+      // Ensure location is always an array
+      const currentLocation = Array.isArray(appState.episode.location) 
+        ? appState.episode.location 
+        : [];
+      
+      const isLocationSet = currentLocation.includes(location);
+      let locations;
+      
+      if (isLocationSet) {
+        locations = currentLocation.filter((l) => l !== location);
       } else {
-        locations = appState.episode.location!.replace(location, '');
+        locations = [...currentLocation, location];
       }
-    } else {
-      if (Array.isArray(appState.episode.location)) {
-        dispatch(handleFormChanging({ location: [...appState.episode.location, location] }));
-
-        return
-      } else if (appState.episode.location!.includes(',')) {
-        dispatch(handleFormChanging({ location: [...appState.episode.location.split(','), location] }));
-        return
-      } else {
-        locations = [location];
-      }
+      
+      dispatch(handleFormChanging({ location: locations }));
+    } catch(err) {
+      console.log(err);
     }
-    dispatch(handleFormChanging({ location: locations }));
-      } catch(err) {
-        console.log(err);
-      }
   };
 
   const validateLocationSelectedAndReturnColorScheme = (
@@ -44,10 +38,9 @@ const Location = () => {
   ): string => {
     if (
       Array.isArray(appState.episode.location) &&
-      Array.from(appState.episode.location)?.includes(location)
+      appState.episode.location.includes(location)
     )
       return '#FF7383';
-    if (appState.episode.location?.includes(location)) return '#FF7383';
 
     return '#eedfc6';
   };
@@ -60,10 +53,8 @@ const Location = () => {
             <View className='relative dark:text-d-text-gray'>
               <Text className='dark:text-d-text-gray absolute top-0 w-full ellipsis h-[36px]'>
                 {Array.isArray(appState.episode.location)
-                  ? Array.from(appState.episode.location).join(' - ')
-                  : appState.episode.location?.includes(',')
-                  ? appState.episode.location.split(',').join(' - ')
-                  : appState.episode.location}
+                  ? appState.episode.location.join(' - ')
+                  : appState.episode.location || ''}
               </Text>
               <Text className='dark:text-d-text-gray absolute top-10 left-0'>
                 Direita

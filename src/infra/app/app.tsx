@@ -66,22 +66,22 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           ),
           location: Array.isArray(appState.episode.location)
             ? appState.episode.location.join(',')
-            : appState.episode.location,
+            : appState.episode.location ? appState.episode.location : null,
           triggers: Array.isArray(appState.episode.triggers)
             ? appState.episode.triggers.join(',')
-            : appState.episode.triggers,
+            : appState.episode.triggers ? appState.episode.triggers : null,
           haloSymptoms: Array.isArray(appState.episode.haloSymptoms)
             ? appState.episode.haloSymptoms.join(',')
-            : appState.episode.haloSymptoms,
+            :  appState.episode.haloSymptoms ? appState.episode.haloSymptoms : null,
           improvementFactor: Array.isArray(appState.episode.improvementFactor)
             ? appState.episode.improvementFactor.join(',')
-            : appState.episode.improvementFactor,
+            : appState.episode.improvementFactor ? appState.episode.improvementFactor : null,
           symptoms: Array.isArray(appState.episode.symptoms)
             ? appState.episode.symptoms.join(',')
-            : appState.episode.symptoms,
+            : appState.episode.symptoms ? appState.episode.symptoms : null,
           impairFactor: Array.isArray(appState.episode.impairFactor)
             ? appState.episode.impairFactor.join(',')
-            : appState.episode.impairFactor,
+            : appState.episode.impairFactor ? appState.episode.impairFactor : null,
         };
 
         Object.keys(parsedObject).map((key) => {
@@ -124,8 +124,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       }
-    } catch (err) {
+    } catch ( err) {
       console.log(err);
+      handleToast((err)as string || 'erro inesperado', 'danger');
     }
   };
 

@@ -52,17 +52,20 @@ const Symptoms = () => {
   const appState = useSelector(appStateSelector);
 
   const handleSetSymptomsValues = (value: string) => {
-    if (appState.episode.symptoms?.includes(value)) {
+    // Ensure symptoms is always an array
+    const currentSymptoms = Array.isArray(appState.episode.symptoms) 
+      ? appState.episode.symptoms 
+      : [];
+    
+    if (currentSymptoms.includes(value)) {
       dispatch(
         handleFormChanging({
-          symptoms: Array.from(appState.episode.symptoms).filter(
-            (tr) => tr !== value
-          ),
+          symptoms: currentSymptoms.filter((tr) => tr !== value),
         })
       );
     } else {
       dispatch(
-        handleFormChanging({ symptoms: [...appState.episode.symptoms, value] })
+        handleFormChanging({ symptoms: [...currentSymptoms, value] })
       );
     }
   };

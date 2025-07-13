@@ -44,15 +44,18 @@ const ImpairFactor = () => {
   } = useForm({ resolver: yupResolver(impairSchema) });
 
   const handleSetImpairFactors = (value: string) => {
-    if (appState.episode.impairFactor?.includes(value)) {
+    // Ensure impairFactor is always an array
+    const currentImpairFactor = Array.isArray(appState.episode.impairFactor) 
+      ? appState.episode.impairFactor 
+      : [];
+    
+    if (currentImpairFactor.includes(value)) {
       dispatch(handleFormChanging({
-        impairFactor: Array.from(appState.episode.impairFactor).filter(
-          (tr) => tr !== value
-        ),
+        impairFactor: currentImpairFactor.filter((tr) => tr !== value),
       }));
     } else {
       dispatch(handleFormChanging({
-        impairFactor: [...appState.episode.impairFactor, value],
+        impairFactor: [...currentImpairFactor, value],
       }));
     }
   };
@@ -86,7 +89,7 @@ const ImpairFactor = () => {
                       flexShrink: 1,
                     }}
                     text={act.label}
-                    isChecked={appState.episode.symptoms?.includes(act.value)}
+                    isChecked={Array.isArray(appState.episode.impairFactor) && appState.episode.impairFactor.includes(act.value)}
                     onPress={(isChecked: boolean) => {
                       handleSetImpairFactors(act.value);
                     }}
@@ -97,7 +100,7 @@ const ImpairFactor = () => {
             />
             {act.value == ImpairFactorType.ANOTHER && (
               <InputContainer
-                editable={appState.episode.impairFactor?.includes(
+                editable={Array.isArray(appState.episode.impairFactor) && appState.episode.impairFactor.includes(
                   ImpairFactorType.ANOTHER
                 )}
                 setValue={setValue}
@@ -107,9 +110,9 @@ const ImpairFactor = () => {
                 control={control}
                 errors={errors}
                 className={
-                  !appState.episode.impairFactor?.includes(
+                  !(Array.isArray(appState.episode.impairFactor) && appState.episode.impairFactor.includes(
                     ImpairFactorType.ANOTHER
-                  )
+                  ))
                     ? 'opacity-25' + ' bg-white drop-shadow-sm'
                     : 'opacity-100' + ' bg-white drop-shadow-sm'
                 }

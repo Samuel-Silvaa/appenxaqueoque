@@ -50,9 +50,9 @@ const improvementSchema = yup.object<ImprovementSchema>().shape({
 const ImprovementFactor = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
-  const isMedicineEditable = !appState.episode.improvementFactor?.includes(
+  const isMedicineEditable = !(Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
     ImprovementFactorType.MEDICINE
-  );
+  ));
   const {
     control,
     formState: { errors },
@@ -60,15 +60,18 @@ const ImprovementFactor = () => {
   } = useForm({ resolver: yupResolver(improvementSchema) });
 
   const handleSetImprovementFactorValues = (value: string) => {
-    if (appState.episode.improvementFactor!.includes(value)) {
+    // Ensure improvementFactor is always an array
+    const currentImprovementFactor = Array.isArray(appState.episode.improvementFactor) 
+      ? appState.episode.improvementFactor 
+      : [];
+    
+    if (currentImprovementFactor.includes(value)) {
       dispatch(handleFormChanging({
-        improvementFactor: Array.from(
-          appState.episode.improvementFactor
-        ).filter((tr) => tr !== value),
+        improvementFactor: currentImprovementFactor.filter((tr) => tr !== value),
       }));
     } else {
       dispatch(handleFormChanging({
-        improvementFactor: [...appState.episode.improvementFactor, value],
+        improvementFactor: [...currentImprovementFactor, value],
       }));
     }
   };
@@ -98,7 +101,7 @@ const ImprovementFactor = () => {
                       flexShrink: 1,
                     }}
                     text={act.label}
-                    isChecked={appState.episode.triggers?.includes(act.value)}
+                    isChecked={Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(act.value)}
                     onPress={(isChecked: boolean) => {
                       handleSetImprovementFactorValues(act.value);
                     }}
@@ -181,11 +184,11 @@ const ImprovementFactor = () => {
               />
             )}
             {act.value == ImprovementFactorType.FOOD &&
-              !appState.episode.improvementFactor?.includes(
+              Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
                 ImprovementFactorType.FOOD
               ) && (
                 <InputContainer
-                  editable={appState.episode.improvementFactor?.includes(
+                  editable={Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
                     ImprovementFactorType.FOOD
                   )}
                   setValue={setValue}
@@ -196,9 +199,9 @@ const ImprovementFactor = () => {
                   errors={errors}
                   placeholder='Descreva brevemente'
                   className={
-                    !appState.episode.improvementFactor?.includes(
+                    !(Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
                       ImprovementFactorType.FOOD
-                    )
+                    ))
                       ? 'opacity-25' + ' bg-white drop-shadow-sm'
                       : 'opacity-100' + ' bg-white drop-shadow-sm'
                   }
@@ -209,13 +212,13 @@ const ImprovementFactor = () => {
                 />
               )}
             {act.value == ImprovementFactorType.ANOTHER &&
-              !appState.episode.improvementFactor?.includes(
+              !(Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
                 ImprovementFactorType.ANOTHER
-              ) && (
+              )) && (
                 <InputContainer
-                  editable={appState.episode.improvementFactor?.includes(
-                    ImprovementFactorType.ANOTHER
-                  )}
+                                      editable={Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
+                      ImprovementFactorType.ANOTHER
+                    )}
                   setValue={setValue}
                   label='Qual outro fator de melhora?'
                   name='anotherImprovementFactor'
@@ -223,9 +226,9 @@ const ImprovementFactor = () => {
                   errors={errors}
                   placeholder='Descreva brevemente'
                   className={
-                    !appState.episode.improvementFactor?.includes(
+                    !(Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
                       ImprovementFactorType.ANOTHER
-                    )
+                    ))
                       ? 'opacity-25' + ' bg-white drop-shadow-sm'
                       : 'opacity-100' + ' bg-white drop-shadow-sm'
                   }

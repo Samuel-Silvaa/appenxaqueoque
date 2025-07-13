@@ -36,15 +36,18 @@ const HaloSymptoms = () => {
   const appState = useSelector(appStateSelector);
 
   const handleSetSymptomsValues = (value: string) => {
-    if (appState.episode.symptoms?.includes(value)) {
+    // Ensure haloSymptoms is always an array
+    const currentHaloSymptoms = Array.isArray(appState.episode.haloSymptoms) 
+      ? appState.episode.haloSymptoms 
+      : [];
+    
+    if (currentHaloSymptoms.includes(value)) {
       dispatch(handleFormChanging({
-        haloSymptoms: Array.from(appState.episode.haloSymptoms).filter(
-          (tr) => tr !== value
-        ),
+        haloSymptoms: currentHaloSymptoms.filter((tr) => tr !== value),
       }));
     } else {
-     dispatch( handleFormChanging({
-        haloSymptoms: [...appState.episode.haloSymptoms, value],
+      dispatch(handleFormChanging({
+        haloSymptoms: [...currentHaloSymptoms, value],
       }));
     }
   };
@@ -75,7 +78,7 @@ const HaloSymptoms = () => {
                     flexShrink: 1,
                   }}
                   text={act.label}
-                  isChecked={appState.episode.symptoms?.includes(act.value)}
+                  isChecked={Array.isArray(appState.episode.haloSymptoms) && appState.episode.haloSymptoms.includes(act.value)}
                   onPress={(isChecked: boolean) => {
                     handleSetSymptomsValues(act.value);
                   }}

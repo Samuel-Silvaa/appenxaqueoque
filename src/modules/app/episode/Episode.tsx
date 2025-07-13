@@ -110,7 +110,7 @@ const Topic = ({
     'Sintomas associados',
     'Sintomas da aura',
     'Fatores de piora',
-    'Fatores desencadentes',
+    'Fatores desencadeantes',
     'Fatores de melhora',
     'Periodo menstrual',
     'Observações',

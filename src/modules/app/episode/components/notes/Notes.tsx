@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
 import { handleFetchEpisodes, handleFormChanging } from "src/infra/app/reducers/app.reducer";
 import { useAsyncAppDispatch } from "src/infra/app/store";
+import { ToastOptions, useToast } from "react-native-toast-notifications";
 
 const stylesheet = {
   wrapper: 'flex-col w-full items-center justify-between',
@@ -33,6 +34,7 @@ const Notes = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
   const navigation = useNavigation();
+  const toast = useToast();
   const asyncDispatch = useAsyncAppDispatch();
   const {  submitEpisode } = useApp();
   const {
@@ -43,12 +45,25 @@ const Notes = () => {
 
   const handleSubmit = async () => {
     const res = await submitEpisode();
+    console.log(res)
 
-    if(res) {
+
+    if(res.meta.requestStatus == 'fulfilled'){
       asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
       navigation.setOptions(res);
       navigation.navigate('Success' as never);
     }
+
+    if(res.meta.requestStatus == 'rejected') {
+        toast.hideAll();
+        const toastOptions: ToastOptions = {
+          type: 'danger',
+        };
+        toast.show(`Error inesperado ao  ${appState.episode.isEdition ? 'editar' : 'cadastrar'} episódio. Entre em contato com nosso suporte!`, toastOptions);
+        return;
+    }
+
+      
   };
 
   return (
