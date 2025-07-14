@@ -45,10 +45,10 @@ const Notes = () => {
 
   const handleSubmit = async () => {
     const res = await submitEpisode();
-    console.log(res)
+    console.log('REsponse : ', res)
 
 
-    if(res.meta.requestStatus == 'fulfilled'){
+    if(res.id){
       asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
       navigation.setOptions(res);
       navigation.navigate('Success' as never);

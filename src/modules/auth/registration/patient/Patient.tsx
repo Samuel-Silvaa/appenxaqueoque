@@ -2,6 +2,7 @@ import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
+import { TimeInput } from 'src/modules/shared/components/timeInput';
 
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
@@ -13,11 +14,12 @@ import { authSelector } from "src/infra/app/selectors";
 import { useAsyncAppDispatch } from "src/infra/app/store";
 import { requestCreatePatient } from "src/infra/app/reducers/auth.reducer";
 import { useNavigation } from "@react-navigation/native";
+import { format, parse } from "date-fns";
 
 interface PatientSchemaProps {
   name: string;
   email: string;
-  birthDate: string;
+  birthDate: Date;
   gender: string;
   kinship: string;
   height: number;
@@ -28,9 +30,9 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
   name: yup.string().required('Preencha seu nome').default('Samuel'),
   email: yup.string().email().required('Preencha seu email'),
   birthDate: yup
-    .string()
+    .date()
     .required('Preencha a data de nascimento')
-    .default('2010-10-10'),
+    .default(new Date('2010-10-10')),
   gender: yup.string().required('Preencha o sexo').default('female'),
   kinship: yup.string().required('Preencha o parentesco').default('mother'),
   height: yup.number().required('Preencha a altura').default(1.5),
@@ -45,26 +47,31 @@ const Patient = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm({
     resolver: yupResolver(patientSchema),
   });
+
+  const watchedValues = watch();
 
   useEffect(() => {
     if (auth.sessionEmail) setValue('email', auth.sessionEmail);
   }, [auth.sessionEmail]);
 
   const onSubmitHandler =  async (data: PatientSchemaProps) => {
-    const res = await dispatch(requestCreatePatient(data));
+   try {
+    console.log({...data, birthDate: format(data.birthDate, 'yyyy-MM-dd')})
+    const res = await dispatch(requestCreatePatient({...data, birthDate: format(data.birthDate, 'yyyy-MM-dd')}));
 
     if(res.meta.requestStatus == 'fulfilled') {
       (navigation as any).navigate('welcome');
     } 
 
+   }catch(err) {
+    console.log(err)
+   }
   };
 
-  const handleEmailConfirmation = () => {
-    (navigation as any).navigate('sendEmailConfirmation');
-  };
 
   return (
     <AuthScaffold
@@ -91,10 +98,6 @@ const Patient = () => {
           setValue={setValue}
           errors={errors}
         ></InputContainer>
-        
-        <TouchableOpacity onPress={handleEmailConfirmation} className="mb-4">
-          <Text className="text-blue-500 text-sm underline">Confirmar email</Text>
-        </TouchableOpacity>
 
         <InputContainer
           keyboardType='default'
@@ -103,15 +106,16 @@ const Patient = () => {
           name='name'
           errors={errors}
         ></InputContainer>
-        <InputContainer
-          keyboardType='default'
+        <TimeInput
           label='Data de nascimento'
-          setValue={setValue}
           name='birthDate'
+          setValue={setValue}
           errors={errors}
-          mask='99/99/9999'
-          placeholder='DD/MM/AAAA'
-        ></InputContainer>
+          placeholder='Selecione a data de nascimento'
+          mode='date'
+          value={watchedValues.birthDate}
+          maximumDate={new Date()}
+        />
         <SelectContainer
           label='Gênero'
           placeholder='Selecione o sexo'

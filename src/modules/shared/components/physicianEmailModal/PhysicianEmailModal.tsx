@@ -1,19 +1,19 @@
 import {
   Image,
   Modal,
-  NativeSyntheticEvent,
   Text,
-  TextInputTextInputEventData,
   TouchableOpacity,
   View,
 } from 'react-native';
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
-import { useApp } from 'src/infra/app/app';
+import { useSelector } from 'react-redux';
+import { useAsyncAppDispatch } from 'src/infra/app/store';
+import { handleGeneratePdfReport } from 'src/infra/app/reducers/app.reducer';
+import { appStateSelector } from 'src/infra/app/selectors';
 import InputContainer from '../inputContainer/InputContainer';
 import { useForm } from 'react-hook-form';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
-import { AppActions } from 'src/infra/app/actions';
 import { Report } from 'src/infra/@types/app.types';
 import { useState } from 'react';
 
@@ -35,7 +35,8 @@ const PhysicianEmailModal = ({
   onClose: () => void;
   report: Report;
 }) => {
-  const { dispatch } = useApp();
+  const asyncDispatch = useAsyncAppDispatch();
+  const appState = useSelector(appStateSelector);
   const {
     control,
     formState: { errors },
@@ -46,10 +47,12 @@ const PhysicianEmailModal = ({
   const handleSubmitEmailSender = () => {
     if (email !== '') {
       try {
-        dispatch(AppActions.REQUEST_GENERATE_PDF_REPORT, {
-          id: report.id,
-          physicianEmail: email,
-        });
+        if (report.id) {
+          asyncDispatch(handleGeneratePdfReport({
+            id: report.id,
+            physicianEmail: email,
+          }));
+        }
       } catch (err) {
         console.log(err);
       }
@@ -63,13 +66,11 @@ const PhysicianEmailModal = ({
       animationType='slide'
       visible={isOpen}
       onRequestClose={() => {
-        dispatch(AppActions.REQUEST_FETCH_REPORTS, {});
         onClose();
       }}
     >
       <AppPageScaffold
         alignment='items-center'
-        className='h-3/4 rounded-t-[16px]'
       >
         <View className={stylesheet.header}>
           <Text className={sharedStyleSheet.title}>

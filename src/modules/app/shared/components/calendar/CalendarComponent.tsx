@@ -34,7 +34,7 @@ const CalendarComponent = ({
           <View className='rounded-full w-full bg-beige-primary/50 dark:bg-d-blue-primary/50 flex-row justify-center items-center p-2 m-auto mb-4'>
             <Image source={require('src/assets/arrowup.png')}></Image>
             <Text className='font-xs p-2 dark:text-d-text-gray'>
-              Escolha a data do episódio que deseja vizualizar ou editar
+              Escolha a data de um episódio existente que deseja vizualizar ou editar
             </Text>
           </View>
         </View>

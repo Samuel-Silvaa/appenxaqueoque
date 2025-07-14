@@ -96,6 +96,7 @@ export interface AppContextDefaultValues {
   dispatch: (action: any, payload?: any, assetId?: string) => Promise<any>;
   validateStepForward: (step: number) => boolean;
   submitEpisode: () => Promise<any>;
+  handleToast: (message:string, type: string) => void;
   episodes?: Episode[];
   patient?: Patient;
   reports?: Report[];

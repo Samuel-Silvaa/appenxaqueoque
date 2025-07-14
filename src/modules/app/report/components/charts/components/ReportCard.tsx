@@ -20,7 +20,7 @@ export const ReportCard = ({
 }) => {
   return (
     <View className={stylesheet.wrapper}>
-      <View className={stylesheet.header + ' bg-beige-primary/50 dark:bg-d-blue-primary/50 h-[50px]'}>
+      <View className={stylesheet.header + ' bg-beige-primary/50 dark:bg-d-blue-primary/50 h-[60px] '}>
         <Text className='font-semibold text-black dark:text-d-text-gray py-5 text-md'>{title}</Text>
       </View>
       <View className={stylesheet.contentWrapper}>
@@ -29,8 +29,8 @@ export const ReportCard = ({
             description.map((desc, index) =>
               desc ? (
                 <View key={index} className={stylesheet.summaryItem}>
-                  <Text className='dark:text-d-text-gray'>•</Text>
-                  <Text className='m-y-4 font-xs dark:text-d-text-gray'> {desc} </Text>
+                  <Text className='dark:text-d-text-dark'>•</Text>
+                  <Text className='m-y-4 font-xs dark:text-d-text-dark'> {desc} </Text>
                 </View>
               ) : (
                 <Text></Text>
@@ -38,8 +38,8 @@ export const ReportCard = ({
             )}
           {typeof description == 'string' && (
             <View key='desc@' className={stylesheet.summaryItem}>
-              <Text className='dark:text-d-text-gray'>•</Text>
-              <Text className='m-y-4 font-xs dark:text-d-text-gray'> {description} </Text>
+              <Text className='dark:text-d-text-dark'>•</Text>
+              <Text className='m-y-4 font-xs dark:text-d-text-dark'> {description} </Text>
             </View>
           )}
         </View>

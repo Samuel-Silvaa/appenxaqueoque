@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CreateReportDTO, requestCreateEpisode, requestCreateReport, requestFetchEpisodes, requestFetchPatient, requestFetchReports, requestUpdateEpisode } from "src/infra/services/appService";
+import { CreateReportDTO, requestCreateEpisode, requestCreateReport, requestFetchEpisodes, requestFetchPatient, requestFetchReports, requestUpdateEpisode, requestFetchReportEpisodesRange, requestGeneratePdfReport } from "src/infra/services/appService";
 import { Episode, EpisodeModalDTO, Patient, Report } from "src/infra/@types/app.types";
 
 
@@ -13,6 +13,8 @@ export interface AppReducer {
   pageTitle: string;
   loading: boolean;
   error: string | null;
+  pdfReportStatus: 'success' | 'error' | 'loading' | null;
+  reportEpisodes: Episode[];
 }
 
 const initialEpisodeState: Episode = {
@@ -53,6 +55,8 @@ const initialState: AppReducer = {
   pageTitle : '',
   loading: false,
   error: null,
+  pdfReportStatus: null,
+  reportEpisodes: [],
 };
 
 
@@ -81,6 +85,7 @@ const appSlice = createSlice({
     },
     clearEpisodeState: (state) => {
       state.episode = initialEpisodeState;
+      state.currentEpStep = 0;
       return state;
     },
     handleStepForward: (state, action) => {
@@ -198,6 +203,31 @@ const appSlice = createSlice({
         loading: false,
       });
     });
+  // REQUEST_FETCH_REPORTS_EPISODES_RANGE
+  builder.addCase(handleFetchReportEpisodesRange.pending, (state) => {
+    state.loading = true;
+  });
+  builder.addCase(handleFetchReportEpisodesRange.fulfilled, (state, action: PayloadAction<Episode[]>) => {
+    state.reportEpisodes = action.payload;
+    state.loading = false;
+    state.error = null;
+  });
+  builder.addCase(handleFetchReportEpisodesRange.rejected, (state, action) => {
+    state.error = action.error.message ?? 'Erro inesperado';
+    state.loading = false;
+  });
+
+  // REQUEST_GENERATE_PDF_REPORT
+  builder.addCase(handleGeneratePdfReport.pending, (state) => {
+    state.pdfReportStatus = 'loading';
+  });
+  builder.addCase(handleGeneratePdfReport.fulfilled, (state, action) => {
+    state.pdfReportStatus = 'success';
+  });
+  builder.addCase(handleGeneratePdfReport.rejected, (state, action) => {
+    state.pdfReportStatus = 'error';
+    state.error = action.error.message ?? 'Erro inesperado';
+  });
   },
 });
 
@@ -244,6 +274,20 @@ export const handleCreateReport = createAsyncThunk(
   'app/handleCreateReport',
   async (payload: CreateReportDTO) => {
     return await requestCreateReport(payload);
+  }
+);
+
+export const handleFetchReportEpisodesRange = createAsyncThunk(
+  'app/handleFetchReportEpisodesRange',
+  async (ids: string) => {
+    return await requestFetchReportEpisodesRange(ids);
+  }
+);
+
+export const handleGeneratePdfReport = createAsyncThunk(
+  'app/handleGeneratePdfReport',
+  async (payload: { id: string; physicianEmail: string }) => {
+    return await requestGeneratePdfReport(payload);
   }
 );
 

@@ -47,11 +47,16 @@ const Login = ({ navigation }: any) => {
   }, []);
 
   const onSubmitHandler = async (data: LoginSchema) => {
-     await dispatch(requestLogin(data));
+     const res = await dispatch(requestLogin(data));
+
+     if(res.meta.requestStatus === 'rejected' && (res as any).error?.message?.includes('confirme seu email')){
+          navigation.navigate('sendEmailConfirmation' as never, { email: data.email } as never);
+     }
+     console.log(res);
   };
 
   const handleForgotPassword = () => {
-    navigation.navigate('sendEmailConfirmation');
+    navigation.navigate('sendEmailConfi rmation' as never, { email: '' } as never);
   };
 
   return (

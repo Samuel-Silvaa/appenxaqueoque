@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Text, View, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
-import { sharedStyleSheet } from '../shared/style/stylesheet';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
@@ -10,12 +9,17 @@ import { requestSendEmailConfirmation } from 'src/infra/app/reducers/auth.reduce
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { useSelector } from 'react-redux';
 import { authSelector } from 'src/infra/app/selectors';
+import { useRoute } from "@react-navigation/native";
 
 const stylesheet = {
   title: 'text-2xl font-bold text-dark mb-2',
   subtitle: 'text-base text-dark/80 mb-8',
   formContainer: 'gap-y-4',
 };
+
+interface RouteParams {
+  email: string;
+}
 
 interface SendEmailConfirmationSchema {
   email: string;
@@ -30,8 +34,8 @@ const validationSchema = yup.object({
 
 const SendEmailConfirmation = ({ navigation }: any) => {
   const dispatch = useAsyncAppDispatch();
-  const { loading, error } = useSelector(authSelector);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const {  error } = useSelector(authSelector);
+  const route = useRoute();
 
   const {
     control,
@@ -42,32 +46,29 @@ const SendEmailConfirmation = ({ navigation }: any) => {
     resolver: yupResolver(validationSchema),
   });
 
+
   const onSubmit = async (data: SendEmailConfirmationSchema) => {
     try {
-      await dispatch(requestSendEmailConfirmation({ email: data.email }));
-      setIsSuccess(true);
-      Alert.alert(
-        'Email enviado!',
-        'Verifique sua caixa de entrada e clique no link de confirmação.',
-        [{ text: 'OK', onPress: () => navigation.navigate('login') }]
-      );
+      const res = await dispatch(requestSendEmailConfirmation({ email: data.email }));
+
+      if(res.meta.requestStatus == 'fulfilled'){
+        navigation.navigate('confirmEmail' as never, { email: data.email } as never);
+      }
+ 
     } catch (error) {
       console.error('Error sending email confirmation:', error);
     }
   };
 
-  if (isSuccess) {
-    return (
-      <AuthScaffold>
-        <View className="flex-1 justify-center items-center">
-          <Text className={stylesheet.title}>Email enviado!</Text>
-          <Text className={stylesheet.subtitle}>
-            Verifique sua caixa de entrada e clique no link de confirmação.
-          </Text>
-        </View>
-      </AuthScaffold>
-    );
-  }
+  
+  useEffect(() => {
+
+    const params = route.params as RouteParams;
+
+    if(params && params.email) {
+      setValue('email', params.email);
+    }
+  },[])
 
   return (
     <AuthScaffold
@@ -76,9 +77,9 @@ const SendEmailConfirmation = ({ navigation }: any) => {
       ctaPrimaryText="Enviar email de confirmação"
     >
       <View className="flex-1 justify-center">
-        <Text className={stylesheet.title}>Confirmar Email</Text>
+        <Text className={stylesheet.title}>Receber código de validação</Text>
         <Text className={stylesheet.subtitle}>
-          Digite seu email para receber um link de confirmação
+          Digite seu email para receber um código de confirmação
         </Text>
 
         <View className={stylesheet.formContainer}>
@@ -90,6 +91,7 @@ const SendEmailConfirmation = ({ navigation }: any) => {
             autoCapitalize="none"
             errors={errors}
             setValue={setValue}
+            defaultValue={route.params && route.params.email ? route.params.email : '' }
           />
 
           {error && (

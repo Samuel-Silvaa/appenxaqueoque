@@ -19,18 +19,18 @@ const Location = () => {
         : [];
       
       const isLocationSet = currentLocation.includes(location);
-      let locations;
+    let locations;
       
-      if (isLocationSet) {
+    if (isLocationSet) {
         locations = currentLocation.filter((l) => l !== location);
       } else {
         locations = [...currentLocation, location];
       }
       
-      dispatch(handleFormChanging({ location: locations }));
-    } catch(err) {
-      console.log(err);
-    }
+    dispatch(handleFormChanging({ location: locations }));
+      } catch(err) {
+        console.log(err);
+      }
   };
 
   const validateLocationSelectedAndReturnColorScheme = (

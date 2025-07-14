@@ -21,6 +21,7 @@ import {  useSelector } from "react-redux";
 import { useAsyncAppDispatch } from "src/infra/app/store";
 import { handleCreateReport, handleFecthReports } from "src/infra/app/reducers/app.reducer";
 import { appStateSelector } from "src/infra/app/selectors";
+import { ptBR } from "date-fns/locale";
 
 const stylesheet = {
   wrapper: 'w-full',
@@ -221,7 +222,10 @@ const ReportDateRangeModal = ({
       visible={isOpen}
       
       onRequestClose={() => {
-        dispatch(handleFecthReports({patientId: appState.patient!.id!, date: { date : null}}) );
+        dispatch(handleFecthReports({patientId: appState.patient!.id!, date: {date: {
+          startDate: format(subDays(new Date(), 15), 'yyyy-MM-dd', { locale: ptBR }),
+          endDate: format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
+        }}}) );
         onClose();
       }}
     >

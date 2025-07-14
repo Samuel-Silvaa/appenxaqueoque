@@ -118,7 +118,7 @@ const ImpairFactor = () => {
                 }
                 defaultValue={appState.episode.anotherImpairFactor!}
                 onChange={(e) =>
-                  handleFormChanging({ anotherImpairFactor: e.nativeEvent.text })
+                  dispatch(handleFormChanging({ anotherImpairFactor: e.nativeEvent.text }))
                 }
               />
             )}

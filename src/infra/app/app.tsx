@@ -23,14 +23,13 @@ import { useAsyncAppDispatch } from './store';
 const AppContext = createContext<AppContextDefaultValues>({
   isLoading: false,
   validateStepForward: () => false,
+  handleToast: () => {},
   submitEpisode: () => new Promise(() => {}),
   dispatch: () => new Promise(() => {}),
   reports: undefined,
 });
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [steps, _] = useState(12);
-  const [reports, setReports] = useState<Report[] | undefined>();
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
@@ -96,10 +95,25 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 
         if (parsedObject.isEdition) {
           delete parsedObject.isEdition;
-          return asyncDispatch(handleUpdateEpisode(
+          const res = await asyncDispatch(handleUpdateEpisode(
            {payload:  parsedObject,
             id: appState.episode.id!,}
           ));
+
+          if (res.meta.requestStatus == 'fulfilled') {
+            const data = res.payload!.data;
+
+            console.log(`Data?>`,data)
+
+            return {
+              ...data,
+              triggers: String(data.triggers).split(','),
+              improvementFactor: String(data.improvementFactor).split(','),
+              symptoms: String(data.symptoms).split(','),
+              haloSymptoms: String(data.haloSymptoms).split(','),
+              impairFactor: String(data.impairFactor).split(','),
+            };
+          }
         } else {
           delete parsedObject.id;
           delete parsedObject.isEdition;
@@ -167,17 +181,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       });
   };
 
-  const handleFitEpisodeData = (ep: Episode): Episode => {
-    return {
-      ...ep,
-      period: Number(ep.period) == 1 ? 'true' : 'false',
-      triggers: String(ep.triggers).split(','),
-      haloSymptoms: String(ep.haloSymptoms),
-      improvementFactor: String(ep.improvementFactor).split(','),
-      symptoms: String(ep.symptoms).split(','),
-    };
-  };
-
   const appDispatch = async (
     action: string,
     payload?: any,
@@ -185,21 +188,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   ): Promise<any> => {
     const userId = await SecureStore.getItemAsync('userId');
     switch (action) {
-      case AppActions.REQUEST_CREATE_REPORT:
-        if (userId) {
-          return handlePromise({
-            promiseFromService: requestCreateReport({
-              ...payload,
-              patientId: userId,
-            }),
-            payload,
-            successCallbackAction: (res) => {
-              appDispatch(AppActions.REQUEST_FETCH_REPORTS, {});
-            },
-            isShowingToast: true,
-          });
-        }
-        break;
       case AppActions.REQUEST_GENERATE_PDF_REPORT:
         return handlePromise({
           promiseFromService: requestGeneratePdfReport({
@@ -217,15 +205,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           },
           isShowingToast: true,
         });
-      case AppActions.REQUEST_FETCH_REPORTS:
-        if (userId) {
-          handlePromise({
-            promiseFromService: requestFetchReports(userId, payload),
-            payload,
-            successCallbackAction: (res) => reducer(action, payload, res),
-          });
-          return requestFetchReports(userId, payload);
-        }
 
       case AppActions.REQUEST_FETCH_REPORTS_EPISODES_RANGE:
         if (userId) {
@@ -241,11 +220,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const reducer = (type: any, payload: any, response: any) => {
-    switch (type) {
-      case AppActions.REQUEST_FETCH_REPORTS:
-        setReports(response);
-        break;
-    }
+   
   };
 
   return (
@@ -253,10 +228,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       value={{
         dispatch: appDispatch,
         validateStepForward,
-        steps,
         submitEpisode,
-        reports: reports,
         isLoading,
+        handleToast
       }}
     >
       {children}

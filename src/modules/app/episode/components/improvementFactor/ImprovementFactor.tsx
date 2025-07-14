@@ -129,7 +129,9 @@ const ImprovementFactor = () => {
                       editable={!isMedicineEditable}
                       defaultValue={appState.episode.medicine!}
                       onChange={(e) =>
+                        dispatch(
                         handleFormChanging({ medicine: e.nativeEvent.text })
+                        )
                       }
                     ></InputContainer>
                     <InputContainer
@@ -142,7 +144,7 @@ const ImprovementFactor = () => {
                       editable={!isMedicineEditable}
                       defaultValue={appState.episode.medicineDosage?.toString()}
                       onChange={(e) =>
-                        handleFormChanging({ medicineDosage: e.nativeEvent.text })
+                       dispatch( handleFormChanging({ medicineDosage: e.nativeEvent.text }))
                       }
                     ></InputContainer>
                     <Text className='font-semibold text-black my-4 text-lg'>
@@ -150,7 +152,7 @@ const ImprovementFactor = () => {
                     </Text>
                     <RadioButton.Group
                       onValueChange={(value) =>
-                        handleFormChanging({ medicineImprovement: value })
+                       dispatch( handleFormChanging({ medicineImprovement: value }))
                       }
                       value={appState.episode.medicineImprovement!}
                     >
@@ -207,12 +209,12 @@ const ImprovementFactor = () => {
                   }
                   defaultValue={appState.episode.foodImprovement!}
                   onChange={(e) =>
-                    handleFormChanging({ foodImprovement: e.nativeEvent.text })
+                   dispatch( handleFormChanging({ foodImprovement: e.nativeEvent.text }))
                   }
                 />
               )}
             {act.value == ImprovementFactorType.ANOTHER &&
-              !(Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
+              (Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
                 ImprovementFactorType.ANOTHER
               )) && (
                 <InputContainer
@@ -234,9 +236,9 @@ const ImprovementFactor = () => {
                   }
                   defaultValue={appState.episode.anotherImprovementFactor!}
                   onChange={(e) =>
-                    handleFormChanging({
+                    dispatch(handleFormChanging({
                       anotherImprovementFactor: e.nativeEvent.text,
-                    })
+                    }))
                   }
                 />
               )}

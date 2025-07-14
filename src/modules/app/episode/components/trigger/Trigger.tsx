@@ -8,9 +8,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Trigger as TriggerType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Fragment, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { appStateSelector } from "src/infra/app/selectors";
-import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector } from 'src/infra/app/selectors';
+import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 
 interface TriggerSchema {
   foodImpair: string;
@@ -26,8 +26,7 @@ const data: {
   img?: ImageSourcePropType;
 }[] = [
   {
-    label:
-      'Sono irregular',
+    label: 'Sono irregular',
     value: TriggerType.JAGGEDSLEEP,
   },
   {
@@ -64,14 +63,16 @@ const Trigger = () => {
 
   const handleSetTriggersValues = (value: string) => {
     // Ensure triggers is always an array
-    const currentTriggers = Array.isArray(appState.episode.triggers) 
-      ? appState.episode.triggers 
+    const currentTriggers = Array.isArray(appState.episode.triggers)
+      ? appState.episode.triggers
       : [];
-    
+
     if (currentTriggers.includes(value)) {
-      dispatch(handleFormChanging({
-        triggers: currentTriggers.filter((tr) => tr !== value),
-      }));
+      dispatch(
+        handleFormChanging({
+          triggers: currentTriggers.filter((tr) => tr !== value),
+        })
+      );
     } else {
       dispatch(handleFormChanging({ triggers: [...currentTriggers, value] }));
     }
@@ -95,13 +96,16 @@ const Trigger = () => {
                     size={22}
                     fillColor='#CEB0FA'
                     unfillColor='#FFFFFF00'
-                    textStyle={{ 
+                    textStyle={{
                       flexWrap: 'wrap',
                       overflow: 'hidden',
-                      padding: 4
+                      padding: 4,
                     }}
                     text={act.label}
-                    isChecked={Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(act.value)}
+                    isChecked={
+                      Array.isArray(appState.episode.triggers) &&
+                      appState.episode.triggers.includes(act.value)
+                    }
                     onPress={(isChecked: boolean) => {
                       handleSetTriggersValues(act.value);
                     }}
@@ -119,15 +123,21 @@ const Trigger = () => {
                 setValue={setValue}
                 control={control}
                 errors={errors}
-                editable={Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(TriggerType.FOOD)}
+                editable={
+                  Array.isArray(appState.episode.triggers) &&
+                  appState.episode.triggers.includes(TriggerType.FOOD)
+                }
                 className={`${
-                  Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(TriggerType.FOOD)
+                  Array.isArray(appState.episode.triggers) &&
+                  appState.episode.triggers.includes(TriggerType.FOOD)
                     ? ' opacity-100'
                     : ' opacity-25'
                 } bg-white drop-shadow-sm`}
                 defaultValue={appState.episode.foodImpair!}
                 onChange={(e) =>
-                  handleFormChanging({ foodImpair: e.nativeEvent.text })
+                  dispatch(
+                    handleFormChanging({ foodImpair: e.nativeEvent.text })
+                  )
                 }
               />
             )}
@@ -139,17 +149,21 @@ const Trigger = () => {
                 control={control}
                 errors={errors}
                 placeholder='Descreva brevemente'
-                editable={Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(
-                  TriggerType.ANOTHER
-                )}
+                editable={
+                  Array.isArray(appState.episode.triggers) &&
+                  appState.episode.triggers.includes(TriggerType.ANOTHER)
+                }
                 className={`${
-                  Array.isArray(appState.episode.triggers) && appState.episode.triggers.includes(TriggerType.ANOTHER)
+                  Array.isArray(appState.episode.triggers) &&
+                  appState.episode.triggers.includes(TriggerType.ANOTHER)
                     ? ' opacity-100 '
                     : ' opacity-25'
                 } bg-white drop-shadow-sm`}
                 defaultValue={appState.episode.anotherTrigger!}
                 onChange={(e) =>
-                  handleFormChanging({ anotherTrigger: e.nativeEvent.text })
+                  dispatch(
+                    handleFormChanging({ anotherTrigger: e.nativeEvent.text })
+                  )
                 }
               />
             )}

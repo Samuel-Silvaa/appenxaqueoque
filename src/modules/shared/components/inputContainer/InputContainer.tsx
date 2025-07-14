@@ -14,7 +14,7 @@ import Svg, { Path } from 'react-native-svg';
 
 const stylesheet = {
   view: 'w-full my-1 ',
-  input: 'flex h-[60px] bg-gray-light rounded rounded-3xl p-4 z-20',
+  input: 'flex h-[60px] bg-gray-light rounded rounded-3xl px-4 z-20',
   label: 'pl-2 text-black text-[15px] dark:text-d-text-gray',
   error: 'text-error pl-2 font-medium',
   inputContainer: 'relative',

@@ -22,7 +22,7 @@ export const getBtnColorScheme = (
   const stylesheet = {
     pressable:
       'w-full flex flex-row items-center justify-center round rounded-full h-[63px] px-4 ',
-    title: 'font-semibold mx-4',
+    title: 'font-semibold mx-4 dark:text-white',
   };
   switch (scheme) {
     case 'primary':

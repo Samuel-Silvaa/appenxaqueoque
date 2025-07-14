@@ -10,8 +10,10 @@ import {
   Symptom,
   Trigger,
 } from 'src/infra/@types/app.types';
-import { AppActions } from 'src/infra/app/actions';
-import { useApp } from 'src/infra/app/app';
+import { useSelector } from 'react-redux';
+import { useAsyncAppDispatch } from 'src/infra/app/store';
+import { handleFetchReportEpisodesRange } from 'src/infra/app/reducers/app.reducer';
+import { appStateSelector } from 'src/infra/app/selectors';
 
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
 import PhysicianEmailModal from 'src/modules/shared/components/physicianEmailModal/PhysicianEmailModal';
@@ -38,19 +40,20 @@ const colorList = [
 
 const ChartsPage = () => {
   const route = useRoute();
-  const { dispatch } = useApp();
-  const [report, _] = useState<Report>(route.params['reportDetails']);
-  const [episodes, setEpisodes] = useState([]);
+  const asyncDispatch = useAsyncAppDispatch();
+  const appState = useSelector(appStateSelector);
+  // Type assertion for route.params
+  const params = route.params as { reportDetails: Report };
+  const [report, _] = useState<Report>(params.reportDetails);
+  // episodes will come from redux state (reports is used for both reports and episodes)
+  const episodes = appState.reportEpisodes || [];
   const [emailModalOpen, setEmailModalOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(
-      AppActions.REQUEST_FETCH_REPORTS_EPISODES_RANGE,
-      report.episodesIds
-    ).then((res) => {
-      setEpisodes(res);
-    });
-  }, [this]);
+    if (report.episodesIds) {
+      asyncDispatch(handleFetchReportEpisodesRange(report.episodesIds));
+    }
+  }, [report.episodesIds]);
 
   const acuteness = useMemo(() => {
     const dataList: Array<{ value: number; name: string; color: string }> = [];
@@ -124,23 +127,12 @@ const ChartsPage = () => {
       label: Symptom;
       frontColor: string;
     }> = [];
-    [
-      Symptom.HALO,
-      Symptom.PHOTOSENSIBILITY,
-      Symptom.HYPERACUSIS,
-      Symptom.NAUSEA,
-      Symptom.SICKNESS,
-      Symptom.VOMIT,
-    ].forEach((symptom) => {
+    Object.values(Symptom).forEach((symptom) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (symptom?.includes(',')) {
-          Array.from(symptom.split(',')).map((s) => {
-            if (s == symptom) {
-              count++;
-            }
-          });
-        } else if (ep.symptoms == symptom) {
+        if (Array.isArray(ep.symptoms)) {
+          if (ep.symptoms.includes(symptom)) count++;
+        } else if (ep.symptoms === symptom) {
           count++;
         }
       });
@@ -288,15 +280,21 @@ const ChartsPage = () => {
         />
       )}
 
-      {report.notes && (
-        <ReportCard
-          key="notes"
-          title='Observações'
-          description={
-            report.notes.includes(',') ? report.notes.split(',') : report.notes
-          }
-        />
-      )}
+      <ReportCard
+        key="notes"
+        title='Observações'
+        description={
+          Array.isArray(report.notes)
+            ? (report.notes.filter((n): n is string => typeof n === 'string').length > 0
+                ? report.notes.filter((n): n is string => typeof n === 'string')
+                : null)
+            : typeof report.notes === 'string' && report.notes.includes(',')
+              ? (report.notes.split(',').filter((n): n is string => typeof n === 'string').length > 0
+                  ? report.notes.split(',').filter((n): n is string => typeof n === 'string')
+                  : null)
+              : report.notes
+        }
+      />
 
       {report.periodNotes && (
         <ReportCard

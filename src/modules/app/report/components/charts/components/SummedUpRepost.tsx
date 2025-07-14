@@ -33,12 +33,12 @@ export const SummedUpReport = (data: { report: Report }) => {
           className={stylesheet.status}
           style={{ backgroundColor: pinColor(report.acuteness) }}
         ></View>
-        <Text className='font-semibold text-black dark:text-d-text-gray'>
+        <Text className='font-semibold text-black dark:text-d-text-dark'>
           De {format(new Date(report.startDate), 'dd MMM', { locale: ptBR })} à{' '}
           {format(new Date(report.endDate), 'dd MMM', { locale: ptBR })}
         </Text>
         <View>
-          <Text className='font-semibold text-black dark:text-d-text-gray'>
+          <Text className='font-semibold text-black dark:text-d-text-dark'>
             {differenceInDays(report.endDate, report.startDate)} dias
           </Text>
         </View>
@@ -50,49 +50,49 @@ export const SummedUpReport = (data: { report: Report }) => {
               className='w-4 h-4'
               source={require('src/assets/chart-doc.png')}
             />
-            <Text className='dark:text-d-text-gray'>{report.episodeAmount} episódios</Text>
+            <Text className='dark:text-d-text-dark'>{report.episodeAmount} episódios</Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-clock.png')}
             />
-            <Text className='dark:text-d-text-gray'>{parseTime(report.time)} </Text>
+            <Text className='dark:text-d-text-dark'>{parseTime(report.time)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-header-location.png')}
             />
-            <Text className='dark:text-d-text-gray'>{parseLocation(report.location)} </Text>
+            <Text className='dark:text-d-text-dark'>{parseLocation(report.location)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-acuteness.png')}
             />
-            <Text className='dark:text-d-text-gray'>{parseAcuteness(report.acuteness)} </Text>
+            <Text className='dark:text-d-text-dark'>{parseAcuteness(report.acuteness)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-sad.png')}
             />
-            <Text className='dark:text-d-text-gray'>{parsePainType(report.painType)} </Text>
+            <Text className='dark:text-d-text-dark'>{parsePainType(report.painType)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-symptom.png')}
             />
-            <Text className='dark:text-d-text-gray'>{parseSymptoms(report.symptoms)} </Text>
+            <Text className='dark:text-d-text-dark'>{parseSymptoms(report.symptoms)} </Text>
           </View>
           <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-trigger.png')}
             />
-            <Text className='dark:text-d-text-gray'>{parseTriggers(report.triggers)} </Text>
+            <Text className='dark:text-d-text-dark'>{parseTriggers(report.triggers)} </Text>
           </View>
         </View>
       </View>

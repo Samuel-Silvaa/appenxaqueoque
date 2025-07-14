@@ -116,15 +116,13 @@ const ReportPage = ({ navigation }) => {
         </View>
         <View className='flex-row justify-between items-center w-full '>
           <ExPressable
-            className='rounded-full w-2/4 h-[45px] bg-blue-primary/70 dark:text-d-text-gray'
+            className='rounded-full w-2/4 h-[45px] bg-blue-primary/70 dark:text-white'
             title='Gerar relatório'
-            colorScheme='light'
             onPress={() => setIsModalOpen(true)}
           />
           <ExPressable
             className='rounded-full w-[40%] h-[45px]'
             title='Filtrar'
-            colorScheme='light'
             onPress={() => setIsFilterModalOpen(true)}
           />
         </View>

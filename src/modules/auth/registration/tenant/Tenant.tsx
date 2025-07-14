@@ -24,7 +24,15 @@ const tenantSchema = yup.object<TenantSchema>().shape({
     .email('Email inválido')
     .required('Preencha seu email')
     .default('samuelsilva666@gmail.com'),
-  password: yup.string().required('Preencha sua senha').default('123123'),
+  password: yup
+    .string()
+    .required('Preencha sua senha')
+    .min(8, 'A senha deve ter pelo menos 8 caracteres')
+    .matches(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
+    .matches(/[a-z]/, 'A senha deve conter pelo menos uma letra minúscula')
+    .matches(/[0-9]/, 'A senha deve conter pelo menos um número')
+    .matches(/[^A-Za-z0-9]/, 'A senha deve conter pelo menos um caractere especial')
+    .default(''),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Senhas não coincidem')
@@ -53,7 +61,8 @@ const Tenant = () => {
             email: res.meta.arg.email,
             password: res.meta.arg.password,
           }))
-        navigation.navigate('patient' as never);
+        navigation.setOptions({email: data.email});
+        navigation.navigate('sendEmailConfirmation' as never);
       }
   };
 
@@ -92,6 +101,10 @@ const Tenant = () => {
         errors={errors}
         placeholder='Repita sua senha'
       ></InputContainer>
+
+      <Text className="text-md font-bold">A senha deve conter pelo menos: </Text>
+      <Text className="text-xs">1 letra maiúscula {'\n'}1 letra minuscula {'\n'}1 número e {'\n'}
+       1 caractere especial incluindo 8 digitos </Text>
     </AuthScaffold>
   );
 };
