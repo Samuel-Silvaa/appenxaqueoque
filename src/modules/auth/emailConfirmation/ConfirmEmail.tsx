@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, Alert, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Text, View, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import {
@@ -10,10 +10,6 @@ import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { useSelector } from 'react-redux';
 import { authSelector } from 'src/infra/app/selectors';
 import { Loader } from 'src/modules/shared/components/loader/Loader';
-import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useApp } from 'src/infra/app/app';
 import { Image } from 'react-native';
 
@@ -32,18 +28,6 @@ interface RouteParams {
   email: string;
 }
 
-interface ConfirmEmailSchema {
-  token: string;
-}
-
-const validationSchema = yup.object({
-  token: yup
-    .string()
-    .length(6, 'O código deve ter 6 dígitos')
-    .matches(/^\d+$/, 'O código deve conter apenas números')
-    .required('Código é obrigatório'),
-});
-
 const ConfirmEmail = () => {
   const { handleToast } = useApp();
   const route = useRoute();
@@ -53,14 +37,8 @@ const ConfirmEmail = () => {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [timer, setTimer] = useState(30);
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<ConfirmEmailSchema>({
-    resolver: yupResolver(validationSchema),
-  });
+  const [digits, setDigits] = useState(['', '', '', '', '', '']);
+  const inputRefs = Array.from({ length: 6 }, () => useRef<TextInput>(null));
 
   useEffect(() => {
     countdownTimer();
@@ -72,17 +50,36 @@ const ConfirmEmail = () => {
     }
   }, []);
 
-  const onSubmit = async (data: ConfirmEmailSchema) => {
+  const handleDigitChange = (value: string, idx: number) => {
+    if (!/^[0-9]*$/.test(value)) return; // Only allow digits
+    const newDigits = [...digits];
+    newDigits[idx] = value.slice(-1); // Only last digit
+    setDigits(newDigits);
+
+    // Move to next input if filled
+    if (value && idx < 5) {
+      inputRefs[idx + 1].current?.focus();
+    }
+    // Move to previous input if deleted
+    if (!value && idx > 0) {
+      inputRefs[idx - 1].current?.focus();
+    }
+  };
+
+  const onSubmit = async () => {
+    const token = digits.join('');
+    if (token.length !== 6) {
+      handleToast('Preencha todos os dígitos do código!', 'danger');
+      return;
+    }
     try {
       const params = route.params as RouteParams;
-
       const res = await dispatch(
         requestConfirmEmail({
-          token: data.token,
+          token,
           email: params.email.toLowerCase(),
         })
       );
-
       if (res.meta.requestStatus == 'fulfilled') {
         setStatus('success');
       } else if (res.meta.requestStatus == 'rejected') {
@@ -142,8 +139,7 @@ const ConfirmEmail = () => {
     return (
       <AuthScaffold
         ctaPrimary={() => {
-          setStatus('idle');
-          setValue('token', '');
+          setDigits(['', '', '', '', '', '']);
         }}
         ctaPrimaryText='Tentar novamente'
       >
@@ -161,7 +157,7 @@ const ConfirmEmail = () => {
   return (
     <AuthScaffold
       hasArrowBack
-      ctaPrimary={handleSubmit(onSubmit)}
+      ctaPrimary={onSubmit}
       ctaPrimaryText='Confirmar Email'
     >
       <View className='flex-1 justify-center'>
@@ -171,16 +167,29 @@ const ConfirmEmail = () => {
         </Text>
 
         <View className={stylesheet.formContainer}>
-          <InputContainer
-            control={control}
-            name='token'
-            placeholder='000000'
-            keyboardType='numeric'
-            maxLength={6}
-            autoCapitalize='none'
-            errors={errors}
-            setValue={setValue}
-          />
+          <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 16 }}>
+            {digits.map((digit, idx) => (
+              <TextInput
+                key={idx}
+                ref={inputRefs[idx]}
+                value={digit}
+                onChangeText={value => handleDigitChange(value, idx)}
+                keyboardType="numeric"
+                maxLength={1}
+                style={{
+                  width: 53,
+                  height: 53,
+                  marginHorizontal: 3,
+                  textAlign: 'center',
+                  fontSize: 24,
+                  backgroundColor: 'white',
+                }}
+                className="rounded-full"
+                returnKeyType={idx === 5 ? 'done' : 'next'}
+                onSubmitEditing={onSubmit}
+              />
+            ))}
+          </View>
 
           <TouchableOpacity
             disabled={timer > 0}
