@@ -9,8 +9,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { requestLogin } from "src/infra/app/reducers/auth.reducer";
-import { useAsyncAppDispatch } from "src/infra/app/store";
+import { clearErrorMessage, requestLogin } from "src/infra/app/reducers/auth.reducer";
+import { useDispatch } from "react-redux";
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',
@@ -32,7 +32,7 @@ const loginSchema = yup.object<LoginSchema>().shape({
 });
 
 const Login = ({ navigation }: any) => {
-  const dispatch = useAsyncAppDispatch();
+  const dispatch = useDispatch();
 
   const {
     handleSubmit,
@@ -46,11 +46,17 @@ const Login = ({ navigation }: any) => {
     SecureStore.deleteItemAsync('welcome');
   }, []);
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearErrorMessage());
+    }
+  })
+
   const onSubmitHandler = async (data: LoginSchema) => {
      const res = await dispatch(requestLogin(data));
 
      if(res.meta.requestStatus === 'rejected' && (res as any).error?.message?.includes('confirme seu email')){
-          navigation.navigate('sendEmailConfirmation' as never, { email: data.email } as never);
+          navigation.navigate('sendEmailConfirmation' as never, { email: data.email, password: data.password } as never);
      }
      console.log(res);
   };

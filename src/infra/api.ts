@@ -55,8 +55,8 @@ const post = async (url: string, payload: object): Promise<any> => {
   }
 };
 
-const put = async <T>(url: string, payload: object): Promise<T> => {
-  return await api.put(url, payload);
+const put = async <T>(url: string, payload: object, headers?: object): Promise<T> => {
+  return await api.put(url, payload, headers ? { headers } : undefined);
 };
 
 const patch = async <T>(

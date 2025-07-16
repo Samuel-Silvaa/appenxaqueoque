@@ -36,6 +36,7 @@ module.exports = {
         'purple-secondary': '#CEB0FA',
         'gray-light': '#F1F1F1',
         'gray-opacity': '#e6e6e6',
+        'gray-secondary': '#E6E0F4',
         'beige-primary': '#EBDCBF',
         'beige-secondary': '#F5E2CEB2',
         'beige-tertiary': '#fbfbfc',

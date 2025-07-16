@@ -8,6 +8,7 @@ import { Image, TouchableOpacity, View } from 'react-native';
 import Patient from './registration/patient/Patient';
 import SendEmailConfirmation from './emailConfirmation/SendEmailConfirmation';
 import ConfirmEmail from './emailConfirmation/ConfirmEmail';
+import AvatarSelection from './registration/avatar/AvatarSelection';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +49,7 @@ const AuthRoutes = () => {
       <Stack.Screen name='welcome' component={Welcome}></Stack.Screen>
       <Stack.Screen name='sendEmailConfirmation' component={SendEmailConfirmation}></Stack.Screen>
       <Stack.Screen name='confirmEmail' component={ConfirmEmail}></Stack.Screen>
+      <Stack.Screen name='avatarSelection' component={AvatarSelection}></Stack.Screen>
     </Stack.Navigator>
   );
 };

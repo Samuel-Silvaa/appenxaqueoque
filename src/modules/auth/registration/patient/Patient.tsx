@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Image } from 'react-native';
 import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { authSelector } from "src/infra/app/selectors";
 import { useAsyncAppDispatch } from "src/infra/app/store";
 import { requestCreatePatient } from "src/infra/app/reducers/auth.reducer";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { format, parse } from "date-fns";
 
 interface PatientSchemaProps {
@@ -37,12 +37,14 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
   kinship: yup.string().required('Preencha o parentesco').default('mother'),
   height: yup.number().required('Preencha a altura').default(1.5),
   weight: yup.number().required('Preencha o peso').default(40),
+  avatar: yup.string().optional(),
 });
 
 const Patient = () => {
   const dispatch   = useAsyncAppDispatch();
   const auth = useSelector(authSelector);
   const navigation = useNavigation();
+  const route = useRoute();
   const {
     handleSubmit,
     formState: { errors },
@@ -56,12 +58,21 @@ const Patient = () => {
 
   useEffect(() => {
     if (auth.sessionEmail) setValue('email', auth.sessionEmail);
-  }, [auth.sessionEmail]);
+    
+    // Check if avatar URI was passed from avatar selection
+    const params = route.params as { avatar?: string };
+    if (params?.email) {
+      setValue('email', auth?.sessionEmail ?? route.params!.email ?? '')
+    }
+  }, [auth.sessionEmail, route.params]);
 
   const onSubmitHandler =  async (data: PatientSchemaProps) => {
    try {
-    console.log({...data, birthDate: format(data.birthDate, 'yyyy-MM-dd')})
-    const res = await dispatch(requestCreatePatient({...data, birthDate: format(data.birthDate, 'yyyy-MM-dd')}));
+    console.log({...data, birthDate: format(data.birthDate, 'yyyy-MM-dd')}, auth);
+    const res = await dispatch(requestCreatePatient({
+      ...data, 
+      birthDate: format(data.birthDate, 'yyyy-MM-dd'),
+    }));
 
     if(res.meta.requestStatus == 'fulfilled') {
       (navigation as any).navigate('welcome');
@@ -86,13 +97,25 @@ const Patient = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        className='w-full p-4 pt-[40px] h-[70%]'
+        className='w-full p-4 pt-[20px] h-[80%]'
       >
+        {watchedValues.avatar && (
+        <View className="items-start mb-4">
+          <View className="w-24 h-24 rounded-full overflow-hidden border-2 border-blue-500">
+            <Image
+              source={{ uri: watchedValues.avatar }}
+              className="w-full h-full"
+              resizeMode="cover"
+            />
+          </View>
+          <Text className="text-sm text-gray-600 mt-1">Foto selecionada</Text>
+        </View>
+      )}
         <InputContainer
           className='opacity-45 bg-white drop-shadow-sm'
           keyboardType='email-address'
           label='E-mail'
-          defaultValue={auth?.sessionEmail ?? ''}
+          defaultValue={auth?.sessionEmail ?? route.params!.email ?? ''}
           name='email'
           editable={false}
           setValue={setValue}

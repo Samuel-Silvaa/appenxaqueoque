@@ -126,7 +126,7 @@ const TimeInput = ({
         </Text>
         <Image
           source={require('src/assets/timer.png')}
-          className='w-6 h-6'
+          className='w-5 h-5'
           resizeMode='contain'
         />
       </TouchableOpacity>

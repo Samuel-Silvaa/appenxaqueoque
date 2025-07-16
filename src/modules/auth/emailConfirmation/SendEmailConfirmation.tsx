@@ -19,6 +19,7 @@ const stylesheet = {
 
 interface RouteParams {
   email: string;
+  password?: string;
 }
 
 interface SendEmailConfirmationSchema {
@@ -36,6 +37,7 @@ const SendEmailConfirmation = ({ navigation }: any) => {
   const dispatch = useAsyncAppDispatch();
   const {  error } = useSelector(authSelector);
   const route = useRoute();
+  const params = route.params as RouteParams;
 
   const {
     control,
@@ -52,9 +54,8 @@ const SendEmailConfirmation = ({ navigation }: any) => {
       const res = await dispatch(requestSendEmailConfirmation({ email: data.email }));
 
       if(res.meta.requestStatus == 'fulfilled'){
-        navigation.navigate('confirmEmail' as never, { email: data.email } as never);
+        navigation.navigate('confirmEmail' as never, { email: data.email, password: params?.password } as never);
       }
- 
     } catch (error) {
       console.error('Error sending email confirmation:', error);
     }
@@ -62,9 +63,6 @@ const SendEmailConfirmation = ({ navigation }: any) => {
 
   
   useEffect(() => {
-
-    const params = route.params as RouteParams;
-
     if(params && params.email) {
       setValue('email', params.email);
     }
@@ -91,7 +89,7 @@ const SendEmailConfirmation = ({ navigation }: any) => {
             autoCapitalize="none"
             errors={errors}
             setValue={setValue}
-            defaultValue={route.params && route.params.email ? route.params.email : '' }
+            defaultValue={params && params.email ? params.email : '' }
           />
 
           {error && (

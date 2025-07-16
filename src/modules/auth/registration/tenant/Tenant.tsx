@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAsyncAppDispatch } from "src/infra/app/store";
 import {  requestLogin, requestSignup } from "src/infra/app/reducers/auth.reducer";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { authSelector } from "src/infra/app/selectors";
 
@@ -40,10 +40,9 @@ const tenantSchema = yup.object<TenantSchema>().shape({
     .default('123123'),
 });
 
-const Tenant = () => {
+const Tenant = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const dispatch = useAsyncAppDispatch();
   const auth = useSelector(authSelector);
-  const navigation = useNavigation();
   const {
     handleSubmit,
     formState: { errors },
@@ -61,8 +60,8 @@ const Tenant = () => {
             email: res.meta.arg.email,
             password: res.meta.arg.password,
           }))
-        navigation.setOptions({email: data.email});
-        navigation.navigate('sendEmailConfirmation' as never);
+          navigation.navigate('sendEmailConfirmation' as never, { email: data.email, password: data.password } as never);
+
       }
   };
 

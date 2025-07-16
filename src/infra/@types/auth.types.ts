@@ -13,6 +13,7 @@ export interface LogInDTO {
 }
 
 export interface LogInResponse {
+  avatar:string;
   email: string;
   token: string;
   userType: string;
@@ -59,6 +60,7 @@ export interface PatientDTO {
   kinship: string;
   height: number;
   weight: number;
+  avatar?: string;
 }
 
 export interface PhysicianDTO {

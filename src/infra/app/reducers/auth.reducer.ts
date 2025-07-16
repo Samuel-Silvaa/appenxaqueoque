@@ -17,11 +17,13 @@ import {
   requestHandleSingUp,
   requestHandleSendEmailConfirmation,
   requestHandleConfirmEmail,
+  requestUpdateAvatar as requestHandleUpdateAvatar,
 } from 'src/infra/services/authService';
 import * as SecureStore from 'expo-secure-store';
 
 // Define initial state type
 export interface AuthReducer {
+  avatar: string | null;
   token: string | null;
   refreshToken: string | null;
   user: PatientDTO | PhysicianDTO | null;
@@ -34,6 +36,7 @@ export interface AuthReducer {
 }
 
 const initialState: AuthReducer = {
+  avatar: null,
   token: null,
   refreshToken: null,
   user: null,
@@ -74,7 +77,6 @@ const authSlice = createSlice({
         SecureStore.setItem('token', action.payload.token);
         if (action.payload.user)
           SecureStore.setItemAsync('userId', action.payload.user.id!);
-
         return (state = {
           ...state,
           ...action.payload,
@@ -190,6 +192,21 @@ const authSlice = createSlice({
         loading: false,
       });
     });
+    //REQUEST_UPDATE_AVATAR
+    builder.addCase(requestUpdateAvatar.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(requestUpdateAvatar.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      if (state.user && 'avatar' in state.user) {
+        (state.user as PatientDTO).avatar = action.payload.avatar;
+      }
+    });
+    builder.addCase(requestUpdateAvatar.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message ?? 'Erro ao atualizar avatar';
+    });
   },
 });
 
@@ -217,6 +234,10 @@ export const requestSendEmailConfirmation = createAsyncThunk(
 export const requestConfirmEmail = createAsyncThunk(
   'auth/requestConfirmEmail',
   async (payload: ConfirmEmailDTO) => await requestHandleConfirmEmail(payload)
+);
+export const requestUpdateAvatar = createAsyncThunk<any, { avatar: string; email: string }>(
+  'auth/requestUpdateAvatar',
+  async (payload) => await requestHandleUpdateAvatar(payload)
 );
 
 // Export actions and reducer

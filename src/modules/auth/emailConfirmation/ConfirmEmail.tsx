@@ -12,6 +12,10 @@ import { authSelector } from 'src/infra/app/selectors';
 import { Loader } from 'src/modules/shared/components/loader/Loader';
 import { useApp } from 'src/infra/app/app';
 import { Image } from 'react-native';
+import { requestLogin } from 'src/infra/app/reducers/auth.reducer';
+import { handleFecthPatient } from 'src/infra/app/reducers/app.reducer';
+import * as SecureStore from 'expo-secure-store';
+import { appStateSelector } from 'src/infra/app/selectors';
 
 const stylesheet = {
   title: 'text-black dark:text-d-text-gray text-2xl font-bold  mb-2',
@@ -26,6 +30,7 @@ const stylesheet = {
 
 interface RouteParams {
   email: string;
+  password?: string;
 }
 
 const ConfirmEmail = () => {
@@ -36,6 +41,7 @@ const ConfirmEmail = () => {
   const { loading, error } = useSelector(authSelector);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [timer, setTimer] = useState(30);
+  const auth = useSelector(authSelector);
 
   const [digits, setDigits] = useState(['', '', '', '', '', '']);
   const inputRefs = Array.from({ length: 6 }, () => useRef<TextInput>(null));
@@ -81,7 +87,37 @@ const ConfirmEmail = () => {
         })
       );
       if (res.meta.requestStatus == 'fulfilled') {
-        setStatus('success');
+        // Automatic login after email confirmation
+        if (params.password) {
+          const loginRes = await dispatch(
+            requestLogin({
+              email: params.email.toLowerCase(),
+              password: params.password,
+            })
+          );
+          if (loginRes.meta.requestStatus === 'fulfilled') {
+            // Fetch patient by userId from SecureStore
+            console.log(auth.user!.id!);
+
+            if (auth.user!.id!) {
+              const patientRes = await dispatch(handleFecthPatient(auth.user!.id!));
+              // If patient is not found or not populated, go to avatar selection
+              const patient: any = patientRes.payload;
+              console.log(patientRes);
+              if (!patient || !patient.id || !patient.name) {
+                setStatus('success'); // triggers avatar selection
+              } else {
+                navigation.navigate('welcome');
+              }
+            } else {
+              setStatus('success'); // fallback to avatar selection
+            }
+          } else {
+            setStatus('error');
+          }
+        } else {
+          setStatus('success');
+        }
       } else if (res.meta.requestStatus == 'rejected') {
         setStatus('error');
       }
@@ -121,9 +157,10 @@ const ConfirmEmail = () => {
     return (
       <AuthScaffold
         ctaPrimary={() => {
-          navigation.navigate('login');
+          const params = route.params as RouteParams;
+          navigation.navigate('avatarSelection' as never, {email: params!.email });
         }}
-        ctaPrimaryText='Login'
+        ctaPrimaryText='Continuar'
       >
         <View className='flex-1 justify-center items-center'>
           <Image source={require('src/assets/welcome.png')} />
@@ -140,6 +177,7 @@ const ConfirmEmail = () => {
       <AuthScaffold
         ctaPrimary={() => {
           setDigits(['', '', '', '', '', '']);
+          setStatus('idle')
         }}
         ctaPrimaryText='Tentar novamente'
       >

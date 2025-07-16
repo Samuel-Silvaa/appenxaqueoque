@@ -1,4 +1,4 @@
-import { post } from '../api';
+import { post, put } from '../api';
 import {
   LogInDTO,
   LogInResponse,
@@ -37,6 +37,22 @@ const requestHandleConfirmEmail = async (
   payload: ConfirmEmailDTO
 ): Promise<ConfirmEmailResponse> => post('session/confirm-email', payload);
 
+const requestUpdateAvatar = async (
+  payload: { avatar: string; email: string }
+): Promise<any> => {
+  const formData = new FormData();
+  formData.append('avatar', {
+    uri: payload.avatar,
+    name: 'avatar' + new Date().getTime().toString() + '.jpg',
+    type: 'image/jpeg',
+  } as any);
+  formData.append('email', payload.email);
+
+  return put('session/avatar', formData, {
+    'Content-Type': 'multipart/form-data',
+  });
+};
+
 export {
   requestHandleLogIn,
   requestHandleSingUp,
@@ -44,4 +60,5 @@ export {
   requestHandleCreatePhysician,
   requestHandleSendEmailConfirmation,
   requestHandleConfirmEmail,
+  requestUpdateAvatar,
 };
