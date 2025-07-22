@@ -44,7 +44,9 @@ const ProfilePage = () => {
       <View className={stylesheet.profile.wrapper}>
         <View className="relative">
         <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('AvatarSelection' as never, {email: auth.sessionEmail, isLogged: true});
+            }}
             className="bg-gray-secondary dark:bg-d-blue-primary p-2 items-center justify-center rounded-full absolute inline-flex bottom-[-20px] right-0 z-50"
           >
             <Text className="text-white font-semibold "><Image source={require('src/assets/camera-icon.png')}></Image></Text>

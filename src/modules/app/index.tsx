@@ -4,10 +4,8 @@ import HomePage from './home/HomePage';
 import { Appearance, Image, Text, View, Animated } from 'react-native';
 import EpisodePage from './episode/Episode';
 import CalendarPage from './calendar/Calendar';
-import ProfilePage from './profile/Profile';
 import AppHeader from '../shared/components/appHeader/AppHeader';
 import ReportStackNavigation from './report/Report';
-import { useApp } from 'src/infra/app/app';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Success from './success/Success';
 import {
@@ -20,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { appStateSelector, authSelector } from 'src/infra/app/selectors';
 import ProfileStackNavigation from "./profile/ProfileStack";
+import AvatarSelection from "../auth/registration/avatar/AvatarSelection";
 
 const stylesheet = {
   calendarBtnContainer:
@@ -29,7 +28,6 @@ const stylesheet = {
 const Tab = createBottomTabNavigator();
 
 const TabsRoutes = () => {
-  const { validateStepForward } = useApp();
   const dispatch = useDispatch();
   const asyncDispatch = useAsyncAppDispatch();
   const auth = useSelector(authSelector);
@@ -296,6 +294,7 @@ const LoggedPages = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='Tabs' component={TabsRoutes} />
       <Stack.Screen name='Success' component={Success} />
+      <Stack.Screen name='AvatarSelection' component={AvatarSelection} />
     </Stack.Navigator>
   );
 };

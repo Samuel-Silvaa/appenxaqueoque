@@ -13,16 +13,26 @@ import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { requestUpdateAvatar } from 'src/infra/app/reducers/auth.reducer';
+import { useApp } from "src/infra/app/app";
+import { requestFetchPatient } from "src/infra/services/appService";
+import { useSelector } from "react-redux";
+import { authSelector } from "src/infra/app/selectors";
+import { handleFecthPatient } from "src/infra/app/reducers/app.reducer";
 
 type AvatarSelectionRouteParams = {
   email?: string;
+  isLogged?: boolean;
 };
 
 const AvatarSelection = () => {
   const navigation = useNavigation<any>();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const route = useRoute<RouteProp<Record<string, AvatarSelectionRouteParams>, string>>();
+  const auth = useSelector(authSelector);
+
   const dispatch = useAsyncAppDispatch();
+  const {handleToast} = useApp();
+
 
   const requestPermissions = async () => {
     if (Platform.OS !== 'web') {
@@ -56,7 +66,7 @@ const AvatarSelection = () => {
         setSelectedImage(result.assets[0].uri);
       }
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível abrir a câmera.');
+      handleToast( 'Não foi possível abrir a câmera.', 'danger');
     }
   };
 
@@ -76,7 +86,7 @@ const AvatarSelection = () => {
         setSelectedImage(result.assets[0].uri);
       }
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível abrir a galeria.');
+      handleToast( 'Não foi possível abrir a galeria.', 'danger');
     }
   };
 
@@ -85,16 +95,21 @@ const AvatarSelection = () => {
     if (selectedImage) {
       try {
         const res = await dispatch(requestUpdateAvatar({ avatar: selectedImage, email: params?.email ?? '' }));
+
         if (res.meta.requestStatus !== 'fulfilled') {
-          Alert.alert('Erro', 'Não foi possível atualizar o avatar.');
-          console.log(res)
+          handleToast('Erro', 'Não foi possível atualizar o avatar.');
           return;
         }
       } catch (err) {
-        Alert.alert('Erro', 'Não foi possível atualizar o avatar.');
+        handleToast('Não foi possível atualizar o avatar.', 'danger');
         return;
       }
-      navigation.navigate('patient', { avatar: selectedImage, email: params?.email });
+      if(params.isLogged ) {
+        
+        navigation.navigate('Profile');
+      } else {
+        navigation.navigate('patient', { avatar: selectedImage, email: params?.email });
+      }
     } else {
       navigation.navigate('patient',  { email: params?.email });
     }
@@ -102,7 +117,12 @@ const AvatarSelection = () => {
 
   const handleSkip = () => {
     // Navigate to patient registration without avatar
-    navigation.navigate('patient');
+    const params = route.params as AvatarSelectionRouteParams;
+    if(params.isLogged) {
+      navigation.navigate('Profile'); 
+    } else {
+      navigation.navigate('patient');
+    }
   };
 
   return (
@@ -111,7 +131,7 @@ const AvatarSelection = () => {
       ctaPrimary={selectedImage ? handleContinue : pickFromGallery}
       ctaPrimaryText={selectedImage ? "Continuar" : 'Galeria'}
       ctaSecondary={handleSkip}
-      ctaSecondaryText="Pular"
+      ctaSecondaryText={route!.params!.isLogged ? "Cancelar" : "Pular"}
     >
       <View className="flex-1 justify-center items-center p-6">
         <Text className={sharedStyleSheet.title}>{selectedImage ? 'Sua foto ficou boa?' : 'Escolha uma foto'}</Text>

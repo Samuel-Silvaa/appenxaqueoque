@@ -14,13 +14,13 @@ import {
 
 const stylesheet = {
   wrapper:
-    'min-h-[200px] h-[300px] w-full rounded-[25px] bg-white dark:bg-d-blue-primary shadow-sm my-4 ',
+    'rounded-[25px] bg-white dark:bg-d-blue-primary shadow-sm my-4 ',
   header:
-    'bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4',
+    'bg-gray-light h-[62px] w-full rounded-t-[25px] flex-row justify-between items-center px-8',
   status: 'w-[26px] h-[26px] rounded-full',
   contentWrapper:
-    'h-[85%] w-full p-[28px] flex-col justify-between items-center',
-  content: 'bg-primary w-full rounded-[16px] p-6 flex-col justify-around ',
+    'w-full p-[28px] flex-col justify-between items-center',
+  content: 'bg-primary w-full rounded-[25px] p-6 flex-col justify-around ',
   summaryItem: 'flex-row gap-x-4 my-1',
 };
 

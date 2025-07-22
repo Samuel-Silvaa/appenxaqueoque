@@ -12,8 +12,8 @@ export const BarChartComponent = ({
 }) => {
   return (
     <>
-      <View className='m-auto p-4 rounded-[6px] bg-blue-four/40 w-full mt-4 mb-2'>
-        <Text className='m-auto font-bold'> {title} </Text>
+      <View className='m-auto p-4 rounded-full bg-snow-white-secondary dark:bg-d-blue-primary mt-4 mb-2'>
+        <Text className='m-auto font-bold dark:text-white'> {title} </Text>
       </View>
 
       {dataset && (
@@ -22,7 +22,7 @@ export const BarChartComponent = ({
             backgroundColor: '#fff',
             paddingBottom: 60,
             paddingTop: 20,
-            borderRadius: 10,
+            borderRadius: 25,
             shadowOffset: { width: 2, height: 4 },
             shadowColor: '#ccc',
             shadowOpacity: 0.8,
@@ -30,6 +30,8 @@ export const BarChartComponent = ({
           }}
         >
           <BarChart
+            barBorderTopRightRadius={4}
+            barBorderTopLeftRadius={4}
             showXAxisIndices
             barWidth={18}
             spacing={12}
@@ -41,15 +43,16 @@ export const BarChartComponent = ({
               transform: 'rotate(50deg)',
               textAlign: 'start',
             }}
-            labelWidth={110}
+            labelWidth={130}
             hideYAxisText
-            labelsExtraHeight={20}
-            barBorderRadius={3}
+            labelsExtraHeight={40}
+            barBorderRadius={4}
             yAxisThickness={1}
             xAxisThickness={1}
             xAxisColor='#ccc'
             yAxisColor='#CCC'
             maxValue={maxValue ? maxValue + 1 : 10}
+            barMarginBottom={4}
           />
         </View>
       )}

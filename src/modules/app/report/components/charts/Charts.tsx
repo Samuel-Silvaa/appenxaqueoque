@@ -23,19 +23,19 @@ import { SummedUpReport } from './components/SummedUpRepost';
 import { ReportCard } from './components/ReportCard';
 
 const stylesheet = {
-  footer: 'w-full h-[50px] ',
-  footerBtn: 'bg-[#F8ECDE] dark:bg-d-blue-primary w-ful h-full rounded-full p-2 my-2',
+  footer: 'w-full ',
+  footerBtn: 'bg-[#F8ECDE] dark:bg-d-blue-primary w-full h-[70px] rounded-full p-2 my-2',
   footerBtnInner:
     'bg-white dark:bg-d-blue-primary-dark w-ful h-full rounded-full p-1 flex-row items-center justify-center',
 };
 
 const colorList = [
-  '#C8F7E1', // Soft mint green
-  '#FFCBA6', // Soft peach
-  '#FFCACD', // Soft pink
-  '#9193E8', // Soft purple
-  '#F1E3FF', // Soft lavender
-  '#F1F1F1', // Light gray
+  '#FFCBA666',
+  '#FFA6A666', 
+  '#C8F7E166',
+  '#FFCACD66', 
+  '#9193E866',
+  '#FFDAF266', 
 ];
 
 const ChartsPage = () => {

@@ -56,7 +56,14 @@ const post = async (url: string, payload: object): Promise<any> => {
 };
 
 const put = async <T>(url: string, payload: object, headers?: object): Promise<T> => {
-  return await api.put(url, payload, headers ? { headers } : undefined);
+
+  try {
+  const {data} = await api.put(url, payload, headers ? { headers } : undefined);
+    return data;
+  } catch( error){
+    const err = error as AxiosError;
+    throw err.response?.data ;
+  }
 };
 
 const patch = async <T>(

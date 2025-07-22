@@ -197,15 +197,16 @@ const authSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(requestUpdateAvatar.fulfilled, (state, action) => {
+      console.log('PAYLOAD : ',action.payload);
       state.loading = false;
       state.error = null;
-      if (state.user && 'avatar' in state.user) {
-        (state.user as PatientDTO).avatar = action.payload.avatar;
-      }
+      state.avatar = action.payload.avatar;
+      return state;
     });
     builder.addCase(requestUpdateAvatar.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message ?? 'Erro ao atualizar avatar';
+      return state
     });
   },
 });

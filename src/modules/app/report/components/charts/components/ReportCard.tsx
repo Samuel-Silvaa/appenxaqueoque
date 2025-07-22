@@ -1,13 +1,14 @@
+import { Fragment } from "react";
 import { Text, View } from 'react-native';
 const stylesheet = {
   wrapper:
-    'min-h-[200px] h-[300px] w-full rounded-[25px] bg-white dark:bg-d-blue-primary shadow-sm my-4 ',
+    'w-full rounded-[25px] bg-white dark:bg-d-blue-primary shadow-sm my-4 ',
   header:
-    'bg-primary h-[10%] w-full rounded-t-[25px] flex-row justify-between items-center px-4',
+    'bg-gray-light w-full rounded-t-[25px] flex-row justify-between items-center px-4',
   status: 'w-[26px] h-[26px] rounded-full',
   contentWrapper:
-    'h-[85%] w-full p-[28px] flex-col justify-between items-center',
-  content: 'bg-primary w-full rounded-[16px] p-6 flex-col justify-around ',
+    'w-full p-[28px] flex-col justify-between items-center',
+  content: 'bg-primary w-full rounded-[25px] p-6 flex-col justify-around ',
   summaryItem: 'flex-row gap-x-4 my-1',
 };
 
@@ -33,7 +34,7 @@ export const ReportCard = ({
                   <Text className='m-y-4 font-xs dark:text-d-text-dark'> {desc} </Text>
                 </View>
               ) : (
-                <Text></Text>
+                <Fragment></Fragment>
               )
             )}
           {typeof description == 'string' && (

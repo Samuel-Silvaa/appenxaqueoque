@@ -15,6 +15,7 @@ module.exports = {
       },
       colors: {
         'snow-white': '#f5f8fd',
+        'snow-white-secondary': '#fbfcfe',
         black: '#2E3E4B',
         'd-blue-title': '#6E8DBB',
         'd-text-gray': '#9DA3A9',

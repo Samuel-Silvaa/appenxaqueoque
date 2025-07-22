@@ -1,9 +1,9 @@
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
-import { Dimensions, Image, Pressable, Text, View } from 'react-native';
+import { Dimensions, Image, Pressable, Text, View, Animated } from 'react-native';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import screenOptions from 'src/modules/shared/style/StackOptions';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { format, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { parseAcuteness, pinColor } from 'src/infra/utils/appUtils';
@@ -34,46 +34,58 @@ const ResourceCard = ({
   reportDetails: Report;
   navigation?: any;
 }) => {
-  return (
-    <Pressable
-      className={stylesheet.reportCard}
-      onPress={() => {
-        navigation.navigate('Charts', { reportDetails });
-      }}
-    >
-      <View
-        className={stylesheet.reportCardColor}
-        style={{ backgroundColor: pinColor(reportDetails.acuteness) }}
-      ></View>
-      <View className={stylesheet.reportCardHeader}>
-        <Text className='font-semibold capitalize dark:text-d-text-gray'>
-          {format(reportDetails.startDate || new Date(), 'dd MMM', { locale: ptBR })} -
-          {format(reportDetails.endDate! || subDays(new Date(), 15), 'dd MMM', { locale: ptBR })} -
-          <Text className='ml-2 font-medium dark:text-d-text-gray'>
-            {' '}
-            {parseAcuteness(reportDetails.acuteness)}
-          </Text>
-        </Text>
-        {!!reportDetails?.notes ? (
-          <Text className={stylesheet.reportCardDesc}>
-            {reportDetails.notes
-              .replaceAll(',', ' ')
-              .substring(0, Dimensions.get('window').width * 0.14) +
-              (reportDetails.notes.length >
-              Dimensions.get('window').width * 0.14
-                ? '...'
-                : '')}
-          </Text>
-        ) : (
-          <Text className={stylesheet.reportCardDesc}>Sem anotações</Text>
-        )}
-      </View>
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-      <Image
-        className='self-center'
-        source={require('src/assets/arrowright.png')}
-      ></Image>
-    </Pressable>
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim }}>
+      <Pressable
+        className={stylesheet.reportCard}
+        onPress={() => {
+          navigation.navigate('Charts', { reportDetails });
+        }}
+      >
+        <View
+          className={stylesheet.reportCardColor}
+          style={{ backgroundColor: pinColor(reportDetails.acuteness) }}
+        ></View>
+        <View className={stylesheet.reportCardHeader}>
+          <Text className='font-semibold capitalize dark:text-d-text-gray'>
+            {format(reportDetails.startDate || new Date(), 'dd MMM', { locale: ptBR })} -
+            {format(reportDetails.endDate! || subDays(new Date(), 15), 'dd MMM', { locale: ptBR })} -
+            <Text className='ml-2 font-medium dark:text-d-text-gray'>
+              {' '}
+              {parseAcuteness(reportDetails.acuteness)}
+            </Text>
+          </Text>
+          {!!reportDetails?.notes ? (
+            <Text className={stylesheet.reportCardDesc}>
+              {reportDetails.notes
+                .replaceAll(',', ' ')
+                .substring(0, Dimensions.get('window').width * 0.14) +
+                (reportDetails.notes.length >
+                Dimensions.get('window').width * 0.14
+                  ? '...'
+                  : '')}
+            </Text>
+          ) : (
+            <Text className={stylesheet.reportCardDesc}>Sem anotações</Text>
+          )}
+        </View>
+
+        <Image
+          className='self-center'
+          source={require('src/assets/arrowright.png')}
+        ></Image>
+      </Pressable>
+    </Animated.View>
   );
 };
 
@@ -116,12 +128,12 @@ const ReportPage = ({ navigation }) => {
         </View>
         <View className='flex-row justify-between items-center w-full '>
           <ExPressable
-            className='rounded-full w-2/4 h-[45px] bg-blue-primary/70 dark:text-white'
+            className='rounded-full w-2/4 h-[45px] bg-blue-primary/60 text-white dark:text-white dark:bg-d-blue-primary'
             title='Gerar relatório'
             onPress={() => setIsModalOpen(true)}
           />
           <ExPressable
-            className='rounded-full w-[40%] h-[45px]'
+            className='rounded-full w-[40%] h-[45px] bg-white text-black dark:bg-d-blue-primary dark:text-d-text-gray'
             title='Filtrar'
             onPress={() => setIsFilterModalOpen(true)}
           />
