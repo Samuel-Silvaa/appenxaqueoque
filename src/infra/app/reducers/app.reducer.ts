@@ -97,6 +97,9 @@ const appSlice = createSlice({
     setLoadingState: (state, action) => {
       return state = {...state, loading : action.payload}
     },
+    setPatientData: (state, action) => {
+      return state = {...state, patient : action.payload}
+    },
   },
   extraReducers: (builder) => {
     // REQUEST_CREATE_EPISODE
@@ -219,14 +222,17 @@ const appSlice = createSlice({
 
   // REQUEST_GENERATE_PDF_REPORT
   builder.addCase(handleGeneratePdfReport.pending, (state) => {
-    state.pdfReportStatus = 'loading';
+    return (state = {...state, loading: true})
   });
   builder.addCase(handleGeneratePdfReport.fulfilled, (state, action) => {
-    state.pdfReportStatus = 'success';
+    return (state = {...state, loading: false})
   });
   builder.addCase(handleGeneratePdfReport.rejected, (state, action) => {
-    state.pdfReportStatus = 'error';
-    state.error = action.error.message ?? 'Erro inesperado';
+    return (state = {
+        ...state,
+        error: action.error.message ?? 'Erro inesperado',
+        loading: false,
+      });
   });
   },
 });
@@ -292,5 +298,5 @@ export const handleGeneratePdfReport = createAsyncThunk(
 );
 
 // Export actions and reducer
-export const { clearAppErrorMessage, handleFormChanging, clearEpisodeState, handleStepForward, setPageTitle, setLoadingState } = appSlice.actions;
+export const { clearAppErrorMessage, handleFormChanging, clearEpisodeState, handleStepForward, setPageTitle, setLoadingState, setPatientData } = appSlice.actions;
 export default appSlice.reducer;

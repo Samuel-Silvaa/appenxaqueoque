@@ -8,9 +8,8 @@ import Card from '../form/card/Card';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 import { appStateSelector } from 'src/infra/app/selectors';
-import { TimeInput, TimeInputWithValidation } from 'src/modules/shared/components/timeInput';
+import {  TimeInputWithValidation } from 'src/modules/shared/components/timeInput';
 import { format, isValid, parse } from "date-fns";
-import { id } from "date-fns/locale";
 
 const durationSchema = yup.object<{ start: Date | null; end: Date | null }>().shape({
   start: yup.date().nullable(),

@@ -28,7 +28,7 @@ const stylesheet = {
     innerCardCategory:
       'bg-white w-[45%] h-[45%] rounded-[30px] p-2 pt-4 box-border m-1 dark:bg-d-blue-primary',
     innerCardImage: 'm-2 w-[24px] h-[24px]',
-    kidsImg: 'absolute top-[-120px]',
+    kidsImg: 'absolute top-[-120px] w-[100%] h-[185]',
   },
 };
 
@@ -94,7 +94,7 @@ const InnerCardCategory = ({ title, icon, path }: HomeCategory) => {
       onPress={() => navigation.navigate(path)}
       className={stylesheet.innerHomeContainer.innerCardCategory}
     >
-      <View>
+      <View className="flex items-start" >
         <Image
           className={stylesheet.innerHomeContainer.innerCardImage}
           source={icon}
@@ -102,7 +102,7 @@ const InnerCardCategory = ({ title, icon, path }: HomeCategory) => {
         ></Image>
         <Text
           className={
-            sharedStyleSheet.subtitle + ' mx-2 w-3/4 dark:text-d-text-gray'
+            sharedStyleSheet.subtitle + ' mx-2 w-3/4 dark:text-d-text-gray '
           }
         >
           {title}
@@ -117,6 +117,7 @@ const InnerHomeContainer = () => {
     <View className={stylesheet.innerHomeContainer.container}>
       <View className={stylesheet.innerHomeContainer.header}>
         <Image
+          resizeMode="contain"
           className={stylesheet.innerHomeContainer.kidsImg}
           source={require('src/assets/calendar_kids.png')}
         ></Image>

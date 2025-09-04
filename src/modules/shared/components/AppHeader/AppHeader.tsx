@@ -1,11 +1,14 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { useCallback } from "react";
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity,  } from 'react-native';
 import { Image, Text, View } from 'react-native';
 import { Appearance } from 'react-native';
 import { useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
+import { useColorScheme } from 'nativewind';
+
+
 
 const stylesheet = {
   header: 'w-full p-4 pt-8 flex flex-row grow-0 justify-between items-center',
@@ -18,14 +21,18 @@ const AppHeader = ({
   route,
 }: BottomTabHeaderProps | NativeStackHeaderProps | any) => {
   const appState = useSelector(appStateSelector);
+    const { setColorScheme } = useColorScheme();
 
-  const toggleColorScheme = useCallback(() => {
+  const toggleAppColorScheme = useCallback(() => {
+
+
     if (Appearance.getColorScheme() == 'light') {
-      Appearance.setColorScheme('dark');
+      setColorScheme('dark')
     } else {
-      Appearance.setColorScheme('light');
+      setColorScheme('light')
+
     }
-  }, []);
+  }, [] );
 
   return (
     <View
@@ -43,7 +50,7 @@ const AppHeader = ({
             navigation.goBack();
           }}
         >
-          <Image source={require('src/assets/arrowback.png')} />
+          <Image resizeMode="contain" className="w-7 h-7 " source={require('src/assets/arrowback.png')} />
         </TouchableOpacity>
       ) : (
         <Image></Image>
@@ -63,11 +70,11 @@ const AppHeader = ({
         className={stylesheet.themeButton}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         onPress={() => {
-          toggleColorScheme();
+          toggleAppColorScheme();
         }}
       >
         <Image
-          className='w-14 h-14 bg-red'
+          className='w-14 h-14'
           resizeMode='contain'
           source={
             Appearance.getColorScheme() == 'light'

@@ -25,10 +25,10 @@ const Success = ({ navigation }) => {
       <View className={stylesheet.wrapper}>
         <View className={stylesheet.titleconainer}>
           <Text className={stylesheet.title}>
-            Cadastro finalizado com sucesso!
+            Episódio registrado com sucesso!
           </Text>
         </View>
-        <Image source={require('src/assets/success.png')}></Image>
+        <Image resizeMode="contain" className="w-[100%] h-[250]" source={require('src/assets/success.png')}></Image>
         <ExPressable
           title='Ver resumo do episódio'
           colorScheme='light'

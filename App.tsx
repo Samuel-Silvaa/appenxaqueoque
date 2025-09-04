@@ -1,6 +1,5 @@
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { NativeWindStyleSheet } from 'nativewind';
-import { Text } from 'react-native';
+import { Text, useColorScheme } from 'react-native';
 import { View } from 'react-native';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { ToastProvider, useToast } from 'react-native-toast-notifications';
@@ -15,10 +14,9 @@ import { Fragment, useEffect } from 'react';
 import { clearErrorMessage } from "src/infra/app/reducers/auth.reducer";
 import { clearAppErrorMessage } from "src/infra/app/reducers/app.reducer";
 import { Linking } from 'react-native';
+import { NativeWindStyleSheet } from "nativewind";
+import { ColorSchemeSystem } from "nativewind/dist/style-sheet/color-scheme";
 
-NativeWindStyleSheet.setOutput({
-  default: 'native',
-});
 
 const ActiveRoutes = () => {
   const auth = useSelector((state) => authSelector(state));
@@ -26,6 +24,7 @@ const ActiveRoutes = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const toast = useToast();
+  const scheme = useColorScheme(); // "light" | "dark"
 
   useEffect(() => {
     // Handle deeplinks
@@ -40,6 +39,9 @@ const ActiveRoutes = () => {
         }
       }
     };
+
+    
+NativeWindStyleSheet.setColorScheme(scheme as ColorSchemeSystem);
 
     // Handle initial URL
     Linking.getInitialURL().then((url) => {
@@ -95,12 +97,29 @@ const ActiveRoutes = () => {
 };
 
 const Toast = ({ toastOptions }: { toastOptions: ToastProps }) => {
+  let containerClass = "w-3/4 h-[56px] rounded-[8px] flex items-start justify-center p-2 shadow-md";
+
+  switch (toastOptions.type) {
+    case "success":
+      containerClass += " bg-green-500";
+      break;
+    case "danger":
+      containerClass += " bg-red-500";
+      break;
+    case "warning":
+      containerClass += " bg-yellow-500";
+      break;
+    default:
+      containerClass += " bg-gray-200";
+      break;
+  }
+
   return (
-    <Fragment>
-      <View className='bg-snow-white w-3/4 h-[56px] rounded-[8px] flex items-start justify-center p-2'>
-        <Text className='text-black text-md'>{toastOptions.message}</Text>
-      </View>
-    </Fragment>
+    <View className={containerClass}>
+      <Text className="text-white text-md font-medium">
+        {toastOptions.message}
+      </Text>
+    </View>
   );
 };
 

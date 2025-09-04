@@ -18,8 +18,8 @@ const stylesheet = {
     'flex-row items-center bg-white rounded-full w-[45%] mx-1 shadow-sm',
   notesLabel: 'text-md font-semibold text-black self-start mt-14 pl-4',
   notesWrapper:
-    'flex-row w-full min-h-[140px] p-2 bg-blue-four rounded-[28px] mt-1 relative',
-  notesInput: 'w-full p-4 flex-grow',
+    'flex-row w-full min-h-[140px] max-h-[200px] p-1 bg-blue-four rounded-[28px] mt-1 relative',
+  notesInput: 'w-full p-4 h-[95%]',
 };
 
 interface PeriodSchema {
@@ -69,7 +69,8 @@ const Period = () => {
 
         <View className={stylesheet.notesWrapper}>
           <Image
-            className='absolute top-[-110px] right-0'
+            className='absolute top-[-125px] right-[-100px] w-[100%] h-[170]'
+            resizeMode="contain"
             source={require('src/assets/girl_laptop.png')}
           ></Image>
           <InputContainer

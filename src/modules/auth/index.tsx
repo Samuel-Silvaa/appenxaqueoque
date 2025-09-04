@@ -31,7 +31,8 @@ const AuthRoutes = () => {
                     bottomTabsProps.navigation.goBack();
                   }}
                 >
-                  <Image source={require('src/assets/arrowback.png')} />
+                            <Image resizeMode="contain" className="w-7 h-7 " source={require('src/assets/arrowback.png')} />
+
                 </TouchableOpacity>
               ) : (
                 <Image></Image>

@@ -78,7 +78,7 @@ const HaloSymptoms = () => {
                     flexShrink: 1,
                   }}
                   text={act.label}
-                  isChecked={Array.isArray(appState.episode.haloSymptoms) && appState.episode.haloSymptoms.includes(act.value)}
+                  isChecked={appState.episode.haloSymptoms.includes(act.value)}
                   onPress={(isChecked: boolean) => {
                     handleSetSymptomsValues(act.value);
                   }}

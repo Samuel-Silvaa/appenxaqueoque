@@ -18,6 +18,7 @@ import {
   requestHandleSendEmailConfirmation,
   requestHandleConfirmEmail,
   requestUpdateAvatar as requestHandleUpdateAvatar,
+  requestUpdatePatient as requestHandleUpdatePatient,
 } from 'src/infra/services/authService';
 import * as SecureStore from 'expo-secure-store';
 
@@ -74,6 +75,7 @@ const authSlice = createSlice({
     builder.addCase(
       requestLogin.fulfilled,
       (state, action: PayloadAction<LogInResponse>) => {
+        console.log(action);
         SecureStore.setItem('token', action.payload.token);
         if (action.payload.user)
           SecureStore.setItemAsync('userId', action.payload.user.id!);
@@ -88,6 +90,7 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestLogin.rejected, (state, action) => {
+        console.log(action);
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -208,6 +211,36 @@ const authSlice = createSlice({
       state.error = action.error.message ?? 'Erro ao atualizar avatar';
       return state
     });
+    //REQUEST_UPDATE_PATIENT
+    builder.addCase(requestUpdatePatient.pending, (state) => {
+      return (state = { ...state, loading: true });
+    });
+    builder.addCase(
+      requestUpdatePatient.fulfilled,
+      (state, action: PayloadAction<PatientDTO>) => {
+        try {
+
+          console.log(action.payload);
+          
+          return (state = {
+            ...state,
+            user: action.payload,
+            loading: false,
+            error: null,
+          });
+        } catch (err) {
+          console.log(err);
+          return (state = { ...state, error: 'Erro inesperado!' });
+        }
+      }
+    );
+    builder.addCase(requestUpdatePatient.rejected, (state, action) => {
+      return (state = {
+        ...state,
+        error: action.error.message ?? 'Erro inesperado',
+        loading: false,
+      });
+    });
   },
 });
 
@@ -239,6 +272,11 @@ export const requestConfirmEmail = createAsyncThunk(
 export const requestUpdateAvatar = createAsyncThunk<any, { avatar: string; email: string }>(
   'auth/requestUpdateAvatar',
   async (payload) => await requestHandleUpdateAvatar(payload)
+);
+
+export const requestUpdatePatient = createAsyncThunk(
+  'auth/requestUpdatePatient',
+  async (payload: PatientDTO & { id: string }) => await requestHandleUpdatePatient(payload)
 );
 
 // Export actions and reducer

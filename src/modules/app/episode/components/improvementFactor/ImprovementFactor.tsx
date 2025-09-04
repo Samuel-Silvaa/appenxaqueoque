@@ -101,7 +101,7 @@ const ImprovementFactor = () => {
                       flexShrink: 1,
                     }}
                     text={act.label}
-                    isChecked={Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(act.value)}
+                    isChecked={ appState.episode.improvementFactor.includes(act.value)}
                     onPress={(isChecked: boolean) => {
                       handleSetImprovementFactorValues(act.value);
                     }}

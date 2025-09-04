@@ -19,6 +19,7 @@ import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { appStateSelector, authSelector } from 'src/infra/app/selectors';
 import ProfileStackNavigation from "./profile/ProfileStack";
 import AvatarSelection from "../auth/registration/avatar/AvatarSelection";
+import Patient from "../auth/registration/patient/Patient";
 
 const stylesheet = {
   calendarBtnContainer:
@@ -233,6 +234,7 @@ const TabsRoutes = () => {
                   }}
                 >
                   <Image
+                    resizeMode="contain"
                     tintColor={colorSchemeApproachHex(focused)}
                     source={require('src/assets/user.png')}
                   />
@@ -295,6 +297,7 @@ const LoggedPages = () => {
       <Stack.Screen name='Tabs' component={TabsRoutes} />
       <Stack.Screen name='Success' component={Success} />
       <Stack.Screen name='AvatarSelection' component={AvatarSelection} />
+      <Stack.Screen name='Patient' component={Patient}></Stack.Screen>
     </Stack.Navigator>
   );
 };

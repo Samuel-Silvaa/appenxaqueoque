@@ -6,7 +6,6 @@ import {
   View,
 } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
-import { useApp } from 'src/infra/app/app';
 import { RefObject, createRef, useEffect, useMemo } from 'react';
 import FormSteps from './components';
 

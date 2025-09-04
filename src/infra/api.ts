@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse, AxiosResponseHeaders } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.66:8080/',
+  baseURL: 'http://ec2-3-84-114-114.compute-1.amazonaws.com:8080/',
 });
 
 api.interceptors.request.use(
@@ -11,7 +11,7 @@ api.interceptors.request.use(
     if (token) config.headers['Authorization'] = 'Bearer ' + token;
     return config;
   },
-  (error: AxiosError) => {
+  (error: AxiosError) => { 
     debugger;
     Promise.reject(error).then(alert);
   }
@@ -71,7 +71,14 @@ const patch = async <T>(
   payload: object,
   headers?: object
 ): Promise<T> => {
-  return await api.patch(url, payload, headers);
+  
+  try {
+    const {data} =  await api.patch(url, payload, headers);
+      return data;
+    } catch( error){
+      const err = error as AxiosError;
+      throw err.response?.data ;
+    }
 };
 
 const remove = async <T>(url: string, body?: object): Promise<T> => {

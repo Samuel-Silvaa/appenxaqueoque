@@ -6,6 +6,7 @@ import PrivacyPolicy from './privacy/PrivacyPolicy';
 import Terms from "./terms/Terms";
 import AboutUs from "./aboutus/AboutUs";
 import Help from "./help/Help";
+import Patient from "src/modules/auth/registration/patient/Patient";
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -16,6 +17,11 @@ const ProfileStackNavigation = () => {
         options={{...screenOptions, headerShown: false}}
         name='ProfileMain'
         component={Profile}
+      />
+      <ProfileStack.Screen
+        options={{...screenOptions, headerShown: false}  }
+        name='PatientLogged'
+        component={Patient}
       />
       <ProfileStack.Screen
         options={{...screenOptions, headerShown: false}  }

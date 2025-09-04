@@ -43,7 +43,7 @@ const stylesheet = {
     'flex-col w-full items-center overflow-hidden dark:bg-d-blue-primary',
   calendar: {
     wrapper: 'h-full pt-14 ',
-    img: 'absolute right-5 top-[-18px] z-30',
+    img: 'absolute right-5 top-[-45px] z-30',
   },
 };
 
@@ -126,9 +126,8 @@ const Datetime = () => {
     <View className={stylesheet.calendar.wrapper}>
       <View className={stylesheet.calendar.img}>
         <Image
-          width={38}
-          height={38}
           resizeMode='cover'
+          className="w-[90px] h-[140px] "
           source={require('src/assets/victor_bear.png')}
         />
       </View>

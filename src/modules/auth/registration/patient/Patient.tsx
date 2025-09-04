@@ -1,196 +1,178 @@
-import { ScrollView, Text, View, TouchableOpacity, Image } from 'react-native';
-import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
-import { sharedStyleSheet } from '../../shared/style/stylesheet';
-import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
-import { TimeInput } from 'src/modules/shared/components/timeInput';
+  import { Text } from 'react-native';
+  import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
+  import { sharedStyleSheet } from '../../shared/style/stylesheet';
+  import PatientForm from 'src/modules/shared/components/patientForm/PatientForm';
 
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import SelectContainer from 'src/modules/shared/components/selectContainer/SelectContainer';
-import { useEffect } from 'react';
-import { useSelector } from "react-redux";
-import { authSelector } from "src/infra/app/selectors";
-import { useAsyncAppDispatch } from "src/infra/app/store";
-import { requestCreatePatient } from "src/infra/app/reducers/auth.reducer";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { format, parse } from "date-fns";
+  import * as yup from 'yup';
+  import { Form, useForm } from 'react-hook-form';
+  import { yupResolver } from '@hookform/resolvers/yup';
+  import { useDispatch, useSelector } from 'react-redux';
+  import { authSelector, appStateSelector } from 'src/infra/app/selectors';
+  import { useAsyncAppDispatch } from 'src/infra/app/store';
+  import {
+    requestCreatePatient,
+    requestUpdatePatient,
+  } from 'src/infra/app/reducers/auth.reducer';
+  import { useNavigation, useRoute } from '@react-navigation/native';
+  import { format } from 'date-fns';
+  import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
+  import ExPressable from '../../shared/components/buttons/pressable/ExPressable';
+  import { useCallback, useEffect } from 'react';
+  import { ToastOptions, useToast } from 'react-native-toast-notifications';
+  import { setPatientData } from "src/infra/app/reducers/app.reducer";
 
-interface PatientSchemaProps {
-  name: string;
-  email: string;
-  birthDate: Date;
-  gender: string;
-  kinship: string;
-  height: number;
-  weight: number;
-}
+  interface PatientSchemaProps {
+    name: string;
+    email: string;
+    birthDate: Date;
+    gender: string;
+    kinship: string;
+    height: number;
+    weight: number;
+  }
 
-const patientSchema = yup.object<PatientSchemaProps>().shape({
-  name: yup.string().required('Preencha seu nome').default('Samuel'),
-  email: yup.string().email().required('Preencha seu email'),
-  birthDate: yup
-    .date()
-    .required('Preencha a data de nascimento')
-    .default(new Date('2010-10-10')),
-  gender: yup.string().required('Preencha o sexo').default('female'),
-  kinship: yup.string().required('Preencha o parentesco').default('mother'),
-  height: yup.number().required('Preencha a altura').default(1.5),
-  weight: yup.number().required('Preencha o peso').default(40),
-  avatar: yup.string().optional(),
-});
+  interface RouteParams {
+    avatar?: string;
+    email?: string;
+    isEditMode?: boolean;
+  }
 
-const Patient = () => {
-  const dispatch   = useAsyncAppDispatch();
-  const auth = useSelector(authSelector);
-  const navigation = useNavigation();
-  const route = useRoute();
-  const {
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm({
-    resolver: yupResolver(patientSchema),
+  const patientSchema = yup.object<PatientSchemaProps>().shape({
+    name: yup.string().required('Preencha seu nome').min(5,'O Nome precisa ter ao menos 5 letras'),
+    email: yup.string().email().required('Preencha seu email'),
+    birthDate: yup.date().required('Preencha a data de nascimento'),
+    gender: yup.string().required('Preencha o sexo'),
+    kinship: yup.string().required('Preencha o parentesco'),
+    height: yup.number().required('Preencha a altura').min(0.4,'A altura precisa ter no mínimo 0.40m'),
+    weight: yup.number().required('Preencha o peso').min(10,'O peso precisa ser maior que 10kg').max(300, 'O peso deve ser menor que 300kg'),
+    avatar: yup.string().optional(),
   });
 
-  const watchedValues = watch();
+  const Patient = () => {
+    const dispatchAsync = useAsyncAppDispatch();
+    const dispatch = useDispatch();
+    const auth = useSelector(authSelector);
+    const appState = useSelector(appStateSelector);
+    const navigation = useNavigation();
+    const route = useRoute();
 
-  useEffect(() => {
-    if (auth.sessionEmail) setValue('email', auth.sessionEmail);
-    
-    // Check if avatar URI was passed from avatar selection
-    const params = route.params as { avatar?: string };
-    if (params?.email) {
-      setValue('email', auth?.sessionEmail ?? route.params!.email ?? '')
-    }
-  }, [auth.sessionEmail, route.params]);
+    // Check if we're in edit mode
+    const routeParams = route.params as RouteParams;
+    const isEditMode = routeParams?.isEditMode === true;
+    const patientData = appState.patient;
+    const toast = useToast();
 
-  const onSubmitHandler =  async (data: PatientSchemaProps) => {
-   try {
-    console.log({...data, birthDate: format(data.birthDate, 'yyyy-MM-dd')}, auth);
-    const res = await dispatch(requestCreatePatient({
-      ...data, 
-      birthDate: format(data.birthDate, 'yyyy-MM-dd'),
-    }));
+    const {
+      handleSubmit,
+      formState: { errors },
+      setValue,
+    } = useForm({
+      resolver: yupResolver(patientSchema),
+    });
 
-    if(res.meta.requestStatus == 'fulfilled') {
-      (navigation as any).navigate('welcome');
-    } 
+    const onSubmitHandler =  useCallback(async (data: PatientSchemaProps) => {
 
-   }catch(err) {
-    console.log(err)
-   }
+        if (isEditMode && patientData?.id) {
+          const res = await dispatchAsync(
+            requestUpdatePatient({
+              ...data,
+              birthDate: format(data.birthDate, 'yyyy-MM-dd'),
+              id: patientData.id,
+            })
+          );
+
+          if (res.meta.requestStatus == 'rejected') {
+            toast.hideAll();
+            const toastOptions: ToastOptions = {
+              type: 'danger',
+            };
+            toast.show(
+              `Error inesperado ao  ${
+                appState.episode.isEdition ? 'editar' : 'cadastrar'
+              } paciente. Entre em contato com nosso suporte!`,
+              toastOptions
+            );
+            return;
+          } else if (res.meta.requestStatus == 'fulfilled') {
+            toast.hideAll();
+            const toastOptions: ToastOptions = {
+              type: 'success',
+            };
+            toast.show(
+              `Dados editados com sucesso.`,
+              toastOptions
+            );
+            dispatch(setPatientData(res.meta.arg));
+            (navigation as any).goBack();
+          }
+        } else {
+          // Create new patient
+          const res = await dispatchAsync(
+            requestCreatePatient({
+              ...data,
+              birthDate: format(data.birthDate, 'yyyy-MM-dd'),
+            })
+          );
+
+          if (res.meta.requestStatus == 'fulfilled') {
+            (navigation as any).navigate('welcome');
+          }
+        }
+
+    },[]);
+
+    useEffect(() => {
+      if (patientData) {
+        setValue('email', patientData.email);
+        setValue('name', patientData.name);
+        setValue('birthDate', patientData?.birthDate ? new Date(patientData.birthDate) : new Date());
+        setValue('gender', patientData.gender);
+        setValue('kinship', patientData.kinship);
+        setValue('weight', patientData.weight);
+        setValue('height', patientData.height);
+      }
+      if(auth.sessionEmail){
+        setValue('email', auth.sessionEmail);
+      }
+    }, [patientData, auth.sessionEmail]);
+
+    const Content = () => {
+      return (
+        <>
+          <Text className={sharedStyleSheet.title}>
+            {isEditMode ? 'Editar informações' : 'Informações da conta'}
+          </Text>
+          <Text className={sharedStyleSheet.subtitle}>
+            {isEditMode
+              ? 'Atualize as informações da criança'
+              : 'Insira as informações da criança'}
+          </Text>
+
+          <PatientForm
+            setValue={setValue}
+            errors={errors}
+            isEditMode={isEditMode}
+            routeParams={routeParams}
+          />
+        </>
+      );
+    };
+
+    return !isEditMode ? (
+      <AuthScaffold
+        alignment='start'
+        ctaPrimaryText='Cadastrar'
+        ctaPrimary={
+          handleSubmit(onSubmitHandler)}
+      >
+        <Content />
+      </AuthScaffold>
+    ) : (
+      <AppPageScaffold hasArrowBack={true}>
+        <Content></Content>
+        <ExPressable title='Salvar' onPress={ handleSubmit(onSubmitHandler)} />
+      </AppPageScaffold>
+    );
   };
 
-
-  return (
-    <AuthScaffold
-      alignment='start'
-      ctaPrimaryText='Cadastrar'
-      ctaPrimary={handleSubmit(onSubmitHandler)}
-    >
-      <Text className={sharedStyleSheet.title}>Informações da conta</Text>
-      <Text className={sharedStyleSheet.subtitle}>
-        Insira as informações da criança
-      </Text>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        className='w-full p-4 pt-[20px] h-[80%]'
-      >
-        {watchedValues.avatar && (
-        <View className="items-start mb-4">
-          <View className="w-24 h-24 rounded-full overflow-hidden border-2 border-blue-500">
-            <Image
-              source={{ uri: watchedValues.avatar }}
-              className="w-full h-full"
-              resizeMode="cover"
-            />
-          </View>
-          <Text className="text-sm text-gray-600 mt-1">Foto selecionada</Text>
-        </View>
-      )}
-        <InputContainer
-          className='opacity-45 bg-white drop-shadow-sm'
-          keyboardType='email-address'
-          label='E-mail'
-          defaultValue={auth?.sessionEmail ?? route.params!.email ?? ''}
-          name='email'
-          editable={false}
-          setValue={setValue}
-          errors={errors}
-        ></InputContainer>
-
-        <InputContainer
-          keyboardType='default'
-          label='Nome da criança'
-          setValue={setValue}
-          name='name'
-          errors={errors}
-        ></InputContainer>
-        <TimeInput
-          label='Data de nascimento'
-          name='birthDate'
-          setValue={setValue}
-          errors={errors}
-          placeholder='Selecione a data de nascimento'
-          mode='date'
-          value={watchedValues.birthDate}
-          maximumDate={new Date()}
-        />
-        <SelectContainer
-          label='Gênero'
-          placeholder='Selecione o sexo'
-          name='gender'
-          options={[
-            { title: 'Masculino', value: 'male' },
-            { title: 'Feminino', value: 'female' },
-          ]}
-          setValue={setValue}
-          errors={errors}
-        ></SelectContainer>
-        <SelectContainer
-          label='Parentesco'
-          placeholder='Escolha o parentesco do responsável'
-          setValue={setValue}
-          options={[
-            { title: 'Pai', value: 'father' },
-            { title: 'Mãe', value: 'mother' },
-            { title: 'Eu', value: 'patient' },
-          ]}
-          name='kinship'
-          errors={errors}
-        ></SelectContainer>
-        <View className='flex-row justify-between items-center '>
-          <View className='w-[45%]'>
-            <InputContainer
-              keyboardType='numeric'
-              label='Peso da criança'
-              setValue={setValue}
-              name='weight'
-              errors={errors}
-              mask='999.9'
-              placeholder='0.0'
-            ></InputContainer>
-          </View>
-
-          <View className='w-[45%]'>
-            <InputContainer
-              keyboardType='numeric'
-              label='Altura da criança'
-              setValue={setValue}
-              name='height'
-              errors={errors}
-              mask='9.99'
-              placeholder='0.00'
-            ></InputContainer>
-          </View>
-        </View>
-        <View className='h-[100px] w-full'></View>
-      </ScrollView>
-    </AuthScaffold>
-  );
-};
-
-export default Patient;
+  export default Patient;

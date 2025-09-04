@@ -1,4 +1,4 @@
-import { post, put } from '../api';
+import { post, put, patch } from '../api';
 import {
   LogInDTO,
   LogInResponse,
@@ -53,6 +53,13 @@ const requestUpdateAvatar = async (
   });
 };
 
+const requestUpdatePatient = async (
+  payload: PatientDTO & { id: string }
+): Promise<PatientDTO> => {
+   const { id, ...body } = payload;
+  return patch(`patient/${payload.id}`, body)
+};
+
 export {
   requestHandleLogIn,
   requestHandleSingUp,
@@ -61,4 +68,5 @@ export {
   requestHandleSendEmailConfirmation,
   requestHandleConfirmEmail,
   requestUpdateAvatar,
+  requestUpdatePatient,
 };

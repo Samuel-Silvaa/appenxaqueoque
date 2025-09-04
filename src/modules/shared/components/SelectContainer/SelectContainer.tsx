@@ -1,10 +1,16 @@
-import { Control, FieldErrors, UseFormSetValue } from 'react-hook-form';
+import {
+  FieldErrors,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import { Image, ImageSourcePropType, Text, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
+import { useState, useEffect } from 'react';
 
 const stylesheet = {
   view: 'w-full my-1 ',
-  input: 'flex h-[60px] bg-gray-light dark:bg-d-blue-primary rounded rounded-3xl p-5 dark:text-d-text-gray',
+  input:
+    'flex h-[60px] bg-gray-light dark:bg-d-blue-primary rounded rounded-3xl p-5 dark:text-d-text-gray',
   label: 'pl-2 text-black dark:text-d-text-gray text-[15px]',
   error: 'text-error pl-2 font-medium',
 };
@@ -16,7 +22,9 @@ interface SelectContainerProps {
   options: Array<{ title: string; value: string | number }>;
   errors: FieldErrors<any>;
   setValue: UseFormSetValue<any>;
+  watch?: UseFormWatch<any>;
   placeholder?: string;
+  defaultValue?: string;
 }
 
 const SelectContainer = ({
@@ -27,7 +35,23 @@ const SelectContainer = ({
   labelicon,
   setValue,
   placeholder,
+  defaultValue
 }: SelectContainerProps) => {
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+  
+  // Find the default option based on the defaultValue string
+  const defaultOption = defaultValue ? options.find(option => option.value === defaultValue) : undefined;
+  
+
+
+  // Set the default value when component mounts or defaultValue changes
+  useEffect(() => {
+    if (defaultOption) {
+      setSelectedItem(defaultOption);
+      setValue(name, defaultOption.value);
+    }
+  }, [defaultOption, name, setValue]);
+
   return (
     <View className={stylesheet.view}>
       <View className='w-full flex-row justify-between items-end my-2'>
@@ -42,7 +66,9 @@ const SelectContainer = ({
       </View>
       <SelectDropdown
         data={options}
+        defaultValue={selectedItem}
         onSelect={(selectedItem) => {
+          setSelectedItem(selectedItem);
           setValue(name, selectedItem.value);
         }}
         renderButton={(selectedItem, isOpened) => {

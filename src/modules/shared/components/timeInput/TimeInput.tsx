@@ -1,5 +1,5 @@
 import { FieldErrors, UseFormSetValue } from 'react-hook-form';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Image,
   ImageSourcePropType,
@@ -52,6 +52,7 @@ const TimeInput = ({
   minuteInterval = 1,
 }: TimeInputProps) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [displayValue, setDisplayValue] = useState('');
 
   const showDatePicker = () => {
     if (!disabled) {
@@ -63,11 +64,12 @@ const TimeInput = ({
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (selectedTime: Date) => {
+  const handleConfirm = useCallback( (selectedTime: Date) => {
+    setDisplayValue(selectedTime ? formatTime(selectedTime) : '');
     setValue(name, selectedTime);
-    onTimeChange?.(selectedTime);
     hideDatePicker();
-  };
+
+  }, [setValue]);
 
   const formatTime = (time: Date | null): string => {
     if (!time) return '';
@@ -101,8 +103,6 @@ const TimeInput = ({
     }
   };
 
-  const displayValue = value ? formatTime(value) : '';
-
   return (
     <View className={stylesheet.view}>
       <View className='w-full flex-row justify-between items-end my-2'>
@@ -125,8 +125,8 @@ const TimeInput = ({
           {displayValue || placeholder}
         </Text>
         <Image
-          source={require('src/assets/timer.png')}
-          className='w-5 h-5'
+          source={require('src/assets/chart-clock.png')}
+          className='w-4 h-4'
           resizeMode='contain'
         />
       </TouchableOpacity>

@@ -11,6 +11,7 @@ const Location = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
 
+
   const handleSelectLocation = (location: string) => {
     try {
       // Ensure location is always an array
@@ -37,7 +38,6 @@ const Location = () => {
     location: string
   ): string => {
     if (
-      Array.isArray(appState.episode.location) &&
       appState.episode.location.includes(location)
     )
       return '#FF7383';

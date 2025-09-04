@@ -170,7 +170,7 @@ const EpisodeModal = ({
               style={{ backgroundColor: pinColor(episode.acuteness!) }}
               className={stylesheet.edition}
             >
-              <Image source={require('src/assets/pencil.png')}></Image>
+              <Image className="w-4 h-4" source={require('src/assets/pencil.png')}></Image>
               <Text className={stylesheet.editText}>Editar</Text>
             </TouchableOpacity>
             {episode?.dateTime && (

@@ -133,7 +133,8 @@ const ReportPage = ({ navigation }) => {
             onPress={() => setIsModalOpen(true)}
           />
           <ExPressable
-            className='rounded-full w-[40%] h-[45px] bg-white text-black dark:bg-d-blue-primary dark:text-d-text-gray'
+            className='rounded-full w-[40%] h-[45px] bg-white dark:bg-d-blue-primary  text-black'
+            colorScheme="secodary "
             title='Filtrar'
             onPress={() => setIsFilterModalOpen(true)}
           />

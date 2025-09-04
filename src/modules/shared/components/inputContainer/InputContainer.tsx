@@ -1,4 +1,4 @@
-import { Control, FieldErrors, UseFormSetValue } from 'react-hook-form';
+import { Control, Controller, ControllerRenderProps, FieldErrors, UseFormSetValue } from 'react-hook-form';
 import {
   Image,
   ImageSourcePropType,
@@ -81,13 +81,13 @@ const InputContainer = ({
     </TouchableOpacity>
   );
 
-  const renderInput = () => {
+  const renderInput = (fields?: ControllerRenderProps) => {
     // Use regular TextInput for password fields, MaskedTextInput for others with masks
     if (mask && !isPassword) {
       return (
         <MaskedTextInput
+        {...fields}
           onChangeText={(text, rawText) => setValue(name, rawText)}
-          id={name}
           className={stylesheet.input}
           mask={mask}
           secureTextEntry={finalSecureTextEntry}
@@ -98,8 +98,8 @@ const InputContainer = ({
 
     return (
       <TextInput
+      {...fields}
         onChangeText={(text) => setValue(name, text)}
-        id={name}
         className={stylesheet.input}
         secureTextEntry={finalSecureTextEntry}
         {...rest}
@@ -120,7 +120,21 @@ const InputContainer = ({
         )}
       </View>
       <View style={{ position: 'relative' }}>
-        {renderInput()}
+        {control && (
+        <Controller
+        shouldUnregister={false}
+        control={control}
+        name={name}
+        defaultValue={rest?.defaultValue}
+        render={({ field }) => renderInput()}>
+
+        </Controller>
+        )} 
+
+        {!control && (
+          renderInput()
+        )}
+        
         {shouldShowEyeIcon && <EyeIcon />}
       </View>
       {errors[name] && (

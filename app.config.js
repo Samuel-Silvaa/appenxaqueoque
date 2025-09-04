@@ -1,0 +1,35 @@
+export default {
+  expo: {
+    name: "appenxaqueoque",
+    slug: "appenxaqueoque",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/icon.png",
+    userInterfaceStyle: "automatic",
+    extra: {
+      eas: {
+        projectId: "2f361f4e-1942-44d6-b5bd-8f84856da1e0"
+      }
+    },
+    android: {
+      adaptiveIcon: {
+        "foregroundImage": "./assets/icon-foreground.png",
+        "backgroundColor": "#FFFFFF"
+      },
+    plugins: [
+      [
+        "expo-splash-screen",
+        {
+          backgroundColor: "#FFFFFF",
+          image: "./assets/logoenxaq.png",
+          dark: {
+            image: "./assets/logoenxaq.png",
+            backgroundColor: "#000000"
+          },
+          imageWidth: 300
+        }
+      ]
+    ]
+  }
+}
+};

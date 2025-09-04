@@ -16,6 +16,7 @@ import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/Ex
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
 import { Report } from 'src/infra/@types/app.types';
 import { useState } from 'react';
+import { ToastOptions, useToast } from "react-native-toast-notifications";
 
 const stylesheet = {
   wrapper: 'w-full',
@@ -43,15 +44,33 @@ const PhysicianEmailModal = ({
   } = useForm();
 
   const [email, setEmail] = useState('');
+  const toast = useToast();
 
-  const handleSubmitEmailSender = () => {
+  const handleSubmitEmailSender = async ()  => {
     if (email !== '') {
       try {
         if (report.id) {
-          asyncDispatch(handleGeneratePdfReport({
+          const res = await asyncDispatch(handleGeneratePdfReport({
             id: report.id,
             physicianEmail: email,
           }));
+          
+              if(res.meta.requestStatus == 'rejected') {
+                  toast.hideAll();
+                  const toastOptions: ToastOptions = {
+                    type: 'danger',
+                  };
+                  toast.show(`Error inesperado ao  ${appState.episode.isEdition ? 'editar' : 'cadastrar'} episódio. Entre em contato com nosso suporte!`, toastOptions);
+                  return;
+              } else if(res.meta.requestStatus == 'fulfilled') {
+                  toast.hideAll();
+                  const toastOptions: ToastOptions = {
+                    type: 'success',
+                  };
+                  toast.show(`Email eviado com sucesso para o endereço: ${email} `, toastOptions);
+                  return; 
+              }
+          
         }
       } catch (err) {
         console.log(err);

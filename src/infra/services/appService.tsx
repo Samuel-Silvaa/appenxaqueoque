@@ -32,6 +32,7 @@ const requestUpdateEpisode = async (
   payload: EpisodeModalDTO,
   episodeId: string
 ): Promise<Episode> => {
+ try {
   const ep = Object.assign({}, payload);
   delete ep.id;
   delete ep.createdAt;
@@ -43,6 +44,10 @@ const requestUpdateEpisode = async (
   delete ep.patientId;
   delete ep.weight;
   return patch(`episode/${episodeId}`, ep);
+ } catch(err) {
+   console.log(err);
+  throw Error();
+ }
 };
 
 const requestFetchPatient = async (id: string): Promise<Patient> =>

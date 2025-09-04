@@ -152,7 +152,7 @@ const AvatarSelection = () => {
           ) : (
             <TouchableOpacity onPress={takePhoto}>
                 <View className="w-52 h-52 rounded-full justify-center items-center">
-                <Image source={require('src/assets/camera.png')}/>
+                <Image resizeMode="contain" className="w-[100%] h-[200]" source={require('src/assets/camera.png')}/>
             </View>
             </TouchableOpacity>
           )}
@@ -170,9 +170,11 @@ const AvatarSelection = () => {
          {selectedImage && (
             <TouchableOpacity
             onPress={takePhoto}
-            className="bg-d-blue-primary p-4 items-center justify-center rounded-full absolute inline-flex bottom-[-20px] z-50"
+            className="bg-gray-secondary dark:bg-d-blue-primary p-4 items-center justify-center rounded-full absolute inline-flex bottom-[-20px] z-50"
           >
-            <Text className="text-white font-semibold ">📷</Text>
+            <Text className="text-white font-semibold ">
+                     <Image source={require('src/assets/camera-icon.png')} style={{width: 24, height: 24}} tintColor={'white'}/>
+            </Text>
           </TouchableOpacity>
          )}
         </View>

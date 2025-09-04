@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',
-  forgotPasswordText: 'text-xs text-black underline dark:text-d-text-gray',
+  forgotPasswordText: 'text-xs text-black underline dark:text-d-text-gray no-underline',
 };
 
 interface LoginSchema {
@@ -27,8 +27,8 @@ const loginSchema = yup.object<LoginSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('samuelsilva666@gmail.com'),
-  password: yup.string().required('Preencha sua senha').default('123123'),
+    .default('controledetributos@gmail.com'),
+  password: yup.string().required('Preencha sua senha').default('Tr@ck721!'),
 });
 
 const Login = ({ navigation }: any) => {
@@ -62,7 +62,7 @@ const Login = ({ navigation }: any) => {
   };
 
   const handleForgotPassword = () => {
-    navigation.navigate('sendEmailConfi rmation' as never, { email: '' } as never);
+    navigation.navigate('sendEmailConfirmation' as never, { email: '' } as never);
   };
 
   return (
@@ -95,7 +95,7 @@ const Login = ({ navigation }: any) => {
       ></InputContainer>
 
       <View className={stylesheet.checkboxContainer}>
-        <BouncyCheckbox
+        {/* <BouncyCheckbox
           iconImageStyle={{ tintColor: '#2E3E4B' }}
           size={24}
           fillColor='#F1F1F1'
@@ -107,7 +107,8 @@ const Login = ({ navigation }: any) => {
             fontSize: 12,
             color: Appearance.getColorScheme() == 'dark' ? '#9DA3A9' : '#2E3E4B',
           }}
-        />
+        /> */}
+        <View></View>
         <TouchableOpacity onPress={handleForgotPassword}>
           <Text className={stylesheet.forgotPasswordText}>Esqueci minha senha</Text>
         </TouchableOpacity>

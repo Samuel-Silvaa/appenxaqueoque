@@ -7,7 +7,7 @@
         "references": [
           {
             "name": "Tailwind Documentation",
-            "url": "https://tailwindcss.com/docs/functions-and-directives#tailwind"
+          "url": "https://tailwindcss.com/docs/functions-and-directives#tailwind"
           }
         ]
       },

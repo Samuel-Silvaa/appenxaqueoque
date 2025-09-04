@@ -16,15 +16,15 @@ const Aboutus = () => {
     <AppPageScaffold>
       <View className='rounded-[30px] bg-white dark:bg-[#191D33] px-5 py-9'>
         <View>
-          <Text className='text-sm text-[#ADB8D3] font-bold'>Autores</Text>
-          <Text className='text-sm text-[#ADB8D3]'>
+          <Text className='text-sm text-dark dark:text-d-blue-title font-bold'>Autores</Text>
+          <Text className='text-sm text-dark dark:text-d-blue-title'>
             Bruna Borges Silva{'\n'}
             Jaqueline Jóice Muniz
           </Text>
         </View>
-        <View className='mt-8'>
-          <Text className='text-sm text-[#ADB8D3] font-bold'>Coautores</Text>
-          <Text className='text-sm text-[#ADB8D3]'>
+        <View className='mt-8 '>
+          <Text className='text-sm text-dark dark:text-d-blue-title font-bold'>Coautores</Text>
+          <Text className='text-sm text-dark dark:text-d-blue-title'>
             Filipe Rodrigues da Silva{'\n'}
             Samuel Rodrigues da Silva{'\n'}
             Karen Emilly Alves Marcantônio{'\n'}
@@ -33,7 +33,8 @@ const Aboutus = () => {
         </View>
         <Image
           source={require('src/assets/ppg.png')}
-          className='self-center mt-12'
+          resizeMode="contain"
+          className='self-center mt-12 w-[100%] h-[80]'
         ></Image>
       </View>
     </AppPageScaffold>

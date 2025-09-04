@@ -13,7 +13,7 @@ export const Loader = () => {
   };
 
   useEffect(() => {
-    startAnimation();
+      startAnimation();
     return () => {
       state.animatedValue.stopAnimation();
     };
@@ -49,7 +49,7 @@ export const Loader = () => {
     <Modal
       presentationStyle='overFullScreen'
       transparent={true}
-      animationType='slide'
+      animationType='fade'
       statusBarTranslucent={true}
       visible={ auth.loading || app.loading}
       onRequestClose={() => {

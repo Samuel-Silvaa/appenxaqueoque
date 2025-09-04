@@ -231,7 +231,8 @@ const ChartsPage = () => {
           >
             <Text className='dark:text-d-text-gray'>Enviar relatório para o médico </Text>
             <Image
-              className='ml-4'
+              className='ml-1 h-[24px]'
+              resizeMode="contain"
               source={require('src/assets/send.png')}
             ></Image>
           </Pressable>

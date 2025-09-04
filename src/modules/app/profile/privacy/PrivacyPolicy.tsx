@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
   return (
     <AppPageScaffold >
       <ScrollView contentContainerStyle={{ padding: 18 }} className="rounded-[30px] bg-white dark:bg-[#3F467ADF]">
-        <Text className="text-sm text-[#ADB8D3]" >
+        <Text className="text-sm text-dark dark:text-d-blue-title" >
           {`
 1. Introdução
  

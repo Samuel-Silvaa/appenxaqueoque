@@ -101,9 +101,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           ));
 
           if (res.meta.requestStatus == 'fulfilled') {
-            const data = res.payload!.data;
-
-            console.log(`Data?>`,data)
+            const data = res.payload!;
+            
+            console.log(`Data?>`, res.payload)
 
             return {
               ...data,
