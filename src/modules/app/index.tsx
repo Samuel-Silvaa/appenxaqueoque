@@ -9,6 +9,7 @@ import ReportStackNavigation from './report/Report';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Success from './success/Success';
 import {
+  clearEpisodeState,
   handleFecthPatient,
   handleFetchEpisodes,
   setLoadingState,
@@ -131,7 +132,13 @@ const TabsRoutes = () => {
           if (e.data?.state) {
             const currentIndex = e.data.state.index;
             dispatch(setPageTitle(getHeaderName(currentIndex)));
+            if(currentIndex != 2 && appState.currentEpStep != 0){
+                dispatch(setPageTitle(''));
+                dispatch(clearEpisodeState());
+            }
           }
+          
+              
         },
         tabPress: (e) => {
           const routeName = e.target?.split('-')[0]; 
@@ -204,7 +211,7 @@ const TabsRoutes = () => {
                   }}
                 >
                   <View className={stylesheet.calendarBtnContainer}>
-                    <Image source={require('src/assets/plus-white.png')} />
+                    <Image className="w-8 h-8" source={require('src/assets/plus-white.png')} />
                   </View>
                 </Animated.View>
               );

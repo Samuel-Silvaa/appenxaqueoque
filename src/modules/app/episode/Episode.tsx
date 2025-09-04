@@ -12,21 +12,27 @@ import FormSteps from './components';
 import { sharedEpisodeStyleSheet } from './shared/SharedEpisodeStyleSheet';
 import React from 'react';
 import _ from 'lodash';
-import { useDispatch, useSelector } from "react-redux";
-import { appStateSelector } from "src/infra/app/selectors";
-import { clearEpisodeState, handleStepForward, setLoadingState, setPageTitle } from "src/infra/app/reducers/app.reducer";
-import Datetime from "./components/datetime/Datetime";
-import EpisodeDuration from "./components/episodeDuration/EpisodeDuration";
-import Acuteness from "./components/acuteness/Acuteness";
-import PainType from "./components/painType/PainType";
-import Symptoms from "./components/symptoms/Symptoms";
-import ImpairFactor from "./components/impairFactor/ImpairFactor";
-import ImprovementFactor from "./components/improvementFactor/ImprovementFactor";
-import Trigger from "./components/trigger/Trigger";
-import Period from "./components/period/Period";
-import Notes from "./components/notes/Notes";
-import HaloSymptoms from "./components/haloSymptoms/HaloSymptoms";
-import Location from "./components/location/Location";
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector } from 'src/infra/app/selectors';
+import {
+  handleStepForward,
+  setEpisodeIndex,
+  setLoadingState,
+  setPageTitle,
+} from 'src/infra/app/reducers/app.reducer';
+import Datetime from './components/datetime/Datetime';
+import EpisodeDuration from './components/episodeDuration/EpisodeDuration';
+import Acuteness from './components/acuteness/Acuteness';
+import PainType from './components/painType/PainType';
+import Symptoms from './components/symptoms/Symptoms';
+import ImpairFactor from './components/impairFactor/ImpairFactor';
+import ImprovementFactor from './components/improvementFactor/ImprovementFactor';
+import Trigger from './components/trigger/Trigger';
+import Period from './components/period/Period';
+import Notes from './components/notes/Notes';
+import HaloSymptoms from './components/haloSymptoms/HaloSymptoms';
+import Location from './components/location/Location';
+import { Image } from 'react-native';
 
 const stylesheet = {
   steps: {
@@ -40,26 +46,25 @@ const stylesheet = {
   },
 };
 
-
-
-
-
 const Steps = () => {
-  const pageComponents = useMemo(() => ([
-    FormSteps.Datetime,
-    FormSteps.EpisodeDuration,
-    FormSteps.Location,
-    FormSteps.Acuteness,
-    FormSteps.PainType,
-    FormSteps.Symptoms,
-    FormSteps.HaloSymptom,
-    FormSteps.ImpairFactor,
-    FormSteps.Trigger,
-    FormSteps.ImprovementFactor,
-    FormSteps.Period,
-    FormSteps.Notes,
-  ]), []); 
- const appState = useSelector(appStateSelector);
+  const pageComponents = useMemo(
+    () => [
+      FormSteps.Datetime,
+      FormSteps.EpisodeDuration,
+      FormSteps.Location,
+      FormSteps.Acuteness,
+      FormSteps.PainType,
+      FormSteps.Symptoms,
+      FormSteps.HaloSymptom,
+      FormSteps.ImpairFactor,
+      FormSteps.Trigger,
+      FormSteps.ImprovementFactor,
+      FormSteps.Period,
+      FormSteps.Notes,
+    ],
+    []
+  );
+  const appState = useSelector(appStateSelector);
 
   return (
     <View className={stylesheet.steps.container}>
@@ -91,36 +96,38 @@ interface EpisodeScaffold {
   episodePagesFlatListRef: RefObject<FlatList>;
 }
 
-
-
 const Topic = ({
   headerStepsFlatListRef,
   episodePagesFlatListRef,
 }: EpisodeScaffold) => {
-  const  appState  = useSelector(appStateSelector);
+  const appState = useSelector(appStateSelector);
   const dispatch = useDispatch();
 
-  const DATA: { id: string; title: string }[] = useMemo(() => [
-    'Data e horário',
-    'Duração da crise',
-    'Localização',
-    'Intensidade',
-    'Características da dor',
-    'Sintomas associados',
-    'Sintomas da aura',
-    'Fatores de piora',
-    'Fatores desencadeantes',
-    'Fatores de melhora',
-    'Periodo menstrual',
-    'Observações',
-  ].map((item, indx) => ({ title: item, id: item + indx })),[]);
+  const DATA: { id: string; title: string }[] = useMemo(
+    () =>
+      [
+        'Data e horário',
+        'Duração da crise',
+        'Localização',
+        'Intensidade',
+        'Características da dor',
+        'Sintomas associados',
+        'Sintomas da aura',
+        'Fatores de piora',
+        'Fatores desencadeantes',
+        'Fatores de melhora',
+        'Periodo menstrual',
+        'Observações',
+      ].map((item, indx) => ({ title: item, id: item + indx })),
+    []
+  );
 
   const handleScrollToIndexFailed = (info: {
     index: number;
     highestMeasuredFrameIndex: number;
     averageItemLength: number;
   }) => {
-    const wait = new Promise(resolve => setTimeout(resolve, 500));
+    const wait = new Promise((resolve) => setTimeout(resolve, 500));
     wait.then(() => {
       if (episodePagesFlatListRef.current) {
         episodePagesFlatListRef.current.scrollToIndex({
@@ -164,7 +171,7 @@ const Topic = ({
           <TouchableOpacity
             key={`topic-${item.id}`}
             onPress={() => {
-                dispatch(handleStepForward(index));
+              dispatch(handleStepForward(index));
             }}
             className={
               sharedEpisodeStyleSheet.topic.item +
@@ -190,10 +197,8 @@ const Topic = ({
       />
     </View>
   );
-
-  
 };
-  const pageComponents = [
+const pageComponents = [
   Datetime,
   EpisodeDuration,
   Location,
@@ -212,10 +217,14 @@ const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
   const appState = useSelector(appStateSelector);
   const PageComponent = pageComponents[appState.currentEpStep];
 
-
-
   return (
-    <View style={{ flex: 1, width: Dimensions.get('screen').width - 32, paddingTop: 20 }}>
+    <View
+      style={{
+        flex: 1,
+        width: Dimensions.get('screen').width - 32,
+        paddingTop: 20,
+      }}
+    >
       <PageComponent />
     </View>
   );
@@ -240,7 +249,6 @@ const FormScaffold = () => {
   const appState = useSelector(appStateSelector);
   const headerStepsFlatListRef = createRef<FlatList>();
   const episodePagesFlatListRef = createRef<FlatList>();
-
 
   useEffect(() => {
     if (appState.currentEpStep == 0) {
@@ -275,18 +283,45 @@ const FormScaffold = () => {
 };
 
 const EpisodePage = () => {
+  const appState = useSelector(appStateSelector);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(setLoadingState(false));
-    return () => {
-      dispatch(setPageTitle(''));
-      dispatch(clearEpisodeState());
-    };
   }, []);
+
   return (
-    <AppPageScaffold>
-      <FormScaffold />
-    </AppPageScaffold>
+    <View>
+      <AppPageScaffold>
+        <FormScaffold />
+      </AppPageScaffold>
+      {appState.currentEpStep != 11 && (
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(setEpisodeIndex(11));
+          }}
+          className=' absolute bottom-10 right-4 bg-blue-primary rounded-full p-4'
+        >
+          <Image
+            className='w-5 h-5'
+            source={require('src/assets/arrowrightwhite.png')}
+          ></Image>
+        </TouchableOpacity>
+      )}
+      {appState.currentEpStep == 11 && (
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(setEpisodeIndex(0));
+          }}
+          className=' absolute bottom-10 right-4 bg-purple-dark-primary  rounded-full p-4'
+        >
+          <Image
+            className='w-5 h-5'
+            source={require('src/assets/arrowback.png')}
+          ></Image>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 };
 

@@ -7,17 +7,19 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Trigger as TriggerType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { appStateSelector } from 'src/infra/app/selectors';
 import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 
 interface TriggerSchema {
   foodImpair: string;
+  anotherTrigger: string;
 }
 
 const triggerSchema = yup.object<TriggerSchema>().shape({
   foodImpair: yup.string(),
+  anotherTrigger: yup.string(),
 });
 
 const data: {
@@ -61,24 +63,31 @@ const Trigger = () => {
     setValue,
   } = useForm({ resolver: yupResolver(triggerSchema) });
 
-  const handleSetTriggersValues = (value: string) => {
+  const handleSetTriggersValues = useCallback((value: string) => {
     // Ensure triggers is always an array
     const currentTriggers = Array.isArray(appState.episode.triggers)
-      ? appState.episode.triggers
-      : [];
+      ? appState.episode.triggers 
+      : appState.episode.triggers ? appState.episode.triggers.split(",").filter((value) => value != '') : [ ];
 
     if (currentTriggers.includes(value)) {
       dispatch(
         handleFormChanging({
           triggers: currentTriggers.filter((tr) => tr !== value),
+          foodImpair: value == TriggerType.FOOD ? '' : appState.episode!.foodImpair,
+          anotherTrigger: value == TriggerType.ANOTHER ? '' : appState.episode!.anotherTrigger,
         })
       );
+      if(value == TriggerType.FOOD) {
+        setValue('foodImpair', '');
+      }
+      if(value == TriggerType.ANOTHER) {
+        setValue('anotherTrigger', '');
+      }
     } else {
       dispatch(handleFormChanging({ triggers: [...currentTriggers, value] }));
     }
-  };
+  }, [appState.episode.anotherTrigger, appState.episode.foodImpair]);
 
-  useEffect(() => {}, [appState.episode.triggers]);
 
   return (
     <View className='h-full w-full'>
@@ -87,9 +96,6 @@ const Trigger = () => {
           <Fragment key={index}>
             <Card
               key={index}
-              onPress={() => {
-                handleSetTriggersValues(act.value);
-              }}
               children={
                 <View className='flex-row items-center '>
                   <BouncyCheckbox
@@ -103,8 +109,8 @@ const Trigger = () => {
                     }}
                     text={act.label}
                     isChecked={
-                      Array.isArray(appState.episode.triggers) &&
-                      appState.episode.triggers.includes(act.value)
+                      appState.episode.triggers ? 
+                      appState.episode.triggers && appState.episode.triggers!.includes(act.value) : false
                     }
                     onPress={(isChecked: boolean) => {
                       handleSetTriggersValues(act.value);
@@ -124,12 +130,10 @@ const Trigger = () => {
                 control={control}
                 errors={errors}
                 editable={
-                  Array.isArray(appState.episode.triggers) &&
-                  appState.episode.triggers.includes(TriggerType.FOOD)
+                  appState.episode.triggers && appState.episode.triggers!.includes(TriggerType.FOOD)
                 }
                 className={`${
-                  Array.isArray(appState.episode.triggers) &&
-                  appState.episode.triggers.includes(TriggerType.FOOD)
+                  appState.episode.triggers && appState.episode.triggers!.includes(TriggerType.FOOD)
                     ? ' opacity-100'
                     : ' opacity-25'
                 } bg-white drop-shadow-sm`}
@@ -150,12 +154,10 @@ const Trigger = () => {
                 errors={errors}
                 placeholder='Descreva brevemente'
                 editable={
-                  Array.isArray(appState.episode.triggers) &&
-                  appState.episode.triggers.includes(TriggerType.ANOTHER)
+                  appState.episode.triggers && appState.episode.triggers!.includes(TriggerType.ANOTHER)
                 }
                 className={`${
-                  Array.isArray(appState.episode.triggers) &&
-                  appState.episode.triggers.includes(TriggerType.ANOTHER)
+                  appState.episode.triggers && appState.episode.triggers!.includes(TriggerType.ANOTHER)
                     ? ' opacity-100 '
                     : ' opacity-25'
                 } bg-white drop-shadow-sm`}

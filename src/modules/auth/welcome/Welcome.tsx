@@ -22,7 +22,7 @@ const data: {
     title: 'Seja bem-vindo',
     subtitle:
       'Registre seus episódios de dor de cabeça de forma descomplicada e divertida!',
-    logo: require('src/assets/logo.png'),
+    logo: require('src/assets/logoenxaq.png'),
     image: require('src/assets/armchair_kid.png'),
   },
   {

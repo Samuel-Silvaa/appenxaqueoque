@@ -39,7 +39,7 @@ const HaloSymptoms = () => {
     // Ensure haloSymptoms is always an array
     const currentHaloSymptoms = Array.isArray(appState.episode.haloSymptoms) 
       ? appState.episode.haloSymptoms 
-      : [];
+      :  appState.episode.haloSymptoms ?  appState.episode.haloSymptoms.split(",").filter((value) => value != '') : [];
     
     if (currentHaloSymptoms.includes(value)) {
       dispatch(handleFormChanging({
@@ -58,9 +58,6 @@ const HaloSymptoms = () => {
         {data.map((act, index) => (
           <Card
             key={index}
-            onPress={() => {
-              handleSetSymptomsValues(act.value);
-            }}
             children={
               <View className='flex-row items-center w-[80%] '>
                 <BouncyCheckbox
@@ -78,7 +75,7 @@ const HaloSymptoms = () => {
                     flexShrink: 1,
                   }}
                   text={act.label}
-                  isChecked={appState.episode.haloSymptoms.includes(act.value)}
+                  isChecked={appState.episode.haloSymptoms ? appState.episode.haloSymptoms.includes(act.value) : null}
                   onPress={(isChecked: boolean) => {
                     handleSetSymptomsValues(act.value);
                   }}

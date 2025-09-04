@@ -196,7 +196,7 @@ const ReportDateRangeModal = ({
     setValue('endDate', new Date());
   };
 
-  const handleSubmitReportCreation = (payload: {
+  const handleSubmitReportCreation = async (payload: {
     startDate: Date;
     endDate: Date;
   }) => {
@@ -206,11 +206,19 @@ const ReportDateRangeModal = ({
         endDate: format(payload.endDate, 'yyyy-MM-dd'),
       }}}));
     } else {
-      dispatch(handleCreateReport({
+      const res = await dispatch(handleCreateReport({
         patientId: appState.patient!.id!,
         startDate: format(payload.startDate, 'yyyy-MM-dd'),
         endDate: format(payload.endDate, 'yyyy-MM-dd'),
       }));
+
+      if(res.meta.requestStatus == 'fulfilled'){
+         dispatch(handleFecthReports({patientId: appState.patient!.id!, date: { date: {
+        startDate: format(payload.startDate, 'yyyy-MM-dd'),
+        endDate: format(payload.endDate, 'yyyy-MM-dd'),
+      }}}));
+      }
+
     }
     onClose({ start: getValues('startDate'), end: getValues('endDate') });
   };

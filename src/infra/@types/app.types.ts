@@ -32,7 +32,7 @@ export interface Episode {
   medicineImprovement: string | null;
   notes: string | null;
   painType: string | null;
-  period: string;
+  period: any;
   periodNotes: string | null;
   symptoms: string | string[];
   time: string | null;

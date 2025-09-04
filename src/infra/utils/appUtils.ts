@@ -44,7 +44,7 @@ export const parseTime = (acuteness: number) => {
     case 2:
       return Time.NIGHT;
     default:
-      Time.MIDNIGHT;
+     return Time.MIDNIGHT;
   }
 };
 

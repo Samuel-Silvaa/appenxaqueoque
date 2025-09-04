@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Card from '../form/card/Card';
 import { RadioButton } from 'react-native-paper';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
-import { useApp } from 'src/infra/app/app';
 import Wrapper from '../form/wrapper/Wrapper';
 import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
@@ -15,21 +14,21 @@ const stylesheet = {
   wrapper: 'flex-col w-full items-center ',
   cardWrapper: 'flex-row items-center justify-center w-full ',
   cardOption:
-    'flex-row items-center bg-white rounded-full w-[45%] mx-1 shadow-sm',
+    'flex-row items-center justify-center bg-white rounded-full w-[50%]',
   notesLabel: 'text-md font-semibold text-black self-start mt-14 pl-4',
   notesWrapper:
-    'flex-row w-full min-h-[140px] max-h-[200px] p-1 bg-blue-four rounded-[28px] mt-1 relative',
-  notesInput: 'w-full p-4 h-[95%]',
+    'flex-row w-full min-h-[140px] max-h-[150px] p-2 pt-2 bg-blue-four rounded-[28px] mt-1 relative',
+  notesInput: 'w-full p-4 h-[95%] start',
 };
 
 interface PeriodSchema {
   period: string;
-  periodNotes: number;
+  periodNotes: string;
 }
 
 const periodSchema = yup.object<PeriodSchema>().shape({
   period: yup.string(),
-  periodNotes: yup.number(),
+  periodNotes: yup.string(),
 });
 
 const Period = () => {
@@ -39,11 +38,20 @@ const Period = () => {
     control,
     formState: { errors },
     setValue,
+    reset
   } = useForm({ resolver: yupResolver(periodSchema) });
+
 
   return (
     <RadioButton.Group
-      onValueChange={(value) => dispatch(handleFormChanging({ period: value }))}
+      onValueChange={(value) => {
+        if(value == 'false') {
+          dispatch(handleFormChanging({ period: value, periodNotes: null }))
+          reset({periodNotes: ''})
+        } else if (value == 'true'){
+          dispatch(handleFormChanging({ period: value }))
+        }
+      }}
       value={appState.episode.period!}
     >
       <View className={stylesheet.wrapper}>
@@ -74,12 +82,13 @@ const Period = () => {
             source={require('src/assets/girl_laptop.png')}
           ></Image>
           <InputContainer
+            textAlignVertical='top'
             editable={appState.episode.period != 'false'}
             name='notes'
             control={control}
             setValue={setValue}
             errors={errors}
-            className={stylesheet.notesInput.concat(appState.episode.period == 'false' ? ' bg-gray-opacity' : ' bg-white')}
+            className={stylesheet.notesInput.concat(appState.episode.period == 'false' ? ' opacity-75' : ' bg-white')}
             numberOfLines={4}
             multiline={true}
             defaultValue={appState.episode.periodNotes!}

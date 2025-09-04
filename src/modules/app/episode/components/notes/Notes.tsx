@@ -18,7 +18,7 @@ const stylesheet = {
   title: 'font-semibold text-black my-2  mb-10 mx-auto text-lg',
   label: 'text-md font-semibold text-black self-start mt-14 pl-4',
   notesWrapper:
-    'flex-row w-full min-h-[140px] max-h-[200px] p-2 bg-blue-four rounded-[28px] mt-1 mb-4 relative',
+    'flex-row w-full min-h-[140px] max-h-[150px] p-2 pt-0 bg-blue-four rounded-[28px] mt-1 mb-4 relative',
   notesInput: 'bg-white w-full p-4 h-[95%]',
 };
 
@@ -79,6 +79,7 @@ const Notes = () => {
 
       <View className={stylesheet.notesWrapper}>
         <InputContainer
+          textAlignVertical="top"
           className={stylesheet.notesInput}
           name='notes'
           setValue={setValue}

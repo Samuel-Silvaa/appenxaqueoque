@@ -182,7 +182,7 @@ const ConfirmEmail = () => {
         ctaPrimaryText='Tentar novamente'
       >
         <View className='flex-1 justify-center items-center'>
-        <Image source={require('src/assets/arthur_lego.png')} />
+        <Image className="w-[100%] h-[250]" source={require('src/assets/arthur_lego.png')} />
           <Text className={stylesheet.subtitle}>
             Não foi possível confirmar seu email. Tente novamente ou entre em
             contato com o suporte.

@@ -96,9 +96,13 @@ const ReportPage = ({ navigation }) => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const dateStringFormat = 'PPP';
   const [selectedDate, setSelectedDate] = useState({
-    start: format(subDays(new Date(), 15), dateStringFormat, { locale: ptBR }),
+    start: format(subDays(new Date(), 7), dateStringFormat, { locale: ptBR }),
     end: format(new Date(), dateStringFormat, { locale: ptBR }),
   });
+        const isEpisodesEmpty = appState.episodes.length == 0;
+      const isReportsEmpty = appState!.reports!.length == 0;
+
+
 
   const {
     setValue,
@@ -108,10 +112,11 @@ const ReportPage = ({ navigation }) => {
   useEffect(() => {
     if(appState.patient?.id)
     dispatch(handleFecthReports({patientId:appState.patient!.id, date: {date: {
-      startDate: format(subDays(new Date(), 15), 'yyyy-MM-dd', { locale: ptBR }),
+      startDate: format(subDays(new Date(), 7), 'yyyy-MM-dd', { locale: ptBR }),
       endDate: format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
     }}}));
   }, []);
+
 
   return (
     <AppPageScaffold title='Relatórios'>
@@ -128,15 +133,15 @@ const ReportPage = ({ navigation }) => {
         </View>
         <View className='flex-row justify-between items-center w-full '>
           <ExPressable
-            className='rounded-full w-2/4 h-[45px] bg-blue-primary/60 text-white dark:text-white dark:bg-d-blue-primary'
+            className={`rounded-full w-2/4 h-[45px] ${isEpisodesEmpty ? 'opacity-[0.4]' : '' } bg-blue-primary/60 text-white dark:text-white dark:bg-d-blue-primary`}
             title='Gerar relatório'
-            onPress={() => setIsModalOpen(true)}
+            onPress={() => !isEpisodesEmpty ?  setIsModalOpen(true) : () => {}}
           />
           <ExPressable
-            className='rounded-full w-[40%] h-[45px] bg-white dark:bg-d-blue-primary  text-black'
+            className={`rounded-full w-[40%] ${isReportsEmpty ? 'opacity-[0.4]' : '' } h-[45px] bg-white dark:bg-d-blue-primary  text-black`}
             colorScheme="secodary "
             title='Filtrar'
-            onPress={() => setIsFilterModalOpen(true)}
+            onPress={() => !isReportsEmpty ?  setIsFilterModalOpen(true) : () => {}}
           />
         </View>
 
@@ -163,9 +168,15 @@ const ReportPage = ({ navigation }) => {
 
       {appState.reports?.length == 0 && (
         <View className='rounded-[16px] h-[45px] bg-blue-primary/30 flex items-center justify-center m-auto m-4'>
-          <Text className='font-semibold'>
+          {isEpisodesEmpty && isReportsEmpty && (
+            <Text className='font-semibold'>
+            Crie um primeiro epidódio para gerar relatórios
+          </Text>
+          )}
+            <Text className='font-semibold'>
             Nenhum relatório foi gerado para este período.
           </Text>
+         
         </View>
       )}
 

@@ -1,17 +1,22 @@
-import { ImageSourcePropType, NativeSyntheticEvent, Text, TextInputChangeEventData, View } from 'react-native';
+import {
+  ImageSourcePropType,
+  NativeSyntheticEvent,
+  Text,
+  TextInputChangeEventData,
+  View,
+} from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
 import { RadioButton } from 'react-native-paper';
 import Card from '../form/card/Card';
-import { useApp } from 'src/infra/app/app';
 import { PainType as PainTypeEnum } from 'src/infra/@types/app.types';
-import { Fragment } from 'react';
+import { Fragment, useCallback } from 'react';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch, useSelector } from "react-redux";
-import { appStateSelector } from "src/infra/app/selectors";
-import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector } from 'src/infra/app/selectors';
+import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 
 const data: {
   label: string;
@@ -48,25 +53,34 @@ const PainType = () => {
     setValue,
   } = useForm({ resolver: yupResolver(painTypeSchema) });
 
+  const handlePainTypeChange = useCallback(
+    async (value: string) => {
+      if (value !== PainTypeEnum.ANOTHER) {
+        dispatch(handleFormChanging({ painType: value, anotherPainType: '' }));
+        setValue( 'anotherPainType', '' );
+      } else {
+        dispatch(handleFormChanging({ painType: value }));
+      }
+    },
+    [appState.episode.painType]
+  );
+
   return (
     <View className='h-full w-full'>
       <Wrapper title='Qual a característica da dor ?'>
         <RadioButton.Group
-          onValueChange={(value) => dispatch(handleFormChanging({ painType: value }))}
+          onValueChange={(value) =>
+           handlePainTypeChange(value)
+          }
           value={appState.episode.painType!}
         >
           {data.map((act, index) => (
-            <Fragment 
-                key={index}
-            >
+            <Fragment key={index}>
               <Card
-                onPress={() => {
-                  dispatch(handleFormChanging({ painType: act.value }));
-                }}
                 children={
                   <View className='flex-row items-center'>
                     <RadioButton value={act.value} color='#CEB0FA' />
-                    <Text 
+                    <Text
                       className='dark:text-d-text-gray'
                       style={{ flexWrap: 'wrap', flex: 1, flexShrink: 1 }}
                     >
@@ -76,6 +90,7 @@ const PainType = () => {
                 }
                 image={act?.img}
               />
+              <Text></Text>
               {act.value == PainTypeEnum.ANOTHER && (
                 <InputContainer
                   editable={appState.episode.painType?.includes(
@@ -88,17 +103,20 @@ const PainType = () => {
                   control={control}
                   errors={errors}
                   className={
-                    !appState.episode.painType?.includes(PainTypeEnum.ANOTHER)
+                    appState.episode.painType != PainTypeEnum.ANOTHER
                       ? 'opacity-25' + ' bg-white drop-shadow-sm'
                       : 'opacity-100' + ' bg-white drop-shadow-sm'
                   }
                   defaultValue={appState.episode.anotherPainType!}
                   onChange={(e) => {
-                    console.log(e);
-                    dispatch(handleFormChanging({ anotherPainType: e.nativeEvent.text  }))
-
-                  }
-                  }
+                    if (appState.episode.painType == PainTypeEnum.ANOTHER) {
+                      dispatch(
+                        handleFormChanging({
+                          anotherPainType: e.nativeEvent.text,
+                        })
+                      );
+                    }
+                  }}
                 />
               )}
             </Fragment>

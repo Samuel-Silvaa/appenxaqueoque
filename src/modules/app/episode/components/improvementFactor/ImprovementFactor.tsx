@@ -8,10 +8,10 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ImprovementFactor as ImprovementFactorType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import { Fragment } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { appStateSelector } from "src/infra/app/selectors";
-import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { Fragment, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector } from 'src/infra/app/selectors';
+import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 
 const data: {
   label: string;
@@ -38,73 +38,116 @@ const data: {
 
 interface ImprovementSchema {
   medicine: string;
-  dosage: number;
+  medicineDosage: number;
+  medicineImprovement: string;
+  foodImprovement: string;
+  anotherImprovementFactor: string;
 }
 
 const improvementSchema = yup.object<ImprovementSchema>().shape({
   medicine: yup.string(),
-  dosage: yup.number(),
+  medicineDosage: yup.number(),
   foodImprovement: yup.string(),
+  medicineImprovement: yup.string(),
+  anotherImprovementFactor: yup.string(),
 });
 
 const ImprovementFactor = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
-  const isMedicineEditable = !(Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
+
+  // ✅ Always normalize improvementFactor into an array
+  const getImprovementFactors = (): string[] => {
+    if (Array.isArray(appState.episode.improvementFactor)) {
+      return appState.episode.improvementFactor;
+    }
+    if (typeof appState.episode.improvementFactor === 'string') {
+      return appState.episode.improvementFactor.split(',').filter((v) => v !== '');
+    }
+    return [];
+  };
+
+  const isMedicineEditable = !getImprovementFactors().includes(
     ImprovementFactorType.MEDICINE
-  ));
+  );
+
   const {
     control,
     formState: { errors },
     setValue,
+    reset,
   } = useForm({ resolver: yupResolver(improvementSchema) });
 
-  const handleSetImprovementFactorValues = (value: string) => {
-    // Ensure improvementFactor is always an array
-    const currentImprovementFactor = Array.isArray(appState.episode.improvementFactor) 
-      ? appState.episode.improvementFactor 
-      : [];
-    
-    if (currentImprovementFactor.includes(value)) {
-      dispatch(handleFormChanging({
-        improvementFactor: currentImprovementFactor.filter((tr) => tr !== value),
-      }));
-    } else {
-      dispatch(handleFormChanging({
-        improvementFactor: [...currentImprovementFactor, value],
-      }));
-    }
-  };
+  const handleSetImprovementFactorValues = useCallback(
+    (value: string) => {
+      const currentImprovementFactor = getImprovementFactors();
+
+      if (currentImprovementFactor.includes(value)) {
+        dispatch(
+          handleFormChanging({
+            improvementFactor: currentImprovementFactor.filter((tr) => tr !== value),
+            foodImprovement:
+              value == ImprovementFactorType.FOOD
+                ? null
+                : appState.episode!.foodImprovement,
+            anotherImprovementFactor:
+              value == ImprovementFactorType.ANOTHER
+                ? null
+                : appState.episode!.anotherImprovementFactor,
+            medicine:
+              value == ImprovementFactorType.MEDICINE
+                ? null
+                : appState.episode!.medicine,
+            medicineDosage:
+              value == ImprovementFactorType.MEDICINE
+                ? null
+                : appState.episode!.medicineDosage,
+            medicineImprovement:
+              value == ImprovementFactorType.MEDICINE
+                ? null
+                : appState.episode!.medicineImprovement,
+          })
+        );
+        if (value == ImprovementFactorType.MEDICINE) {
+          reset({ medicine: '', medicineDosage: 0, medicineImprovement: '' });
+        }
+        if (value == ImprovementFactorType.FOOD) {
+          reset({ foodImprovement: '' });
+        }
+        if (value == ImprovementFactorType.ANOTHER) {
+          reset({ anotherImprovementFactor: '' });
+        }
+      } else {
+        dispatch(
+          handleFormChanging({ improvementFactor: [...currentImprovementFactor, value] })
+        );
+      }
+    },
+    [appState.episode.improvementFactor]
+  );
 
   return (
-    <View className='h-full w-full'>
-      <Wrapper title='O que ajudou a melhorar?'>
+    <View className="h-full w-full">
+      <Wrapper title="O que ajudou a melhorar?">
         {data.map((act, index) => (
-          <Fragment 
-              key={index}
-          >
+          <Fragment key={index}>
             <Card
               key={index}
-              onPress={() => {
-                handleSetImprovementFactorValues(act.value);
-              }}
               children={
-                <View className='flex-row items-center'>
+                <View className="flex-row items-center">
                   <BouncyCheckbox
                     size={22}
-                    fillColor='#CEB0FA'
-                    unfillColor='#FFFFFF00'
-                    textStyle={{ 
+                    fillColor="#CEB0FA"
+                    unfillColor="#FFFFFF00"
+                    textStyle={{
                       textDecorationLine: 'none',
                       flexWrap: 'wrap',
                       flex: 1,
                       flexShrink: 1,
                     }}
                     text={act.label}
-                    isChecked={ appState.episode.improvementFactor.includes(act.value)}
-                    onPress={(isChecked: boolean) => {
-                      handleSetImprovementFactorValues(act.value);
-                    }}
+                    isChecked={getImprovementFactors().includes(act.value)}
+                    onPress={() => handleSetImprovementFactorValues(act.value)}
                   />
                 </View>
               }
@@ -115,133 +158,145 @@ const ImprovementFactor = () => {
               <Card
                 key={`subcard-${index}`}
                 className={isMedicineEditable ? 'opacity-25' : 'opacity-100'}
-                title='Você tomou algum medicamento?'
+                title="Você tomou algum medicamento?"
                 children={
-                  <View className='w-full flex-col items-center'>
+                  <View className="w-full flex-col items-center">
                     <InputContainer
-                      label='Nome do medicamento'
+                      label="Nome do medicamento"
                       labelicon={require('src/assets/medicine.png')}
-                      name='medicine'
+                      name="medicine"
                       setValue={setValue}
                       control={control}
                       errors={errors}
-                      className='bg-tertiary w-full'
+                      className="bg-tertiary w-full"
                       editable={!isMedicineEditable}
                       defaultValue={appState.episode.medicine!}
                       onChange={(e) =>
                         dispatch(
-                        handleFormChanging({ medicine: e.nativeEvent.text })
+                          handleFormChanging({ medicine: e.nativeEvent.text })
                         )
                       }
                     ></InputContainer>
                     <InputContainer
-                      label='Dosagem'
-                      name='dosage'
+                      label="Dosagem"
+                      name="dosage"
                       setValue={setValue}
                       control={control}
                       errors={errors}
-                      className='bg-tertiary w-full'
+                      className="bg-tertiary w-full"
                       editable={!isMedicineEditable}
                       defaultValue={appState.episode.medicineDosage?.toString()}
                       onChange={(e) =>
-                       dispatch( handleFormChanging({ medicineDosage: e.nativeEvent.text }))
+                        dispatch(
+                          handleFormChanging({
+                            medicineDosage: e.nativeEvent.text,
+                          })
+                        )
                       }
                     ></InputContainer>
-                    <Text className='font-semibold text-black my-4 text-lg'>
+                    <Text className="font-semibold text-black my-4 text-lg">
                       Você notou alguma melhora?
                     </Text>
                     <RadioButton.Group
                       onValueChange={(value) =>
-                       dispatch( handleFormChanging({ medicineImprovement: value }))
+                        dispatch(
+                          handleFormChanging({ medicineImprovement: value })
+                        )
                       }
                       value={appState.episode.medicineImprovement!}
                     >
-                      <View className='flex-row items-center bg-tertiary w-full rounded-full'>
+                      <View className="flex-row items-center bg-tertiary w-full rounded-full">
                         <RadioButton
                           disabled={isMedicineEditable}
-                          value='Melhorou'
-                          color='#CEB0FA'
+                          value="Melhorou"
+                          color="#CEB0FA"
                         />
-                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>Melhorou</Text>
+                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>
+                          Melhorou
+                        </Text>
                       </View>
-                      <View className='flex-row items-center bg-tertiary w-full rounded-full '>
+                      <View className="flex-row items-center bg-tertiary w-full rounded-full ">
                         <RadioButton
                           disabled={isMedicineEditable}
-                          value='Melhorou parcialmente'
-                          color='#CEB0FA'
+                          value="Melhorou parcialmente"
+                          color="#CEB0FA"
                         />
-                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>Melhorou parcialmente</Text>
+                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>
+                          Melhorou parcialmente
+                        </Text>
                       </View>
-                      <View className='flex-row items-center bg-tertiary w-full rounded-full'>
+                      <View className="flex-row items-center bg-tertiary w-full rounded-full">
                         <RadioButton
                           disabled={isMedicineEditable}
-                          value='Não melhorou'
-                          color='#CEB0FA'
+                          value="Não melhorou"
+                          color="#CEB0FA"
                         />
-                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>Não melhorou</Text>
+                        <Text style={{ flexWrap: 'wrap', flex: 1 }}>
+                          Não melhorou
+                        </Text>
                       </View>
                     </RadioButton.Group>
                   </View>
                 }
               />
             )}
-            {act.value == ImprovementFactorType.FOOD &&
-              Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
-                ImprovementFactorType.FOOD
-              ) && (
-                <InputContainer
-                  editable={Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
-                    ImprovementFactorType.FOOD
-                  )}
-                  setValue={setValue}
-                  label='Qual alimento ajudou a melhorar?'
-                  labelicon={require('src/assets/avocado.png')}
-                  name='foodImprovement'
-                  control={control}
-                  errors={errors}
-                  placeholder='Descreva brevemente'
-                  className={
-                    !(Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
-                      ImprovementFactorType.FOOD
-                    ))
-                      ? 'opacity-25' + ' bg-white drop-shadow-sm'
-                      : 'opacity-100' + ' bg-white drop-shadow-sm'
-                  }
-                  defaultValue={appState.episode.foodImprovement!}
-                  onChange={(e) =>
-                   dispatch( handleFormChanging({ foodImprovement: e.nativeEvent.text }))
-                  }
-                />
-              )}
-            {act.value == ImprovementFactorType.ANOTHER &&
-              (Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
-                ImprovementFactorType.ANOTHER
-              )) && (
-                <InputContainer
-                                      editable={Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
-                      ImprovementFactorType.ANOTHER
-                    )}
-                  setValue={setValue}
-                  label='Qual outro fator de melhora?'
-                  name='anotherImprovementFactor'
-                  control={control}
-                  errors={errors}
-                  placeholder='Descreva brevemente'
-                  className={
-                    !(Array.isArray(appState.episode.improvementFactor) && appState.episode.improvementFactor.includes(
-                      ImprovementFactorType.ANOTHER
-                    ))
-                      ? 'opacity-25' + ' bg-white drop-shadow-sm'
-                      : 'opacity-100' + ' bg-white drop-shadow-sm'
-                  }
-                  defaultValue={appState.episode.anotherImprovementFactor!}
-                  onChange={(e) =>
-                    dispatch(handleFormChanging({
+
+            {act.value == ImprovementFactorType.FOOD && (
+              <InputContainer
+                editable={getImprovementFactors().includes(
+                  ImprovementFactorType.FOOD
+                )}
+                setValue={setValue}
+                label="Qual alimento ajudou a melhorar?"
+                labelicon={require('src/assets/avocado.png')}
+                name="foodImprovement"
+                control={control}
+                errors={errors}
+                placeholder="Descreva brevemente"
+                className={
+                  !getImprovementFactors().includes(ImprovementFactorType.FOOD)
+                    ? 'opacity-25 bg-white drop-shadow-sm'
+                    : 'opacity-100 bg-white drop-shadow-sm'
+                }
+                defaultValue={appState.episode.foodImprovement!}
+                onChange={(e) =>
+                  dispatch(
+                    handleFormChanging({
+                      foodImprovement: e.nativeEvent.text,
+                    })
+                  )
+                }
+              />
+            )}
+
+            {act.value == ImprovementFactorType.ANOTHER && (
+              <InputContainer
+                editable={getImprovementFactors().includes(
+                  ImprovementFactorType.ANOTHER
+                )}
+                setValue={setValue}
+                label="Qual outro fator de melhora?"
+                name="anotherImprovementFactor"
+                control={control}
+                errors={errors}
+                placeholder="Descreva brevemente"
+                className={
+                  !getImprovementFactors().includes(
+                    ImprovementFactorType.ANOTHER
+                  )
+                    ? 'opacity-25 bg-white drop-shadow-sm'
+                    : 'opacity-100 bg-white drop-shadow-sm'
+                }
+                defaultValue={appState.episode.anotherImprovementFactor!}
+                onChange={(e) =>
+                  dispatch(
+                    handleFormChanging({
                       anotherImprovementFactor: e.nativeEvent.text,
-                    }))
-                  }
-                />
-              )}
+                    })
+                  )
+                }
+              />
+            )}
           </Fragment>
         ))}
       </Wrapper>

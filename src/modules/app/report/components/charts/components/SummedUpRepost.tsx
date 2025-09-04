@@ -23,9 +23,9 @@ const stylesheet = {
   content: 'bg-primary w-full rounded-[25px] p-6 flex-col justify-around ',
   summaryItem: 'flex-row gap-x-4 my-1',
 };
-
 export const SummedUpReport = (data: { report: Report }) => {
   const { report } = data;
+
   return (
     <View className={stylesheet.wrapper}>
       <View className={stylesheet.header}>
@@ -52,7 +52,8 @@ export const SummedUpReport = (data: { report: Report }) => {
             />
             <Text className='dark:text-d-text-dark'>{report.episodeAmount} episódios</Text>
           </View>
-          <View className={stylesheet.summaryItem}>
+          
+            <View className={stylesheet.summaryItem}>
             <Image
               className='w-4 h-4'
               source={require('src/assets/chart-clock.png')}

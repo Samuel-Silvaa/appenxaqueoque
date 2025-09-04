@@ -88,6 +88,9 @@ const appSlice = createSlice({
       state.currentEpStep = 0;
       return state;
     },
+    setEpisodeIndex: (state, action) => {
+      return state = {...state, currentEpStep : action.payload};
+    },
     handleStepForward: (state, action) => {
       return state = {...state, currentEpStep: action.payload};
     },
@@ -298,5 +301,5 @@ export const handleGeneratePdfReport = createAsyncThunk(
 );
 
 // Export actions and reducer
-export const { clearAppErrorMessage, handleFormChanging, clearEpisodeState, handleStepForward, setPageTitle, setLoadingState, setPatientData } = appSlice.actions;
+export const { clearAppErrorMessage, handleFormChanging, clearEpisodeState, handleStepForward, setPageTitle, setLoadingState, setPatientData,setEpisodeIndex } = appSlice.actions;
 export default appSlice.reducer;

@@ -3,7 +3,7 @@ import Card from '../form/card/Card';
 import Wrapper from '../form/wrapper/Wrapper';
 import { ImpairFactor as ImpairFactorType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import { Fragment } from 'react';
+import { Fragment, useCallback } from 'react';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -41,24 +41,28 @@ const ImpairFactor = () => {
     control,
     formState: { errors },
     setValue,
+    reset,
   } = useForm({ resolver: yupResolver(impairSchema) });
 
-  const handleSetImpairFactors = (value: string) => {
+  const handleSetImpairFactors = useCallback((value: string) => {
     // Ensure impairFactor is always an array
     const currentImpairFactor = Array.isArray(appState.episode.impairFactor) 
       ? appState.episode.impairFactor 
-      : [];
+      : appState.episode.impairFactor ? appState.episode.impairFactor.split(",").filter((value) => value != '') : [];
     
-    if (currentImpairFactor.includes(value)) {
+    if (currentImpairFactor!.includes(value)) {
       dispatch(handleFormChanging({
         impairFactor: currentImpairFactor.filter((tr) => tr !== value),
+        anotherImpairFactor: value == ImpairFactorType.ANOTHER ? null : value 
       }));
+      reset({anotherImpairFactor: ''})
     } else {
       dispatch(handleFormChanging({
         impairFactor: [...currentImpairFactor, value],
       }));
     }
-  };
+  }, [appState.episode]);
+  console.log(appState.episode)
 
   return (
     <View className='h-full w-full'>
@@ -69,9 +73,6 @@ const ImpairFactor = () => {
           >
             <Card
               key={index}
-              onPress={() => {
-                handleSetImpairFactors(act.value);
-              }}
               children={
                 <View className='flex-row items-center w-[80%] '>
                   <BouncyCheckbox
@@ -89,7 +90,7 @@ const ImpairFactor = () => {
                       flexShrink: 1,
                     }}
                     text={act.label}
-                    isChecked={Array.isArray(appState.episode.impairFactor) && appState.episode.impairFactor.includes(act.value)}
+                    isChecked={ appState.episode.impairFactor ? appState.episode.impairFactor?.includes(act.value) : false}
                     onPress={(isChecked: boolean) => {
                       handleSetImpairFactors(act.value);
                     }}
@@ -100,21 +101,21 @@ const ImpairFactor = () => {
             />
             {act.value == ImpairFactorType.ANOTHER && (
               <InputContainer
-                editable={Array.isArray(appState.episode.impairFactor) && appState.episode.impairFactor.includes(
+                editable={appState.episode!.impairFactor ? appState.episode.impairFactor!.includes(
                   ImpairFactorType.ANOTHER
-                )}
+                ) : false}
                 setValue={setValue}
                 label='Qual outro fator de piora?'
                 name='anotherImpairFactor'
                 placeholder='Descreva brevemente'
                 control={control}
                 errors={errors}
-                className={
-                  !(Array.isArray(appState.episode.impairFactor) && appState.episode.impairFactor.includes(
-                    ImpairFactorType.ANOTHER
-                  ))
+                className={appState.episode!.impairFactor ? !appState.episode!.impairFactor?.includes(
+                  ImpairFactorType.ANOTHER
+                )
                     ? 'opacity-25' + ' bg-white drop-shadow-sm'
-                    : 'opacity-100' + ' bg-white drop-shadow-sm'
+                    : 'opacity-100' + ' bg-white drop-shadow-sm' : 'opacity-25' + ' bg-white drop-shadow-sm'
+                 
                 }
                 defaultValue={appState.episode.anotherImpairFactor!}
                 onChange={(e) =>
