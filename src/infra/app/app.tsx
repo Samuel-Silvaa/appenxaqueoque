@@ -103,8 +103,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           if (res.meta.requestStatus == 'fulfilled') {
             const data = res.payload!;
             
-            console.log(`Data?>`, res.payload)
-
             return {
               ...data,
               triggers: String(data.triggers).split(','),

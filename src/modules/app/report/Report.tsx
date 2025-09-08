@@ -252,7 +252,7 @@ const ReportPage = ({ navigation }) => {
         </View>
       </View>
 
-      {appState.reports?.length && (
+      {!!appState.reports?.length && (
         <SwipeableFlatList
           keyExtractor={(item: Report, index: string) =>
             String(item!.id ?? index)
@@ -310,13 +310,13 @@ const ReportPage = ({ navigation }) => {
         </View>
       )}
 
-      {isModalOpen && (
+      {!!isModalOpen && (
         <ReportDateRangeModal
           isOpen={isModalOpen}
           onClose={(dates) => setIsModalOpen(false)}
         />
       )}
-      {isFilterModalOpen && (
+      {!!isFilterModalOpen && (
         <ReportDateRangeModal
           filter
           isOpen={isFilterModalOpen}

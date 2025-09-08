@@ -16,7 +16,7 @@ import { appStateSelector, authSelector } from 'src/infra/app/selectors';
 
 const stylesheet = {
   userName:
-    'text-2xl font-bold px-4 pb-4 dark:text-d-blue-title w-[90%] truncate',
+    'text-2xl font-bold px-4 pb-4 dark:text-d-blue-title w-[70%] truncate break-words',
   countingDays: {
     card: 'w-full bg-white dark:bg-d-blue-primary-dark rounded-[20px] flex justify-center items-start h-[52px] mb-14 mt-4 px-4',
     title: 'text-start font-semibold dark:text-d-text-gray',
@@ -80,9 +80,9 @@ const CountingDaysTitle = () => {
             : 0;
   return (
     <View className={stylesheet.countingDays.card}>
-      {appState.episodes && (
+      {!!appState.episodes && (
         <Text className={stylesheet.countingDays.title}>
-          Você está há + {getDaysRange()} dias sem crises!
+          Você está há {getDaysRange()} dias sem crises!
         </Text>
       )}
     </View>
@@ -175,7 +175,7 @@ const HomePage = () => {
     <AppPageScaffold paddingInset={isEpisodesPopulated ? 4 : 0}>
       <View>
         <View className='flex flex-row items-center p-0'>
-        {!isEpisodesPopulated && !appstate.loading && (
+        { !isEpisodesPopulated && !appstate.loading && (
           <Image
             className=' h-[200] w-[30vw]'
             resizeMode='contain'
@@ -184,7 +184,7 @@ const HomePage = () => {
         )}
         <Text className={stylesheet.userName}>Olá, {auth!.user!.name}</Text>
       </View>
-      {isEpisodesPopulated && (
+      {!!isEpisodesPopulated && (
         <View>
           <CountingDaysTitle />
           <InnerHomeContainer />

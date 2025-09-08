@@ -169,9 +169,10 @@ const EpisodeModal = ({
       if (id) {
         const res = await dispatchAsync(handleDeleteEpisode({ id: id }));
         if (
-          res.meta.requestStatus === 'fulfilled' 
+          res.meta.requestStatus === 'fulfilled'
         ) {
           onClose();
+          navigation.navigate('Calendar' as never);
           toast.show('Episódio deletado com sucesso!', {type: 'success'})
         }
       }
@@ -220,7 +221,7 @@ const EpisodeModal = ({
               <Text className={stylesheet.editText}>Editar</Text>
             </TouchableOpacity>
 
-            {episode?.dateTime && (
+            {!!episode?.dateTime && (
               <Text className={stylesheet.headerDate}>
                 {format(episode?.dateTime, 'PPPP', { locale: ptBR })}
               </Text>
@@ -287,7 +288,7 @@ const EpisodeModal = ({
             <ExPressable title="Deletar Episódio" className="bg-error" onPress={() => {setOpenConfirmationModal(true)}} />
           </View>
         </View>
-        {openConfirmationModal && (
+        {!!openConfirmationModal && (
           <ActionConfirmationModal
           isOpen={openConfirmationModal}
           onClose={()=>{
