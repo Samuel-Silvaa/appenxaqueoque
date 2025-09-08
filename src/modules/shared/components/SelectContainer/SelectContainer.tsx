@@ -1,4 +1,6 @@
 import {
+  Control,
+  Controller,
   FieldErrors,
   UseFormSetValue,
   UseFormWatch,
@@ -21,6 +23,7 @@ interface SelectContainerProps {
   labelicon?: ImageSourcePropType;
   options: Array<{ title: string; value: string | number }>;
   errors: FieldErrors<any>;
+  control?: Control<any>;
   setValue: UseFormSetValue<any>;
   watch?: UseFormWatch<any>;
   placeholder?: string;
@@ -35,14 +38,15 @@ const SelectContainer = ({
   labelicon,
   setValue,
   placeholder,
-  defaultValue
+  defaultValue,
+  control,
 }: SelectContainerProps) => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
-  
-  // Find the default option based on the defaultValue string
-  const defaultOption = defaultValue ? options.find(option => option.value === defaultValue) : undefined;
-  
 
+  // Find the default option based on the defaultValue string
+  const defaultOption = defaultValue
+    ? options.find((option) => option.value === defaultValue)
+    : undefined;
 
   // Set the default value when component mounts or defaultValue changes
   useEffect(() => {
@@ -64,40 +68,86 @@ const SelectContainer = ({
           ></Image>
         )}
       </View>
-      <SelectDropdown
-        data={options}
-        defaultValue={selectedItem}
-        onSelect={(selectedItem) => {
-          setSelectedItem(selectedItem);
-          setValue(name, selectedItem.value);
-        }}
-        renderButton={(selectedItem, isOpened) => {
-          return (
-            <View>
-              <Text className={stylesheet.input}>
-                {(selectedItem && selectedItem.title) ||
-                  placeholder ||
-                  'Selecione uma opção'}
-              </Text>
-            </View>
-          );
-        }}
-        renderItem={(item, index, isSelected) => {
-          return (
-            <View>
-              <Text
-                className={
-                  stylesheet.input +
-                  ' text-md capitalize font-bold bg-beige-tertiary dark:bg-d-blue-primary-dark rounded-none dark:text-d-text-gray'
-                }
-              >
-                {item.title}
-              </Text>
-            </View>
-          );
-        }}
-        showsVerticalScrollIndicator={false}
-      />
+      {control && (
+        <Controller
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <SelectDropdown
+              {...field}
+              defaultValue={options.find((o) => o.value === field.value)}
+              data={options}
+              onSelect={(selectedItem) => {
+                setSelectedItem(selectedItem);
+                setValue(name, selectedItem.value);
+              }}
+              renderButton={(selectedItem, isOpened) => {
+                return (
+                  <View>
+                    <Text className={stylesheet.input}>
+                      {(selectedItem && selectedItem.title) ||
+                        placeholder ||
+                        'Selecione uma opção'}
+                    </Text>
+                  </View>
+                );
+              }}
+              renderItem={(item, index, isSelected) => {
+                return (
+                  <View>
+                    <Text
+                      className={
+                        stylesheet.input +
+                        ' text-md capitalize font-bold bg-beige-tertiary dark:bg-d-blue-primary-dark rounded-none dark:text-d-text-gray'
+                      }
+                    >
+                      {item.title}
+                    </Text>
+                  </View>
+                );
+              }}
+              showsVerticalScrollIndicator={false}
+            />
+          )}
+        ></Controller>
+      )}
+
+      {!control && (
+        <SelectDropdown
+          data={options}
+          defaultValue={selectedItem}
+          onSelect={(selectedItem) => {
+            setSelectedItem(selectedItem);
+            setValue(name, selectedItem.value);
+          }}
+          renderButton={(selectedItem, isOpened) => {
+            return (
+              <View>
+                <Text className={stylesheet.input}>
+                  {(selectedItem && selectedItem.title) ||
+                    placeholder ||
+                    'Selecione uma opção'}
+                </Text>
+              </View>
+            );
+          }}
+          renderItem={(item, index, isSelected) => {
+            return (
+              <View>
+                <Text
+                  className={
+                    stylesheet.input +
+                    ' text-md capitalize font-bold bg-beige-tertiary dark:bg-d-blue-primary-dark rounded-none dark:text-d-text-gray'
+                  }
+                >
+                  {item.title}
+                </Text>
+              </View>
+            );
+          }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       {errors[name] && (
         <Text className={stylesheet.error}>

@@ -14,6 +14,8 @@ import { Time } from 'src/infra/@types/app.types';
 import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
 import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { isFuture } from "date-fns";
+import { useToast } from "react-native-toast-notifications";
 
 const data = [
   {
@@ -106,12 +108,12 @@ const Timepicker = () => {
 const Datetime = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector)
+  const toast = useToast();
 
   const handleSelectDate = useCallback((date: DateData) => {
     if (!Object.keys(appState.episode.dates).includes(date.dateString)) {
       dispatch(handleFormChanging(({
         dates: {
-          ...appState.episode.dates,
           [date.dateString]: {
             selected: true,
             marked: true,
@@ -133,7 +135,14 @@ const Datetime = () => {
       </View>
       <CalendarComponent
         markedDates={appState.episode.dates}
-        onDayPress={(date) => handleSelectDate(date)}
+        onDayPress={(date) => {
+          if(isFuture(date.dateString)){
+            toast.hideAll()
+            toast.show('Selecione uma data válida!', {type: 'warning'})
+            return
+          }
+          handleSelectDate(date)
+        }}
       />
       <Timepicker />
     </View>

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { ReactNode, useEffect, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { Appearance, ImageBackground, ScrollView, View } from 'react-native';
 import { getAppScaffoldAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 
@@ -13,6 +13,8 @@ interface AppPageScaffoldProps {
   hasArrowBack?: boolean;
   displayBg?: boolean;
   children: ReactNode;
+  paddingInset?: number;
+  disabledScroll?: boolean;
 }
 
 const AppPageScaffold = ({
@@ -20,6 +22,8 @@ const AppPageScaffold = ({
   children,
   alignment = 'start',
   displayBg = true,
+  paddingInset = 4,
+  disabledScroll = false,
   ...res
 }: AppPageScaffoldProps) => {
   const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme());
@@ -36,7 +40,6 @@ const AppPageScaffold = ({
       {...res}
     >
       <StatusBar />
-
       {displayBg && (
         <ImageBackground
           className='w-full h-full flex-grow '
@@ -47,26 +50,47 @@ const AppPageScaffold = ({
               : require('src/assets/dappbg.png')
           }
         >
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            className='w-full p-4 pt-[2px]'
-          >
-            {children}
-            <View className='h-[140px] w-full'></View>
-          </ScrollView>
+          {!disabledScroll && (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              className={'w-full pt-[2px]'.concat(` p-${paddingInset}`)}
+            >
+              {children}
+              <View className='h-[140px] w-full'></View>
+            </ScrollView>
+          )}
+
+          {disabledScroll && (
+            <View className={'w-full pt-[2px]'.concat(` p-${paddingInset}`)}>
+              {children}
+              <View className='h-[140px] w-full'></View>
+            </View>
+          )}
         </ImageBackground>
       )}
 
       {!displayBg && (
-        <ScrollView
-          className='w-full p-4 pt-[40px] pb-14'
-          showsHorizontalScrollIndicator={false}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-        >
-          {children}
-          <View className='h-[140px] w-full'></View>
-        </ScrollView>
+        <View>
+          {disabledScroll && (
+            <View
+              className={'w-full pt-[40px] pb-14'.concat(` p-${paddingInset}`)}
+            >
+              {children}
+              <View className='h-[140px] w-full'></View>
+            </View>
+          )}
+          {!disabledScroll && (
+            <ScrollView
+              className={'w-full pt-[40px] pb-14'.concat(` p-${paddingInset}`)}
+              showsHorizontalScrollIndicator={false}
+              horizontal={false}
+              showsVerticalScrollIndicator={false}
+            >
+              {children}
+              <View className='h-[140px] w-full'></View>
+            </ScrollView>
+          )}
+        </View>
       )}
     </View>
   );

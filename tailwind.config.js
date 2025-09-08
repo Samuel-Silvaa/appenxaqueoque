@@ -43,7 +43,10 @@ module.exports = {
         'beige-tertiary': '#fbfbfc',
         'calendar-dot': '#FFCACD',
         white: '#fff',
-        error: '#FFB0B5',
+        error: '#FF8AA6',
+        success: '#C8F7E1',
+        warning: '#FFCBA6',
+        default: '#F1E3FF'
       },
     },
   },

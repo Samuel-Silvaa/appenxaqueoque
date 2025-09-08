@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CreateReportDTO, requestCreateEpisode, requestCreateReport, requestFetchEpisodes, requestFetchPatient, requestFetchReports, requestUpdateEpisode, requestFetchReportEpisodesRange, requestGeneratePdfReport } from "src/infra/services/appService";
+import { CreateReportDTO, requestCreateEpisode, requestCreateReport, requestFetchEpisodes, requestFetchPatient, requestFetchReports, requestUpdateEpisode, requestFetchReportEpisodesRange, requestGeneratePdfReport, requestDeleteAccount, requestDeleteEpisode, requestDeleteReport } from "src/infra/services/appService";
 import { Episode, EpisodeModalDTO, Patient, Report } from "src/infra/@types/app.types";
 
 
@@ -237,6 +237,53 @@ const appSlice = createSlice({
         loading: false,
       });
   });
+
+  // REQUEST_DELETE_ACCOUNT
+  builder.addCase(handleDeleteAccount.pending, (state) => {
+    return (state = {...state, loading: true})
+  });
+  builder.addCase(handleDeleteAccount.fulfilled, (state, action) => {
+    return (state = {...state, loading: false})
+  });
+  builder.addCase(handleDeleteAccount.rejected, (state, action) => {
+    return (state = {
+        ...state,
+        error: action.error.message ?? 'Erro inesperado',
+        loading: false,
+      });
+  });
+
+  // REQUEST_DELETE_REPORT
+  builder.addCase(handleDeleteReport.pending, (state) => {
+    return (state = {...state, loading: true})
+  });
+  builder.addCase(handleDeleteReport.fulfilled, (state, action) => {
+        return (state = {...state, loading: false, reports: state.reports?.filter(report => report.id !=  action.payload.id) || []} )
+
+  });
+  builder.addCase(handleDeleteReport.rejected, (state, action) => {
+    return (state = {
+        ...state,
+        error: action.error.message ?? 'Erro inesperado',
+        loading: false,
+      });
+  });
+
+  //REQUEEST_DELETE_EPISODE
+  builder.addCase(handleDeleteEpisode.pending, (state) => {
+    return (state = {...state, loading: true})
+  });
+  builder.addCase(handleDeleteEpisode.fulfilled, (state, action) => {
+    console.log(action.payload);
+    return (state = {...state, loading: false, episodes: state.episodes?.filter(episode => episode.id !=  action.payload.id) || []} )
+  });
+  builder.addCase(handleDeleteEpisode.rejected, (state, action) => {
+    return (state = {
+        ...state,
+        error: action.error.message ?? 'Erro inesperado',
+        loading: false,
+      });
+  });
   },
 });
 
@@ -297,6 +344,29 @@ export const handleGeneratePdfReport = createAsyncThunk(
   'app/handleGeneratePdfReport',
   async (payload: { id: string; physicianEmail: string }) => {
     return await requestGeneratePdfReport(payload);
+  }
+);
+
+export const handleDeleteAccount = createAsyncThunk(
+  'app/handleDeleteAccount',
+  async (payload: { id: string; emailAddress: string}) => {
+    return await requestDeleteAccount(payload);
+  }
+);
+
+export const handleDeleteEpisode = createAsyncThunk(
+  'app/handleDeleteEpisode',
+  async (payload: { id: string}) => {
+    const res = await requestDeleteEpisode(payload);
+    return {id: payload.id, ...res}
+  }
+);
+
+export const handleDeleteReport = createAsyncThunk(
+  'app/handleDeleteReport',
+  async (payload: { id: string}) => {
+    const res = await requestDeleteReport(payload);
+    return {id: payload.id, ...res};
   }
 );
 

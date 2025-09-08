@@ -137,8 +137,6 @@ const TabsRoutes = () => {
                 dispatch(clearEpisodeState());
             }
           }
-          
-              
         },
         tabPress: (e) => {
           const routeName = e.target?.split('-')[0]; 

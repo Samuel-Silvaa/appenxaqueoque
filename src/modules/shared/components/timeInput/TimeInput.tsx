@@ -23,9 +23,10 @@ interface TimeInputProps {
   name: string;
   labelicon?: ImageSourcePropType;
   errors: FieldErrors<any>;
-  setValue: UseFormSetValue<any>;
+  setValue?: UseFormSetValue<any>;
   placeholder?: string;
   value?: Date | null;
+  defaultValue?: Date | null;
   disabled?: boolean;
   onTimeChange?: (time: Date) => void;
   mode?: 'time' | 'date' | 'datetime';
@@ -43,6 +44,7 @@ const TimeInput = ({
   setValue,
   placeholder = 'Selecione o horário',
   value,
+  defaultValue,
   disabled = false,
   onTimeChange,
   mode = 'time',
@@ -66,7 +68,7 @@ const TimeInput = ({
 
   const handleConfirm = useCallback( (selectedTime: Date) => {
     setDisplayValue(selectedTime ? formatTime(selectedTime) : '');
-    setValue(name, selectedTime);
+    setValue!(name, selectedTime);
     hideDatePicker();
 
   }, [setValue]);
@@ -138,12 +140,13 @@ const TimeInput = ({
       )}
 
       <DateTimePickerModal
+        buttonTextColorIOS="#9194E9"
         locale='pt-BR'
         isVisible={isDatePickerVisible}
         mode={mode}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
-        date={value || new Date()}
+        date={value || defaultValue || new Date()}
         minimumDate={minimumDate}
         maximumDate={maximumDate}
         minuteInterval={minuteInterval}

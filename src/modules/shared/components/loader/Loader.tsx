@@ -53,7 +53,6 @@ export const Loader = () => {
       statusBarTranslucent={true}
       visible={ auth.loading || app.loading}
       onRequestClose={() => {
-        console.log('close modal');
       }}
     >
       <View style={{ height: '100%', marginTop: 20 }} className='flex items-center justify-center m-auto bg-black/30 w-full z-300'>
@@ -66,7 +65,7 @@ export const Loader = () => {
             className='w-[150px] h-[110px]'
             source={require('src/assets/duck.png')}
           ></Image>
-          <Text className='text-xs text-black/40 dark:text-d-text-gray/40'> Carregando ...</Text>
+          <Text className='text-xs text-black/40 dark:text-d-text-gray/40'>Carregando ...</Text>
         </Animated.View>
       </View>
     </Modal>

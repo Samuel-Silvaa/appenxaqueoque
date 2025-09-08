@@ -22,7 +22,7 @@ const Card = ({
   <Pressable
     {...res}
     onPress={onPress}
-    className='flex-col w-full rounded-[30px] bg-white py-2 px-2 my-2 drop-shadow-md dark:bg-d-blue-primary '
+    className='flex-col w-full rounded-[30px] bg-white py-2 px-2 my-2 drop-shadow-md dark:bg-d-blue-primary shadow-lg'
   >
     {title && (
       <Text className='font-semibold text-black my-2 mx-auto text-lg dark:text-d-blue-title'>

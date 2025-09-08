@@ -1,4 +1,4 @@
-import { get, patch, post } from '../api';
+import { get, patch, post, remove } from '../api';
 import { Episode, EpisodeModalDTO, Patient, Report } from '../@types/app.types';
 import { format, subDays } from 'date-fns';
 
@@ -77,6 +77,15 @@ const requestFetchReportEpisodesRange = async (
   ids: string
 ): Promise<Episode[]> => get(`report/episodes`, {}, { ids: ids });
 
+const requestDeleteAccount = async ({id, emailAddress} : {id: string, emailAddress: string}): Promise<{email:string, userType: string}> =>
+  remove(`session/${id}/${emailAddress}`);
+
+const requestDeleteEpisode = async ({id} : {id: string}): Promise<Episode> =>
+  remove(`episode/${id}`);
+
+const requestDeleteReport = async ({id} : {id: string}): Promise<Report> =>
+  remove(`report/${id}`);
+
 export {
   requestGeneratePdfReport,
   requestCreateEpisode,
@@ -86,4 +95,7 @@ export {
   requestFetchReports,
   requestFetchReportEpisodesRange,
   requestCreateReport,
+  requestDeleteAccount,
+  requestDeleteEpisode,
+  requestDeleteReport
 };

@@ -63,6 +63,7 @@ const PhysicianEmailModal = ({
                   toast.show(`Error inesperado ao  ${appState.episode.isEdition ? 'editar' : 'cadastrar'} episódio. Entre em contato com nosso suporte!`, toastOptions);
                   return;
               } else if(res.meta.requestStatus == 'fulfilled') {
+                  onClose();
                   toast.hideAll();
                   const toastOptions: ToastOptions = {
                     type: 'success',
@@ -81,7 +82,7 @@ const PhysicianEmailModal = ({
 
   return (
     <Modal
-      transparent={false}
+      transparent
       animationType='slide'
       visible={isOpen}
       onRequestClose={() => {

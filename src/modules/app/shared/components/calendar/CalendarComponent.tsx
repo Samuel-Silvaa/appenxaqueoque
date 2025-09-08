@@ -3,7 +3,6 @@ import { getCalendarTheme, Calendarstyle } from './CalendarStyle';
 import { Image, Text, View } from 'react-native';
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { sharedEpisodeStyleSheet } from 'src/modules/app/episode/shared/SharedEpisodeStyleSheet';
-import { Appearance } from 'react-native';
 
 const stylesheet = {
   container: 'bg-white dark:bg-d-blue-primary rounded-[32px] m-2 ',

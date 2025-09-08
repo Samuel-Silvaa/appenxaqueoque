@@ -9,7 +9,7 @@ const Wrapper = ({
   title: string;
 }) => (
   <View className='mb-3'>
-    <View className='bg-snow-white mb-4 rounded-[44px] w-full h-[40px] dark:bg-d-blue-primary '>
+    <View className='bg-snow-white mb-4 rounded-[44px] w-full h-[40px] dark:bg-d-blue-primary shadow-lg'>
       <Text className='font-semibold text-black mx-auto text-lg m-auto dark:text-d-blue-title px-3'>
         {title}
       </Text>

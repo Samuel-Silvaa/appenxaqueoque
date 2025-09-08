@@ -12,6 +12,7 @@ interface ExPressableProps extends TouchableOpacityProps {
   colorScheme?: string;
   icon?: ImageSourcePropType;
   selected?: boolean;
+  disabled?:boolean
 }
 
 const ExPressable = ({
@@ -19,6 +20,7 @@ const ExPressable = ({
   colorScheme = 'primary',
   icon,
   selected = false,
+  disabled,
   ...res
 }: ExPressableProps) => {
   const { pressable, title: titleStyle } = getBtnColorScheme(
@@ -26,7 +28,7 @@ const ExPressable = ({
   );
 
   return (
-    <TouchableOpacity className={pressable} {...res}>
+    <TouchableOpacity className={pressable.concat(disabled ? ' opacity-50' : '')} {...res} disabled={disabled}>
       {icon && <Image source={icon}></Image>}
       <Text className={titleStyle}>{title}</Text>
     </TouchableOpacity>

@@ -45,7 +45,7 @@ const Notes = () => {
 
   const handleSubmit = async () => {
     const res = await submitEpisode();
-    console.log('REsponse : ', res)
+    console.log('REsponse : ', appState)
 
 
     if(res.id){

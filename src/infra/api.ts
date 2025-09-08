@@ -82,7 +82,13 @@ const patch = async <T>(
 };
 
 const remove = async <T>(url: string, body?: object): Promise<T> => {
-  return await api.delete(url, body);
+  try {
+      const {data} = await api.delete(url, body);
+      return data;
+    } catch( error){
+      const err = error as AxiosError;
+      throw err.response?.data ;
+    }
 };
 
 export { get, patch, post, put, remove, api as wbsAPI };
