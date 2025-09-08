@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { clearErrorMessage, requestLogin } from "src/infra/app/reducers/auth.reducer";
 import { useDispatch } from "react-redux";
+import { useAsyncAppDispatch } from "src/infra/app/store";
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',
@@ -27,12 +28,12 @@ const loginSchema = yup.object<LoginSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('controledetributos@gmail.com'),
-  password: yup.string().required('Preencha sua senha').default('Tr@ck721!'),
+    .default('samuellsilva74@gmail.com'),
+  password: yup.string().required('Preencha sua senha').default('Teste@123'),
 });
 
 const Login = ({ navigation }: any) => {
-  const dispatch = useDispatch();
+  const dispatch = useAsyncAppDispatch();
 
   const {
     handleSubmit,
@@ -58,7 +59,6 @@ const Login = ({ navigation }: any) => {
      if(res.meta.requestStatus === 'rejected' && (res as any).error?.message?.includes('confirme seu email')){
           navigation.navigate('sendEmailConfirmation' as never, { email: data.email, password: data.password } as never);
      }
-     console.log(res);
   };
 
   const handleForgotPassword = () => {

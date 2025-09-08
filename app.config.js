@@ -12,8 +12,9 @@ export default {
       }
     },
     android: {
+      package: "com.samuell_silva.appenxaqueoque",
       adaptiveIcon: {
-        "foregroundImage": "./assets/icon-foreground.png",
+        "foregroundImage": "./assets/logoenxaq.png",
         "backgroundColor": "#FFFFFF"
       },
     plugins: [

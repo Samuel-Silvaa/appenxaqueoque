@@ -138,8 +138,8 @@ const TimeInputWithValidation = ({
                 {displayValue || placeholder}
               </Text>
               <Image
-                source={require('src/assets/timer.png')}
-                className='w-6 h-6'
+                source={require('src/assets/chart-clock.png')}
+                className='w-4 h-4'
                 resizeMode='contain'
               />
             </TouchableOpacity>

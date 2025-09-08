@@ -16,8 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { appStateSelector } from 'src/infra/app/selectors';
 import {
   handleStepForward,
-  setEpisodeIndex,
-  setLoadingState,
+   setLoadingState,
   setPageTitle,
 } from 'src/infra/app/reducers/app.reducer';
 import Datetime from './components/datetime/Datetime';
@@ -295,7 +294,7 @@ const EpisodePage = () => {
       <AppPageScaffold>
         <FormScaffold />
       </AppPageScaffold>
-      {appState.currentEpStep != 11 && (
+      {/* {appState.currentEpStep != 11 && (
         <TouchableOpacity
           onPress={() => {
             dispatch(setEpisodeIndex(11));
@@ -320,7 +319,7 @@ const EpisodePage = () => {
             source={require('src/assets/arrowback.png')}
           ></Image>
         </TouchableOpacity>
-      )}
+      )} */}
     </View>
   );
 };

@@ -6,7 +6,7 @@ import PrivacyPolicy from './privacy/PrivacyPolicy';
 import Terms from "./terms/Terms";
 import AboutUs from "./aboutus/AboutUs";
 import Help from "./help/Help";
-import Patient from "src/modules/auth/registration/patient/Patient";
+import Patient from "./edittion/Patient";
 
 const ProfileStack = createNativeStackNavigator();
 

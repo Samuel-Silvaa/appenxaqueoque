@@ -11,12 +11,11 @@ import AuthRoutes from 'src/modules/auth';
 import { appStateSelector, authSelector } from 'src/infra/app/selectors';
 import { Loader } from 'src/modules/shared/components/loader/Loader';
 import { Fragment, useEffect } from 'react';
-import { clearErrorMessage } from "src/infra/app/reducers/auth.reducer";
-import { clearAppErrorMessage } from "src/infra/app/reducers/app.reducer";
+import { clearErrorMessage } from 'src/infra/app/reducers/auth.reducer';
+import { clearAppErrorMessage } from 'src/infra/app/reducers/app.reducer';
 import { Linking } from 'react-native';
-import { NativeWindStyleSheet } from "nativewind";
-import { ColorSchemeSystem } from "nativewind/dist/style-sheet/color-scheme";
-
+import { NativeWindStyleSheet } from 'nativewind';
+import { ColorSchemeSystem } from 'nativewind/dist/style-sheet/color-scheme';
 
 const ActiveRoutes = () => {
   const auth = useSelector((state) => authSelector(state));
@@ -33,15 +32,14 @@ const ActiveRoutes = () => {
         const urlObj = new URL(url);
         const token = urlObj.searchParams.get('token');
         const email = urlObj.searchParams.get('email');
-        
+
         if (token && email) {
           (navigation as any).navigate('confirmEmail', { token, email });
         }
       }
     };
 
-    
-NativeWindStyleSheet.setColorScheme(scheme as ColorSchemeSystem);
+    NativeWindStyleSheet.setColorScheme(scheme as ColorSchemeSystem);
 
     // Handle initial URL
     Linking.getInitialURL().then((url) => {
@@ -61,62 +59,73 @@ NativeWindStyleSheet.setColorScheme(scheme as ColorSchemeSystem);
   }, [navigation]);
 
   useEffect(() => {
-
-    if(app.error != null) {
-        toast.show(app.error!, {type: 'danger', dangerColor: 'danger', onClose() {
+    if (app.error != null) {
+      toast.show(app.error!, {
+        type: 'danger',
+        dangerColor: 'danger',
+        onClose() {
           dispatch(clearAppErrorMessage());
-        },});
+        },
+      });
     }
-  }, [app])
+  }, [app]);
 
   useEffect(() => {
-
-    if(auth.error != null) {
-        toast.show(auth.error!, {type: 'danger', dangerColor: 'danger', onClose() {
+    if (auth.error != null) {
+      toast.show(auth.error!, {
+        type: 'danger',
+        dangerColor: 'danger',
+        onClose() {
           dispatch(clearErrorMessage());
-        },});
+        },
+      });
     }
-  }, [auth])
+  }, [auth]);
 
   useEffect(() => {
-      if(auth.token && !auth.user ){
-      toast.show('Bem vindo de volta! Finalize o cadastro do paciente para continuar.', {type: 'warning', dangerColor: 'danger', duration: 5000});
-      (navigation as any).navigate('patient');
+    if (auth.token && !auth.user) {
+      toast.show(
+        'Bem vindo de volta! Finalize o cadastro do paciente para continuar.',
+        { type: 'warning', dangerColor: 'danger', duration: 5000 }
+      );
+      (navigation as any).navigate('patient', { email: auth.sessionEmail });
     }
-
-  }, [auth.token])
-
-
+  }, [auth.token]);
 
   return (
     <Fragment>
       <Loader></Loader>
-      {auth.token && auth.user && !auth.isFirstAccess ? <TabsRoutes /> : <AuthRoutes />}
+      {auth.token && auth.user && !auth.isFirstAccess ? (
+        <TabsRoutes />
+      ) : (
+        <AuthRoutes />
+      )}
     </Fragment>
   );
 };
 
 const Toast = ({ toastOptions }: { toastOptions: ToastProps }) => {
-  let containerClass = "w-3/4 h-[56px] rounded-[8px] flex items-start justify-center p-2 shadow-md";
+  let containerClass =
+    'w-3/4 h-[56px] rounded-[8px] flex items-center justify-center p-2 shadow-lg';
 
   switch (toastOptions.type) {
-    case "success":
-      containerClass += " bg-green-500";
+    case 'success':
+      containerClass += ' bg-success';
       break;
-    case "danger":
-      containerClass += " bg-red-500";
+    case 'danger':
+      containerClass += ' bg-error';
       break;
-    case "warning":
-      containerClass += " bg-yellow-500";
+    case 'warning':
+      containerClass += ' bg-warning';
       break;
     default:
-      containerClass += " bg-gray-200";
+      containerClass += ' bg-default';
       break;
   }
 
   return (
     <View className={containerClass}>
-      <Text className="text-white text-md font-medium">
+      <Text className='text-white text-md font-medium text-center'>
         {toastOptions.message}
       </Text>
     </View>
@@ -132,13 +141,15 @@ const App = () => {
             animationDuration={400}
             animationType='slide-in'
             placement='top'
-            offsetTop={40}
+            offsetTop={60}
             duration={2000}
-            renderToast={(toastOptions) => <Toast toastOptions={toastOptions} />}
+            renderToast={(toastOptions) => (
+              <Toast toastOptions={toastOptions} />
+            )}
           >
-              <AppProvider>
-                <ActiveRoutes />
-              </AppProvider>
+            <AppProvider>
+              <ActiveRoutes />
+            </AppProvider>
           </ToastProvider>
         </NavigationContainer>
     </Provider>

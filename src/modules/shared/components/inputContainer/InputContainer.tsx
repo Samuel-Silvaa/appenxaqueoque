@@ -13,8 +13,8 @@ import { useState } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 const stylesheet = {
-  view: 'w-full my-1 ',
-  input: 'flex h-[60px] bg-gray-light rounded rounded-3xl px-4 z-20',
+  view: 'w-full my-1',
+  input: 'flex h-[60px] bg-gray-light rounded rounded-3xl px-4 z-20 shadow-lg',
   label: 'pl-2 text-black text-[15px] dark:text-d-text-gray',
   error: 'text-error pl-2 font-medium',
   inputContainer: 'relative',
@@ -26,7 +26,7 @@ interface InputContainerProps extends TextInputProps {
   labelicon?: ImageSourcePropType;
   control?: Control<any>;
   errors: FieldErrors<any>;
-  setValue: UseFormSetValue<any>;
+  setValue?: UseFormSetValue<any>;
   mask?: string;
 }
 
@@ -87,7 +87,7 @@ const InputContainer = ({
       return (
         <MaskedTextInput
         {...fields}
-          onChangeText={(text, rawText) => setValue(name, rawText)}
+          onChangeText={(text, rawText) => setValue!(name, text)}
           className={stylesheet.input}
           mask={mask}
           secureTextEntry={finalSecureTextEntry}
@@ -99,7 +99,7 @@ const InputContainer = ({
     return (
       <TextInput
       {...fields}
-        onChangeText={(text) => setValue(name, text)}
+        onChangeText={(text) => setValue!(name, text)}
         className={stylesheet.input}
         secureTextEntry={finalSecureTextEntry}
         {...rest}

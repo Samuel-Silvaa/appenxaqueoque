@@ -24,6 +24,7 @@ interface AuthScaffoldProps {
   ctaSecondary?: () => void;
   ctaSecondaryText?: string;
   ctaSecondaryLeftIcon?: ImageSourcePropType;
+  isPrimaryBtnEnabled?: boolean
 }
 
 const AuthScaffold = ({
@@ -35,6 +36,7 @@ const AuthScaffold = ({
   ctaSecondary,
   ctaSecondaryText,
   ctaSecondaryLeftIcon,
+  isPrimaryBtnEnabled
 }: AuthScaffoldProps) => {
   return (
     <KeyboardAvoidingView
@@ -52,6 +54,7 @@ const AuthScaffold = ({
             title={ctaPrimaryText}
             icon={ctaPrimaryLeftIcon}
             onPress={ctaPrimary}
+            disabled={isPrimaryBtnEnabled}
           ></ExPressable>
         )}
         {ctaSecondary && ctaSecondaryText && (

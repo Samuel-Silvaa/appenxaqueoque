@@ -225,7 +225,7 @@ const ReportDateRangeModal = ({
 
   return (
     <Modal
-      transparent={false}
+      transparent
       animationType='slide'
       visible={isOpen}
       

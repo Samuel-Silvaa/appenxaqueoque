@@ -103,6 +103,7 @@ const Trigger = () => {
                     fillColor='#CEB0FA'
                     unfillColor='#FFFFFF00'
                     textStyle={{
+                      textDecorationLine: 'none',
                       flexWrap: 'wrap',
                       overflow: 'hidden',
                       padding: 4,

@@ -101,9 +101,8 @@ const ConfirmEmail = () => {
 
             if (auth.user!.id!) {
               const patientRes = await dispatch(handleFecthPatient(auth.user!.id!));
-              // If patient is not found or not populated, go to avatar selection
               const patient: any = patientRes.payload;
-              console.log(patientRes);
+              
               if (!patient || !patient.id || !patient.name) {
                 setStatus('success'); // triggers avatar selection
               } else {
@@ -112,7 +111,7 @@ const ConfirmEmail = () => {
             } else {
               setStatus('success'); // fallback to avatar selection
             }
-          } else {
+          } else if(loginRes.meta.requestStatus === 'rejected') {
             setStatus('error');
           }
         } else {
@@ -163,7 +162,7 @@ const ConfirmEmail = () => {
         ctaPrimaryText='Continuar'
       >
         <View className='flex-1 justify-center items-center'>
-          <Image source={require('src/assets/welcome.png')} />
+          <Image className="w-[100%] h-[250]" source={require('src/assets/welcome.png')} />
           <Text className={stylesheet.subtitle}>
             Email confirmado com sucesso.
           </Text>

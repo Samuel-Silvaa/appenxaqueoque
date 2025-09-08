@@ -1,18 +1,26 @@
 import { ScrollView, Text, View } from 'react-native';
-import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
-import { sharedStyleSheet } from '../../shared/style/stylesheet';
 
 import * as yup from 'yup';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, Form, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector, appStateSelector } from 'src/infra/app/selectors';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
-import { requestCreatePatient } from 'src/infra/app/reducers/auth.reducer';
+import {
+  requestCreatePatient,
+  requestUpdatePatient,
+} from 'src/infra/app/reducers/auth.reducer';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { format } from 'date-fns';
-import { useCallback, useEffect } from 'react';
+import { format, subMonths } from 'date-fns';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { TimeInput } from 'src/modules/shared/components/timeInput';
 import SelectContainer from 'src/modules/shared/components/selectContainer/SelectContainer';
+import AppPageScaffold from '../../shared/components/appPageScaffold/AppPageScaffold';
+import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
+import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
+import { useCallback, useEffect } from 'react';
+import { ToastOptions, useToast } from 'react-native-toast-notifications';
+import { setPatientData } from 'src/infra/app/reducers/app.reducer';
 
 interface PatientSchemaProps {
   name: string;
@@ -24,7 +32,11 @@ interface PatientSchemaProps {
   weight: string;
 }
 
-
+interface RouteParams {
+  avatar?: string;
+  email?: string;
+  isEditMode?: boolean;
+}
 
 const patientSchema = yup.object<PatientSchemaProps>().shape({
   name: yup
@@ -45,68 +57,112 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
 
 const Patient = () => {
   const dispatchAsync = useAsyncAppDispatch();
+  const dispatch = useDispatch();
+  const auth = useSelector(authSelector);
+  const appState = useSelector(appStateSelector);
   const navigation = useNavigation();
   const route = useRoute();
+  const patientData = appState.patient;
+
+  // Check if we're in edit mode
+  const routeParams = route.params as RouteParams;
 
   const {
     handleSubmit,
     formState: { errors },
     setValue,
     control,
-    register,
-    reset
+    reset,
   } = useForm({
-    defaultValues: { email: route.params?.email },
     reValidateMode: 'onChange',
+    defaultValues: { email: auth!.sessionEmail! },
     resolver: yupResolver(patientSchema),
   });
 
-  const onSubmitHandler = useCallback(async (data: PatientSchemaProps) => {
-    const res = await dispatchAsync(
-      requestCreatePatient({
-        ...data,
-        weight: parseFloat(data.weight),
-        height: parseFloat(data.height),
-        birthDate: format(data.birthDate, 'yyyy-MM-dd'),
-      })
-    );
+  const toast = useToast();
 
-    if (res.meta.requestStatus == 'fulfilled') {
-      (navigation as any).navigate('welcome');
+  const onSubmitHandler = useCallback(async (data: PatientSchemaProps) => {
+    if (patientData!.id) {
+      const res = await dispatchAsync(
+        requestUpdatePatient({
+          ...data,
+          weight: parseFloat(data.weight),
+          height: parseFloat(data.height),
+          birthDate: format(data.birthDate, 'yyyy-MM-dd'),
+          id: patientData!.id,
+        })
+      );
+
+      if (res.meta.requestStatus == 'rejected') {
+        toast.hideAll();
+        const toastOptions: ToastOptions = {
+          type: 'danger',
+        };
+        toast.show(
+          `Error inesperado ao  ${
+            appState.episode.isEdition ? 'editar' : 'cadastrar'
+          } paciente. Entre em contato com nosso suporte!`,
+          toastOptions
+        );
+        return;
+      } else if (res.meta.requestStatus == 'fulfilled') {
+        toast.hideAll();
+        const toastOptions: ToastOptions = {
+          type: 'success',
+        };
+        toast.show(`Dados editados com sucesso.`, toastOptions);
+        dispatch(setPatientData(res.meta.arg));
+        (navigation as any).goBack();
+      }
+
+
     }
   }, []);
+
   useEffect(() => {
-    if (route.params) {
-      reset({email: route.params.email });
+    if (auth.sessionEmail) {
+      reset({ email: auth.sessionEmail });
     }
-  }, [route.params]);
+    if (patientData?.birthDate) {
+      reset({ birthDate: new Date(patientData.birthDate) });
+      setValue('birthDate', new Date(patientData.birthDate));
+    }
+  }, [auth.sessionEmail, patientData]);
 
   const Content = useCallback(() => {
     return (
       <>
-        <Text className={sharedStyleSheet.title}>Informações da conta</Text>
+        <Text className={sharedStyleSheet.title}>Editar informações</Text>
         <Text className={sharedStyleSheet.subtitle}>
-          Insira as informações da criança
+          Atualize as informações da criança
         </Text>
 
         <ScrollView
           showsVerticalScrollIndicator={false}
           className='w-full h-[85%]'
         >
-          <InputContainer
-            className='opacity-45 bg-white drop-shadow-sm'
-            keyboardType='email-address'
-            label='E-mail'
-            defaultValue={route.params?.email ?? ''}
-            editable={false}
+          <Controller
+            control={control}
+            defaultValue={auth.sessionEmail!}
             name='email'
-            style={{ opacity: 0.6 }}
-            value={route.params?.email}
-            errors={errors}
+            render={({ field }) => (
+              <InputContainer
+                className='opacity-45 bg-white drop-shadow-sm'
+                keyboardType='email-address'
+                label='E-mail'
+                editable={false}
+                style={{ opacity: 0.6 }}
+                onChangeText={field.onChange}
+                {...field}
+                errors={errors}
+              />
+            )}
           />
+
           <Controller
             control={control}
             name='name'
+            defaultValue={patientData!.name}
             render={({ field }) => (
               <InputContainer
                 keyboardType='default'
@@ -123,17 +179,20 @@ const Patient = () => {
             label='Data de nascimento'
             name='birthDate'
             setValue={setValue}
+            value={new Date(patientData!.birthDate)}
             errors={errors}
+            defaultValue={new Date(patientData!.birthDate)}
             placeholder='Selecione a data de nascimento'
             mode='date'
-            maximumDate={new Date()}
+            maximumDate={subMonths(new Date(), 48)}
           />
 
           <SelectContainer
             control={control}
             label='Gênero'
             placeholder='Selecione o sexo'
-            {...register('gender')}
+            defaultValue={patientData!.gender}
+            name='gender'
             options={[
               { title: 'Masculino', value: 'male' },
               { title: 'Feminino', value: 'female' },
@@ -147,6 +206,7 @@ const Patient = () => {
             label='Parentesco'
             placeholder='Escolha o parentesco do responsável'
             setValue={setValue}
+            defaultValue={patientData!.kinship}
             options={[
               { title: 'Pai', value: 'father' },
               { title: 'Mãe', value: 'mother' },
@@ -159,6 +219,7 @@ const Patient = () => {
             <View className='w-[45%]'>
               <Controller
                 control={control}
+                defaultValue={patientData!.weight.toString()}
                 name='weight'
                 render={({ field }) => (
                   <InputContainer
@@ -178,6 +239,7 @@ const Patient = () => {
             <View className='w-[45%]'>
               <Controller
                 control={control}
+                defaultValue={patientData!.height.toString()}
                 name='height'
                 render={({ field }) => (
                   <InputContainer
@@ -198,16 +260,13 @@ const Patient = () => {
         </ScrollView>
       </>
     );
-  }, [control, errors, setValue, route.params]);
+  }, [control, errors, setValue, auth, routeParams]);
 
   return (
-    <AuthScaffold
-      alignment='start'
-      ctaPrimaryText='Cadastrar'
-      ctaPrimary={handleSubmit(onSubmitHandler)}
-    >
-      <Content />
-    </AuthScaffold>
+    <AppPageScaffold hasArrowBack={true}>
+      <Content></Content>
+      <ExPressable title='Salvar' onPress={handleSubmit(onSubmitHandler)} />
+    </AppPageScaffold>
   );
 };
 

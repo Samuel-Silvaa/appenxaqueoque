@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Image,
   Modal,
@@ -11,7 +11,6 @@ import {
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
 import { ptBR } from 'date-fns/locale';
 import { useNavigation } from '@react-navigation/native';
-import { useApp } from 'src/infra/app/app';
 import { pinColor } from 'src/infra/utils/appUtils';
 import {
   Acuteness,
@@ -21,8 +20,12 @@ import {
   PainType,
   Trigger,
 } from 'src/infra/@types/app.types';
-import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
+import { handleDeleteEpisode, handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 import { useDispatch } from 'react-redux';
+import ExPressable from "src/modules/auth/shared/components/buttons/pressable/ExPressable";
+import ActionConfirmationModal from "../actionConfirmationModal/ActionConfirmationModal";
+import { useAsyncAppDispatch } from "src/infra/app/store";
+import { useToast } from "react-native-toast-notifications";
 
 const stylesheet = {
   wrapper: 'w-full pt-4',
@@ -30,7 +33,7 @@ const stylesheet = {
   arrowdown: 'flex items-center justify-center p-2',
   closeButton: 'p-3',
   edition:
-    'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 ',
+    'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2  shadow-lg ',
   editText: 'text-[8px] text-black dark:text-d-text-gray',
   headerDate: 'font-bold text-black dark:text-d-text-gray',
   contentWrapper:
@@ -48,6 +51,9 @@ const stylesheet = {
 const sanitizeString = (value?: string | null): string =>
   value?.trim() || '';
 
+const sanitizeTime = (value?: string | null): string =>
+  value || '';
+
 const formatArray = (value?: string[] | null): string =>
   Array.isArray(value) ? value.join(' - ') : sanitizeString(value as any);
 
@@ -62,6 +68,9 @@ const EpisodeModal = ({
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const dispatchAsync = useAsyncAppDispatch();
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const toast = useToast();
 
   const fullDetails = [
     {
@@ -72,7 +81,7 @@ const EpisodeModal = ({
     {
       icon: require('src/assets/chart-clock.png'),
       title: 'Horas de duração',
-      desc: sanitizeString(episode.start ? episode.start! : '') + sanitizeString(episode.end ? '--' + episode.end! : '--N/A'),
+      desc: sanitizeTime(episode.start ? episode.start! : 'N/A') + sanitizeTime(episode.end ? '--' + episode.end! : '-N/A'),
     },
     {
       icon: require('src/assets/chart-header-location.png'),
@@ -156,11 +165,22 @@ const EpisodeModal = ({
     return { details, nullDetails };
   }, [episode]);
 
+    const handleDelete = async (id: string) => {
+      if (id) {
+        const res = await dispatchAsync(handleDeleteEpisode({ id: id }));
+        if (
+          res.meta.requestStatus === 'fulfilled' 
+        ) {
+          onClose();
+          toast.show('Episódio deletado com sucesso!', {type: 'success'})
+        }
+      }
+    };
+  
   return (
     <Modal
       animationType="slide"
-      transparent={false}
-      style={{ height: 70 }}
+      transparent
       visible={isOpen}
       onRequestClose={onClose}
     >
@@ -263,7 +283,24 @@ const EpisodeModal = ({
               </Pressable>
             ))}
           </View>
+          <View>
+            <ExPressable title="Deletar Episódio" className="bg-error" onPress={() => {setOpenConfirmationModal(true)}} />
+          </View>
         </View>
+        {openConfirmationModal && (
+          <ActionConfirmationModal
+          isOpen={openConfirmationModal}
+          onClose={()=>{
+            setOpenConfirmationModal(false);
+          }}
+          desc={`Você está prestes a deletar o episódio do dia ${format(episode?.dateTime, 'PPP', { locale: ptBR })}.`}
+          submitAction={() => {
+            setOpenConfirmationModal(false);
+            if(episode.id)
+            handleDelete(episode.id);
+          }}
+          />
+        )}
       </AppPageScaffold>
     </Modal>
   );
