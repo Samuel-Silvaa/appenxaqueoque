@@ -9,7 +9,7 @@ import { requestSendEmailConfirmation } from 'src/infra/app/reducers/auth.reduce
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { useSelector } from 'react-redux';
 import { authSelector } from 'src/infra/app/selectors';
-import { useRoute } from "@react-navigation/native";
+import { useRoute } from '@react-navigation/native';
 
 const stylesheet = {
   title: 'text-2xl font-bold text-dark mb-2',
@@ -35,7 +35,7 @@ const validationSchema = yup.object({
 
 const SendEmailConfirmation = ({ navigation }: any) => {
   const dispatch = useAsyncAppDispatch();
-  const {  error } = useSelector(authSelector);
+  const { error } = useSelector(authSelector);
   const route = useRoute();
   const params = route.params as RouteParams;
 
@@ -48,57 +48,71 @@ const SendEmailConfirmation = ({ navigation }: any) => {
     resolver: yupResolver(validationSchema),
   });
 
-
   const onSubmit = async (data: SendEmailConfirmationSchema) => {
     try {
-      const res = await dispatch(requestSendEmailConfirmation({ email: data.email }));
+      const res = await dispatch(
+        requestSendEmailConfirmation({ email: data.email })
+      );
 
-      if(res.meta.requestStatus == 'fulfilled'){
-        navigation.navigate('confirmEmail' as never, { email: data.email, password: params?.password } as never);
+      if (res.meta.requestStatus == 'fulfilled') {
+        navigation.navigate(
+          'confirmEmail' as never,
+          { email: data.email, password: params?.password } as never
+        );
       }
     } catch (error) {
       console.error('Error sending email confirmation:', error);
     }
   };
 
-  
   useEffect(() => {
-    if(params && params.email) {
+    if (params && params.email) {
       setValue('email', params.email);
     }
-  },[])
+  }, []);
 
   return (
     <AuthScaffold
       hasArrowBack
       ctaPrimary={handleSubmit(onSubmit)}
-      ctaPrimaryText="Enviar email de confirmação"
+      ctaPrimaryText='Enviar email de confirmação'
+      ctaSecondary={() =>
+        navigation.navigate(
+          'confirmEmail' as never,
+          { email: params!.email, password: params?.password } as never
+        )}
+      ctaSecondaryText='Já recebi o código'
     >
-      <View className="flex-1 justify-center">
-        <Text className={stylesheet.title}>Receber código de validação</Text>
+      <View className='flex-1 justify-center'>
+        <Text className={stylesheet.title}> Código de validação</Text>
         <Text className={stylesheet.subtitle}>
-          Digite seu email para receber um código de confirmação
+          Um código será enviado para o email informado.
         </Text>
 
         <View className={stylesheet.formContainer}>
           <InputContainer
             control={control}
-            name="email"
-            placeholder="Digite seu email"
-            keyboardType="email-address"
-            autoCapitalize="none"
+            editable={false}
+            name='email'
+            placeholder='Digite seu email'
+            keyboardType='email-address'
+            autoCapitalize='none'
             errors={errors}
             setValue={setValue}
-            defaultValue={params && params.email ? params.email : '' }
+            defaultValue={params && params.email ? params.email : ''}
           />
 
           {error && (
-            <Text className="text-red-500 text-sm text-center">{error}</Text>
+            <Text className='text-red-500 text-sm text-center'>{error}</Text>
           )}
+
+          <Text className={stylesheet.subtitle.concat(' text-xs')}>
+            Pule esta etapa caso já tenha recebido um código de verificação.
+          </Text>
         </View>
       </View>
     </AuthScaffold>
   );
 };
 
-export default SendEmailConfirmation; 
+export default SendEmailConfirmation;

@@ -15,7 +15,7 @@ const Help = () => {
   },[])
 
   return (
-    <AppPageScaffold>
+    <AppPageScaffold >
       <View className='rounded-[30px] bg-white dark:bg-[#191D33] px-5 py-9'>
         <Text className='text-sm text-dark dark:text-d-blue-title'>
           Olá! Estamos aqui para te ajudar. Caso você tenha dúvidas,

@@ -1,7 +1,6 @@
 import { Appearance, ImageSourcePropType, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
 import Card from '../form/card/Card';
-import { useApp } from 'src/infra/app/app';
 import { Symptom as SymptomType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,34 +13,35 @@ const data: {
   img?: ImageSourcePropType;
 }[] = [
   {
-    label: 'Sensibilidade à luz - A criança busca um lugar escuro.',
+    label: 'Sensibilidade à luz - A criança pode buscar um lugar escuro.',
     img: require('src/assets/photo.png'),
     value: SymptomType.PHOTOSENSIBILITY,
   },
   {
-    label: 'Sensibilidade ao barulho - A criança busca um lugar silencioso.',
+    label:
+      'Sensibilidade ao barulho - A criança pode buscar um lugar silencioso.',
     img: require('src/assets/hiperacusis.png'),
     value: SymptomType.HYPERACUSIS,
   },
   {
-    label: 'Náusea - A criança deixa de comer.',
+    label: 'Náusea - Vontade de vomitar.',
     img: require('src/assets/nausea.png'),
     value: SymptomType.NAUSEA,
   },
   {
-    label: 'Vômito.',
+    label: 'Vômito',
     img: require('src/assets/vomit.png'),
     value: SymptomType.VOMIT,
   },
- 
+
   {
-    label: 'Dor de barriga.',
+    label: 'Dor de barriga',
     img: require('src/assets/barriga.png'),
 
     value: SymptomType.SICKNESS,
   },
   {
-    label: 'Tontura.',
+    label: 'Tontura',
     img: require('src/assets/tontura.png'),
     value: SymptomType.DIZZINESS,
   },
@@ -53,10 +53,10 @@ const Symptoms = () => {
 
   const handleSetSymptomsValues = (value: string) => {
     // Ensure symptoms is always an array
-    const currentSymptoms = Array.isArray(appState.episode.symptoms) 
-      ? appState.episode.symptoms 
+    const currentSymptoms = Array.isArray(appState.episode.symptoms)
+      ? appState.episode.symptoms
       : [];
-    
+
     if (currentSymptoms.includes(value)) {
       dispatch(
         handleFormChanging({
@@ -64,9 +64,7 @@ const Symptoms = () => {
         })
       );
     } else {
-      dispatch(
-        handleFormChanging({ symptoms: [...currentSymptoms, value] })
-      );
+      dispatch(handleFormChanging({ symptoms: [...currentSymptoms, value] }));
     }
   };
 
@@ -80,7 +78,7 @@ const Symptoms = () => {
               handleSetSymptomsValues(act.value);
             }}
             children={
-              <View className='flex-row items-center w-[80%] '>
+              <View className='flex-row items-center w-[90%] '>
                 <BouncyCheckbox
                   size={22}
                   fillColor='#CEB0FA'

@@ -32,27 +32,32 @@ export const BarChartComponent = ({
           <BarChart
             barBorderTopRightRadius={4}
             barBorderTopLeftRadius={4}
-            showXAxisIndices
             barWidth={18}
-            spacing={12}
             data={dataset}
             width={Dimensions.get('window').width - 62}
             showValuesAsTopLabel
-            xAxisLabelsVerticalShift={50}
+            scrollAnimation
+            yAxisLabelWidth={10}
+            xAxisLabelsVerticalShift={20}
             xAxisLabelTextStyle={{
-              transform: 'rotate(50deg)',
-              textAlign: 'start',
+              transform: [
+                { rotate: '90deg' },
+                { translateY: 90 },
+                { translateX: 90 },
+                { rotate: '180deg' },
+              ],
+              textAlign: 'right',
             }}
-            labelWidth={130}
+            labelWidth={200}
             hideYAxisText
-            labelsExtraHeight={40}
+            labelsExtraHeight={120}
             barBorderRadius={4}
             yAxisThickness={1}
             xAxisThickness={1}
             xAxisColor='#ccc'
             yAxisColor='#CCC'
             maxValue={maxValue ? maxValue + 1 : 10}
-            barMarginBottom={4}
+            barMarginBottom={6}
           />
         </View>
       )}

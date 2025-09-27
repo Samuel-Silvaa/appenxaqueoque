@@ -1,7 +1,9 @@
 import axios, { AxiosError, AxiosResponse, AxiosResponseHeaders } from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import { useToast } from 'react-native-toast-notifications';
 
 const api = axios.create({
+  //baseURL: 'http://127.0.0.1:8080/',
   baseURL: 'http://ec2-3-84-114-114.compute-1.amazonaws.com:8080/',
 });
 
@@ -11,24 +13,25 @@ api.interceptors.request.use(
     if (token) config.headers['Authorization'] = 'Bearer ' + token;
     return config;
   },
-  (error: AxiosError) => { 
+  (error: AxiosError) => {
     debugger;
     Promise.reject(error).then(alert);
   }
 );
 
-// api.interceptors.response.use(
-//   (config) => config,
-//   (error) => {
-//     if (error.request?.status === 401) {
-//       localStorage.clear();
-//       window.location.href = '/login';
-//       window.dispatchEvent(new Event('storage'));
-//     } else {
-//       Promise.ject(error);
-//     }
-//   }
-// );
+api.interceptors.response.use(
+  (config) => config,
+  (error) => {
+    if (error.request?.status === 401) {
+      SecureStore.deleteItemAsync('token');
+      SecureStore.deleteItemAsync('user');
+      window.location.href = '/login';
+      window.dispatchEvent(new Event('storage'));
+    } else {
+      Promise.reject(error);
+    }
+  }
+);
 
 const get = async <T>(
   url: string,
@@ -44,25 +47,31 @@ const get = async <T>(
 };
 
 const post = async (url: string, payload: object): Promise<any> => {
- 
-    try {
-    const { data } =  await api.post(url, payload);
+  try {
+    const { data } = await api.post(url, payload);
     return data;
   } catch (error) {
     const err = error as AxiosError;
 
-    throw err.response?.data ;
+    throw err.response?.data;
   }
 };
 
-const put = async <T>(url: string, payload: object, headers?: object): Promise<T> => {
-
+const put = async <T>(
+  url: string,
+  payload: object,
+  headers?: object
+): Promise<T> => {
   try {
-  const {data} = await api.put(url, payload, headers ? { headers } : undefined);
+    const { data } = await api.put(
+      url,
+      payload,
+      headers ? { headers } : undefined
+    );
     return data;
-  } catch( error){
+  } catch (error) {
     const err = error as AxiosError;
-    throw err.response?.data ;
+    throw err.response?.data;
   }
 };
 
@@ -71,24 +80,23 @@ const patch = async <T>(
   payload: object,
   headers?: object
 ): Promise<T> => {
-  
   try {
-    const {data} =  await api.patch(url, payload, headers);
-      return data;
-    } catch( error){
-      const err = error as AxiosError;
-      throw err.response?.data ;
-    }
+    const { data } = await api.patch(url, payload, headers);
+    return data;
+  } catch (error) {
+    const err = error as AxiosError;
+    throw err.response?.data;
+  }
 };
 
 const remove = async <T>(url: string, body?: object): Promise<T> => {
   try {
-      const {data} = await api.delete(url, body);
-      return data;
-    } catch( error){
-      const err = error as AxiosError;
-      throw err.response?.data ;
-    }
+    const { data } = await api.delete(url, body);
+    return data;
+  } catch (error) {
+    const err = error as AxiosError;
+    throw err.response?.data;
+  }
 };
 
 export { get, patch, post, put, remove, api as wbsAPI };

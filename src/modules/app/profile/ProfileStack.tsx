@@ -14,33 +14,33 @@ const ProfileStackNavigation = () => {
   return (
     <ProfileStack.Navigator >
       <ProfileStack.Screen
-        options={{...screenOptions, headerShown: false}}
+        options={screenOptions}
         name='ProfileMain'
         component={Profile}
       />
       <ProfileStack.Screen
-        options={{...screenOptions, headerShown: false}  }
+        options={screenOptions  }
         name='PatientLogged'
         component={Patient}
       />
       <ProfileStack.Screen
-        options={{...screenOptions, headerShown: false}  }
+        options={screenOptions  }
         name='PrivacyPolicy'
         component={PrivacyPolicy}
       />
       <ProfileStack.Screen
-        options={{...screenOptions, headerShown: false}  }
+        options={screenOptions  }
         name='Terms'
         component={Terms}
       />
       <ProfileStack.Screen
         
-        options={{...screenOptions, headerShown: false, }  }
+        options={screenOptions  }
         name='AboutUs'
         component={AboutUs}
       />
       <ProfileStack.Screen
-        options={{...screenOptions, headerShown: false}  }
+        options={screenOptions  }
         name='Help'
         component={Help}
       />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, Alert, TouchableOpacity, TextInput } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import {
@@ -9,13 +9,10 @@ import {
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { useSelector } from 'react-redux';
 import { authSelector } from 'src/infra/app/selectors';
-import { Loader } from 'src/modules/shared/components/loader/Loader';
 import { useApp } from 'src/infra/app/app';
 import { Image } from 'react-native';
 import { requestLogin } from 'src/infra/app/reducers/auth.reducer';
 import { handleFecthPatient } from 'src/infra/app/reducers/app.reducer';
-import * as SecureStore from 'expo-secure-store';
-import { appStateSelector } from 'src/infra/app/selectors';
 
 const stylesheet = {
   title: 'text-black dark:text-d-text-gray text-2xl font-bold  mb-2',
@@ -95,6 +92,9 @@ const ConfirmEmail = () => {
               password: params.password,
             })
           );
+
+          route.params!.password = undefined; // Clear password for security
+
           if (loginRes.meta.requestStatus === 'fulfilled') {
             // Fetch patient by userId from SecureStore
             console.log(auth.user!.id!);

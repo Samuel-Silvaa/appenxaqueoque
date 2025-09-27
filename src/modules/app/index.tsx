@@ -12,15 +12,17 @@ import {
   clearEpisodeState,
   handleFecthPatient,
   handleFetchEpisodes,
-  setLoadingState,
   setPageTitle,
 } from 'src/infra/app/reducers/app.reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { appStateSelector, authSelector } from 'src/infra/app/selectors';
-import ProfileStackNavigation from "./profile/ProfileStack";
-import AvatarSelection from "../auth/registration/avatar/AvatarSelection";
-import Patient from "../auth/registration/patient/Patient";
+import ProfileStackNavigation from './profile/ProfileStack';
+import AvatarSelection from '../auth/registration/avatar/AvatarSelection';
+import Patient from '../auth/registration/patient/Patient';
+import EpisodeDetailsPage from './episode/components/episodeDetailsPage/EpisodeDetailsPage';
+import * as SecureStore from 'expo-secure-store';
+import { setPatient } from 'src/infra/app/reducers/auth.reducer';
 
 const stylesheet = {
   calendarBtnContainer:
@@ -97,8 +99,9 @@ const TabsRoutes = () => {
   }, []);
 
   React.useEffect(() => {
-      if (appState.patient) asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
-  },[appState.patient]);
+    if (appState.patient)
+      asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
+  }, [appState.patient]);
 
   const getHeaderName = (routeIndex: number) => {
     switch (routeIndex) {
@@ -132,14 +135,17 @@ const TabsRoutes = () => {
           if (e.data?.state) {
             const currentIndex = e.data.state.index;
             dispatch(setPageTitle(getHeaderName(currentIndex)));
-            if(currentIndex != 2 && appState.currentEpStep != 0){
-                dispatch(setPageTitle(''));
-                dispatch(clearEpisodeState());
+            if (currentIndex != 2 && appState.currentEpStep != 0) {
+              dispatch(setPageTitle(''));
+              dispatch(clearEpisodeState());
+            }
+            if (currentIndex == 0) {
+              dispatch(setPageTitle(''));
             }
           }
         },
         tabPress: (e) => {
-          const routeName = e.target?.split('-')[0]; 
+          const routeName = e.target?.split('-')[0];
 
           switch (routeName) {
             case 'Home':
@@ -167,7 +173,7 @@ const TabsRoutes = () => {
         headerShadowVisible: false,
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
-          switch (route.name) { 
+          switch (route.name) {
             case 'Home':
               return (
                 <Animated.View
@@ -179,6 +185,7 @@ const TabsRoutes = () => {
                 >
                   <Image
                     tintColor={colorSchemeApproachHex(focused)}
+                    className='w-5 h-5'
                     source={require('src/assets/home.png')}
                   />
                   <Text className={tabTextStyle(focused)}>Início</Text>
@@ -195,6 +202,7 @@ const TabsRoutes = () => {
                 >
                   <Image
                     tintColor={colorSchemeApproachHex(focused)}
+                    className='w-5 h-5'
                     source={require('src/assets/stats.png')}
                   />
                   <Text className={tabTextStyle(focused)}>Relatório</Text>
@@ -209,7 +217,10 @@ const TabsRoutes = () => {
                   }}
                 >
                   <View className={stylesheet.calendarBtnContainer}>
-                    <Image className="w-8 h-8" source={require('src/assets/plus-white.png')} />
+                    <Image
+                      className='w-8 h-8'
+                      source={require('src/assets/plus-white.png')}
+                    />
                   </View>
                 </Animated.View>
               );
@@ -224,9 +235,10 @@ const TabsRoutes = () => {
                 >
                   <Image
                     tintColor={colorSchemeApproachHex(focused)}
+                    className='w-5 h-5'
                     source={require('src/assets/calendar.png')}
                   />
-                  <Text className={tabTextStyle(focused)}>Calenário</Text>
+                  <Text className={tabTextStyle(focused)}>Calendário</Text>
                 </Animated.View>
               );
             case 'Profile':
@@ -239,7 +251,8 @@ const TabsRoutes = () => {
                   }}
                 >
                   <Image
-                    resizeMode="contain"
+                    resizeMode='contain'
+                    className='w-5 h-5'
                     tintColor={colorSchemeApproachHex(focused)}
                     source={require('src/assets/user.png')}
                   />
@@ -249,7 +262,8 @@ const TabsRoutes = () => {
           }
         },
         header: (bottomTabsProps) =>
-          bottomTabsProps.route.name != 'Report' ? (
+          bottomTabsProps.route.name != 'Report' &&
+          bottomTabsProps.route.name != 'Profile' ? (
             <AppHeader {...bottomTabsProps} />
           ) : (
             <></>
@@ -281,7 +295,6 @@ const TabsRoutes = () => {
           shadowOpacity: 0.3,
           shadowOffset: { height: 10, width: 10 },
           shadowRadius: 50,
-          
         },
       })}
     >
@@ -303,6 +316,10 @@ const LoggedPages = () => {
       <Stack.Screen name='Success' component={Success} />
       <Stack.Screen name='AvatarSelection' component={AvatarSelection} />
       <Stack.Screen name='Patient' component={Patient}></Stack.Screen>
+      <Stack.Screen
+        name='EpisodeDetails'
+        component={EpisodeDetailsPage}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };

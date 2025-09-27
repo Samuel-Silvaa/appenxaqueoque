@@ -45,7 +45,7 @@ const stylesheet = {
     'flex-col w-full items-center overflow-hidden dark:bg-d-blue-primary',
   calendar: {
     wrapper: 'h-full pt-14 ',
-    img: 'absolute right-5 top-[-45px] z-30',
+    img: 'absolute right-5 top-[-45px] z-30 flex-row items-center justify-between',
   },
 };
 
@@ -126,7 +126,11 @@ const Datetime = () => {
 
   return (
     <View className={stylesheet.calendar.wrapper}>
+   
       <View className={stylesheet.calendar.img}>
+             <Text className={sharedEpisodeStyleSheet.timepicker.title.concat(' text-md w-2/3')}>
+          Escolha a data da crise
+        </Text>
         <Image
           resizeMode='cover'
           className="w-[90px] h-[140px] "

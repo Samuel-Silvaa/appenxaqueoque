@@ -11,6 +11,7 @@ export const getCalendarTheme = (): Theme => {
       transform: 'translateY(8px)',
       borderRadius: 4.5,
     },
+    textDayStyle: {columnGap: 20},
     backgroundColor: isDark ? '#373D59' : '#ffffff',
     calendarBackground: isDark ? '#373D59' : '#ffffff',
     textSectionTitleColor: isDark ? '#9DA3A9' : '#b6c1cd',
@@ -29,4 +30,5 @@ export const Calendarstyle: StyleProp<ViewStyle> = {
   position: 'relative',
   width: Dimensions.get('window').width - 50,
   borderRadius: 28,
+  height: Dimensions.get('window').height * 0.4
 };

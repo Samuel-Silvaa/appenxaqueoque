@@ -3,13 +3,10 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 import {
   AppContextDefaultValues,
   Episode,
-  Patient,
 } from '../@types/app.types';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
 import {
-  requestCreateReport,
   requestFetchReportEpisodesRange,
-  requestFetchReports,
   requestGeneratePdfReport,
 } from '../services/appService';
 import { AppActions } from './actions';
@@ -82,6 +79,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             ? appState.episode.impairFactor.join(',')
             : appState.episode.impairFactor ? appState.episode.impairFactor : null,
         };
+        
 
         Object.keys(parsedObject).map((key) => {
           if (
@@ -115,6 +113,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         } else {
           delete parsedObject.id;
           delete parsedObject.isEdition;
+        console.log(`SUBMIT`, parsedObject)
+
           const res = await asyncDispatch(
             handleCreateEpisode({
               payload: parsedObject,

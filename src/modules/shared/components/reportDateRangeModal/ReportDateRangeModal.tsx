@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from 'react';
+import { createRef, useCallback, useEffect, useState } from 'react';
 import {
   Appearance,
   FlatList,
@@ -17,16 +17,21 @@ import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
 import { sharedEpisodeStyleSheet } from 'src/modules/app/episode/shared/SharedEpisodeStyleSheet';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format, subDays } from 'date-fns';
-import {  useSelector } from "react-redux";
-import { useAsyncAppDispatch } from "src/infra/app/store";
-import { handleCreateReport, handleFecthReports } from "src/infra/app/reducers/app.reducer";
-import { appStateSelector } from "src/infra/app/selectors";
-import { ptBR } from "date-fns/locale";
+import { useSelector } from 'react-redux';
+import { useAsyncAppDispatch } from 'src/infra/app/store';
+import {
+  handleCreateReport,
+  handleFecthReports,
+} from 'src/infra/app/reducers/app.reducer';
+import { appStateSelector } from 'src/infra/app/selectors';
+import { ptBR } from 'date-fns/locale';
+import { useNavigation } from '@react-navigation/native';
+import { useToast } from 'react-native-toast-notifications';
 
 const stylesheet = {
   wrapper: 'w-full',
   header: 'w-full flex-row items-center justify-between mb-4 pt-[8vh]',
-  arrowdown: 'flex items-center justify-center p-2',
+  arrowdown: 'flex items-center justify-center p-2 w-5 h-5',
   closeButton: 'p-3',
   edition:
     'flex-col items-center justify-center w-[48px] h-[48px] rounded-full p-2 ',
@@ -128,7 +133,9 @@ const Range = ({
           >
             <Text
               className={`${
-                currentStep == index ? 'text-[#fff]' : 'text-black dark:text-d-text-gray '
+                currentStep == index
+                  ? 'text-[#fff]'
+                  : 'text-black dark:text-d-text-gray '
               }`}
             >
               {item.title}
@@ -151,7 +158,7 @@ const ReportDateRangeModal = ({
   onClose: (dates?: { start: Date; end: Date }) => void;
   filter?: boolean;
 }) => {
-  const dispatch  = useAsyncAppDispatch();
+  const dispatch = useAsyncAppDispatch();
   const appState = useSelector(appStateSelector);
   const {
     control,
@@ -167,6 +174,8 @@ const ReportDateRangeModal = ({
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [inputSelect, setInputSelect] = useState('');
   const colorScheme = Appearance.getColorScheme();
+  const navigation = useNavigation();
+  const toast = useToast();
 
   useEffect(() => {
     return () => {
@@ -196,48 +205,66 @@ const ReportDateRangeModal = ({
     setValue('endDate', new Date());
   };
 
-  const handleSubmitReportCreation = async (payload: {
-    startDate: Date;
-    endDate: Date;
-  }) => {
-    if (filter) {
-      dispatch(handleFecthReports({patientId: appState.patient!.id!, date: { date: {
-        startDate: format(payload.startDate, 'yyyy-MM-dd'),
-        endDate: format(payload.endDate, 'yyyy-MM-dd'),
-      }}}));
-    } else {
-      const res = await dispatch(handleCreateReport({
-        patientId: appState.patient!.id!,
-        startDate: format(payload.startDate, 'yyyy-MM-dd'),
-        endDate: format(payload.endDate, 'yyyy-MM-dd'),
-      }));
+  const handleSubmitReportCreation = useCallback(
+    async (payload: { startDate: Date; endDate: Date }) => {
+      if (filter) {
+        dispatch(
+          handleFecthReports({
+            patientId: appState.patient!.id!,
+            date: {
+              date: {
+                startDate: format(payload.startDate, 'yyyy-MM-dd'),
+                endDate: format(payload.endDate, 'yyyy-MM-dd'),
+              },
+            },
+          })
+        );
+      } else {
+        const res = await dispatch(
+          handleCreateReport({
+            patientId: appState.patient!.id!,
+            startDate: format(payload.startDate, 'yyyy-MM-dd'),
+            endDate: format(payload.endDate, 'yyyy-MM-dd'),
+          })
+        );
 
-      if(res.meta.requestStatus == 'fulfilled'){
-         dispatch(handleFecthReports({patientId: appState.patient!.id!, date: { date: {
-        startDate: format(payload.startDate, 'yyyy-MM-dd'),
-        endDate: format(payload.endDate, 'yyyy-MM-dd'),
-      }}}));
+        if (res.meta.requestStatus == 'fulfilled') {
+          //    dispatch(handleFecthReports({patientId: appState.patient!.id!, date: { date: {
+          //   startDate: format(payload.startDate, 'yyyy-MM-dd'),
+          //   endDate: format(payload.endDate, 'yyyy-MM-dd'),
+          // }}}));
+          navigation.navigate('Charts', { reportDetails: res.payload });
+        }
       }
-
-    }
-    onClose({ start: getValues('startDate'), end: getValues('endDate') });
-  };
+      onClose({ start: getValues('startDate'), end: getValues('endDate') });
+    },
+    []
+  );
 
   return (
     <Modal
       transparent
-      animationType='slide'
+      animationType='fade'
       visible={isOpen}
-      
       onRequestClose={() => {
-        dispatch(handleFecthReports({patientId: appState.patient!.id!, date: {date: {
-          startDate: format(subDays(new Date(), 15), 'yyyy-MM-dd', { locale: ptBR }),
-          endDate: format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
-        }}}) );
+        dispatch(
+          handleFecthReports({
+            patientId: appState.patient!.id!,
+            date: {
+              date: {
+                startDate: format(subDays(new Date(), 15), 'yyyy-MM-dd', {
+                  locale: ptBR,
+                }),
+                endDate: format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
+              },
+            },
+          })
+        );
         onClose();
       }}
     >
       <AppPageScaffold
+        hasArrowBack={false}
         alignment='items-center'
         className='h-3/4 rounded-t-[16px]'
       >
@@ -245,14 +272,19 @@ const ReportDateRangeModal = ({
           <Text className={sharedStyleSheet.title}>
             {filter ? 'Filtrar relatórios por período' : 'Gerar relátorio'}
           </Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => onClose()}
             className={stylesheet.closeButton}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Image
               className={stylesheet.arrowdown}
-              source={ colorScheme == 'dark' ? require( 'src/assets/arrowdown.png') : require( 'src/assets/arrowdown.png')}
+              resizeMode='contain'
+              source={
+                colorScheme == 'dark'
+                  ? require('src/assets/arrowdown.png')
+                  : require('src/assets/arrowdown.png')
+              }
             ></Image>
           </TouchableOpacity>
         </View>
@@ -272,9 +304,8 @@ const ReportDateRangeModal = ({
             inputMode='numeric'
             control={control}
             errors={errors}
-            editable={false}
             value={format(getValues('startDate'), 'dd/MM/yyyy')}
-            setValue={()=>{}}
+            setValue={() => {}}
             onPressOut={() => {
               showDatePicker();
               setInputSelect('startDate');
@@ -288,7 +319,7 @@ const ReportDateRangeModal = ({
             errors={errors}
             editable={true}
             value={format(getValues('endDate'), 'dd/MM/yyyy')}
-            setValue={()=>{}}
+            setValue={() => {}}
             onPressOut={() => {
               showDatePicker();
               setInputSelect('endDate');

@@ -21,6 +21,7 @@ import {
   requestUpdatePatient as requestHandleUpdatePatient,
 } from 'src/infra/services/authService';
 import * as SecureStore from 'expo-secure-store';
+import { Patient } from 'src/infra/@types/app.types';
 
 // Define initial state type
 export interface AuthReducer {
@@ -30,6 +31,7 @@ export interface AuthReducer {
   user: PatientDTO | PhysicianDTO | null;
   sessionEmail: string | null;
   loading: boolean;
+  entireScreenLoading: boolean;
   error: string | null;
   isFirstAccess: boolean;
   userType: string | null;
@@ -43,6 +45,7 @@ const initialState: AuthReducer = {
   user: null,
   sessionEmail: null,
   loading: false,
+  entireScreenLoading: false,
   error: null,
   isFirstAccess: false,
   userType: null,
@@ -59,6 +62,8 @@ const authSlice = createSlice({
       state.refreshToken = null;
       state.user = null;
       state.error = null;
+      SecureStore.deleteItemAsync('token');
+      SecureStore.deleteItemAsync('user');
     },
     clearErrorMessage: (state) => {
       return (state = { ...state, error: null });
@@ -66,35 +71,42 @@ const authSlice = createSlice({
     setWelcomeJourneyDone: (state) => {
       return (state = { ...state, isFirstAccess: false });
     },
+    setPatient: (state, action) => {
+      return (state = { ...state, user: action.payload });
+    },
+    setToken: (state, action) => {
+      return (state = { ...state, token: action.payload });
+    },
   },
   extraReducers: (builder) => {
     // REQUEST_LOGIN
     builder.addCase(requestLogin.pending, (state) => {
-      return (state = { ...state, loading: true });
+      return (state = { ...state, entireScreenLoading: true });
     });
     builder.addCase(
       requestLogin.fulfilled,
       (state, action: PayloadAction<LogInResponse>) => {
-        console.log(action);
         SecureStore.setItem('token', action.payload.token);
+        SecureStore.setItem('user', JSON.stringify(action.payload.user));
         if (action.payload.user)
           SecureStore.setItemAsync('userId', action.payload.user.id!);
         return (state = {
           ...state,
           ...action.payload,
           refreshToken: '',
-          sessionEmail: action.payload.email,
+          entireScreenLoading: false,
           loading: false,
+          sessionEmail: action.payload.email,
           error: null,
         });
       }
     );
     builder.addCase(requestLogin.rejected, (state, action) => {
-        console.log(action);
+      console.log(action);
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
-        loading: false,
+        entireScreenLoading: false,
       });
     });
     //REQUEST_SIGNUP
@@ -176,11 +188,11 @@ const authSlice = createSlice({
       requestConfirmEmail.fulfilled,
       (state, action: PayloadAction<ConfirmEmailResponse>) => {
         try {
-          return (state = { 
-            ...state, 
+          return (state = {
+            ...state,
             isEmailConfirmed: action.payload.isEmailConfirmed,
-            loading: false, 
-            error: null 
+            loading: false,
+            error: null,
           });
         } catch (err) {
           console.log(err);
@@ -200,7 +212,6 @@ const authSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(requestUpdateAvatar.fulfilled, (state, action) => {
-      console.log('PAYLOAD : ',action.payload);
       state.loading = false;
       state.error = null;
       state.avatar = action.payload.avatar;
@@ -209,7 +220,7 @@ const authSlice = createSlice({
     builder.addCase(requestUpdateAvatar.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message ?? 'Erro ao atualizar avatar';
-      return state
+      return state;
     });
     //REQUEST_UPDATE_PATIENT
     builder.addCase(requestUpdatePatient.pending, (state) => {
@@ -219,9 +230,6 @@ const authSlice = createSlice({
       requestUpdatePatient.fulfilled,
       (state, action: PayloadAction<PatientDTO>) => {
         try {
-
-          console.log(action.payload);
-          
           return (state = {
             ...state,
             user: action.payload,
@@ -263,23 +271,33 @@ export const requestCreatePatient = createAsyncThunk(
 );
 export const requestSendEmailConfirmation = createAsyncThunk(
   'auth/requestSendEmailConfirmation',
-  async (payload: SendEmailConfirmationDTO) => await requestHandleSendEmailConfirmation(payload)
+  async (payload: SendEmailConfirmationDTO) =>
+    await requestHandleSendEmailConfirmation(payload)
 );
 export const requestConfirmEmail = createAsyncThunk(
   'auth/requestConfirmEmail',
   async (payload: ConfirmEmailDTO) => await requestHandleConfirmEmail(payload)
 );
-export const requestUpdateAvatar = createAsyncThunk<any, { avatar: string; email: string }>(
+export const requestUpdateAvatar = createAsyncThunk<
+  any,
+  { avatar: string; email: string }
+>(
   'auth/requestUpdateAvatar',
   async (payload) => await requestHandleUpdateAvatar(payload)
 );
 
 export const requestUpdatePatient = createAsyncThunk(
   'auth/requestUpdatePatient',
-  async (payload: PatientDTO & { id: string }) => await requestHandleUpdatePatient(payload)
+  async (payload: PatientDTO & { id: string }) =>
+    await requestHandleUpdatePatient(payload)
 );
 
 // Export actions and reducer
-export const { signOut, clearErrorMessage, setWelcomeJourneyDone } =
-  authSlice.actions;
+export const {
+  signOut,
+  clearErrorMessage,
+  setWelcomeJourneyDone,
+  setPatient,
+  setToken,
+} = authSlice.actions;
 export default authSlice.reducer;

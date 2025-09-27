@@ -3,13 +3,13 @@ import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 
 import * as yup from 'yup';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, Form, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { requestCreatePatient } from 'src/infra/app/reducers/auth.reducer';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
-import { useCallback, useEffect } from 'react';
+import {  useCallback, useEffect, useState } from 'react';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { TimeInput } from 'src/modules/shared/components/timeInput';
 import SelectContainer from 'src/modules/shared/components/selectContainer/SelectContainer';
@@ -39,7 +39,7 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
   gender: yup.string().required('Preencha o sexo'),
   kinship: yup.string().required('Preencha o parentesco'),
   height: yup.string().required('Preencha a altura').min(3, 'Mínimo 3 digitos'),
-  weight: yup.string().required('Preencha o peso').min(2, 'Mínimo 2 digitos'),
+  weight: yup.string().required('Preencha o peso'),
   avatar: yup.string().optional(),
 });
 
@@ -47,21 +47,24 @@ const Patient = () => {
   const dispatchAsync = useAsyncAppDispatch();
   const navigation = useNavigation();
   const route = useRoute();
+  const [birthDate, setBirthDate] = useState<Date>(new Date());
 
   const {
     handleSubmit,
     formState: { errors },
     setValue,
     control,
-    register,
-    reset
+    reset,
   } = useForm({
+    shouldUnregister: false,
+    reValidateMode: 'onSubmit',
+    mode: 'onSubmit',
     defaultValues: { email: route.params?.email },
-    reValidateMode: 'onChange',
     resolver: yupResolver(patientSchema),
   });
 
   const onSubmitHandler = useCallback(async (data: PatientSchemaProps) => {
+    console.log(data);
     const res = await dispatchAsync(
       requestCreatePatient({
         ...data,
@@ -75,13 +78,20 @@ const Patient = () => {
       (navigation as any).navigate('welcome');
     }
   }, []);
+
+
   useEffect(() => {
     if (route.params) {
       reset({email: route.params.email });
     }
+
   }, [route.params]);
 
-  const Content = useCallback(() => {
+  useEffect(() => {
+    setValue('birthDate', birthDate);
+  }, [birthDate]);
+
+  const Content = () => {
     return (
       <>
         <Text className={sharedStyleSheet.title}>Informações da conta</Text>
@@ -110,7 +120,7 @@ const Patient = () => {
             render={({ field }) => (
               <InputContainer
                 keyboardType='default'
-                label='Nome da criança'
+                label='Nome da criança'         
                 onChangeText={field.onChange}
                 {...field}
                 name='name'
@@ -119,25 +129,26 @@ const Patient = () => {
             )}
           />
 
-          <TimeInput
-            label='Data de nascimento'
-            name='birthDate'
-            setValue={setValue}
-            errors={errors}
-            placeholder='Selecione a data de nascimento'
-            mode='date'
-            maximumDate={new Date()}
-          />
-
+            <TimeInput
+              label='Data de nascimento'
+              mode='date'
+              placeholder='Selecione a data de nascimento'
+              value={birthDate}
+              onChange={(date) => {setBirthDate(date)}}
+              name='birthDate'
+              errors={errors}
+              maximumDate={new Date()}
+            />
+        
           <SelectContainer
             control={control}
             label='Gênero'
             placeholder='Selecione o sexo'
-            {...register('gender')}
             options={[
               { title: 'Masculino', value: 'male' },
               { title: 'Feminino', value: 'female' },
             ]}
+            name="gender"
             setValue={setValue}
             errors={errors}
           />
@@ -168,8 +179,8 @@ const Patient = () => {
                     onChangeText={field.onChange}
                     errors={errors}
                     mask='999.9'
-                    name='weight'
                     placeholder='0.0'
+                    name="weight"
                   />
                 )}
               />
@@ -185,10 +196,10 @@ const Patient = () => {
                     label='Altura da criança'
                     value={field.value ?? ''}
                     onChangeText={field.onChange}
-                    name='height'
                     errors={errors}
                     mask='9.99'
                     placeholder='0.00'
+                    name="height"
                   />
                 )}
               />
@@ -198,7 +209,7 @@ const Patient = () => {
         </ScrollView>
       </>
     );
-  }, [control, errors, setValue, route.params]);
+  }
 
   return (
     <AuthScaffold

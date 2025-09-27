@@ -10,7 +10,7 @@ import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
 
 const stylesheet = {
-  view: 'flex-col flex-grow bg-primary px-4 gap-y-2 pb-14 dark:bg-d-blue-primary-dark',
+  view: 'flex-col flex-grow bg-primary px-4 gap-y-2 pb-14 dark:bg-d-blue-primary-dark relative ',
 };
 
 interface AuthScaffoldProps {

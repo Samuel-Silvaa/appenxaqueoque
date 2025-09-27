@@ -57,7 +57,6 @@ const Period = () => {
       <View className={stylesheet.wrapper}>
         <Wrapper title='A criança está em período menstrual? '>
           <Card
-            title='Menstruação'
             children={
               <View className={stylesheet.cardWrapper}>
                 <View className={stylesheet.cardOption}>

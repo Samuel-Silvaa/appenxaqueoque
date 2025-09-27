@@ -4,7 +4,6 @@
 module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   important: true,
-  darkMode: 'class',
   corePlugins: {
     blur: true,
   },
@@ -38,15 +37,15 @@ module.exports = {
         'gray-light': '#F1F1F1',
         'gray-opacity': '#e6e6e6',
         'gray-secondary': '#E6E0F4',
-        'beige-primary': '#EBDCBF',
+        'beige-primary': '#FCF9F8',
         'beige-secondary': '#F5E2CEB2',
         'beige-tertiary': '#fbfbfc',
-        'calendar-dot': '#FFCACD',
+        'calendar-dot': '#FFB0B5',
         white: '#fff',
         error: '#FF8AA6',
         success: '#C8F7E1',
         warning: '#FFCBA6',
-        default: '#F1E3FF'
+        default: '#F1E3FF',
       },
     },
   },

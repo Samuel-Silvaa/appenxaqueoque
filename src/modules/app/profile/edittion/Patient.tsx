@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, appStateSelector } from 'src/infra/app/selectors';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import {
-  requestCreatePatient,
   requestUpdatePatient,
 } from 'src/infra/app/reducers/auth.reducer';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -74,7 +73,7 @@ const Patient = () => {
     control,
     reset,
   } = useForm({
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
     defaultValues: { email: auth!.sessionEmail! },
     resolver: yupResolver(patientSchema),
   });
@@ -175,17 +174,22 @@ const Patient = () => {
             )}
           />
 
-          <TimeInput
+          <Controller
+            control={control}
+            name='birthDate'
+            defaultValue={new Date(patientData!.birthDate)}
+          render={({ field }) => (
+            <TimeInput
+            {...field}
             label='Data de nascimento'
             name='birthDate'
-            setValue={setValue}
-            value={new Date(patientData!.birthDate)}
             errors={errors}
-            defaultValue={new Date(patientData!.birthDate)}
             placeholder='Selecione a data de nascimento'
             mode='date'
             maximumDate={subMonths(new Date(), 48)}
+          /> )}
           />
+
 
           <SelectContainer
             control={control}

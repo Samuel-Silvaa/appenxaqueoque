@@ -29,6 +29,7 @@ export interface Episode {
   location: string | string[];
   medicine: string | null;
   medicineDosage: number;
+  medicineUnit: string | null;
   medicineImprovement: string | null;
   notes: string | null;
   painType: string | null;
@@ -73,6 +74,7 @@ export interface EpisodeModalDTO {
 }
 
 export interface Report {
+  createdAt?: string;
   id?: string;
   startDate: string;
   endDate: string;
@@ -96,7 +98,7 @@ export interface AppContextDefaultValues {
   dispatch: (action: any, payload?: any, assetId?: string) => Promise<any>;
   validateStepForward: (step: number) => boolean;
   submitEpisode: () => Promise<any>;
-  handleToast: (message:string, type: string) => void;
+  handleToast: (message: string, type: string) => void;
   episodes?: Episode[];
   patient?: Patient;
   reports?: Report[];
@@ -113,30 +115,38 @@ export enum Location {
   TEMPLELEFT = 'Temporal esquerda',
   TEMPLEBILATERAL = 'Temporal bilateral',
   BACKSIDE = 'Posterior/nuca',
+  OCCIPITALRIGHT = 'Occipital direita',
+  OCCIPITALLEFT = 'Occipital esquerda',
+  OCCIPITALBILATERAL = 'Occipital bilateral',
+  NONE = 'Dados insuficientes',
 }
 
 export enum ImpairFactor {
   JUMP = 'Pular',
   CROUCH = 'Agachar',
   ANOTHER = 'Outros',
+  NONE = 'Dados insuficientes',
 }
 
 export enum Acuteness {
   LIGHT = 'Leve',
   MILD = 'Moderada',
   SEVERE = 'Forte',
+  NONE = 'Dados insuficientes',
 }
 
 export enum PainType {
   THROB = 'Pulsátil',
   TIGHT = 'Aperto',
   ANOTHER = 'Outros',
+  NONE = 'Dados insuficientes',
 }
 
 export enum HaloSymptom {
   VISUAL_DISTORTIONS = 'Alterações visuais',
   TINGLING = 'Formigamento',
   SPEECH_DISTORTIONS = 'Alterações na fala',
+  NONE = 'Dados insuficientes',
 }
 
 export enum Symptom {
@@ -146,6 +156,7 @@ export enum Symptom {
   SICKNESS = 'Dor de barriga',
   HYPERACUSIS = 'Sensibilidade ao barulho',
   DIZZINESS = 'Tontura',
+  NONE = 'Dados insuficientes',
 }
 
 export enum Trigger {
@@ -155,6 +166,7 @@ export enum Trigger {
   FASTING = 'Jejum prolongado',
   FOOD = 'Alimentação',
   ANOTHER = 'Outros',
+  NONE = 'Dados insuficientes',
 }
 
 export enum ImprovementFactor {
@@ -162,6 +174,7 @@ export enum ImprovementFactor {
   SLEEP = 'Sono ou descanso',
   FOOD = 'Alimentação',
   ANOTHER = 'Outros',
+  NONE = 'Dados insuficientes',
 }
 
 export enum Time {
@@ -169,4 +182,5 @@ export enum Time {
   EVENING = 'Tarde',
   NIGHT = 'Noite',
   MIDNIGHT = 'Madrugada',
+  NONE = 'Dados insuficientes',
 }

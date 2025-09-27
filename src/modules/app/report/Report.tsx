@@ -1,23 +1,23 @@
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import {
-  Dimensions,
   Image,
   Pressable,
   Text,
   View,
   Animated,
+  Touchable,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import screenOptions from 'src/modules/shared/style/StackOptions';
 import { useEffect, useState, useRef } from 'react';
-import { differenceInDays, format, subDays } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { parseAcuteness, pinColor } from 'src/infra/utils/appUtils';
+import { pinColor } from 'src/infra/utils/appUtils';
 import ChartsPage from './components/charts/Charts';
 import { Report } from 'src/infra/@types/app.types';
-import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useForm } from 'react-hook-form';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import ReportDateRangeModal from 'src/modules/shared/components/reportDateRangeModal/ReportDateRangeModal';
@@ -29,9 +29,9 @@ import {
   handleFecthReports,
 } from 'src/infra/app/reducers/app.reducer';
 import SwipeableFlatList from 'react-native-swipeable-list';
-import ActionConfirmationModal from 'src/modules/shared/components/actionConfirmationModal/ActionConfirmationModal';
-import { requestDeleteReport } from 'src/infra/services/appService';
-import { useToast } from "react-native-toast-notifications";
+import CalendarEpisodeListModal from 'src/modules/shared/components/actionConfirmationModal/ActionConfirmationModal';
+import { useToast } from 'react-native-toast-notifications';
+import { DeleteComponent } from 'src/modules/shared/components/deleteComponent/DeleteComponent';
 
 const stylesheet = {
   reportCard:
@@ -72,21 +72,18 @@ const ResourceCard = ({
           style={{ backgroundColor: pinColor(reportDetails.acuteness) }}
         ></View>
         <View className={stylesheet.reportCardHeader}>
-          <Text className='font-semibold capitalize dark:text-d-text-gray'>
-            {format(reportDetails.startDate || new Date(), 'dd MMM', {
+          <Text className='font-semibold dark:text-d-text-gray'>
+            Entre{' '}
+            {format(reportDetails.startDate || new Date(), 'P', {
               locale: ptBR,
             })}{' '}
-            -
-            {format(
-              reportDetails.endDate! || subDays(new Date(), 15),
-              'dd MMM',
-              { locale: ptBR }
-            )}{' '}
-            -
-            <Text className='ml-2 font-medium dark:text-d-text-gray'>
-              {' '}
-              {parseAcuteness(reportDetails.acuteness)}
-            </Text>
+            e{' '}
+            {format(reportDetails.endDate! || subDays(new Date(), 15), 'P', {
+              locale: ptBR,
+            })}{' '}
+            {format(reportDetails.createdAt || new Date(), 'P', {
+              locale: ptBR,
+            })}
           </Text>
           {!!reportDetails?.notes ? (
             <Text className={stylesheet.reportCardDesc}>
@@ -98,7 +95,8 @@ const ResourceCard = ({
         </View>
 
         <Image
-          className='self-center'
+          resizeMode='contain'
+          className='self-center w-4 h-4'
           source={require('src/assets/arrowright.png')}
         ></Image>
       </Pressable>
@@ -106,93 +104,84 @@ const ResourceCard = ({
   );
 };
 
-const ReportPage = ({ navigation }) => {
-  const dispatch = useAsyncAppDispatch();
+const ReportOptionsPage = ({ navigation }) => {
+  const [isEpisodesPopulated, setIsEpisodesPopulated] = useState(true);
   const appState = useSelector(appStateSelector);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setIsEpisodesPopulated(appState!.episodes!.length > 0);
+  }, [appState.episode, appState.reports]);
+
+  return (
+    <AppPageScaffold>
+      <View className='flex-row justify-between items-center w-full mt-12'>
+        <ExPressable
+          className={`rounded-full w-2/4 h-[45px] ${
+            !isEpisodesPopulated ? 'opacity-[0.4]' : ''
+          } bg-blue-primary/60 text-white dark:text-white dark:bg-d-blue-primary shadow-lg`}
+          title='Gerar relatório'
+          onPress={() =>
+            isEpisodesPopulated ? setIsModalOpen(true) : () => {}
+          }
+        />
+        <ExPressable
+          className={`rounded-full w-[45%] h-[45px] bg-white dark:bg-d-blue-primary text-black shadow-lg`}
+          colorScheme='secodary '
+          title='Lista de relatórios'
+          onPress={() => {
+            navigation.navigate('ReportListPage');
+          }}
+        />
+      </View>
+
+      <View className='w-full flex items-center mt-12'>
+        <Image
+          resizeMode='contain'
+          className='w-[300] h-[400] opacity-50'
+          source={require('src/assets/doctorchild.png')}
+        ></Image>
+      </View>
+
+      {!!isModalOpen && (
+        <ReportDateRangeModal
+          isOpen={isModalOpen}
+          onClose={(dates) => setIsModalOpen(false)}
+        />
+      )}
+    </AppPageScaffold>
+  );
+};
+
+const ReportListPage = ({ navigation }) => {
+  const dispatch = useAsyncAppDispatch();
+  const appState = useSelector(appStateSelector);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const dateStringFormat = 'PPP';
+  const dateStringFormat = 'dd/MM/yyyy';
   const [selectedDate, setSelectedDate] = useState({
     start: format(subDays(new Date(), 90), dateStringFormat, { locale: ptBR }),
     end: format(new Date(), dateStringFormat, { locale: ptBR }),
   });
-  const [isEpisodesPopulated, setIsEpisodesPopulated] = useState(true);
   const [isReportsPopulated, setIsReportsPopulated] = useState(true);
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
   const [reportDraggedIndex, setReportDraggedIndex] = useState(0);
 
   useEffect(() => {
-    setIsEpisodesPopulated(appState!.episodes!.length > 0);
     setIsReportsPopulated(appState!.reports!.length > 0);
   }, [appState.episode, appState.reports]);
 
   const {
-    setValue,
     formState: { errors },
   } = useForm();
   const toast = useToast();
 
-  useEffect(() => {
-    if (appState.patient!.id) {
-      dispatch(
-        handleFecthReports({
-          patientId: appState.patient!.id,
-          date: {
-            date: {
-              startDate: format(subDays(new Date(), 15), 'yyyy-MM-dd', {
-                locale: ptBR,
-              }),
-              endDate: format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
-            },
-          },
-        })
-      );
-    }
-  }, [appState.patient, ]);
-
   const handleDelete = async (report: Report) => {
     if (report.id) {
       const res = await dispatch(handleDeleteReport({ id: report!.id }));
-      if (
-        res.meta.requestStatus === 'fulfilled' 
-      ) {
-        toast.show('Relatório deletado com sucesso!', {type: 'success'})
+      if (res.meta.requestStatus === 'fulfilled') {
+        toast.show('Relatório deletado com sucesso!', { type: 'success' });
       }
     }
-  };
-
-  const DeleteComponent = ({
-    item,
-    onPress,
-  }: {
-    index: number;
-    item: Report;
-    onPress: () => void;
-  }) => {
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-
-    useEffect(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start();
-    }, [fadeAnim]);
-
-    return (
-      <Animated.View
-        style={{ opacity: fadeAnim }}
-        className='h-full pr-4 flex  items-end justify-center'
-      >
-        <TouchableOpacity
-          className='bg-error rounded-full'
-          onPress={() => onPress()}
-          style={{ padding: 12 }}
-        >
-          <Text style={{ color: '#fff', fontWeight: '700' }}>Deletar</Text>
-        </TouchableOpacity>
-      </Animated.View>
-    );
   };
 
   const renderResource = ({ item }: { index: number; item: Report }) => {
@@ -206,9 +195,9 @@ const ReportPage = ({ navigation }) => {
   };
 
   return (
-    <AppPageScaffold title='Relatórios' disabledScroll={true}>
+    <AppPageScaffold disabledScroll={true}>
       <View className='flex-col items-center justify-between my-4 gap-y-4'>
-        <View className='w-full pr-2 h-[45px] mb-4'>
+        {/* <View className='w-full pr-2 h-[45px] mb-4'>
           <InputContainer
             className='bg-[#FAFAFA] rounded-[16px] h-[45px]'
             placeholder='Pesquisar'
@@ -217,33 +206,22 @@ const ReportPage = ({ navigation }) => {
             setValue={setValue}
             errors={errors}
           ></InputContainer>
-        </View>
-        <View className='flex-row justify-between items-center w-full '>
-          <ExPressable
-            className={`rounded-full w-2/4 h-[45px] ${
-              !isEpisodesPopulated ? 'opacity-[0.4]' : ''
-            } bg-blue-primary/60 text-white dark:text-white dark:bg-d-blue-primary shadow-lg`}
-            title='Gerar relatório'
-            onPress={() =>
-              isEpisodesPopulated ? setIsModalOpen(true) : () => {}
-            }
-          />
-          <ExPressable
-            className={`rounded-full w-[40%] ${
-              !isReportsPopulated ? 'opacity-[0.4]' : ''
-            } h-[45px] bg-white dark:bg-d-blue-primary  text-black shadow-lg`}
-            colorScheme='secodary '
-            title='Filtrar'
-            onPress={() =>
-              isReportsPopulated ? setIsFilterModalOpen(true) : () => {}
-            }
-          />
-        </View>
+        </View> */}
 
-        <View className='self-start px-2 w-full'>
+        <View className='self-start px-2 w-full flex flex-row justify-between items-center'>
           <Text className='dark:text-d-text-gray m-auto'>
-            {selectedDate.start} a {selectedDate.end}
+            Relatórios do período entre {'\n'} {selectedDate.start} à{' '}
+            {selectedDate.end}
           </Text>
+          <TouchableOpacity
+            onPress={() => setIsFilterModalOpen(true)}
+            className='flex-row justify-between items-center rounded-full bg-white p-3 shadow-lg'
+          >
+            <Image
+              source={require('src/assets/filter.png')}
+              className={`w-5 h-5`}
+            />
+          </TouchableOpacity>
         </View>
         <View className='bg-snow-white dark:bg-d-blue-primary mb-4 rounded-[44px] w-full h-[45px]'>
           <Text className='font-semibold text-black dark:text-d-text-gray mx-auto text-md m-auto '>
@@ -254,6 +232,11 @@ const ReportPage = ({ navigation }) => {
 
       {!!appState.reports?.length && (
         <SwipeableFlatList
+          maxSwipeDistance={100}
+          style={{
+            height: Dimensions.get('screen').height * 0.55,
+            paddingBottom: 30,
+          }}
           keyExtractor={(item: Report, index: string) =>
             String(item!.id ?? index)
           }
@@ -276,7 +259,7 @@ const ReportPage = ({ navigation }) => {
                   }}
                 />
                 {openConfirmationModal && index == reportDraggedIndex && (
-                  <ActionConfirmationModal
+                  <CalendarEpisodeListModal
                     isOpen={openConfirmationModal}
                     onClose={() => {
                       setOpenConfirmationModal(false);
@@ -286,7 +269,7 @@ const ReportPage = ({ navigation }) => {
                       item.startDate,
                       'PPP',
                       { locale: ptBR }
-                    )} a ${format(item.endDate, 'PPP', { locale: ptBR })} `}
+                    )} à ${format(item.endDate, 'PPP', { locale: ptBR })} `}
                     submitAction={() => {
                       setOpenConfirmationModal(false);
                       setReportDraggedIndex(0);
@@ -298,7 +281,6 @@ const ReportPage = ({ navigation }) => {
             );
           }}
           renderItem={renderResource}
-          maxSwipeDistance={100}
         />
       )}
 
@@ -310,12 +292,6 @@ const ReportPage = ({ navigation }) => {
         </View>
       )}
 
-      {!!isModalOpen && (
-        <ReportDateRangeModal
-          isOpen={isModalOpen}
-          onClose={(dates) => setIsModalOpen(false)}
-        />
-      )}
       {!!isFilterModalOpen && (
         <ReportDateRangeModal
           filter
@@ -353,13 +329,39 @@ const ReportPage = ({ navigation }) => {
 const ReportStack = createNativeStackNavigator();
 
 const ReportStackNavigation = () => {
+  const dispatch = useAsyncAppDispatch();
+  const appState = useSelector(appStateSelector);
+  useEffect(() => {
+    if (appState.patient!.id) {
+      dispatch(
+        handleFecthReports({
+          patientId: appState.patient!.id,
+          date: {
+            date: {
+              startDate: format(subDays(new Date(), 15), 'yyyy-MM-dd', {
+                locale: ptBR,
+              }),
+              endDate: format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
+            },
+          },
+        })
+      );
+    }
+  }, [appState.patient]);
   return (
     <ReportStack.Navigator>
       <ReportStack.Screen
         options={screenOptions}
-        name='ReportList'
-        component={ReportPage}
+        name='ReportOptions'
+        component={ReportOptionsPage}
       ></ReportStack.Screen>
+
+      <ReportStack.Screen
+        options={screenOptions}
+        name='ReportListPage'
+        component={ReportListPage}
+      ></ReportStack.Screen>
+
       <ReportStack.Screen
         options={screenOptions}
         name='Charts'

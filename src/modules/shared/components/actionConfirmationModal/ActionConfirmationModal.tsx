@@ -1,14 +1,9 @@
-import {
-  Image,
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
-import { useToast } from "react-native-toast-notifications";
+import { useToast } from 'react-native-toast-notifications';
+import { CloseButton } from '../closeButton/CloseButton';
 
 const stylesheet = {
   header: ' w-[90%] flex items-start justify-start  grow',
@@ -21,13 +16,13 @@ const ActionConfirmationModal = ({
   onClose,
   desc,
   ctaTitle = 'Confirmar',
-  submitAction
-  }: {
+  submitAction,
+}: {
   isOpen: boolean;
   onClose: () => void;
   desc?: string;
-  ctaTitle?: string
-  submitAction: () => void
+  ctaTitle?: string;
+  submitAction: () => void;
 }) => {
   const {
     formState: { errors },
@@ -36,42 +31,40 @@ const ActionConfirmationModal = ({
   const toast = useToast();
 
   return (
-      <Modal
+    <Modal
       transparent={true}
-      animationType='slide'
+      animationType='fade'
       visible={isOpen}
       onRequestClose={() => {
         onClose();
       }}
     >
-      <View  className="flex-1 bg-black/50 justify-center items-center">
-        <View
-      className="w-3/4 min-h-[250px] z-999 m-auto bg-white dark:bg-blue-primary-dark rounded-[30px] shadow-2xl shadow-blue-primary dark:shadow-blue-primary-dark flex items-center justify-between p-6 relative"
-      > 
-         <TouchableOpacity 
-            onPress={() => onClose()}
-            className={stylesheet.closeButton}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Image
-              className={stylesheet.arrowdown}
-              source={require('src/assets/close-white.png')}
-            ></Image>
-          </TouchableOpacity>
-        <View className={stylesheet.header}>
-          <Text className={sharedStyleSheet.subtitle.concat(' text-center font-bold w-[100%]')}>
-            Deseja realmente prosseguir ?
-          </Text>
-         {desc && (
-           <Text className={sharedStyleSheet.subtitle.concat(' text-sm font-thin text-center')}>
-            {desc}
-          </Text>
-         )}
-         
-        </View>
+      <View className='flex-1 bg-black/50 justify-center items-center'>
+        <View className='w-3/4 min-h-[250px] z-999 m-auto bg-white dark:bg-blue-primary-dark rounded-[30px] shadow-2xl shadow-blue-primary dark:shadow-blue-primary-dark flex items-center justify-between p-6 relative'>
+          <View className='mb-6 w-full items-end'>
+            <CloseButton onClose={onClose} />
+          </View>
+          <View className={stylesheet.header}>
+            <Text
+              className={sharedStyleSheet.subtitle.concat(
+                ' text-center font-bold w-[100%]'
+              )}
+            >
+              Deseja realmente prosseguir ?
+            </Text>
+            {desc && (
+              <Text
+                className={sharedStyleSheet.subtitle.concat(
+                  ' text-sm font-thin text-center'
+                )}
+              >
+                {desc}
+              </Text>
+            )}
+          </View>
 
-        <ExPressable title={ctaTitle} onPress={submitAction}/>
-      </View>
+          <ExPressable title={ctaTitle} onPress={submitAction} />
+        </View>
       </View>
     </Modal>
   );

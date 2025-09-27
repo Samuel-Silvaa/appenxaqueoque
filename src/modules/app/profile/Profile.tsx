@@ -10,12 +10,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { appStateSelector, authSelector } from 'src/infra/app/selectors';
 import { signOut } from 'src/infra/app/reducers/auth.reducer';
 import { useNavigation } from '@react-navigation/native';
-import { handleDeleteAccount, setPageTitle } from 'src/infra/app/reducers/app.reducer';
+import {
+  handleDeleteAccount,
+  setPageTitle,
+} from 'src/infra/app/reducers/app.reducer';
 import { differenceInYears } from 'date-fns';
-import ActionConfirmationModal from "src/modules/shared/components/actionConfirmationModal/ActionConfirmationModal";
-import { useState } from "react";
-import { useAsyncAppDispatch } from "src/infra/app/store";
-import { useToast } from "react-native-toast-notifications";
+import CalendarEpisodeListModal from 'src/modules/shared/components/actionConfirmationModal/ActionConfirmationModal';
+import { useEffect, useState } from 'react';
+import { useAsyncAppDispatch } from 'src/infra/app/store';
+import { useToast } from 'react-native-toast-notifications';
 
 const stylesheet = {
   profile: {
@@ -47,9 +50,6 @@ const CustomActionButton = ({
   );
 };
 
-
-
-
 const ProfilePage = () => {
   const auth = useSelector(authSelector);
   const appState = useSelector(appStateSelector);
@@ -59,28 +59,37 @@ const ProfilePage = () => {
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
   const toast = useToast();
 
+  useEffect(() => {
+    dispatch(setPageTitle('Perfil'));
+  }, []);
 
-      const handleDelete = async () => {
-      if (appState.patient!.id && auth.sessionEmail) {
-        const res = await dispatchAsync(handleDeleteAccount({ id: appState.patient!.id, emailAddress: auth.sessionEmail }));
-        if (
-          res.meta.requestStatus === 'fulfilled' 
-        ) {
-          toast.show('É uma pena que tenha partido. Estaremos sempre disponíveis para ajudar!', {type: 'success', duration: 30000})
-          dispatch(signOut());
-        }
+  const handleDelete = async () => {
+    if (appState.patient!.id && auth.sessionEmail) {
+      const res = await dispatchAsync(
+        handleDeleteAccount({
+          id: appState.patient!.id,
+          emailAddress: auth.sessionEmail,
+        })
+      );
+      if (res.meta.requestStatus === 'fulfilled') {
+        toast.show(
+          'É uma pena que tenha partido. Estaremos sempre disponíveis para ajudar!',
+          { type: 'success', duration: 30000 }
+        );
+        dispatch(signOut());
       }
-    };
+    }
+  };
   return (
     <AppPageScaffold>
       <View className={stylesheet.profile.wrapper}>
         <View className='relative mb-4'>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate(
-                'AvatarSelection' as never,
-                { email: auth.sessionEmail, isLogged: true } as never
-              );
+              navigation.navigate('AvatarSelection', {
+                email: auth.sessionEmail,
+                isLogged: true,
+              });
             }}
             className='bg-gray-secondary dark:bg-d-blue-primary items-center justify-center rounded-full absolute inline-flex bottom-[-20px] right-0 z-50'
           >
@@ -149,7 +158,7 @@ const ProfilePage = () => {
             title='Meus relatórios'
             iconName={require('src/assets/document.png')}
             onPress={() => {
-              navigation.navigate('Report' as never);
+              navigation.navigate('ReportListPage' as never);
             }}
           />
           {/* <CustomActionButton title='Contas vinculadas' /> */}
@@ -157,7 +166,6 @@ const ProfilePage = () => {
             title='Ajuda'
             iconName={require('src/assets/interrogation.png')}
             onPress={() => {
-              dispatch(setPageTitle('Ajuda'));
               navigation.navigate('Help' as never);
             }}
           />
@@ -172,7 +180,7 @@ const ProfilePage = () => {
             title='Deletar conta'
             iconName={require('src/assets/user.png')}
             onPress={() => {
-            setOpenConfirmationModal(true);
+              setOpenConfirmationModal(true);
             }}
           />
           <CustomActionButton
@@ -183,29 +191,31 @@ const ProfilePage = () => {
             }}
           />
 
-           {openConfirmationModal && (
-          <ActionConfirmationModal
-          isOpen={openConfirmationModal}
-          onClose={()=>{
-            setOpenConfirmationModal(false);
-          }}
-          desc={`Você está prestes a deletar a sua conta. Todos os seus dados serão perdidos de forma permamente.`}
-          submitAction={() => {
-            setOpenConfirmationModal(false);
-            handleDelete();
-          }}
-          />
+          {openConfirmationModal && (
+            <CalendarEpisodeListModal
+              isOpen={openConfirmationModal}
+              onClose={() => {
+                setOpenConfirmationModal(false);
+              }}
+              desc={`Você está prestes a deletar a sua conta. Todos os seus dados serão perdidos de forma permamente.`}
+              submitAction={() => {
+                setOpenConfirmationModal(false);
+                handleDelete();
+              }}
+            />
           )}
-               
         </View>
         <Text className='p-4 text-start text-xs text-d-text-dark dark:text-[#737E86]'>
           Para uma melhor experiência e um ambiente agradável, leia as{' '}
           <Text className='dark:text-[#8FD7FF] text-xs'>
             Políticas de privacidade
           </Text>{' '}
-           
-          <Text className='dark:text-[#8FD7FF] text-xs'> e os{' '} Termos de uso.</Text>
+          <Text className='dark:text-[#8FD7FF] text-xs'>
+            {' '}
+            e os Termos de uso.
+          </Text>
         </Text>
+        <Text className='m-auto text-xs'>Versão 1.0 - Beta - Teste aberto</Text>
       </View>
     </AppPageScaffold>
   );

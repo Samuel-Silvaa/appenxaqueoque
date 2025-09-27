@@ -28,7 +28,7 @@ const Aboutus = () => {
             Filipe Rodrigues da Silva{'\n'}
             Samuel Rodrigues da Silva{'\n'}
             Karen Emilly Alves Marcantônio{'\n'}
-            Mariana Rodrigues da Silva
+            Mariana Rodrigues Zeferino
           </Text>
         </View>
         <Image

@@ -36,7 +36,7 @@ const data: {
     value: TriggerType.EMOTIONAL,
   },
   {
-    label: 'Excesso de tela.',
+    label: 'Excesso de tela',
     value: TriggerType.VISUALEFFORT,
   },
   {
@@ -91,7 +91,7 @@ const Trigger = () => {
 
   return (
     <View className='h-full w-full'>
-      <Wrapper title='Nos diga quais foram os gatilhos : '>
+      <Wrapper title='Quais fatores podem ter desencadeado a crise? '>
         {data.map((act, index) => (
           <Fragment key={index}>
             <Card
@@ -124,7 +124,6 @@ const Trigger = () => {
             {act.value == TriggerType.FOOD && (
               <InputContainer
                 label='Qual alimento?'
-                labelicon={require('src/assets/cupcake.png')}
                 name='foodImpair'
                 placeholder='Descreva brevemente'
                 setValue={setValue}

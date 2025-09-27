@@ -1,7 +1,7 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
-import { useCallback } from "react";
-import { TouchableOpacity,  } from 'react-native';
+import { useCallback, useEffect } from "react";
+import { Animated, TouchableOpacity,  } from 'react-native';
 import { Image, Text, View } from 'react-native';
 import { Appearance } from 'react-native';
 import { useSelector } from "react-redux";
@@ -11,9 +11,9 @@ import { useColorScheme } from 'nativewind';
 
 
 const stylesheet = {
-  header: 'w-full p-4 pt-8 flex flex-row grow-0 justify-between items-center',
+  header: 'w-full p-4 pt-12 flex flex-row grow-0 justify-between items-center absolute ',
   backButton: 'p-3',
-  themeButton: 'p-3',
+  themeButton: 'w-14 h-14',
 };
 
 const AppHeader = ({
@@ -34,46 +34,53 @@ const AppHeader = ({
     }
   }, [] );
 
+  useEffect(() => {
+    setColorScheme('light');
+  },[])
+
   return (
     <View
       className={stylesheet.header}
       style={{
-        backgroundColor:
-          Appearance.getColorScheme() == 'light' ? '#edf1f8' : '#23263F',
+        backgroundColor: 'transparent'
       }}
     >
-      {navigation.canGoBack() ? (
+      {(navigation.canGoBack()) ?   (
         <TouchableOpacity
           className={stylesheet.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           onPress={() => {
-            navigation.goBack();
+              navigation.goBack()
           }}
         >
-          <Image resizeMode="contain" className="w-7 h-7 " source={require('src/assets/arrowback.png')} />
+          <Image resizeMode="contain" className="w-1/7 h-7 " source={require('src/assets/arrowback.png')} />
         </TouchableOpacity>
       ) : (
-        <Image></Image>
+        <View className="w-1/6 h-7 "></View>
       )}
-      {appState.pageTitle && (
-        <Text
+        {appState.pageTitle && (
+        <Animated.View 
+        >
+          <Text
           className={`text-2xl ${
             Appearance.getColorScheme() == 'light'
               ? 'text-black '
               : 'text-d-blue-title'
-          } font-extrabold ml-8 w-2/4 align-center text-center `}
+          } font-extrabold text-center self-center align-centerflex-1`}
         >
           {appState.pageTitle}
         </Text>
+        </Animated.View>
       )}
+      
       <TouchableOpacity
         className={stylesheet.themeButton}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         onPress={() => {
-          toggleAppColorScheme();
+          // toggleAppColorScheme();
         }}
       >
-        <Image
+        {/* <Image
           className='w-14 h-14'
           resizeMode='contain'
           source={
@@ -81,7 +88,7 @@ const AppHeader = ({
               ? require('src/assets/moon.png')
               : require('src/assets/sun.png')
           }
-        />
+        /> */}
       </TouchableOpacity>
     </View>
   );

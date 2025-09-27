@@ -1,7 +1,7 @@
 export default {
   expo: {
-    name: "appenxaqueoque",
-    slug: "appenxaqueoque",
+    name: "Enxaque o quê?: Diário de Enxaqueca Infantil",
+    slug: "Enxaque o quê?: Diário de Enxaqueca Infantil",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
@@ -22,9 +22,9 @@ export default {
         "expo-splash-screen",
         {
           backgroundColor: "#FFFFFF",
-          image: "./assets/logoenxaq.png",
+          image: "./assets/splash.png",
           dark: {
-            image: "./assets/logoenxaq.png",
+            image: "./assets/splash.png",
             backgroundColor: "#000000"
           },
           imageWidth: 300

@@ -1,10 +1,4 @@
-import {
-  Image,
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, Modal, Text, TouchableOpacity, View } from 'react-native';
 import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
 import { useSelector } from 'react-redux';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
@@ -16,12 +10,12 @@ import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/Ex
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
 import { Report } from 'src/infra/@types/app.types';
 import { useState } from 'react';
-import { ToastOptions, useToast } from "react-native-toast-notifications";
+import { ToastOptions, useToast } from 'react-native-toast-notifications';
 
 const stylesheet = {
   wrapper: 'w-full',
   header: 'w-full flex-row items-center justify-between mb-4',
-  arrowdown: 'flex items-center justify-center p-2',
+  arrowdown: 'flex items-center justify-center p-2 w-5 h-5',
   closeButton: 'p-3',
   inputCard:
     'w-4/5 bg-white dark:bg-d-blue-primary shadow-sm rounded-[16px] flex-col items-center jusitfy-center p-6 gap-y-2 m-auto self-center z-20 overflow-hidden',
@@ -46,32 +40,41 @@ const PhysicianEmailModal = ({
   const [email, setEmail] = useState('');
   const toast = useToast();
 
-  const handleSubmitEmailSender = async ()  => {
+  const handleSubmitEmailSender = async () => {
     if (email !== '') {
       try {
         if (report.id) {
-          const res = await asyncDispatch(handleGeneratePdfReport({
-            id: report.id,
-            physicianEmail: email,
-          }));
-          
-              if(res.meta.requestStatus == 'rejected') {
-                  toast.hideAll();
-                  const toastOptions: ToastOptions = {
-                    type: 'danger',
-                  };
-                  toast.show(`Error inesperado ao  ${appState.episode.isEdition ? 'editar' : 'cadastrar'} episódio. Entre em contato com nosso suporte!`, toastOptions);
-                  return;
-              } else if(res.meta.requestStatus == 'fulfilled') {
-                  onClose();
-                  toast.hideAll();
-                  const toastOptions: ToastOptions = {
-                    type: 'success',
-                  };
-                  toast.show(`Email eviado com sucesso para o endereço: ${email} `, toastOptions);
-                  return; 
-              }
-          
+          const res = await asyncDispatch(
+            handleGeneratePdfReport({
+              id: report.id,
+              physicianEmail: email,
+            })
+          );
+
+          if (res.meta.requestStatus == 'rejected') {
+            toast.hideAll();
+            const toastOptions: ToastOptions = {
+              type: 'danger',
+            };
+            toast.show(
+              `Error inesperado ao  ${
+                appState.episode.isEdition ? 'editar' : 'cadastrar'
+              } episódio. Entre em contato com nosso suporte!`,
+              toastOptions
+            );
+            return;
+          } else if (res.meta.requestStatus == 'fulfilled') {
+            onClose();
+            toast.hideAll();
+            const toastOptions: ToastOptions = {
+              type: 'success',
+            };
+            toast.show(
+              `Email eviado com sucesso para o endereço: ${email} `,
+              toastOptions
+            );
+            return;
+          }
         }
       } catch (err) {
         console.log(err);
@@ -89,20 +92,19 @@ const PhysicianEmailModal = ({
         onClose();
       }}
     >
-      <AppPageScaffold
-        alignment='items-center'
-      >
+      <AppPageScaffold hasArrowBack={false} alignment='items-center'>
         <View className={stylesheet.header}>
-          <Text className={sharedStyleSheet.title}>
+          <Text className={sharedStyleSheet.title.concat(' w-3/4 text-[24px]')}>
             Envie um pdf do seu relatório de episódios para o seu médico.
           </Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => onClose()}
             className={stylesheet.closeButton}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Image
               className={stylesheet.arrowdown}
+              resizeMode='contain'
               source={require('src/assets/arrowdown.png')}
             ></Image>
           </TouchableOpacity>
@@ -117,9 +119,7 @@ const PhysicianEmailModal = ({
             inputMode='email'
             name='email'
             setValue={setEmail}
-            onChangeText={(
-              value: string
-            ) => {
+            onChangeText={(value: string) => {
               setEmail(value);
             }}
             control={control}

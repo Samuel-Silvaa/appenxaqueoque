@@ -1,5 +1,5 @@
 import { FieldErrors, UseFormSetValue } from 'react-hook-form';
-import { useCallback, useState } from 'react';
+import { RefObject, useCallback, useEffect, useState } from 'react';
 import {
   Image,
   ImageSourcePropType,
@@ -28,7 +28,7 @@ interface TimeInputProps {
   value?: Date | null;
   defaultValue?: Date | null;
   disabled?: boolean;
-  onTimeChange?: (time: Date) => void;
+  onChange?: (time: Date) => void;
   mode?: 'time' | 'date' | 'datetime';
   format?: '24h' | '12h';
   minimumDate?: Date;
@@ -46,12 +46,13 @@ const TimeInput = ({
   value,
   defaultValue,
   disabled = false,
-  onTimeChange,
+  onChange,
   mode = 'time',
   format = '24h',
   minimumDate,
   maximumDate,
   minuteInterval = 1,
+  ...res
 }: TimeInputProps) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [displayValue, setDisplayValue] = useState('');
@@ -66,12 +67,25 @@ const TimeInput = ({
     setDatePickerVisibility(false);
   };
 
+  
+  useEffect(() => {
+  if (value) {
+    setDisplayValue(formatTime(value));
+  } else if (defaultValue) {
+    setDisplayValue(formatTime(defaultValue));
+  } else {
+    setDisplayValue('');
+  }
+}, [value, defaultValue]);
+
   const handleConfirm = useCallback( (selectedTime: Date) => {
     setDisplayValue(selectedTime ? formatTime(selectedTime) : '');
     setValue!(name, selectedTime);
+    if(onChange)
+    onChange(selectedTime);
     hideDatePicker();
 
-  }, [setValue]);
+  }, [onChange, name, setValue]);
 
   const formatTime = (time: Date | null): string => {
     if (!time) return '';
@@ -140,6 +154,7 @@ const TimeInput = ({
       )}
 
       <DateTimePickerModal
+        {...res}
         buttonTextColorIOS="#9194E9"
         locale='pt-BR'
         isVisible={isDatePickerVisible}

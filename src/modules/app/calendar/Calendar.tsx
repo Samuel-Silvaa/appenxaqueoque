@@ -2,21 +2,22 @@ import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffol
 import './locale';
 
 import CalendarComponent from '../shared/components/calendar/CalendarComponent';
-import { useApp } from 'src/infra/app/app';
 import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import { View } from 'react-native';
-import EpisodeModal from 'src/modules/shared/components/episodemodal/EpisodeModal';
 import { pinColor } from 'src/infra/utils/appUtils';
 import AcutenessLegend from '../shared/components/calendar/AcutenessLegend';
 import { Episode } from 'src/infra/@types/app.types';
 import { useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
+import { useNavigation } from "@react-navigation/native";
+import CalendarEpisodeListModal from "src/modules/shared/components/calendarEpísodeListModal/CalendarEpisodeListModal";
 
 const InnerHomeContainer = () => {
   const appState = useSelector(appStateSelector);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEpisode, setSelectedEpisode] = useState<Episode>();
+  const navigation = useNavigation<any>();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedDateEpisodes, setSelectedDateEpisodes] = useState<Episode[] | null>(null);
 
   const parsedEpisodes = useMemo(() => {
     if (Array.isArray(appState.episodes)) {
@@ -38,31 +39,39 @@ const InnerHomeContainer = () => {
   return (
     <View className='flex-grow'>
       <CalendarComponent
+        displayMessage
         onDayPress={(date) => {
           if (Object.keys(parsedEpisodes).includes(date.dateString)) {
-            setIsModalOpen(true);
-            setSelectedEpisode(
-              appState.episodes?.find(
+            const selectedEpisode =  appState.episodes?.filter(
                 (ep) => format(ep.dateTime!, 'yyyy-MM-dd') == date.dateString
-              )! || null
-            );
+              )! || null;
+
+              if(selectedEpisode.length > 1) {
+                setSelectedDateEpisodes(selectedEpisode);
+                setIsOpen(true);
+                return;
+              }
+
+            navigation.navigate('EpisodeDetails', {episode : {
+            ...(selectedEpisode[0] as Episode),
+            period: Number(selectedEpisode[0]?.period) == 1 ? 'true' : 'false',
+            dates: {
+              [format(selectedEpisode[0].dateTime!, 'yyyy-MM-dd').toString()]:
+                parsedEpisodes[format(selectedEpisode[0].dateTime!, 'yyyy-MM-dd')],
+            },
+          }});
+           
           }
         }}
         markedDates={parsedEpisodes}
       />
-      {isModalOpen && selectedEpisode && selectedEpisode.dateTime && (
-        <EpisodeModal
-          episode={{
-            ...(selectedEpisode as Episode),
-            period: Number(selectedEpisode?.period) == 1 ? 'true' : 'false',
-            dates: {
-              [format(selectedEpisode.dateTime, 'yyyy-MM-dd').toString()]:
-                parsedEpisodes[format(selectedEpisode.dateTime, 'yyyy-MM-dd')],
-            },
-          }}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
+      { isOpen && (
+
+      <CalendarEpisodeListModal
+      episodes={selectedDateEpisodes!}
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      />
       )}
     </View>
   );

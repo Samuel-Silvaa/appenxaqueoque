@@ -12,13 +12,15 @@ const stylesheet = {
 const CalendarComponent = ({
   markedDates,
   onDayPress,
+  displayMessage
 }: {
   markedDates?: MarkedDates;
   onDayPress: (date: DateData) => void;
+  displayMessage?: boolean
 }) => {
   return (
     <View className='relative w-full'>
-      <View className='bg-blue-tertiary dark:bg-d-blue-primary rounded-[28px] absolute top-0 h-2/5 w-full'></View>
+      <View className='bg-blue-four dark:bg-d-blue-primary rounded-[28px] absolute top-0 h-2/5 w-full'></View>
       <View className={stylesheet.container}>
         <View className={stylesheet.body}>
           <Calendar
@@ -28,14 +30,18 @@ const CalendarComponent = ({
             theme={getCalendarTheme()}
           />
 
-          <View className={sharedEpisodeStyleSheet.timepicker.divider}></View>
+          {displayMessage && (
+            <View className="flex items-center p-4">
+              <View className={sharedEpisodeStyleSheet.timepicker.divider}></View>
 
           <View className='rounded-full w-full bg-beige-primary/50 dark:bg-d-blue-primary/50 flex-row justify-center items-center p-2 m-auto mb-4'>
             <Image source={require('src/assets/arrowup.png')}></Image>
             <Text className='font-xs p-2 dark:text-d-text-gray'>
-              Escolha a data de um episódio existente que deseja vizualizar ou editar
+              Escolha a data do episódio que deseja visualizar ou editar
             </Text>
           </View>
+          </View>
+          )}
         </View>
       </View>
     </View>

@@ -77,6 +77,7 @@ const PainType = () => {
           {data.map((act, index) => (
             <Fragment key={index}>
               <Card
+              isHeart={act.value == PainTypeEnum.THROB}
                 children={
                   <View className='flex-row items-center'>
                     <RadioButton value={act.value} color='#CEB0FA' />

@@ -8,9 +8,9 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from "react-redux";
-import { appStateSelector } from "src/infra/app/selectors";
-import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector } from 'src/infra/app/selectors';
+import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 
 const data = [
   {
@@ -44,33 +44,42 @@ const ImpairFactor = () => {
     reset,
   } = useForm({ resolver: yupResolver(impairSchema) });
 
-  const handleSetImpairFactors = useCallback((value: string) => {
-    // Ensure impairFactor is always an array
-    const currentImpairFactor = Array.isArray(appState.episode.impairFactor) 
-      ? appState.episode.impairFactor 
-      : appState.episode.impairFactor ? appState.episode.impairFactor.split(",").filter((value) => value != '') : [];
-    
-    if (currentImpairFactor!.includes(value)) {
-      dispatch(handleFormChanging({
-        impairFactor: currentImpairFactor.filter((tr) => tr !== value),
-        anotherImpairFactor: value == ImpairFactorType.ANOTHER ? null : value 
-      }));
-      reset({anotherImpairFactor: ''})
-    } else {
-      dispatch(handleFormChanging({
-        impairFactor: [...currentImpairFactor, value],
-      }));
-    }
-  }, [appState.episode]);
-  console.log(appState.episode)
+  const handleSetImpairFactors = useCallback(
+    (value: string) => {
+      // Ensure impairFactor is always an array
+      const currentImpairFactor = Array.isArray(appState.episode.impairFactor)
+        ? appState.episode.impairFactor
+        : appState.episode.impairFactor
+        ? appState.episode.impairFactor
+            .split(',')
+            .filter((value) => value != '')
+        : [];
+
+      if (currentImpairFactor!.includes(value)) {
+        dispatch(
+          handleFormChanging({
+            impairFactor: currentImpairFactor.filter((tr) => tr !== value),
+            anotherImpairFactor:
+              value == ImpairFactorType.ANOTHER ? null : value,
+          })
+        );
+        reset({ anotherImpairFactor: '' });
+      } else {
+        dispatch(
+          handleFormChanging({
+            impairFactor: [...currentImpairFactor, value],
+          })
+        );
+      }
+    },
+    [appState.episode]
+  );
 
   return (
     <View className='h-full w-full'>
       <Wrapper title='O que piora a dor?'>
         {data.map((act, index) => (
-          <Fragment 
-              key={index}
-          >
+          <Fragment key={index}>
             <Card
               key={index}
               children={
@@ -90,7 +99,11 @@ const ImpairFactor = () => {
                       flexShrink: 1,
                     }}
                     text={act.label}
-                    isChecked={ appState.episode.impairFactor ? appState.episode.impairFactor?.includes(act.value) : false}
+                    isChecked={
+                      appState.episode.impairFactor
+                        ? appState.episode.impairFactor?.includes(act.value)
+                        : false
+                    }
                     onPress={(isChecked: boolean) => {
                       handleSetImpairFactors(act.value);
                     }}
@@ -101,25 +114,35 @@ const ImpairFactor = () => {
             />
             {act.value == ImpairFactorType.ANOTHER && (
               <InputContainer
-                editable={appState.episode!.impairFactor ? appState.episode.impairFactor!.includes(
-                  ImpairFactorType.ANOTHER
-                ) : false}
+                editable={
+                  appState.episode!.impairFactor
+                    ? appState.episode.impairFactor!.includes(
+                        ImpairFactorType.ANOTHER
+                      )
+                    : false
+                }
                 setValue={setValue}
                 label='Qual outro fator de piora?'
                 name='anotherImpairFactor'
                 placeholder='Descreva brevemente'
                 control={control}
                 errors={errors}
-                className={appState.episode!.impairFactor ? !appState.episode!.impairFactor?.includes(
-                  ImpairFactorType.ANOTHER
-                )
-                    ? 'opacity-25' + ' bg-white drop-shadow-sm'
-                    : 'opacity-100' + ' bg-white drop-shadow-sm' : 'opacity-25' + ' bg-white drop-shadow-sm'
-                 
+                className={
+                  appState.episode!.impairFactor
+                    ? !appState.episode!.impairFactor?.includes(
+                        ImpairFactorType.ANOTHER
+                      )
+                      ? 'opacity-25' + ' bg-white drop-shadow-sm'
+                      : 'opacity-100' + ' bg-white drop-shadow-sm'
+                    : 'opacity-25' + ' bg-white drop-shadow-sm'
                 }
                 defaultValue={appState.episode.anotherImpairFactor!}
                 onChange={(e) =>
-                  dispatch(handleFormChanging({ anotherImpairFactor: e.nativeEvent.text }))
+                  dispatch(
+                    handleFormChanging({
+                      anotherImpairFactor: e.nativeEvent.text,
+                    })
+                  )
                 }
               />
             )}

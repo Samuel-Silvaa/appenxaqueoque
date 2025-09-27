@@ -16,6 +16,8 @@ import { clearAppErrorMessage } from 'src/infra/app/reducers/app.reducer';
 import { Linking } from 'react-native';
 import { NativeWindStyleSheet } from 'nativewind';
 import { ColorSchemeSystem } from 'nativewind/dist/style-sheet/color-scheme';
+import { ScreenLoader } from 'src/modules/shared/components/loader/ScreenLoader';
+import * as SecureStore from 'expo-secure-store';
 
 const ActiveRoutes = () => {
   const auth = useSelector((state) => authSelector(state));
@@ -94,7 +96,8 @@ const ActiveRoutes = () => {
 
   return (
     <Fragment>
-      <Loader></Loader>
+      {!auth.entireScreenLoading && <Loader></Loader>}
+      {auth.entireScreenLoading && <ScreenLoader></ScreenLoader>}
       {auth.token && auth.user && !auth.isFirstAccess ? (
         <TabsRoutes />
       ) : (
@@ -135,23 +138,21 @@ const Toast = ({ toastOptions }: { toastOptions: ToastProps }) => {
 const App = () => {
   return (
     <Provider store={store}>
-        <NavigationContainer>
-          <ToastProvider
-            swipeEnabled={true}
-            animationDuration={400}
-            animationType='slide-in'
-            placement='top'
-            offsetTop={60}
-            duration={2000}
-            renderToast={(toastOptions) => (
-              <Toast toastOptions={toastOptions} />
-            )}
-          >
-            <AppProvider>
-              <ActiveRoutes />
-            </AppProvider>
-          </ToastProvider>
-        </NavigationContainer>
+      <NavigationContainer>
+        <ToastProvider
+          swipeEnabled={true}
+          animationDuration={400}
+          animationType='slide-in'
+          placement='top'
+          offsetTop={60}
+          duration={2000}
+          renderToast={(toastOptions) => <Toast toastOptions={toastOptions} />}
+        >
+          <AppProvider>
+            <ActiveRoutes />
+          </AppProvider>
+        </ToastProvider>
+      </NavigationContainer>
     </Provider>
   );
 };

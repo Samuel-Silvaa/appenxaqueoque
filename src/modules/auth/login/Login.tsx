@@ -9,13 +9,20 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { clearErrorMessage, requestLogin } from "src/infra/app/reducers/auth.reducer";
-import { useDispatch } from "react-redux";
-import { useAsyncAppDispatch } from "src/infra/app/store";
+import {
+  clearErrorMessage,
+  requestLogin,
+  setPatient,
+  setToken,
+} from 'src/infra/app/reducers/auth.reducer';
+import { useDispatch } from 'react-redux';
+import { useAsyncAppDispatch } from 'src/infra/app/store';
+import { setPatientData } from 'src/infra/app/reducers/app.reducer';
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',
-  forgotPasswordText: 'text-xs text-black underline dark:text-d-text-gray no-underline',
+  forgotPasswordText:
+    'text-xs text-black underline dark:text-d-text-gray no-underline',
 };
 
 interface LoginSchema {
@@ -50,19 +57,28 @@ const Login = ({ navigation }: any) => {
   useEffect(() => {
     return () => {
       dispatch(clearErrorMessage());
-    }
-  })
+    };
+  });
 
   const onSubmitHandler = async (data: LoginSchema) => {
-     const res = await dispatch(requestLogin(data));
+    const res = await dispatch(requestLogin(data));
 
-     if(res.meta.requestStatus === 'rejected' && (res as any).error?.message?.includes('confirme seu email')){
-          navigation.navigate('sendEmailConfirmation' as never, { email: data.email, password: data.password } as never);
-     }
+    if (
+      res.meta.requestStatus === 'rejected' &&
+      (res as any).error?.message?.includes('confirme seu email')
+    ) {
+      navigation.navigate(
+        'sendEmailConfirmation' as never,
+        { email: data.email, password: data.password } as never
+      );
+    }
   };
 
   const handleForgotPassword = () => {
-    navigation.navigate('sendEmailConfirmation' as never, { email: '' } as never);
+    navigation.navigate(
+      'sendEmailConfirmation' as never,
+      { email: '' } as never
+    );
   };
 
   return (
@@ -110,7 +126,9 @@ const Login = ({ navigation }: any) => {
         /> */}
         <View></View>
         <TouchableOpacity onPress={handleForgotPassword}>
-          <Text className={stylesheet.forgotPasswordText}>Esqueci minha senha</Text>
+          <Text className={stylesheet.forgotPasswordText}>
+            Esqueci minha senha
+          </Text>
         </TouchableOpacity>
       </View>
     </AuthScaffold>

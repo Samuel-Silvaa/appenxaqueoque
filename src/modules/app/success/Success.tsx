@@ -1,9 +1,6 @@
 import { Image, Text, View } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
-import EpisodeModal from 'src/modules/shared/components/episodemodal/EpisodeModal';
-import { useState } from 'react';
-import { useApp } from 'src/infra/app/app';
 import { clearEpisodeState } from "src/infra/app/reducers/app.reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
@@ -16,7 +13,6 @@ const stylesheet = {
 };
 
 const Success = ({ navigation }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
 
@@ -33,7 +29,7 @@ const Success = ({ navigation }) => {
           title='Ver resumo do episódio'
           colorScheme='light'
           onPress={() => {
-            setIsModalOpen(true);
+            navigation.navigate('EpisodeDetails', {episode: appState.episode})
           }}
         />
         <ExPressable
@@ -44,13 +40,7 @@ const Success = ({ navigation }) => {
           }}
         />
       </View>
-      {isModalOpen && (
-        <EpisodeModal
-          episode={appState.episode}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+    
     </AppPageScaffold>
   );
 };

@@ -23,12 +23,12 @@ const stylesheet = {
   },
   innerHomeContainer: {
     container:
-      'relative w-full h-[100vw] bg-beige-primary dark:bg-d-blue-primary-dark flex-row flex-wrap justify-between rounded-[30px] mt-[80px] p-2',
-    header: 'w-full h-[20%] flex items-center p-4',
+      'relative w-full h-[90vw] bg-beige-primary dark:bg-d-blue-primary-dark flex-row flex-wrap justify-between rounded-[30px] mt-[80px] p-2',
+    header: 'w-full h-[15%] flex items-center p-4',
     body: 'flex-row flex-wrap justify-evenly items-end w-full h-[80%] p-1',
     innerCardCategory:
       'bg-white w-[45%] h-[45%] rounded-[30px] p-2 pt-4 box-border m-1 dark:bg-d-blue-primary shadow-lg',
-    innerCardImage: 'm-2 w-[24px] h-[24px]',
+    innerCardImage: 'm-2 w-6 h-6',
     kidsImg: 'absolute top-[-120px] w-[100%] h-[185]',
   },
   footer: 'w-full ',
@@ -42,6 +42,7 @@ interface HomeCategory {
   title: string;
   icon: ImageSourcePropType;
   path: string;
+  child?: string;
 }
 
 const categories: Array<HomeCategory> = [
@@ -54,6 +55,7 @@ const categories: Array<HomeCategory> = [
     title: 'Enviar relatórios',
     icon: require('src/assets/stats.png'),
     path: 'Report',
+    child: 'ReportOptions',
   },
   {
     title: 'Calendário de episódios',
@@ -70,14 +72,15 @@ const categories: Array<HomeCategory> = [
 const CountingDaysTitle = () => {
   const appState = useSelector(appStateSelector);
 
-  const getDaysRange = () => appState.episodes?.length > 0
-            ? differenceInDays(
-                format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
-                format(new Date(appState.episodes[0].dateTime!), 'yyyy-MM-dd', {
-                  locale: ptBR,
-                })
-              )
-            : 0;
+  const getDaysRange = () =>
+    appState.episodes?.length > 0
+      ? differenceInDays(
+          format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
+          format(new Date(appState.episodes[0].dateTime!), 'yyyy-MM-dd', {
+            locale: ptBR,
+          })
+        )
+      : 0;
   return (
     <View className={stylesheet.countingDays.card}>
       {!!appState.episodes && (
@@ -89,11 +92,13 @@ const CountingDaysTitle = () => {
   );
 };
 
-const InnerCardCategory = ({ title, icon, path }: HomeCategory) => {
+const InnerCardCategory = ({ title, icon, path, child }: HomeCategory) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate(path)}
+      onPress={() => {
+        navigation.navigate(path as never);
+      }}
       className={stylesheet.innerHomeContainer.innerCardCategory}
     >
       <View className='flex items-start'>
@@ -131,6 +136,7 @@ const InnerHomeContainer = () => {
             title={cat.title}
             icon={cat.icon}
             path={cat.path}
+            child={cat.child}
           />
         ))}
       </View>
@@ -175,25 +181,27 @@ const HomePage = () => {
     <AppPageScaffold paddingInset={isEpisodesPopulated ? 4 : 0}>
       <View>
         <View className='flex flex-row items-center p-0'>
-        { !isEpisodesPopulated && !appstate.loading && (
-          <Image
-            className=' h-[200] w-[30vw]'
-            resizeMode='contain'
-            source={require('src/assets/ruiva-sem-episodio.png')}
-          ></Image>
-        )}
-        <Text className={stylesheet.userName}>Olá, {auth!.user!.name}</Text>
-      </View>
-      {!!isEpisodesPopulated && (
-        <View>
-          <CountingDaysTitle />
-          <InnerHomeContainer />
+          {!isEpisodesPopulated && !appstate.loading && (
+            <Image
+              className=' h-[200] w-[30vw]'
+              resizeMode='contain'
+              source={require('src/assets/ruiva-sem-episodio.png')}
+            ></Image>
+          )}
+          <Text className={stylesheet.userName}>
+            Olá, {!!auth!.user ? auth.user!.name : '...'}
+          </Text>
         </View>
-      )}
+        {!!isEpisodesPopulated && (
+          <View>
+            <CountingDaysTitle />
+            <InnerHomeContainer />
+          </View>
+        )}
 
-      {!isEpisodesPopulated && !appstate.loading && (
-        <FirtAccessInnerHomeContainer />
-      )}
+        {!isEpisodesPopulated && !appstate.loading && (
+          <FirtAccessInnerHomeContainer />
+        )}
       </View>
     </AppPageScaffold>
   );

@@ -4,10 +4,13 @@ import { Image, Pressable, Text, View } from 'react-native';
 import {
   Acuteness,
   Episode,
+  ImpairFactor,
+  ImprovementFactor,
   Location,
   PainType,
   Report,
   Symptom,
+  Time,
   Trigger,
 } from 'src/infra/@types/app.types';
 import { useSelector } from 'react-redux';
@@ -21,21 +24,28 @@ import PieChartComponent from './components/PieChartComponent';
 import { BarChartComponent } from './components/BarChartComponent';
 import { SummedUpReport } from './components/SummedUpRepost';
 import { ReportCard } from './components/ReportCard';
+import {
+  episodePinColors,
+  parseImpairFactor,
+  parseImprovementFactor,
+  parsePainType,
+} from 'src/infra/utils/appUtils';
 
 const stylesheet = {
   footer: 'w-full ',
-  footerBtn: 'bg-[#F8ECDE] dark:bg-d-blue-primary w-full h-[70px] rounded-full p-2 my-2',
+  footerBtn:
+    'bg-[#F8ECDE] dark:bg-d-blue-primary w-full h-[70px] rounded-full p-2 my-2',
   footerBtnInner:
     'bg-white dark:bg-d-blue-primary-dark w-ful h-full rounded-full p-1 flex-row items-center justify-center',
 };
 
 const colorList = [
-  '#FFCBA666',
-  '#FFA6A666', 
   '#C8F7E166',
-  '#FFCACD66', 
+  '#FFCBA666',
+  '#FFA6A666',
+  '#FFB0B566',
   '#9193E866',
-  '#FFDAF266', 
+  '#FFDAF266',
 ];
 
 const ChartsPage = () => {
@@ -81,9 +91,30 @@ const ChartsPage = () => {
           count++;
         }
       });
-      dataList.push({ value: count, name: pt, color: colorList[index] });
+      dataList.push({ value: count, name: pt, color: episodePinColors(index) });
       count = 0;
     });
+    return dataList;
+  }, [episodes]);
+
+  const time = useMemo(() => {
+    const dataList: Array<{ value: number; name: string; color: string }> = [];
+    [Time.MORNING, Time.EVENING, Time.NIGHT, Time.MIDNIGHT].forEach(
+      (pt, index) => {
+        let count = 0;
+        episodes.map((ep: Episode) => {
+          if (ep.time == pt) {
+            count++;
+          }
+        });
+        dataList.push({
+          value: count,
+          name: pt,
+          color: episodePinColors(index),
+        });
+        count = 0;
+      }
+    );
     return dataList;
   }, [episodes]);
 
@@ -104,6 +135,9 @@ const ChartsPage = () => {
       Location.TEMPLELEFT,
       Location.TEMPLEBILATERAL,
       Location.BACKSIDE,
+      Location.OCCIPITALRIGHT,
+      Location.OCCIPITALLEFT,
+      Location.OCCIPITALBILATERAL,
     ].forEach((location) => {
       let count = 0;
       episodes.map((ep: Episode) => {
@@ -114,7 +148,7 @@ const ChartsPage = () => {
       locationList.push({
         value: count,
         label: location,
-        frontColor: colorList[locationList.length % colorList.length],
+        frontColor: episodePinColors(locationList.length % colorList.length),
       });
       count = 0;
     });
@@ -139,12 +173,29 @@ const ChartsPage = () => {
       symptomsList.push({
         value: count,
         label: symptom,
-        frontColor: colorList[symptomsList.length % colorList.length],
+        frontColor: episodePinColors(symptomsList.length % colorList.length),
       });
       count = 0;
     });
     return symptomsList;
   }, [episodes]);
+
+  function normalizeNotes(notes: unknown): string[] | null {
+    if (Array.isArray(notes)) {
+      const filtered = notes.filter((n): n is string => typeof n === 'string');
+      return filtered.length > 0 ? filtered : null;
+    }
+
+    if (typeof notes === 'string') {
+      const parts = notes
+        .split(',')
+        .map((n) => n.trim())
+        .filter(Boolean);
+      return parts.length > 0 ? parts : null;
+    }
+
+    return null;
+  }
 
   const triggers = useMemo(() => {
     const triggersList: Array<{
@@ -152,28 +203,32 @@ const ChartsPage = () => {
       label: Trigger;
       frontColor: string;
     }> = [];
-    [Trigger.FOOD, Trigger.JAGGEDSLEEP, Trigger.EMOTIONAL].forEach(
-      (trigger) => {
-        let count = 0;
-        episodes.map((ep: Episode) => {
-          if (trigger?.includes(',')) {
-            Array.from(trigger.split(',')).map((t) => {
-              if (t == trigger) {
-                count++;
-              }
-            });
-          } else if (ep.triggers == trigger) {
-            count++;
-          }
-        });
-        triggersList.push({
-          value: count,
-          label: trigger,
-          frontColor: colorList[triggersList.length % colorList.length],
-        });
-        count = 0;
-      }
-    );
+    [
+      Trigger.JAGGEDSLEEP,
+      Trigger.EMOTIONAL,
+      Trigger.VISUALEFFORT,
+      Trigger.FASTING,
+      Trigger.FOOD,
+    ].forEach((trigger) => {
+      let count = 0;
+      episodes.map((ep: Episode) => {
+        if (trigger?.includes(',')) {
+          Array.from(trigger.split(',')).map((t) => {
+            if (t == trigger) {
+              count++;
+            }
+          });
+        } else if (ep.triggers == trigger) {
+          count++;
+        }
+      });
+      triggersList.push({
+        value: count,
+        label: trigger,
+        frontColor: episodePinColors(triggersList.length % colorList.length),
+      });
+      count = 0;
+    });
     return triggersList;
   }, [episodes]);
 
@@ -229,10 +284,12 @@ const ChartsPage = () => {
               setEmailModalOpen(true);
             }}
           >
-            <Text className='dark:text-d-text-gray'>Enviar relatório para o médico </Text>
+            <Text className='dark:text-d-text-gray'>
+              Enviar relatório para o médico{' '}
+            </Text>
             <Image
               className='ml-1 h-[24px]'
-              resizeMode="contain"
+              resizeMode='contain'
               source={require('src/assets/send.png')}
             ></Image>
           </Pressable>
@@ -242,70 +299,118 @@ const ChartsPage = () => {
       {!!report && <SummedUpReport report={report} />}
 
       <BarChartComponent
-        key="location-bar"
+        key='location-bar'
         title='Localização da dor'
         dataset={location}
         maxValue={locationMaxValue}
       />
 
       <BarChartComponent
-        key="symptoms-bar"
+        key='symptoms-bar'
         title='Sintomas associados à dor'
         dataset={symptoms}
         maxValue={symptomsMaxValue}
       />
 
       <BarChartComponent
-        key="triggers-bar"
+        key='triggers-bar'
         title='Fatores desencadeantes da dor'
         dataset={triggers}
         maxValue={triggersMaxValue}
       />
 
-      <PieChartComponent assets={acuteness} title='Intensidade da dor' key="acuteness-pie" />
-      <PieChartComponent assets={painType} title='Característica da dor' key="painType-pie" />
+      <PieChartComponent
+        assets={acuteness}
+        title='Intensidade da dor'
+        key='acuteness-pie'
+      />
+      <PieChartComponent
+        assets={painType}
+        title='Característica da dor'
+        key='painType-pie'
+      />
 
-      {foodImprovement.length > 0 && (
-        <ReportCard
-          key="food-improvement"
-          title='Alimentos que ajudaram a melhorar'
-          description={foodImprovement}
-        />
-      )}
+      <PieChartComponent assets={time} title='Horário da crise' key='time' />
 
       {foodImpair.length > 0 && (
         <ReportCard
-          key="food-impair"
-          title='Alimentos que foram gatilhos para a dor'
+          key='food-impair'
+          title='Alimentos que foram gatilhos para a crise'
           description={foodImpair}
         />
       )}
 
-      <ReportCard
-        key="notes"
-        title='Observações'
-        description={
-          Array.isArray(report.notes)
-            ? (report.notes.filter((n): n is string => typeof n === 'string').length > 0
-                ? report.notes.filter((n): n is string => typeof n === 'string')
-                : null)
-            : typeof report.notes === 'string' && report.notes.includes(',')
-              ? (report.notes.split(',').filter((n): n is string => typeof n === 'string').length > 0
-                  ? report.notes.split(',').filter((n): n is string => typeof n === 'string')
-                  : null)
-              : report.notes
-        }
-      />
+      {report.notes && (
+        <ReportCard
+          key='notes'
+          title='Observações'
+          description={normalizeNotes(report.notes)}
+        />
+      )}
+
+      {parseImprovementFactor(report.improvementFactor) ==
+        ImprovementFactor.MEDICINE && (
+        <ReportCard
+          key='medicine'
+          title='Medicamentos'
+          description={episodes
+            .filter((ep) => ep.medicine != null)
+            .map(
+              (rpt) =>
+                `${rpt.medicine} - ${rpt.medicineDosage}  ${
+                  rpt.medicineUnit || ''
+                }`
+            )}
+        />
+      )}
+
+      {parseImprovementFactor(report.improvementFactor) ==
+        ImprovementFactor.FOOD && (
+        <ReportCard
+          key='improvementFood'
+          title='Alimentos que melhoraram a crise'
+          description={episodes
+            .filter((ep) => ep.foodImprovement != null)
+            .map((rpt) => `${rpt.foodImprovement}`)}
+        />
+      )}
+
+      {parseImprovementFactor(report.improvementFactor) ==
+        ImprovementFactor.ANOTHER && (
+        <ReportCard
+          key='anotherImprovement'
+          title='Alternativas que melhoraram a crise'
+          description={episodes
+            .filter((ep) => ep.anotherImprovementFactor != null)
+            .map((rpt) => `${rpt.anotherImprovementFactor}`)}
+        />
+      )}
+
+      {parsePainType(report.painType) == PainType.ANOTHER && (
+        <ReportCard
+          key='paintype'
+          title='Tipo da dor'
+          description={episodes
+            .filter((ep) => ep.painType != null)
+            .map((rpt) => `${rpt.anotherPainType}`)}
+        />
+      )}
+
+      {parseImpairFactor(report.impairFactor) == ImpairFactor.ANOTHER && (
+        <ReportCard
+          key='impairFactor'
+          title='Fatores de melhora'
+          description={episodes
+            .filter((ep) => ep.impairFactor != null)
+            .map((rpt) => `${rpt.anotherImpairFactor}`)}
+        />
+      )}
 
       {report.periodNotes && (
         <ReportCard
-          key="period-notes"
+          key='period-notes'
           title='Período menstrual'
-          description={
-            report.periodNotes.includes(',')
-              ? report.periodNotes.split(',')
-              : report.periodNotes
-          }
+          description={report.periodNotes}
         />
       )}
 

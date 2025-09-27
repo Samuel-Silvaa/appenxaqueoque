@@ -4,9 +4,9 @@ import Card from '../form/card/Card';
 import { useApp } from 'src/infra/app/app';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { HaloSymptom } from 'src/infra/@types/app.types';
-import { useDispatch, useSelector } from "react-redux";
-import { appStateSelector } from "src/infra/app/selectors";
-import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector } from 'src/infra/app/selectors';
+import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 
 const data: {
   label: string;
@@ -20,12 +20,14 @@ const data: {
     value: HaloSymptom.VISUAL_DISTORTIONS,
   },
   {
-    label: 'Formigamento - A criança pode sentir dormência nos braços, na face ou na língua.',
+    label:
+      'Formigamento - A criança pode sentir dormência nos braços, na face ou na língua.',
     img: require('src/assets/formigamento.png'),
     value: HaloSymptom.TINGLING,
   },
   {
-    label: 'Alterações na fala - A criança pode emitir sons incompreensíveis ou ter dificuldade em pronunciar algumas palavras.',
+    label:
+      'Alterações na fala - A criança pode emitir sons incompreensíveis ou ter dificuldade em pronunciar algumas palavras.',
     img: require('src/assets/fala.png'),
     value: HaloSymptom.SPEECH_DISTORTIONS,
   },
@@ -37,18 +39,24 @@ const HaloSymptoms = () => {
 
   const handleSetSymptomsValues = (value: string) => {
     // Ensure haloSymptoms is always an array
-    const currentHaloSymptoms = Array.isArray(appState.episode.haloSymptoms) 
-      ? appState.episode.haloSymptoms 
-      :  appState.episode.haloSymptoms ?  appState.episode.haloSymptoms.split(",").filter((value) => value != '') : [];
-    
+    const currentHaloSymptoms = Array.isArray(appState.episode.haloSymptoms)
+      ? appState.episode.haloSymptoms
+      : appState.episode.haloSymptoms
+      ? appState.episode.haloSymptoms.split(',').filter((value) => value != '')
+      : [];
+
     if (currentHaloSymptoms.includes(value)) {
-      dispatch(handleFormChanging({
-        haloSymptoms: currentHaloSymptoms.filter((tr) => tr !== value),
-      }));
+      dispatch(
+        handleFormChanging({
+          haloSymptoms: currentHaloSymptoms.filter((tr) => tr !== value),
+        })
+      );
     } else {
-      dispatch(handleFormChanging({
-        haloSymptoms: [...currentHaloSymptoms, value],
-      }));
+      dispatch(
+        handleFormChanging({
+          haloSymptoms: [...currentHaloSymptoms, value],
+        })
+      );
     }
   };
 
@@ -59,7 +67,7 @@ const HaloSymptoms = () => {
           <Card
             key={index}
             children={
-              <View className='flex-row items-center w-[80%] '>
+              <View className='flex-row items-center w-[96%] text-justify p-1'>
                 <BouncyCheckbox
                   size={22}
                   fillColor='#CEB0FA'
@@ -73,9 +81,14 @@ const HaloSymptoms = () => {
                     flexWrap: 'wrap',
                     flex: 1,
                     flexShrink: 1,
+                    textAlign: 'justify',
                   }}
                   text={act.label}
-                  isChecked={appState.episode.haloSymptoms ? appState.episode.haloSymptoms.includes(act.value) : null}
+                  isChecked={
+                    appState.episode.haloSymptoms
+                      ? appState.episode.haloSymptoms.includes(act.value)
+                      : null
+                  }
                   onPress={(isChecked: boolean) => {
                     handleSetSymptomsValues(act.value);
                   }}

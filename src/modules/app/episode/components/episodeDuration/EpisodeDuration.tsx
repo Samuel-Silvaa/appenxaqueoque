@@ -1,6 +1,5 @@
-import { View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
-import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -10,6 +9,16 @@ import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
 import { appStateSelector } from 'src/infra/app/selectors';
 import { TimeInputWithValidation } from 'src/modules/shared/components/timeInput';
 import { format, isValid, parse } from 'date-fns';
+import { sharedEpisodeStyleSheet } from "../../shared/SharedEpisodeStyleSheet";
+
+const stylesheet = {
+  calendarWrapper:
+    'flex-col w-full items-center overflow-hidden dark:bg-d-blue-primary',
+  calendar: {
+    wrapper: 'h-full pt-14 ',
+    img: 'absolute right-5 top-[-45px] z-30 flex-row items-center justify-between',
+  },
+};
 
 const durationSchema = yup
   .object<{ start: Date | null; end: Date | null }>()
@@ -53,7 +62,6 @@ const EpisodeDuration = () => {
     },
   });
 
-  const startTime = watch('start');
   const endTime = watch('end');
 
   const handleStartTimeChange = (time: Date) => {
@@ -83,11 +91,24 @@ const EpisodeDuration = () => {
 
   return (
     <View className="h-full w-full">
-      <Wrapper title="Quanto tempo durou a dor ?">
+       <View className={stylesheet.calendar.wrapper}>
+   
+      <View className={stylesheet.calendar.img}>
+             <Text className={sharedEpisodeStyleSheet.timepicker.title.concat(' text-md w-2/3 mb-2')}>
+          Quanto tempo durou a crise ?
+        </Text>
+        <Image
+          resizeMode='cover'
+          className="w-[90px] h-[140px] "
+          source={require('src/assets/victor_bear.png')}
+        />
+        
+      </View>
+       <Wrapper>
         <Card
           children={
             <View className="w-full">
-              <TimeInputWithValidation
+              <TimeInputWithValidation  
                 label="Horário de Início:"
                 name="start"
                 control={control}
@@ -111,7 +132,9 @@ const EpisodeDuration = () => {
             </View>
           }
         />
-      </Wrapper>
+       </Wrapper>
+      
+    </View>
     </View>
   );
 };

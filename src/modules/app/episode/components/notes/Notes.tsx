@@ -7,16 +7,19 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import { useApp } from 'src/infra/app/app';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from "react-redux";
-import { appStateSelector } from "src/infra/app/selectors";
-import { handleFetchEpisodes, handleFormChanging } from "src/infra/app/reducers/app.reducer";
-import { useAsyncAppDispatch } from "src/infra/app/store";
-import { ToastOptions, useToast } from "react-native-toast-notifications";
+import { useDispatch, useSelector } from 'react-redux';
+import { appStateSelector } from 'src/infra/app/selectors';
+import {
+  handleFetchEpisodes,
+  handleFormChanging,
+} from 'src/infra/app/reducers/app.reducer';
+import { useAsyncAppDispatch } from 'src/infra/app/store';
+import { ToastOptions, useToast } from 'react-native-toast-notifications';
 
 const stylesheet = {
-  wrapper: 'flex-col w-full items-center justify-between',
+  wrapper: 'flex-col w-full items-center justify-between relative',
   title: 'font-semibold text-black my-2  mb-10 mx-auto text-lg',
-  label: 'text-md font-semibold text-black self-start mt-14 pl-4',
+  label: 'text-md font-semibold text-black self-start mt-14 pl-4 mb-4',
   notesWrapper:
     'flex-row w-full min-h-[140px] max-h-[150px] p-2 pt-0 bg-blue-four rounded-[28px] mt-1 mb-4 relative',
   notesInput: 'bg-white w-full p-4 h-[95%]',
@@ -30,13 +33,13 @@ const notesSchema = yup.object<NotesSchema>().shape({
   notes: yup.string(),
 });
 
-const Notes = () => { 
+const Notes = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
   const navigation = useNavigation();
   const toast = useToast();
   const asyncDispatch = useAsyncAppDispatch();
-  const {  submitEpisode } = useApp();
+  const { submitEpisode } = useApp();
   const {
     control,
     formState: { errors },
@@ -45,25 +48,26 @@ const Notes = () => {
 
   const handleSubmit = async () => {
     const res = await submitEpisode();
-    console.log('REsponse : ', appState)
 
-
-    if(res.id){
+    if (res.id) {
       asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
       navigation.setOptions(res);
       navigation.navigate('Success' as never);
     }
 
-    if(res.meta.requestStatus == 'rejected') {
-        toast.hideAll();
-        const toastOptions: ToastOptions = {
-          type: 'danger',
-        };
-        toast.show(`Error inesperado ao  ${appState.episode.isEdition ? 'editar' : 'cadastrar'} episódio. Entre em contato com nosso suporte!`, toastOptions);
-        return;
+    if (res.meta.requestStatus == 'rejected') {
+      toast.hideAll();
+      const toastOptions: ToastOptions = {
+        type: 'danger',
+      };
+      toast.show(
+        `Error inesperado ao  ${
+          appState.episode.isEdition ? 'editar' : 'cadastrar'
+        } episódio. Entre em contato com nosso suporte!`,
+        toastOptions
+      );
+      return;
     }
-
-      
   };
 
   return (
@@ -79,7 +83,7 @@ const Notes = () => {
 
       <View className={stylesheet.notesWrapper}>
         <InputContainer
-          textAlignVertical="top"
+          textAlignVertical='top'
           className={stylesheet.notesInput}
           name='notes'
           setValue={setValue}
@@ -88,7 +92,9 @@ const Notes = () => {
           defaultValue={appState.episode.notes!}
           numberOfLines={4}
           multiline={true}
-          onChange={(e) => dispatch(handleFormChanging({ notes: e.nativeEvent.text }))}
+          onChange={(e) =>
+            dispatch(handleFormChanging({ notes: e.nativeEvent.text }))
+          }
         ></InputContainer>
       </View>
 

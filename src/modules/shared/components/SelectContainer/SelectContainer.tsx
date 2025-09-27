@@ -5,7 +5,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
-import { Image, ImageSourcePropType, Text, View } from 'react-native';
+import { Dimensions, Image, ImageSourcePropType, Text, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useState, useEffect } from 'react';
 
@@ -25,6 +25,7 @@ interface SelectContainerProps {
   errors: FieldErrors<any>;
   control?: Control<any>;
   setValue: UseFormSetValue<any>;
+  onChange?: (item: string) => void;
   watch?: UseFormWatch<any>;
   placeholder?: string;
   defaultValue?: string;
@@ -37,6 +38,7 @@ const SelectContainer = ({
   options,
   labelicon,
   setValue,
+  onChange,
   placeholder,
   defaultValue,
   control,
@@ -77,9 +79,16 @@ const SelectContainer = ({
               {...field}
               defaultValue={options.find((o) => o.value === field.value)}
               data={options}
+              dropdownStyle={{
+                borderRadius: 20,
+                shadowOffset: { width: 4, height: 2 },
+                padding: 0,
+                top: Dimensions.get('window').height / 3,
+              }}
               onSelect={(selectedItem) => {
                 setSelectedItem(selectedItem);
                 setValue(name, selectedItem.value);
+                if (onChange) onChange(selectedItem.value);
               }}
               renderButton={(selectedItem, isOpened) => {
                 return (
@@ -98,10 +107,10 @@ const SelectContainer = ({
                     <Text
                       className={
                         stylesheet.input +
-                        ' text-md capitalize font-bold bg-beige-tertiary dark:bg-d-blue-primary-dark rounded-none dark:text-d-text-gray'
+                        'text-md capitalize bg-beige-tertiary dark:bg-d-blue-primary-dark rounded-none dark:text-d-text-gray px-6 rounded'
                       }
                     >
-                      {item.title}
+                      • {item.title}
                     </Text>
                   </View>
                 );
@@ -116,9 +125,16 @@ const SelectContainer = ({
         <SelectDropdown
           data={options}
           defaultValue={selectedItem}
+          dropdownStyle={{
+            borderRadius: 20,
+            shadowOffset: { width: 4, height: 2 },
+            padding: 0,
+          top: Dimensions.get('window').height / 3,
+          }}
           onSelect={(selectedItem) => {
             setSelectedItem(selectedItem);
             setValue(name, selectedItem.value);
+            if (onChange) onChange(selectedItem.value);
           }}
           renderButton={(selectedItem, isOpened) => {
             return (
@@ -137,10 +153,10 @@ const SelectContainer = ({
                 <Text
                   className={
                     stylesheet.input +
-                    ' text-md capitalize font-bold bg-beige-tertiary dark:bg-d-blue-primary-dark rounded-none dark:text-d-text-gray'
+                    ' text-md capitalize bg-beige-tertiary dark:bg-d-blue-primary-dark rounded-none dark:text-d-text-gray rounded px-6'
                   }
                 >
-                  {item.title}
+                  • {item.title}
                 </Text>
               </View>
             );

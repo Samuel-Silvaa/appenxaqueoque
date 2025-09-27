@@ -12,6 +12,7 @@ import { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { appStateSelector } from 'src/infra/app/selectors';
 import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
+import SelectContainer from 'src/modules/shared/components/selectContainer/SelectContainer';
 
 const data: {
   label: string;
@@ -62,7 +63,9 @@ const ImprovementFactor = () => {
       return appState.episode.improvementFactor;
     }
     if (typeof appState.episode.improvementFactor === 'string') {
-      return appState.episode.improvementFactor.split(',').filter((v) => v !== '');
+      return appState.episode.improvementFactor
+        .split(',')
+        .filter((v) => v !== '');
     }
     return [];
   };
@@ -85,7 +88,9 @@ const ImprovementFactor = () => {
       if (currentImprovementFactor.includes(value)) {
         dispatch(
           handleFormChanging({
-            improvementFactor: currentImprovementFactor.filter((tr) => tr !== value),
+            improvementFactor: currentImprovementFactor.filter(
+              (tr) => tr !== value
+            ),
             foodImprovement:
               value == ImprovementFactorType.FOOD
                 ? null
@@ -119,7 +124,9 @@ const ImprovementFactor = () => {
         }
       } else {
         dispatch(
-          handleFormChanging({ improvementFactor: [...currentImprovementFactor, value] })
+          handleFormChanging({
+            improvementFactor: [...currentImprovementFactor, value],
+          })
         );
       }
     },
@@ -127,18 +134,18 @@ const ImprovementFactor = () => {
   );
 
   return (
-    <View className="h-full w-full">
-      <Wrapper title="O que ajudou a melhorar?">
+    <View className='h-full w-full'>
+      <Wrapper title='O que ajudou a melhorar?'>
         {data.map((act, index) => (
           <Fragment key={index}>
             <Card
               key={index}
               children={
-                <View className="flex-row items-center">
+                <View className='flex-row items-center'>
                   <BouncyCheckbox
                     size={22}
-                    fillColor="#CEB0FA"
-                    unfillColor="#FFFFFF00"
+                    fillColor='#CEB0FA'
+                    unfillColor='#FFFFFF00'
                     textStyle={{
                       textDecorationLine: 'none',
                       flexWrap: 'wrap',
@@ -158,17 +165,18 @@ const ImprovementFactor = () => {
               <Card
                 key={`subcard-${index}`}
                 className={isMedicineEditable ? 'opacity-25' : 'opacity-100'}
-                title="Você tomou algum medicamento?"
+                title='A criança foi medicada?'
                 children={
-                  <View className="w-full flex-col items-center">
+                  <View className='w-full flex-col items-center'>
                     <InputContainer
-                      label="Nome do medicamento"
+                      label='Nome do medicamento'
                       labelicon={require('src/assets/medicine.png')}
-                      name="medicine"
+                      name='medicine'
                       setValue={setValue}
                       control={control}
                       errors={errors}
-                      className="bg-tertiary w-full"
+                      maxLength={40}
+                      className='bg-tertiary w-full'
                       editable={!isMedicineEditable}
                       defaultValue={appState.episode.medicine!}
                       onChange={(e) =>
@@ -178,23 +186,52 @@ const ImprovementFactor = () => {
                       }
                     ></InputContainer>
                     <InputContainer
-                      label="Dosagem"
-                      name="dosage"
+                      keyboardType='numeric'
+                      label='Dosagem'
+                      name='dosage'
                       setValue={setValue}
                       control={control}
                       errors={errors}
-                      className="bg-tertiary w-full"
+                      maxLength={4}
+                      className='bg-tertiary w-full'
                       editable={!isMedicineEditable}
                       defaultValue={appState.episode.medicineDosage?.toString()}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        let numbers = e.nativeEvent.text.replace(/[^0-9]/g, '');
                         dispatch(
                           handleFormChanging({
-                            medicineDosage: e.nativeEvent.text,
+                            medicineDosage: numbers,
+                          })
+                        );
+                      }}
+                    ></InputContainer>
+                    <SelectContainer
+                      control={control}
+                      label='Unidade de medida'
+                      placeholder='Escolha uma unidade de medida'
+                      setValue={setValue}
+                      defaultValue={appState.episode.medicineUnit!}
+                      options={[
+                        { title: 'Grama - g', value: 'g' },
+                        { title: 'Miligrama - mg', value: 'mg' },
+                        { title: 'Micrograma - mcg', value: 'mcg' },
+                        { title: 'Mililitro - mL', value: 'mL' },
+                        { title: 'Litro - L', value: 'L' },
+                        { title: 'Unidade Internacional - IU', value: 'IU' },
+                        { title: 'Dose', value: 'dose' },
+                        { title: 'Gota', value: 'gota' },
+                      ]}
+                      name='medicineUnit'
+                      onChange={(value) =>
+                        dispatch(
+                          handleFormChanging({
+                            medicineUnit: value,
                           })
                         )
                       }
-                    ></InputContainer>
-                    <Text className="font-semibold text-black my-4 text-lg">
+                      errors={errors}
+                    />
+                    <Text className='font-semibold text-black my-4 text-lg'>
                       Você notou alguma melhora?
                     </Text>
                     <RadioButton.Group
@@ -205,31 +242,31 @@ const ImprovementFactor = () => {
                       }
                       value={appState.episode.medicineImprovement!}
                     >
-                      <View className="flex-row items-center bg-tertiary w-full rounded-full">
+                      <View className='flex-row items-center bg-tertiary w-full rounded-full'>
                         <RadioButton
                           disabled={isMedicineEditable}
-                          value="Melhorou"
-                          color="#CEB0FA"
+                          value='Melhorou'
+                          color='#CEB0FA'
                         />
                         <Text style={{ flexWrap: 'wrap', flex: 1 }}>
                           Melhorou
                         </Text>
                       </View>
-                      <View className="flex-row items-center bg-tertiary w-full rounded-full ">
+                      <View className='flex-row items-center bg-tertiary w-full rounded-full '>
                         <RadioButton
                           disabled={isMedicineEditable}
-                          value="Melhorou parcialmente"
-                          color="#CEB0FA"
+                          value='Melhorou parcialmente'
+                          color='#CEB0FA'
                         />
                         <Text style={{ flexWrap: 'wrap', flex: 1 }}>
                           Melhorou parcialmente
                         </Text>
                       </View>
-                      <View className="flex-row items-center bg-tertiary w-full rounded-full">
+                      <View className='flex-row items-center bg-tertiary w-full rounded-full'>
                         <RadioButton
                           disabled={isMedicineEditable}
-                          value="Não melhorou"
-                          color="#CEB0FA"
+                          value='Não melhorou'
+                          color='#CEB0FA'
                         />
                         <Text style={{ flexWrap: 'wrap', flex: 1 }}>
                           Não melhorou
@@ -247,12 +284,12 @@ const ImprovementFactor = () => {
                   ImprovementFactorType.FOOD
                 )}
                 setValue={setValue}
-                label="Qual alimento ajudou a melhorar?"
+                label='Qual alimento ajudou a melhorar?'
                 labelicon={require('src/assets/avocado.png')}
-                name="foodImprovement"
+                name='foodImprovement'
                 control={control}
                 errors={errors}
-                placeholder="Descreva brevemente"
+                placeholder='Descreva brevemente'
                 className={
                   !getImprovementFactors().includes(ImprovementFactorType.FOOD)
                     ? 'opacity-25 bg-white drop-shadow-sm'
@@ -275,11 +312,11 @@ const ImprovementFactor = () => {
                   ImprovementFactorType.ANOTHER
                 )}
                 setValue={setValue}
-                label="Qual outro fator de melhora?"
-                name="anotherImprovementFactor"
+                label='Qual outro fator de melhora?'
+                name='anotherImprovementFactor'
                 control={control}
                 errors={errors}
-                placeholder="Descreva brevemente"
+                placeholder='Descreva brevemente'
                 className={
                   !getImprovementFactors().includes(
                     ImprovementFactorType.ANOTHER

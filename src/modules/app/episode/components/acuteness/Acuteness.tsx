@@ -6,6 +6,7 @@ import { Acuteness as AcutenessType } from 'src/infra/@types/app.types';
 import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
 import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { pinColor } from "src/infra/utils/appUtils";
 
 const data = [
   {
@@ -14,7 +15,7 @@ const data = [
     img: require('src/assets/escorregador.png'),
   },
   {
-    label: 'Moderado - A criança reclama e para de brincar, mas não se deita.',
+    label: 'Moderada - A criança reclama e para de brincar, mas não se deita.',
     value: AcutenessType.MILD,
     img: require('src/assets/arthur_lego.png'),
   },
@@ -44,7 +45,7 @@ const Acuteness = () => {
               }}
               children={
                 <View className='flex-row items-center'>
-                  <RadioButton value={act.value} color='#CEB0FA' />
+                  <RadioButton value={act.value} color={pinColor(index)} />
                   <Text 
                     className='dark:text-d-text-gray'
                     style={{ flexWrap: 'wrap', flex: 1, flexShrink: 1 }}
