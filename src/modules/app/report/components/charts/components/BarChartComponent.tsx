@@ -18,6 +18,7 @@ export const BarChartComponent = ({
 
       {dataset && (
         <View
+          key={'bar-' + title}
           style={{
             backgroundColor: '#fff',
             paddingBottom: 60,
@@ -30,6 +31,7 @@ export const BarChartComponent = ({
           }}
         >
           <BarChart
+            key={title}
             barBorderTopRightRadius={4}
             barBorderTopLeftRadius={4}
             barWidth={18}

@@ -23,7 +23,7 @@ const stylesheet = {
   },
   innerHomeContainer: {
     container:
-      'relative w-full h-[90vw] bg-beige-primary dark:bg-d-blue-primary-dark flex-row flex-wrap justify-between rounded-[30px] mt-[80px] p-2',
+      'relative w-full h-[90vw] dark:bg-d-blue-primary-dark flex-row flex-wrap justify-between rounded-[30px] mt-[80px] p-2  bg-beige-primary/100',
     header: 'w-full h-[15%] flex items-center p-4',
     body: 'flex-row flex-wrap justify-evenly items-end w-full h-[80%] p-1',
     innerCardCategory:

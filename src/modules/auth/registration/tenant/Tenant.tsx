@@ -1,4 +1,4 @@
-import {  Text } from 'react-native';
+import { Text } from 'react-native';
 import AuthScaffold from '../../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../../shared/style/stylesheet';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
@@ -6,11 +6,14 @@ import InputContainer from 'src/modules/shared/components/inputContainer/InputCo
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAsyncAppDispatch } from "src/infra/app/store";
-import {  requestLogin, requestSignup } from "src/infra/app/reducers/auth.reducer";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { useSelector } from "react-redux";
-import { authSelector } from "src/infra/app/selectors";
+import { useAsyncAppDispatch } from 'src/infra/app/store';
+import {
+  requestLogin,
+  requestSignup,
+} from 'src/infra/app/reducers/auth.reducer';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { authSelector } from 'src/infra/app/selectors';
 
 interface TenantSchema {
   email: string;
@@ -23,7 +26,7 @@ const tenantSchema = yup.object<TenantSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('samuelsilva666@gmail.com'),
+    .default('cegefe@forexnews.bg'),
   password: yup
     .string()
     .required('Preencha sua senha')
@@ -31,13 +34,16 @@ const tenantSchema = yup.object<TenantSchema>().shape({
     .matches(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
     .matches(/[a-z]/, 'A senha deve conter pelo menos uma letra minúscula')
     .matches(/[0-9]/, 'A senha deve conter pelo menos um número')
-    .matches(/[^A-Za-z0-9]/, 'A senha deve conter pelo menos um caractere especial')
-    .default(''),
+    .matches(
+      /[^A-Za-z0-9]/,
+      'A senha deve conter pelo menos um caractere especial'
+    )
+    .default('Teste@123'),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Senhas não coincidem')
     .required('Preencha sua senha')
-    .default('123123'),
+    .default('Teste@123'),
 });
 
 const Tenant = ({ navigation }: { navigation: NavigationProp<any> }) => {
@@ -52,17 +58,26 @@ const Tenant = ({ navigation }: { navigation: NavigationProp<any> }) => {
   });
 
   const onSubmitHandler = async (data: TenantSchema) => {
+    const res = await dispatch(
+      requestSignup({
+        email: data.email,
+        password: data.password,
+        userType: 'PATIENT',
+      })
+    );
 
-    const res = await dispatch(requestSignup({email: data.email, password: data.password, userType: 'PATIENT'}));
-
-      if(res.meta.requestStatus == 'fulfilled') {
-            dispatch(requestLogin({
-            email: res.meta.arg.email,
-            password: res.meta.arg.password,
-          }))
-          navigation.navigate('sendEmailConfirmation' as never, { email: data.email, password: data.password } as never);
-
-      }
+    if (res.meta.requestStatus == 'fulfilled') {
+      dispatch(
+        requestLogin({
+          email: res.meta.arg.email,
+          password: res.meta.arg.password,
+        })
+      );
+      navigation.navigate(
+        'sendEmailConfirmation' as never,
+        { email: data.email, password: data.password } as never
+      );
+    }
   };
 
   return (
@@ -101,9 +116,13 @@ const Tenant = ({ navigation }: { navigation: NavigationProp<any> }) => {
         placeholder='Repita sua senha'
       ></InputContainer>
 
-      <Text className="text-md font-bold">A senha deve conter pelo menos: </Text>
-      <Text className="text-xs">1 letra maiúscula {'\n'}1 letra minuscula {'\n'}1 número e {'\n'}
-       1 caractere especial incluindo 8 digitos </Text>
+      <Text className='text-md font-bold'>
+        A senha deve conter pelo menos:{' '}
+      </Text>
+      <Text className='text-xs'>
+        1 letra maiúscula {'\n'}1 letra minuscula {'\n'}1 número e {'\n'}1
+        caractere especial incluindo 8 digitos{' '}
+      </Text>
     </AuthScaffold>
   );
 };

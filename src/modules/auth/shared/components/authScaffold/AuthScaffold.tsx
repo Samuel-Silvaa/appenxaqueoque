@@ -24,7 +24,7 @@ interface AuthScaffoldProps {
   ctaSecondary?: () => void;
   ctaSecondaryText?: string;
   ctaSecondaryLeftIcon?: ImageSourcePropType;
-  isPrimaryBtnEnabled?: boolean
+  isPrimaryBtnEnabled?: boolean;
 }
 
 const AuthScaffold = ({
@@ -36,15 +36,18 @@ const AuthScaffold = ({
   ctaSecondary,
   ctaSecondaryText,
   ctaSecondaryLeftIcon,
-  isPrimaryBtnEnabled
+  isPrimaryBtnEnabled,
 }: AuthScaffoldProps) => {
   return (
     <KeyboardAvoidingView
       className={`${stylesheet.view} ${getAlignment(alignment)}`}
-      keyboardVerticalOffset={200}
+      keyboardVerticalOffset={100}
       enabled
+      behavior='padding'
     >
-      <StatusBar style={Appearance.getColorScheme() == 'dark' ? 'light' : 'dark'} />
+      <StatusBar
+        style={Appearance.getColorScheme() == 'dark' ? 'light' : 'dark'}
+      />
 
       {children}
 

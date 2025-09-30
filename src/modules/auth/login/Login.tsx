@@ -12,12 +12,8 @@ import * as SecureStore from 'expo-secure-store';
 import {
   clearErrorMessage,
   requestLogin,
-  setPatient,
-  setToken,
 } from 'src/infra/app/reducers/auth.reducer';
-import { useDispatch } from 'react-redux';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
-import { setPatientData } from 'src/infra/app/reducers/app.reducer';
 
 const stylesheet = {
   checkboxContainer: 'w-full flex-row items-center justify-between mb-[100px]',

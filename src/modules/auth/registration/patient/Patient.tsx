@@ -9,7 +9,7 @@ import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { requestCreatePatient } from 'src/infra/app/reducers/auth.reducer';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
-import {  useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { TimeInput } from 'src/modules/shared/components/timeInput';
 import SelectContainer from 'src/modules/shared/components/selectContainer/SelectContainer';
@@ -23,8 +23,6 @@ interface PatientSchemaProps {
   height: string;
   weight: string;
 }
-
-
 
 const patientSchema = yup.object<PatientSchemaProps>().shape({
   name: yup
@@ -56,7 +54,6 @@ const Patient = () => {
     control,
     reset,
   } = useForm({
-    shouldUnregister: false,
     reValidateMode: 'onSubmit',
     mode: 'onSubmit',
     defaultValues: { email: route.params?.email },
@@ -79,12 +76,10 @@ const Patient = () => {
     }
   }, []);
 
-
   useEffect(() => {
     if (route.params) {
-      reset({email: route.params.email });
+      reset({ email: route.params.email });
     }
-
   }, [route.params]);
 
   useEffect(() => {
@@ -101,6 +96,7 @@ const Patient = () => {
 
         <ScrollView
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps='handled'
           className='w-full h-[85%]'
         >
           <InputContainer
@@ -120,7 +116,7 @@ const Patient = () => {
             render={({ field }) => (
               <InputContainer
                 keyboardType='default'
-                label='Nome da criança'         
+                label='Nome da criança'
                 onChangeText={field.onChange}
                 {...field}
                 name='name'
@@ -129,17 +125,19 @@ const Patient = () => {
             )}
           />
 
-            <TimeInput
-              label='Data de nascimento'
-              mode='date'
-              placeholder='Selecione a data de nascimento'
-              value={birthDate}
-              onChange={(date) => {setBirthDate(date)}}
-              name='birthDate'
-              errors={errors}
-              maximumDate={new Date()}
-            />
-        
+          <TimeInput
+            label='Data de nascimento'
+            mode='date'
+            placeholder='Selecione a data de nascimento'
+            value={birthDate}
+            onChange={(date) => {
+              setBirthDate(date);
+            }}
+            name='birthDate'
+            errors={errors}
+            maximumDate={new Date()}
+          />
+
           <SelectContainer
             control={control}
             label='Gênero'
@@ -148,7 +146,7 @@ const Patient = () => {
               { title: 'Masculino', value: 'male' },
               { title: 'Feminino', value: 'female' },
             ]}
-            name="gender"
+            name='gender'
             setValue={setValue}
             errors={errors}
           />
@@ -180,7 +178,7 @@ const Patient = () => {
                     errors={errors}
                     mask='999.9'
                     placeholder='0.0'
-                    name="weight"
+                    name='weight'
                   />
                 )}
               />
@@ -199,7 +197,7 @@ const Patient = () => {
                     errors={errors}
                     mask='9.99'
                     placeholder='0.00'
-                    name="height"
+                    name='height'
                   />
                 )}
               />
@@ -209,7 +207,7 @@ const Patient = () => {
         </ScrollView>
       </>
     );
-  }
+  };
 
   return (
     <AuthScaffold

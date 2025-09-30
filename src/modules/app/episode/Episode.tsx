@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { appStateSelector } from 'src/infra/app/selectors';
 import {
   handleStepForward,
-   setLoadingState,
+  setLoadingState,
   setPageTitle,
 } from 'src/infra/app/reducers/app.reducer';
 import Datetime from './components/datetime/Datetime';
@@ -31,7 +31,6 @@ import Period from './components/period/Period';
 import Notes from './components/notes/Notes';
 import HaloSymptoms from './components/haloSymptoms/HaloSymptoms';
 import Location from './components/location/Location';
-import { Image } from 'react-native';
 
 const stylesheet = {
   steps: {

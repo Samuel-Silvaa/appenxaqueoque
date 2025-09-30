@@ -86,6 +86,7 @@ const ConfirmEmail = () => {
       if (res.meta.requestStatus == 'fulfilled') {
         // Automatic login after email confirmation
         if (params.password) {
+          console.log(params);
           const loginRes = await dispatch(
             requestLogin({
               email: params.email.toLowerCase(),
@@ -93,16 +94,17 @@ const ConfirmEmail = () => {
             })
           );
 
-          route.params!.password = undefined; // Clear password for security
-
           if (loginRes.meta.requestStatus === 'fulfilled') {
+            route.params!.password = undefined; // Clear password for security
             // Fetch patient by userId from SecureStore
             console.log(auth.user!.id!);
 
             if (auth.user!.id!) {
-              const patientRes = await dispatch(handleFecthPatient(auth.user!.id!));
+              const patientRes = await dispatch(
+                handleFecthPatient(auth.user!.id!)
+              );
               const patient: any = patientRes.payload;
-              
+
               if (!patient || !patient.id || !patient.name) {
                 setStatus('success'); // triggers avatar selection
               } else {
@@ -111,7 +113,7 @@ const ConfirmEmail = () => {
             } else {
               setStatus('success'); // fallback to avatar selection
             }
-          } else if(loginRes.meta.requestStatus === 'rejected') {
+          } else if (loginRes.meta.requestStatus === 'rejected') {
             setStatus('error');
           }
         } else {
@@ -129,10 +131,9 @@ const ConfirmEmail = () => {
   const countdownTimer = () => {
     setTimer(30);
     setInterval(() => {
-      if(timer > 0)
-      setTimer((prevState) => prevState - 1);
-    }, 1000)
-  }
+      if (timer > 0) setTimer((prevState) => prevState - 1);
+    }, 1000);
+  };
 
   const handleResendConfirmationCode = async () => {
     try {
@@ -144,25 +145,32 @@ const ConfirmEmail = () => {
       countdownTimer();
 
       if (res.meta.requestStatus == 'fulfilled') {
-        handleToast('Código enviado com sucesso. Verifique sua caixa de entrada e lixo eletrônico.', 'sucess')
+        handleToast(
+          'Código enviado com sucesso. Verifique sua caixa de entrada e lixo eletrônico.',
+          'sucess'
+        );
       }
     } catch (error) {
       console.error('Error sending email confirmation:', error);
     }
   };
 
-
   if (status === 'success') {
     return (
       <AuthScaffold
         ctaPrimary={() => {
           const params = route.params as RouteParams;
-          navigation.navigate('avatarSelection' as never, {email: params!.email });
+          navigation.navigate('avatarSelection' as never, {
+            email: params!.email,
+          });
         }}
         ctaPrimaryText='Continuar'
       >
         <View className='flex-1 justify-center items-center'>
-          <Image className="w-[100%] h-[250]" source={require('src/assets/welcome.png')} />
+          <Image
+            className='w-[100%] h-[250]'
+            source={require('src/assets/welcome.png')}
+          />
           <Text className={stylesheet.subtitle}>
             Email confirmado com sucesso.
           </Text>
@@ -176,12 +184,15 @@ const ConfirmEmail = () => {
       <AuthScaffold
         ctaPrimary={() => {
           setDigits(['', '', '', '', '', '']);
-          setStatus('idle')
+          setStatus('idle');
         }}
         ctaPrimaryText='Tentar novamente'
       >
         <View className='flex-1 justify-center items-center'>
-        <Image className="w-[100%] h-[250]" source={require('src/assets/arthur_lego.png')} />
+          <Image
+            className='w-[100%] h-[250]'
+            source={require('src/assets/arthur_lego.png')}
+          />
           <Text className={stylesheet.subtitle}>
             Não foi possível confirmar seu email. Tente novamente ou entre em
             contato com o suporte.
@@ -204,14 +215,20 @@ const ConfirmEmail = () => {
         </Text>
 
         <View className={stylesheet.formContainer}>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 16 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginBottom: 16,
+            }}
+          >
             {digits.map((digit, idx) => (
               <TextInput
                 key={idx}
                 ref={inputRefs[idx]}
                 value={digit}
-                onChangeText={value => handleDigitChange(value, idx)}
-                keyboardType="numeric"
+                onChangeText={(value) => handleDigitChange(value, idx)}
+                keyboardType='numeric'
                 maxLength={1}
                 style={{
                   width: 53,
@@ -221,7 +238,7 @@ const ConfirmEmail = () => {
                   fontSize: 24,
                   backgroundColor: 'white',
                 }}
-                className="rounded-full"
+                className='rounded-full'
                 returnKeyType={idx === 5 ? 'done' : 'next'}
                 onSubmitEditing={onSubmit}
               />
@@ -234,9 +251,11 @@ const ConfirmEmail = () => {
               handleResendConfirmationCode();
             }}
           >
-           
-            <Text className={stylesheet.subtitle}>  {timer > 0  && (
-            <Text>Aguarde {timer} segundos  para</Text> )} Reenviar o código</Text>
+            <Text className={stylesheet.subtitle}>
+              {' '}
+              {timer > 0 && <Text>Aguarde {timer} segundos para</Text>} Reenviar
+              o código
+            </Text>
           </TouchableOpacity>
 
           {error && (

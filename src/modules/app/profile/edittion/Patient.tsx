@@ -6,9 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, appStateSelector } from 'src/infra/app/selectors';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
-import {
-  requestUpdatePatient,
-} from 'src/infra/app/reducers/auth.reducer';
+import { requestUpdatePatient } from 'src/infra/app/reducers/auth.reducer';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format, subMonths } from 'date-fns';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
@@ -113,8 +111,6 @@ const Patient = () => {
         dispatch(setPatientData(res.meta.arg));
         (navigation as any).goBack();
       }
-
-
     }
   }, []);
 
@@ -138,6 +134,7 @@ const Patient = () => {
 
         <ScrollView
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps='handled'
           className='w-full h-[85%]'
         >
           <Controller
@@ -178,18 +175,18 @@ const Patient = () => {
             control={control}
             name='birthDate'
             defaultValue={new Date(patientData!.birthDate)}
-          render={({ field }) => (
-            <TimeInput
-            {...field}
-            label='Data de nascimento'
-            name='birthDate'
-            errors={errors}
-            placeholder='Selecione a data de nascimento'
-            mode='date'
-            maximumDate={subMonths(new Date(), 48)}
-          /> )}
+            render={({ field }) => (
+              <TimeInput
+                {...field}
+                label='Data de nascimento'
+                name='birthDate'
+                errors={errors}
+                placeholder='Selecione a data de nascimento'
+                mode='date'
+                maximumDate={subMonths(new Date(), 48)}
+              />
+            )}
           />
-
 
           <SelectContainer
             control={control}

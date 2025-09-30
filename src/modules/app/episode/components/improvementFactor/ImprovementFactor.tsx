@@ -285,7 +285,6 @@ const ImprovementFactor = () => {
                 )}
                 setValue={setValue}
                 label='Qual alimento ajudou a melhorar?'
-                labelicon={require('src/assets/avocado.png')}
                 name='foodImprovement'
                 control={control}
                 errors={errors}

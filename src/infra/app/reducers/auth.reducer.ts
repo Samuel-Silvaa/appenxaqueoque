@@ -81,7 +81,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     // REQUEST_LOGIN
     builder.addCase(requestLogin.pending, (state) => {
-      return (state = { ...state, entireScreenLoading: true });
+      return (state = { ...state, entireScreenLoading: true, loading: false });
     });
     builder.addCase(
       requestLogin.fulfilled,
@@ -102,7 +102,6 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestLogin.rejected, (state, action) => {
-      console.log(action);
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -125,6 +124,7 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestSignup.rejected, (state, action) => {
+      console.log(action);
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -160,7 +160,7 @@ const authSlice = createSlice({
     });
     //REQUEST_SEND_EMAIL_CONFIRMATION
     builder.addCase(requestSendEmailConfirmation.pending, (state) => {
-      return (state = { ...state, loading: true });
+      return (state = { ...state, loading: false });
     });
     builder.addCase(
       requestSendEmailConfirmation.fulfilled,

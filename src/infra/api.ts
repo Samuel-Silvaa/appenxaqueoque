@@ -15,7 +15,6 @@ api.interceptors.request.use(
   },
   (error: AxiosError) => {
     debugger;
-    Promise.reject(error).then(alert);
   }
 );
 
@@ -27,8 +26,9 @@ api.interceptors.response.use(
       SecureStore.deleteItemAsync('user');
       window.location.href = '/login';
       window.dispatchEvent(new Event('storage'));
+      return Promise.reject(error);
     } else {
-      Promise.reject(error);
+      return Promise.reject(error);
     }
   }
 );

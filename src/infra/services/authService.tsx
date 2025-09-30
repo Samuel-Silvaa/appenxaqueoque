@@ -12,10 +12,12 @@ import {
   ConfirmEmailResponse,
 } from '../@types/auth.types';
 
-const requestHandleLogIn = async (payload: LogInDTO): Promise<LogInResponse> => {
-   const res= await post('session/log-in', payload);
-   return {...res, email: payload.email}
-}
+const requestHandleLogIn = async (
+  payload: LogInDTO
+): Promise<LogInResponse> => {
+  const res = await post('session/log-in', payload);
+  return { ...res, email: payload.email };
+};
 
 const requestHandleSingUp = async (
   payload: SignUpDTO
@@ -31,15 +33,17 @@ const requestHandleCreatePhysician = async (
 
 const requestHandleSendEmailConfirmation = async (
   payload: SendEmailConfirmationDTO
-): Promise<SendEmailConfirmationResponse> => post('session/send-email-confirmation', payload);
+): Promise<SendEmailConfirmationResponse> =>
+  post('session/send-email-confirmation', payload);
 
 const requestHandleConfirmEmail = async (
   payload: ConfirmEmailDTO
 ): Promise<ConfirmEmailResponse> => post('session/confirm-email', payload);
 
-const requestUpdateAvatar = async (
-  payload: { avatar: string; email: string }
-): Promise<any> => {
+const requestUpdateAvatar = async (payload: {
+  avatar: string;
+  email: string;
+}): Promise<any> => {
   const formData = new FormData();
   formData.append('avatar', {
     uri: payload.avatar,
@@ -56,8 +60,8 @@ const requestUpdateAvatar = async (
 const requestUpdatePatient = async (
   payload: PatientDTO & { id: string }
 ): Promise<PatientDTO> => {
-   const { id, ...body } = payload;
-  return patch(`patient/${payload.id}`, body)
+  const { id, ...body } = payload;
+  return patch(`patient/${payload.id}`, body);
 };
 
 export {

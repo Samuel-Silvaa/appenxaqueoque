@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Fragment, ReactNode, useEffect, useState } from 'react';
-import { KeyboardAvoidingView } from "react-native";
+import { KeyboardAvoidingView } from 'react-native';
 import { Appearance, ImageBackground, ScrollView, View } from 'react-native';
 import { getAppScaffoldAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 
@@ -37,6 +37,9 @@ const AppPageScaffold = ({
 
   return (
     <KeyboardAvoidingView
+      keyboardVerticalOffset={20}
+      enabled
+      behavior='padding'
       className={`${stylesheet.view} ${getAppScaffoldAlignment(alignment)}`}
       {...res}
     >

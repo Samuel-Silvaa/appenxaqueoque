@@ -175,7 +175,6 @@ const ReportDateRangeModal = ({
   const [inputSelect, setInputSelect] = useState('');
   const colorScheme = Appearance.getColorScheme();
   const navigation = useNavigation();
-  const toast = useToast();
 
   useEffect(() => {
     return () => {

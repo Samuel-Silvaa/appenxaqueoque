@@ -266,7 +266,26 @@ const ChartsPage = () => {
   }, [triggers]);
 
   const foodImprovement = useMemo(
-    () => episodes.map((ep: Episode) => ep.foodImprovement).filter((e) => !!e),
+    () =>
+      episodes
+        .map(
+          (ep: Episode) =>
+            ep.improvementFactor.includes(ImprovementFactor.FOOD) &&
+            ep.foodImprovement
+        )
+        .filter((e) => !!e),
+    [episodes]
+  );
+
+  const anotherImprovementFactor = useMemo(
+    () =>
+      episodes
+        .map(
+          (ep: Episode) =>
+            ep.improvementFactor.includes(ImprovementFactor.ANOTHER) &&
+            ep.anotherImprovementFactor
+        )
+        .filter((e) => !!e),
     [episodes]
   );
 
@@ -274,6 +293,29 @@ const ChartsPage = () => {
     () => episodes.map((ep: Episode) => ep.foodImpair).filter((e) => !!e),
     [episodes]
   );
+
+  const anotherPainType = useMemo(
+    () =>
+      episodes
+        .map(
+          (ep: Episode) =>
+            ep.painType?.includes(PainType.ANOTHER) && ep.anotherPainType
+        )
+        .filter((e) => !!e),
+    [episodes]
+  );
+
+  const anotherImpairFactor = useMemo(
+    () =>
+      episodes
+        .map(
+          (ep: Episode) =>
+            ep.triggers?.includes(Trigger.ANOTHER) && ep.anotherImpairFactor
+        )
+        .filter((e) => !!e),
+    [episodes]
+  );
+
   return (
     <AppPageScaffold>
       <View className={stylesheet.footer}>
@@ -332,7 +374,7 @@ const ChartsPage = () => {
 
       <PieChartComponent assets={time} title='Horário da crise' key='time' />
 
-      {foodImpair.length > 0 && (
+      {!!foodImpair.length && (
         <ReportCard
           key='food-impair'
           title='Alimentos que foram gatilhos para a crise'
@@ -340,7 +382,15 @@ const ChartsPage = () => {
         />
       )}
 
-      {report.notes && (
+      {!!anotherImpairFactor!.length && (
+        <ReportCard
+          key='another-impair'
+          title='Outros tipos de gatilhos para a crise'
+          description={anotherImpairFactor}
+        />
+      )}
+
+      {!!report.notes && (
         <ReportCard
           key='notes'
           title='Observações'
@@ -364,10 +414,9 @@ const ChartsPage = () => {
         />
       )}
 
-      {parseImprovementFactor(report.improvementFactor) ==
-        ImprovementFactor.FOOD && (
+      {!!foodImprovement.length && (
         <ReportCard
-          key='improvementFood'
+          key='foodImprovement'
           title='Alimentos que melhoraram a crise'
           description={episodes
             .filter((ep) => ep.foodImprovement != null)
@@ -375,24 +424,13 @@ const ChartsPage = () => {
         />
       )}
 
-      {parseImprovementFactor(report.improvementFactor) ==
-        ImprovementFactor.ANOTHER && (
+      {!!anotherImprovementFactor.length && (
         <ReportCard
           key='anotherImprovement'
           title='Alternativas que melhoraram a crise'
           description={episodes
             .filter((ep) => ep.anotherImprovementFactor != null)
             .map((rpt) => `${rpt.anotherImprovementFactor}`)}
-        />
-      )}
-
-      {parsePainType(report.painType) == PainType.ANOTHER && (
-        <ReportCard
-          key='paintype'
-          title='Tipo da dor'
-          description={episodes
-            .filter((ep) => ep.painType != null)
-            .map((rpt) => `${rpt.anotherPainType}`)}
         />
       )}
 
@@ -406,7 +444,7 @@ const ChartsPage = () => {
         />
       )}
 
-      {report.periodNotes && (
+      {!!report.periodNotes && (
         <ReportCard
           key='period-notes'
           title='Período menstrual'
