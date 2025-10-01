@@ -85,12 +85,13 @@ android {
 
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
+
     namespace 'com.samuell_silva.appenxaqueoque'
     defaultConfig {
         applicationId 'com.samuell_silva.appenxaqueoque'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
+        versionCode 1
         versionName "1.0.0"
     }
     signingConfigs {
@@ -100,14 +101,6 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            storeFile file('@samuell_silva__appenxaqueoque.jks')
-            storePassword '3abd8a119b7653b3950236049c8e7732'
-            keyAlias '5d9afaa94b6b0dc39a56ad0c1ae2d492'
-            keyPassword 'f5993b0044430657f922bf5410266528'
-        }
     }
     buildTypes {
         debug {
@@ -116,8 +109,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
             shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"

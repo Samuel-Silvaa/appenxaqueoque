@@ -141,14 +141,14 @@ const ProfilePage = () => {
           />
           {/* <CustomActionButton title='Notificações' /> */}
           <CustomActionButton
-            title='Privacidade'
+            title='Políticas de privacidade'
             iconName={require('src/assets/lock.png')}
             onPress={() => {
               navigation.navigate('PrivacyPolicy' as never);
             }}
           />
           <CustomActionButton
-            title='Termos'
+            title='Termos de uso'
             iconName={require('src/assets/diploma.png')}
             onPress={() => {
               navigation.navigate('Terms' as never);
@@ -161,19 +161,19 @@ const ProfilePage = () => {
               navigation.navigate('ReportListPage' as never);
             }}
           />
+          <CustomActionButton
+            title='Sobre nós'
+            iconName={require('src/assets/info.png')}
+            onPress={() => {
+              navigation.navigate('AboutUs' as never);
+            }}
+          />
           {/* <CustomActionButton title='Contas vinculadas' /> */}
           <CustomActionButton
             title='Ajuda'
             iconName={require('src/assets/interrogation.png')}
             onPress={() => {
               navigation.navigate('Help' as never);
-            }}
-          />
-          <CustomActionButton
-            title='Sobre nós'
-            iconName={require('src/assets/info.png')}
-            onPress={() => {
-              navigation.navigate('AboutUs' as never);
             }}
           />
           <CustomActionButton
