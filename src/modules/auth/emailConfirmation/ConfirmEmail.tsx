@@ -5,6 +5,7 @@ import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import {
   requestConfirmEmail,
   requestSendEmailConfirmation,
+  requestSendPasswordEmailConfirmation,
 } from 'src/infra/app/reducers/auth.reducer';
 import { useAsyncAppDispatch } from 'src/infra/app/store';
 import { useSelector } from 'react-redux';
@@ -28,6 +29,7 @@ const stylesheet = {
 interface RouteParams {
   email: string;
   password?: string;
+  isPasswordConfirmation?: boolean;
 }
 
 const ConfirmEmail = () => {
@@ -46,9 +48,9 @@ const ConfirmEmail = () => {
   useEffect(() => {
     countdownTimer();
     const params = route.params as RouteParams;
+
     if (!params.email) {
       setStatus('error');
-
       handleToast('Email não cadastrado!', 'danger');
     }
   }, []);
@@ -75,52 +77,60 @@ const ConfirmEmail = () => {
       handleToast('Preencha todos os dígitos do código!', 'danger');
       return;
     }
+
     try {
       const params = route.params as RouteParams;
-      const res = await dispatch(
-        requestConfirmEmail({
-          token,
-          email: params.email.toLowerCase(),
-        })
-      );
-      if (res.meta.requestStatus == 'fulfilled') {
-        // Automatic login after email confirmation
-        if (params.password) {
-          console.log(params);
-          const loginRes = await dispatch(
-            requestLogin({
-              email: params.email.toLowerCase(),
-              password: params.password,
-            })
-          );
+      if (!!params.isPasswordConfirmation) {
+        navigation.navigate('sendNewPassword', {
+          email: params.email,
+          code: token,
+        });
+      } else {
+        const res = await dispatch(
+          requestConfirmEmail({
+            token,
+            email: params.email.toLowerCase(),
+          })
+        );
+        if (res.meta.requestStatus == 'fulfilled') {
+          // Automatic login after email confirmation
+          if (params.password) {
+            console.log(params);
+            const loginRes = await dispatch(
+              requestLogin({
+                email: params.email.toLowerCase(),
+                password: params.password,
+              })
+            );
 
-          if (loginRes.meta.requestStatus === 'fulfilled') {
-            route.params!.password = undefined; // Clear password for security
-            // Fetch patient by userId from SecureStore
-            console.log(auth.user!.id!);
+            if (loginRes.meta.requestStatus === 'fulfilled') {
+              route.params!.password = undefined; // Clear password for security
+              // Fetch patient by userId from SecureStore
+              console.log(auth.user!.id!);
 
-            if (auth.user!.id!) {
-              const patientRes = await dispatch(
-                handleFecthPatient(auth.user!.id!)
-              );
-              const patient: any = patientRes.payload;
+              if (auth.user!.id!) {
+                const patientRes = await dispatch(
+                  handleFecthPatient(auth.user!.id!)
+                );
+                const patient: any = patientRes.payload;
 
-              if (!patient || !patient.id || !patient.name) {
-                setStatus('success'); // triggers avatar selection
+                if (!patient || !patient.id || !patient.name) {
+                  setStatus('success'); // triggers avatar selection
+                } else {
+                  navigation.navigate('welcome');
+                }
               } else {
-                navigation.navigate('welcome');
+                setStatus('success'); // fallback to avatar selection
               }
-            } else {
-              setStatus('success'); // fallback to avatar selection
+            } else if (loginRes.meta.requestStatus === 'rejected') {
+              setStatus('error');
             }
-          } else if (loginRes.meta.requestStatus === 'rejected') {
-            setStatus('error');
+          } else {
+            setStatus('success');
           }
-        } else {
-          setStatus('success');
+        } else if (res.meta.requestStatus == 'rejected') {
+          setStatus('error');
         }
-      } else if (res.meta.requestStatus == 'rejected') {
-        setStatus('error');
       }
     } catch (error) {
       console.error('Error confirming email:', error);
@@ -140,6 +150,26 @@ const ConfirmEmail = () => {
       const params = route.params as RouteParams;
       const res = await dispatch(
         requestSendEmailConfirmation({ email: params.email })
+      );
+
+      countdownTimer();
+
+      if (res.meta.requestStatus == 'fulfilled') {
+        handleToast(
+          'Código enviado com sucesso. Verifique sua caixa de entrada e lixo eletrônico.',
+          'sucess'
+        );
+      }
+    } catch (error) {
+      console.error('Error sending email confirmation:', error);
+    }
+  };
+
+  const handleResendPasswordConfirmationCode = async () => {
+    try {
+      const params = route.params as RouteParams;
+      const res = await dispatch(
+        requestSendPasswordEmailConfirmation({ email: params.email })
       );
 
       countdownTimer();
@@ -206,7 +236,9 @@ const ConfirmEmail = () => {
     <AuthScaffold
       hasArrowBack
       ctaPrimary={onSubmit}
-      ctaPrimaryText='Confirmar Email'
+      ctaPrimaryText={
+        !!route.params!.isPasswordConfirmation ? 'Continuar' : 'Confirmar Email'
+      }
     >
       <View className='flex-1 justify-center'>
         <Text className={stylesheet.title}>Confirmar Email</Text>
@@ -248,7 +280,12 @@ const ConfirmEmail = () => {
           <TouchableOpacity
             disabled={timer > 0}
             onPress={() => {
-              handleResendConfirmationCode();
+              const params = route.params as RouteParams;
+              if (!!params.isPasswordConfirmation) {
+                handleResendPasswordConfirmationCode();
+              } else {
+                handleResendConfirmationCode();
+              }
             }}
           >
             <Text className={stylesheet.subtitle}>

@@ -9,11 +9,12 @@ import Patient from './registration/patient/Patient';
 import SendEmailConfirmation from './emailConfirmation/SendEmailConfirmation';
 import ConfirmEmail from './emailConfirmation/ConfirmEmail';
 import AvatarSelection from './registration/avatar/AvatarSelection';
+import SendNewPasswordPage from './forgotPassword/SendNewPassword';
+import SendPasswordCodePage from './forgotPassword/SendPasswordCode';
 
 const Stack = createNativeStackNavigator();
 
 const AuthRoutes = () => {
-
   return (
     <Stack.Navigator
       screenOptions={{
@@ -31,8 +32,11 @@ const AuthRoutes = () => {
                     bottomTabsProps.navigation.goBack();
                   }}
                 >
-                            <Image resizeMode="contain" className="w-7 h-7 " source={require('src/assets/arrowback.png')} />
-
+                  <Image
+                    resizeMode='contain'
+                    className='w-7 h-7 '
+                    source={require('src/assets/arrowback.png')}
+                  />
                 </TouchableOpacity>
               ) : (
                 <Image></Image>
@@ -48,9 +52,23 @@ const AuthRoutes = () => {
       <Stack.Screen name='tenant' component={Tenant}></Stack.Screen>
       <Stack.Screen name='patient' component={Patient}></Stack.Screen>
       <Stack.Screen name='welcome' component={Welcome}></Stack.Screen>
-      <Stack.Screen name='sendEmailConfirmation' component={SendEmailConfirmation}></Stack.Screen>
+      <Stack.Screen
+        name='sendEmailConfirmation'
+        component={SendEmailConfirmation}
+      ></Stack.Screen>
       <Stack.Screen name='confirmEmail' component={ConfirmEmail}></Stack.Screen>
-      <Stack.Screen name='avatarSelection' component={AvatarSelection}></Stack.Screen>
+      <Stack.Screen
+        name='sendNewPassword'
+        component={SendNewPasswordPage}
+      ></Stack.Screen>
+      <Stack.Screen
+        name='sendPasswordCode'
+        component={SendPasswordCodePage}
+      ></Stack.Screen>
+      <Stack.Screen
+        name='avatarSelection'
+        component={AvatarSelection}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };

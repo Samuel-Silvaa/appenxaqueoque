@@ -130,9 +130,7 @@ const Patient = () => {
             mode='date'
             placeholder='Selecione a data de nascimento'
             value={birthDate}
-            onChange={(date) => {
-              setBirthDate(date);
-            }}
+            setValue={setValue}
             name='birthDate'
             errors={errors}
             maximumDate={new Date()}

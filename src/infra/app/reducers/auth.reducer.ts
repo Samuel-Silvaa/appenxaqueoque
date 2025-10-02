@@ -10,6 +10,8 @@ import {
   SendEmailConfirmationResponse,
   ConfirmEmailDTO,
   ConfirmEmailResponse,
+  SendNewPasswordWithCode,
+  SendNewPassword,
 } from './../../@types/auth.types';
 import {
   requestHandleCreatePatient,
@@ -19,6 +21,9 @@ import {
   requestHandleConfirmEmail,
   requestUpdateAvatar as requestHandleUpdateAvatar,
   requestUpdatePatient as requestHandleUpdatePatient,
+  requestHandleSendPasswordEmailConfirmation,
+  requestHandleSendNewPasswordWithCode,
+  requestHandleResetPassword,
 } from 'src/infra/services/authService';
 import * as SecureStore from 'expo-secure-store';
 import { Patient } from 'src/infra/@types/app.types';
@@ -160,7 +165,7 @@ const authSlice = createSlice({
     });
     //REQUEST_SEND_EMAIL_CONFIRMATION
     builder.addCase(requestSendEmailConfirmation.pending, (state) => {
-      return (state = { ...state, loading: false });
+      return (state = { ...state, loading: true });
     });
     builder.addCase(
       requestSendEmailConfirmation.fulfilled,
@@ -174,6 +179,78 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestSendEmailConfirmation.rejected, (state, action) => {
+      return (state = {
+        ...state,
+        error: action.error.message ?? 'Erro inesperado',
+        loading: false,
+      });
+    });
+    //REQUEST_SEND_PASSWORD_EMAIL_CONFIRMATION
+    builder.addCase(requestSendPasswordEmailConfirmation.pending, (state) => {
+      return (state = { ...state, loading: true });
+    });
+    builder.addCase(
+      requestSendPasswordEmailConfirmation.fulfilled,
+      (state, action: PayloadAction<SendEmailConfirmationResponse>) => {
+        try {
+          return (state = { ...state, loading: false, error: null });
+        } catch (err) {
+          console.log(err);
+          return (state = { ...state, error: 'Erro inesperado!' });
+        }
+      }
+    );
+    builder.addCase(
+      requestSendPasswordEmailConfirmation.rejected,
+      (state, action) => {
+        return (state = {
+          ...state,
+          error: action.error.message ?? 'Erro inesperado',
+          loading: false,
+        });
+      }
+    );
+    //REQUEST_SEND_NEW_PASSWORD_WITH_CODE
+    builder.addCase(requestSendNewPasswordWithCode.pending, (state) => {
+      return (state = { ...state, loading: true });
+    });
+    builder.addCase(
+      requestSendNewPasswordWithCode.fulfilled,
+      (state, action: PayloadAction<SendEmailConfirmationResponse>) => {
+        try {
+          return (state = { ...state, loading: false, error: null });
+        } catch (err) {
+          console.log(err);
+          return (state = { ...state, error: 'Erro inesperado!' });
+        }
+      }
+    );
+    builder.addCase(
+      requestSendNewPasswordWithCode.rejected,
+      (state, action) => {
+        return (state = {
+          ...state,
+          error: action.error.message ?? 'Erro inesperado',
+          loading: false,
+        });
+      }
+    );
+    //REQUEST_RESET_PASSWORD
+    builder.addCase(requestResetPassword.pending, (state) => {
+      return (state = { ...state, loading: true });
+    });
+    builder.addCase(
+      requestResetPassword.fulfilled,
+      (state, action: PayloadAction<SendEmailConfirmationResponse>) => {
+        try {
+          return (state = { ...state, loading: false, error: null });
+        } catch (err) {
+          console.log(err);
+          return (state = { ...state, error: 'Erro inesperado!' });
+        }
+      }
+    );
+    builder.addCase(requestResetPassword.rejected, (state, action) => {
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -273,6 +350,21 @@ export const requestSendEmailConfirmation = createAsyncThunk(
   'auth/requestSendEmailConfirmation',
   async (payload: SendEmailConfirmationDTO) =>
     await requestHandleSendEmailConfirmation(payload)
+);
+export const requestSendPasswordEmailConfirmation = createAsyncThunk(
+  'auth/requestSendPasswordEmailConfirmation',
+  async (payload: SendEmailConfirmationDTO) =>
+    await requestHandleSendPasswordEmailConfirmation(payload)
+);
+export const requestSendNewPasswordWithCode = createAsyncThunk(
+  'auth/requestSendNewPasswordWithCode',
+  async (payload: SendNewPasswordWithCode) =>
+    await requestHandleSendNewPasswordWithCode(payload)
+);
+
+export const requestResetPassword = createAsyncThunk(
+  'auth/requestResetPassword',
+  async (payload: SendNewPassword) => await requestHandleResetPassword(payload)
 );
 export const requestConfirmEmail = createAsyncThunk(
   'auth/requestConfirmEmail',

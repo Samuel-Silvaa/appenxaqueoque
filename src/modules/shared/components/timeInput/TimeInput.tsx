@@ -11,7 +11,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const stylesheet = {
   view: 'w-full my-1',
-  input: 'flex h-[60px] bg-gray-light rounded rounded-3xl p-4 z-20 flex-row items-center justify-between',
+  input:
+    'flex h-[60px] bg-gray-light rounded rounded-3xl p-4 z-20 flex-row items-center justify-between',
   label: 'pl-2 text-black text-[15px] dark:text-d-text-gray',
   error: 'text-error pl-2 font-medium',
   timeText: 'text-black text-[16px] dark:text-d-text-gray',
@@ -67,29 +68,28 @@ const TimeInput = ({
     setDatePickerVisibility(false);
   };
 
-  
   useEffect(() => {
-  if (value) {
-    setDisplayValue(formatTime(value));
-  } else if (defaultValue) {
-    setDisplayValue(formatTime(defaultValue));
-  } else {
-    setDisplayValue('');
-  }
-}, [value, defaultValue]);
+    if (value) {
+      setDisplayValue(formatTime(value));
+    } else if (defaultValue) {
+      setDisplayValue(formatTime(defaultValue));
+    } else {
+      setDisplayValue('');
+    }
+  }, [value, defaultValue]);
 
-  const handleConfirm = useCallback( (selectedTime: Date) => {
-    setDisplayValue(selectedTime ? formatTime(selectedTime) : '');
-    setValue!(name, selectedTime);
-    if(onChange)
-    onChange(selectedTime);
-    hideDatePicker();
-
-  }, [onChange, name, setValue]);
+  const handleConfirm = useCallback(
+    (selectedTime: Date) => {
+      setDisplayValue(selectedTime ? formatTime(selectedTime) : '');
+      setValue!(name, selectedTime);
+      if (onChange) onChange(selectedTime);
+    },
+    [onChange, name, setValue]
+  );
 
   const formatTime = (time: Date | null): string => {
     if (!time) return '';
-    
+
     if (mode === 'date') {
       return time.toLocaleDateString('pt-BR');
     } else if (mode === 'datetime') {
@@ -131,13 +131,17 @@ const TimeInput = ({
           />
         )}
       </View>
-      
+
       <TouchableOpacity
         onPress={showDatePicker}
         disabled={disabled}
         className={`${stylesheet.input} ${disabled ? 'opacity-50' : ''}`}
       >
-        <Text className={displayValue ? stylesheet.timeText : stylesheet.placeholderText}>
+        <Text
+          className={
+            displayValue ? stylesheet.timeText : stylesheet.placeholderText
+          }
+        >
           {displayValue || placeholder}
         </Text>
         <Image
@@ -155,12 +159,13 @@ const TimeInput = ({
 
       <DateTimePickerModal
         {...res}
-        buttonTextColorIOS="#9194E9"
+        buttonTextColorIOS='#9194E9'
         locale='pt-BR'
         isVisible={isDatePickerVisible}
         mode={mode}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
+        onChange={onChange}
         date={value || defaultValue || new Date()}
         minimumDate={minimumDate}
         maximumDate={maximumDate}
@@ -171,4 +176,4 @@ const TimeInput = ({
   );
 };
 
-export default TimeInput; 
+export default TimeInput;

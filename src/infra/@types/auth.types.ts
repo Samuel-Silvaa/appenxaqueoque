@@ -13,7 +13,7 @@ export interface LogInDTO {
 }
 
 export interface LogInResponse {
-  avatar:string;
+  avatar: string;
   email: string;
   token: string;
   userType: string;
@@ -30,10 +30,22 @@ export interface SignUpDTO {
 export interface SignUpResponse {
   email: string;
   userType: string;
-  password: string ;
+  password: string;
 }
 
 export interface SendEmailConfirmationDTO {
+  email: string;
+}
+
+export interface SendNewPasswordWithCode {
+  email: string;
+  newPassword: string;
+  code: string;
+}
+
+export interface SendNewPassword {
+  currentPassword: string;
+  newPassword: string;
   email: string;
 }
 

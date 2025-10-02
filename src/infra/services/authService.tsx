@@ -10,6 +10,8 @@ import {
   SendEmailConfirmationResponse,
   ConfirmEmailDTO,
   ConfirmEmailResponse,
+  SendNewPasswordWithCode,
+  SendNewPassword,
 } from '../@types/auth.types';
 
 const requestHandleLogIn = async (
@@ -35,6 +37,20 @@ const requestHandleSendEmailConfirmation = async (
   payload: SendEmailConfirmationDTO
 ): Promise<SendEmailConfirmationResponse> =>
   post('session/send-email-confirmation', payload);
+
+const requestHandleSendPasswordEmailConfirmation = async (
+  payload: SendEmailConfirmationDTO
+): Promise<SendEmailConfirmationResponse> =>
+  post('session/password-reset/request', payload);
+
+const requestHandleSendNewPasswordWithCode = async (
+  payload: SendNewPasswordWithCode
+): Promise<{ message: string }> =>
+  post('session/password-reset/confirm', payload);
+
+const requestHandleResetPassword = async (
+  payload: SendNewPassword
+): Promise<{ message: string }> => post('session/change-password', payload);
 
 const requestHandleConfirmEmail = async (
   payload: ConfirmEmailDTO
@@ -73,4 +89,7 @@ export {
   requestHandleConfirmEmail,
   requestUpdateAvatar,
   requestUpdatePatient,
+  requestHandleSendPasswordEmailConfirmation,
+  requestHandleSendNewPasswordWithCode,
+  requestHandleResetPassword,
 };

@@ -15,7 +15,7 @@ import SelectContainer from 'src/modules/shared/components/selectContainer/Selec
 import AppPageScaffold from '../../shared/components/appPageScaffold/AppPageScaffold';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ToastOptions, useToast } from 'react-native-toast-notifications';
 import { setPatientData } from 'src/infra/app/reducers/app.reducer';
 
@@ -41,10 +41,7 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
     .required('Preencha seu nome')
     .min(5, 'O Nome precisa ter no mínimo 5 letras'),
   email: yup.string().email().required('Preencha seu email'),
-  birthDate: yup
-    .date()
-    .required('Preencha a data de nascimento')
-    .default(new Date()),
+  birthDate: yup.date().required('Preencha a data de nascimento').default(),
   gender: yup.string().required('Preencha o sexo'),
   kinship: yup.string().required('Preencha o parentesco'),
   height: yup.string().required('Preencha a altura').min(3, 'Mínimo 3 digitos'),
@@ -75,11 +72,19 @@ const Patient = () => {
     defaultValues: { email: auth!.sessionEmail! },
     resolver: yupResolver(patientSchema),
   });
+  const [birthDate, setBirthDate] = useState<Date>(new Date());
 
   const toast = useToast();
 
   const onSubmitHandler = useCallback(async (data: PatientSchemaProps) => {
     if (patientData!.id) {
+      console.log({
+        ...data,
+        weight: parseFloat(data.weight),
+        height: parseFloat(data.height),
+        birthDate: format(data.birthDate, 'yyyy-MM-dd'),
+        id: patientData!.id,
+      });
       const res = await dispatchAsync(
         requestUpdatePatient({
           ...data,
@@ -180,6 +185,7 @@ const Patient = () => {
                 {...field}
                 label='Data de nascimento'
                 name='birthDate'
+                setValue={setValue}
                 errors={errors}
                 placeholder='Selecione a data de nascimento'
                 mode='date'

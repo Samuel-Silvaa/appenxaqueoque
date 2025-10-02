@@ -155,10 +155,17 @@ const ProfilePage = () => {
             }}
           />
           <CustomActionButton
+            title='Segurança'
+            iconName={require('src/assets/key.png')}
+            onPress={() => {
+              navigation.navigate('ResetPassword' as never);
+            }}
+          />
+          <CustomActionButton
             title='Meus relatórios'
             iconName={require('src/assets/document.png')}
             onPress={() => {
-              navigation.navigate('ReportListPage' as never);
+              navigation.navigate('Report' as never);
             }}
           />
           <CustomActionButton

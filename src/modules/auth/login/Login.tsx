@@ -71,10 +71,7 @@ const Login = ({ navigation }: any) => {
   };
 
   const handleForgotPassword = () => {
-    navigation.navigate(
-      'sendEmailConfirmation' as never,
-      { email: '' } as never
-    );
+    navigation.navigate('sendPasswordCode' as never, { email: '' } as never);
   };
 
   return (
