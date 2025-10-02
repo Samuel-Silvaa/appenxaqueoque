@@ -5,26 +5,27 @@ import { pinColor } from 'src/infra/utils/appUtils';
 const AcutenessLegend = () => {
   return (
     <View className='flex-row justify-around item-center w-full my-8 '>
-      <View className='flex-row items-center justify-center gapx-2'>
-        <View
-          style={{ backgroundColor: pinColor(Acuteness.SEVERE) }}
-          className='w-[8px] h-[8px] rounded-full mx-2'
-        ></View>
-        <Text className='dark:text-d-text-gray'>Forte</Text>
-      </View>
-      <View className='flex-row items-center justify-center gapx-2'>
-        <View
-          style={{ backgroundColor: pinColor(Acuteness.MILD) }}
-          className='w-[8px] h-[8px] rounded-full mx-2'
-        ></View>
-        <Text className='dark:text-d-text-gray'>Moderada</Text>
-      </View>
-      <View className='flex-row items-center justify-center gapx-2'>
+      <View className='flex-row items-center justify-center gap-x-1'>
         <View
           style={{ backgroundColor: pinColor(Acuteness.LIGHT) }}
-          className='w-[8px] h-[8px] rounded-full mx-2'
+          className='w-[12px] h-[12px] rounded-full mx-2 shadow-md'
         ></View>
-        <Text className='dark:text-d-text-gray'>Leve</Text>
+        <Text className='dark:text-d-text-gray font-[400]'>Leve</Text>
+      </View>
+      <View className='flex-row items-center justify-center gap-x-1'>
+        <View
+          style={{ backgroundColor: pinColor(Acuteness.MILD) }}
+          className='w-[12px] h-[12px] rounded-full mx-2 shadow-md'
+        ></View>
+        <Text className='dark:text-d-text-gray font-[400]'>Moderada</Text>
+      </View>
+
+      <View className='flex-row items-center justify-center gap-x-1'>
+        <View
+          style={{ backgroundColor: pinColor(Acuteness.SEVERE) }}
+          className='w-[12px] h-[12px] rounded-full mx-2 shadow-md'
+        ></View>
+        <Text className='dark:text-d-text-gray font-[400]'>Forte</Text>
       </View>
     </View>
   );

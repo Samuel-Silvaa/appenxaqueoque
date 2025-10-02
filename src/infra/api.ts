@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse, AxiosResponseHeaders } from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import { navigate } from 'navigationService';
 import { useToast } from 'react-native-toast-notifications';
 
 const api = axios.create({
@@ -24,12 +25,9 @@ api.interceptors.response.use(
     if (error.request?.status === 401) {
       SecureStore.deleteItemAsync('token');
       SecureStore.deleteItemAsync('user');
-      window.location.href = '/login';
-      window.dispatchEvent(new Event('storage'));
-      return Promise.reject(error);
-    } else {
-      return Promise.reject(error);
+      navigate('login');
     }
+    return Promise.reject(error);
   }
 );
 
@@ -53,7 +51,14 @@ const post = async (url: string, payload: object): Promise<any> => {
   } catch (error) {
     const err = error as AxiosError;
 
-    throw err.response?.data;
+    // throw a clean error message if present
+    const message =
+      err.response?.data?.error?.message ||
+      err.response?.data?.message ||
+      err.message ||
+      'Unknown error';
+
+    throw new Error(message);
   }
 };
 
@@ -71,7 +76,15 @@ const put = async <T>(
     return data;
   } catch (error) {
     const err = error as AxiosError;
-    throw err.response?.data;
+
+    // throw a clean error message if present
+    const message =
+      err.response?.data?.error?.message ||
+      err.response?.data?.message ||
+      err.message ||
+      'Unknown error';
+
+    throw new Error(message);
   }
 };
 
@@ -85,7 +98,15 @@ const patch = async <T>(
     return data;
   } catch (error) {
     const err = error as AxiosError;
-    throw err.response?.data;
+
+    // throw a clean error message if present
+    const message =
+      err.response?.data?.error?.message ||
+      err.response?.data?.message ||
+      err.message ||
+      'Unknown error';
+
+    throw new Error(message);
   }
 };
 
@@ -95,7 +116,15 @@ const remove = async <T>(url: string, body?: object): Promise<T> => {
     return data;
   } catch (error) {
     const err = error as AxiosError;
-    throw err.response?.data;
+
+    // throw a clean error message if present
+    const message =
+      err.response?.data?.error?.message ||
+      err.response?.data?.message ||
+      err.message ||
+      'Unknown error';
+
+    throw new Error(message);
   }
 };
 

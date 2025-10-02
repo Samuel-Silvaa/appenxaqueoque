@@ -100,7 +100,7 @@ const ResetPassword = ({ navigation }: any) => {
 
   return (
     <AppPageScaffold hasArrowBack>
-      <View className='flex-1 w-full justify-center p-2 gap-y-2'>
+      <View className='flex-1 w-full justify-center p-2 gap-y-2 pt-12'>
         <Card>
           <View className=' flex flex-col items-center w-full'>
             <InputContainer

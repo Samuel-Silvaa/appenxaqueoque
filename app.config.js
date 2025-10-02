@@ -32,10 +32,5 @@ export default {
         ],
       ],
     },
-    splash: {
-      image: './assets/splash.png',
-      resizeMode: 'contain', // ou 'cover'
-      backgroundColor: '#FFFFFF',
-    },
   },
 };

@@ -107,6 +107,7 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestLogin.rejected, (state, action) => {
+      console.log('red', action);
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',

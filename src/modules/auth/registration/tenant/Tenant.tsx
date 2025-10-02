@@ -26,7 +26,7 @@ const tenantSchema = yup.object<TenantSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('cegefe@forexnews.bg'),
+    .default(''),
   password: yup
     .string()
     .required('Preencha sua senha')
@@ -38,12 +38,12 @@ const tenantSchema = yup.object<TenantSchema>().shape({
       /[^A-Za-z0-9]/,
       'A senha deve conter pelo menos um caractere especial'
     )
-    .default('Teste@123'),
+    .default(''),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Senhas não coincidem')
     .required('Preencha sua senha')
-    .default('Teste@123'),
+    .default(''),
 });
 
 const Tenant = ({ navigation }: { navigation: NavigationProp<any> }) => {

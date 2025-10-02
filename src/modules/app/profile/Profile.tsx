@@ -91,10 +91,11 @@ const ProfilePage = () => {
                 isLogged: true,
               });
             }}
-            className='bg-gray-secondary dark:bg-d-blue-primary items-center justify-center rounded-full absolute inline-flex bottom-[-20px] right-0 z-50'
+            className='bg-gray-secondary dark:bg-d-blue-primary items-center justify-center rounded-full absolute inline-flex bottom-[-20px] right-0 z-50 p-0'
           >
             <Image
-              className='w-5 h-5 m-3'
+              className=' w-5 h-5 m-3'
+              resizeMode='contain'
               source={require('src/assets/camera-icon.png')}
             ></Image>
           </TouchableOpacity>
@@ -107,7 +108,10 @@ const ProfilePage = () => {
             className='w-36 h-36 rounded-full'
           ></Image>
         </View>
-        <Text className='my-1 dark:text-d-text-white'>
+        <Text
+          className='my-1 dark:text-d-text-white font-[600] my-2'
+          style={{ fontSize: 17 }}
+        >
           {appState.patient?.name}
         </Text>
         <View className={stylesheet.profile.infoRow}>
@@ -212,18 +216,29 @@ const ProfilePage = () => {
             />
           )}
         </View>
-        <Text className='p-4 text-start text-xs text-d-text-dark dark:text-[#737E86]'>
-          Para uma melhor experiência e um ambiente agradável, leia as{' '}
-          <Text className='dark:text-[#8FD7FF] text-xs'>
-            Políticas de privacidade
-          </Text>{' '}
-          <Text className='dark:text-[#8FD7FF] text-xs'>
-            {' '}
-            e os Termos de uso.
-          </Text>
-        </Text>
-        <Text className='m-auto text-xs'>Versão 1.0 - Beta - Teste aberto</Text>
       </View>
+      <Text className='p-4 text-start text-xs text-d-text-dark dark:text-[#737E86]'>
+        Para uma melhor experiência e um ambiente agradável, leia as{' '}
+        <Text
+          onPress={() => {
+            navigation.navigate('PrivacyPolicy' as never);
+          }}
+          className='dark:text-[#8FD7FF] text-xs text-success'
+        >
+          Políticas de privacidade
+        </Text>{' '}
+        e os
+        <Text
+          onPress={() => {
+            navigation.navigate('Terms' as never);
+          }}
+          className='dark:text-[#8FD7FF] text-xs text-success'
+        >
+          {' '}
+          Termos de uso.
+        </Text>
+      </Text>
+      <Text className='m-auto text-xs'>Versão 1.0 - Beta - Teste aberto</Text>
     </AppPageScaffold>
   );
 };

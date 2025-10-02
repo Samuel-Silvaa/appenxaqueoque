@@ -31,8 +31,8 @@ const loginSchema = yup.object<LoginSchema>().shape({
     .string()
     .email('Email inválido')
     .required('Preencha seu email')
-    .default('samuellsilva74@gmail.com'),
-  password: yup.string().required('Preencha sua senha').default('Teste@123'),
+    .default(''),
+  password: yup.string().required('Preencha sua senha').default(''),
 });
 
 const Login = ({ navigation }: any) => {

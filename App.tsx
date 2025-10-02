@@ -17,6 +17,7 @@ import { Linking } from 'react-native';
 import { NativeWindStyleSheet } from 'nativewind';
 import { ColorSchemeSystem } from 'nativewind/dist/style-sheet/color-scheme';
 import { ScreenLoader } from 'src/modules/shared/components/loader/ScreenLoader';
+import { navigationRef } from 'navigationService';
 
 const ActiveRoutes = () => {
   const auth = useSelector((state) => authSelector(state));
@@ -137,7 +138,7 @@ const Toast = ({ toastOptions }: { toastOptions: ToastProps }) => {
 const App = () => {
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <ToastProvider
           swipeEnabled={true}
           animationDuration={400}

@@ -5,8 +5,12 @@ import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { sharedEpisodeStyleSheet } from 'src/modules/app/episode/shared/SharedEpisodeStyleSheet';
 
 const stylesheet = {
-  container: 'bg-white dark:bg-d-blue-primary rounded-[32px] m-2 ',
-  body: 'flex-row flex-wrap justify-evenly items-start w-full rounded-[28px] p-1 bg-white dark:bg-d-blue-primary ',
+  container: 'bg-white dark:bg-d-blue-primary rounded-[32px] m-2 mt-4',
+  body: 'flex-row flex-wrap justify-evenly items-start w-full rounded-[28px] p-1 bg-white dark:bg-d-blue-primary shadow-lg',
+  calendar: {
+    img: 'absolute right-5 top-[-65px] z-30 flex-row items-center justify-between',
+    duck: 'absolute left-5 top-[-65px] z-30 flex-row items-center justify-between',
+  },
 };
 
 const CalendarComponent = ({
@@ -19,7 +23,22 @@ const CalendarComponent = ({
   displayMessage?: boolean;
 }) => {
   return (
-    <View className='relative w-full'>
+    <View className='relative w-full mt-14'>
+      <View className={stylesheet.calendar.duck}>
+        <Image
+          resizeMode='contain'
+          className='w-[100px] h-[100px] '
+          source={require('src/assets/duck.png')}
+        />
+      </View>
+      <View className={stylesheet.calendar.img}>
+        <Image
+          resizeMode='contain'
+          className='w-[100px] h-[100px] '
+          source={require('src/assets/baby_book.png')}
+        />
+      </View>
+
       <View className='bg-blue-four dark:bg-d-blue-primary rounded-[28px] absolute top-0 h-2/5 w-full'></View>
       <View className={stylesheet.container}>
         <View className={stylesheet.body}>
