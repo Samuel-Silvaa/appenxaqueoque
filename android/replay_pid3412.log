@@ -1,26 +1,8 @@
 JvmtiExport can_access_local_variables 0
 JvmtiExport can_hotswap_or_post_breakpoint 0
 JvmtiExport can_post_on_exceptions 0
-# 188 ciObject found
+# 215 ciObject found
 ciInstanceKlass java/lang/Cloneable 1 0 7 100 1 100 1 1 1
-instanceKlass java/util/concurrent/ConcurrentLinkedQueue$Itr
-instanceKlass org/gradle/internal/remote/internal/inet/SocketConnection$1
-instanceKlass org/gradle/internal/logging/ConsoleRenderer
-instanceKlass java/nio/channels/Channels
-instanceKlass java/nio/file/FileChannelLinesSpliterator$1
-instanceKlass com/google/common/collect/ForwardingObject
-instanceKlass java/util/stream/Streams$1
-instanceKlass java/lang/invoke/MethodHandle$1
-instanceKlass sun/nio/ch/FileChannelImpl$Closer
-instanceKlass sun/nio/fs/WindowsChannelFactory$2
-instanceKlass sun/nio/fs/WindowsChannelFactory$Flags
-instanceKlass sun/nio/fs/WindowsChannelFactory$1
-instanceKlass sun/nio/fs/WindowsChannelFactory
-instanceKlass sun/nio/fs/WindowsSecurityDescriptor
-instanceKlass java/nio/file/FileChannelLinesSpliterator
-instanceKlass org/gradle/launcher/daemon/diagnostics/DaemonLogFileUtils
-instanceKlass org/slf4j/helpers/FormattingTuple
-instanceKlass org/slf4j/helpers/MessageFormatter
 instanceKlass org/gradle/internal/serialize/ExceptionReplacingObjectInputStream$1
 instanceKlass java/io/Bits
 instanceKlass jdk/internal/access/JavaObjectInputFilterAccess
@@ -37,15 +19,20 @@ instanceKlass java/io/ObjectInputStream$HandleTable$HandleList
 instanceKlass java/io/ObjectInputStream$HandleTable
 instanceKlass jdk/internal/access/JavaObjectInputStreamReadString
 instanceKlass jdk/internal/access/JavaObjectInputStreamAccess
-instanceKlass java/io/ObjectOutput
-instanceKlass java/io/ObjectStreamConstants
 instanceKlass java/io/ObjectInput
+instanceKlass java/io/ObjectStreamConstants
+instanceKlass java/io/ObjectOutput
 instanceKlass org/gradle/internal/serialize/Message
 instanceKlass com/google/common/collect/Lists$ReverseList$1
 instanceKlass org/gradle/internal/logging/console/DefaultColorMap$CompositeColor
 instanceKlass org/gradle/internal/logging/console/DefaultColorMap$ForegroundColor
+instanceKlass org/gradle/internal/logging/console/DefaultTextArea$2$1
+instanceKlass org/gradle/internal/logging/console/DefaultTextArea$2
+instanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext
 instanceKlass com/google/common/base/ExtraObjectsMethodsForWeb
 instanceKlass com/google/common/primitives/IntsMethodsForWeb
+instanceKlass org/gradle/internal/time/TimeFormatting
+instanceKlass com/google/common/collect/NullnessCasts
 instanceKlass org/gradle/internal/logging/format/TersePrettyDurationFormatter
 instanceKlass org/gradle/internal/logging/format/DurationFormatter
 instanceKlass org/gradle/internal/logging/console/ProgressBar
@@ -54,6 +41,7 @@ instanceKlass org/gradle/launcher/daemon/client/DaemonCancelForwarder
 instanceKlass org/gradle/internal/daemon/client/clientinput/DaemonClientInputForwarder$ForwardingUserInput
 instanceKlass org/gradle/internal/logging/console/UserInputReceiver
 instanceKlass org/gradle/internal/daemon/client/clientinput/DaemonClientInputForwarder
+instanceKlass org/gradle/launcher/daemon/diagnostics/DaemonDiagnostics
 instanceKlass java/nio/channels/spi/AbstractSelector$1
 instanceKlass org/gradle/internal/deprecation/DeprecationMessageBuilder$WithDocumentation
 instanceKlass org/gradle/internal/deprecation/Documentation
@@ -74,8 +62,11 @@ instanceKlass org/gradle/internal/deprecation/DeprecationLogger
 instanceKlass java/lang/Long$LongCache
 instanceKlass org/gradle/launcher/daemon/client/DaemonClientConnection
 instanceKlass org/gradle/internal/serialize/Serializers$StatefulSerializerAdapter$2
+instanceKlass org/gradle/internal/serialize/AbstractEncoder
+instanceKlass org/gradle/internal/serialize/PositionAwareEncoder
 instanceKlass org/gradle/internal/serialize/Serializers$StatefulSerializerAdapter$1
 instanceKlass org/gradle/internal/remote/internal/inet/SocketInetAddress$Serializer
+instanceKlass org/gradle/internal/remote/internal/inet/SocketInetAddress
 instanceKlass org/gradle/internal/io/BufferCaster
 instanceKlass java/lang/invoke/ConstantBootstraps
 instanceKlass java/nio/channels/SelectionKey
@@ -83,12 +74,6 @@ instanceKlass java/nio/BufferMismatch
 instanceKlass sun/nio/ch/IOStatus
 instanceKlass sun/nio/ch/Util$BufferCache
 instanceKlass com/sun/security/sasl/Provider$1
-instanceKlass sun/security/pkcs11/SunPKCS11$Descriptor
-instanceKlass javax/security/auth/Subject
-instanceKlass javax/security/auth/callback/CallbackHandler
-instanceKlass sun/security/smartcardio/SunPCSC$1
-instanceKlass sun/security/mscapi/SunMSCAPI$2
-instanceKlass sun/security/mscapi/SunMSCAPI$1
 instanceKlass com/sun/security/sasl/gsskerb/JdkSASL$1
 instanceKlass sun/security/jgss/SunProvider$1
 instanceKlass java/security/spec/ECFieldF2m
@@ -104,8 +89,21 @@ instanceKlass java/security/spec/ECFieldFp
 instanceKlass java/security/spec/ECField
 instanceKlass sun/security/util/CurveDB
 instanceKlass sun/security/ec/SunEC$1
+instanceKlass org/gradle/internal/logging/console/DefaultColorMap$AttributeColor
 instanceKlass org/jcp/xml/dsig/internal/dom/XMLDSigRI$2
+instanceKlass org/gradle/internal/logging/console/DefaultRedrawableLabel$1
 instanceKlass org/jcp/xml/dsig/internal/dom/XMLDSigRI$1
+instanceKlass org/gradle/internal/logging/console/WorkInProgressRenderer$AssociationLabel
+instanceKlass net/rubygrapefruit/platform/internal/MutableTerminalSize
+instanceKlass org/gradle/internal/logging/console/ProgressOperation
+instanceKlass sun/security/pkcs11/SunPKCS11$Descriptor
+instanceKlass javax/security/auth/Subject
+instanceKlass org/gradle/internal/logging/sink/GroupingProgressLogEventGenerator$OperationState
+instanceKlass javax/security/auth/callback/CallbackHandler
+instanceKlass sun/security/smartcardio/SunPCSC$1
+instanceKlass sun/security/mscapi/SunMSCAPI$2
+instanceKlass sun/security/mscapi/SunMSCAPI$1
+instanceKlass jdk/internal/module/ModulePatcher$PatchedModuleReader
 instanceKlass sun/security/jca/ProviderConfig$ProviderLoader
 instanceKlass sun/security/jca/ProviderConfig$3
 instanceKlass sun/security/rsa/SunRsaSignEntries
@@ -131,186 +129,6 @@ instanceKlass org/gradle/internal/remote/internal/Connection
 instanceKlass org/gradle/internal/dispatch/Receive
 instanceKlass org/gradle/internal/remote/internal/MessageSerializer
 instanceKlass org/gradle/internal/remote/internal/inet/SocketConnectCompletion
-instanceKlass org/gradle/launcher/daemon/registry/PersistentDaemonRegistry$2
-instanceKlass jdk/internal/math/FDBigInteger
-instanceKlass org/gradle/internal/time/TimeFormatting
-instanceKlass org/gradle/launcher/daemon/diagnostics/DaemonDiagnostics
-instanceKlass org/gradle/launcher/daemon/diagnostics/DaemonStartupInfo
-instanceKlass org/gradle/process/internal/DefaultExecHandle$ExecResultImpl
-instanceKlass java/util/regex/Matcher$ImmutableMatchResult
-instanceKlass java/text/DigitList
-instanceKlass java/text/FieldPosition
-instanceKlass java/lang/StringUTF16$CharsSpliterator
-instanceKlass java/util/stream/Sink$ChainedInt
-instanceKlass java/util/OptionalInt
-instanceKlass java/util/stream/Sink$OfInt
-instanceKlass java/util/function/IntConsumer
-instanceKlass java/util/function/IntPredicate
-instanceKlass java/util/stream/IntStream
-instanceKlass java/lang/StringLatin1$CharsSpliterator
-instanceKlass java/text/DecimalFormatSymbols
-instanceKlass sun/util/resources/Bundles$2
-instanceKlass sun/util/resources/LocaleData$LocaleDataResourceBundleProvider
-instanceKlass java/util/spi/ResourceBundleProvider
-instanceKlass java/text/Format
-instanceKlass java/util/Scanner$PatternLRUCache
-instanceKlass java/util/Scanner
-instanceKlass org/gradle/process/internal/shutdown/ShutdownHooks
-instanceKlass org/gradle/process/internal/streams/ExecOutputHandleRunner
-instanceKlass org/gradle/util/internal/DisconnectableInputStream$1
-instanceKlass org/gradle/util/internal/DisconnectableInputStream$ThreadExecuter
-instanceKlass java/lang/ProcessImpl$2
-instanceKlass java/lang/ProcessHandleImpl
-instanceKlass java/lang/ProcessHandle
-instanceKlass net/rubygrapefruit/platform/internal/jni/WindowsHandleFunctions
-instanceKlass java/lang/ProcessBuilder
-instanceKlass java/util/concurrent/ForkJoinPool$WorkQueue
-instanceKlass java/util/concurrent/ForkJoinPool$DefaultCommonPoolForkJoinWorkerThreadFactory
-instanceKlass java/util/concurrent/ForkJoinPool$1
-instanceKlass java/util/concurrent/ForkJoinPool$DefaultForkJoinWorkerThreadFactory
-instanceKlass java/util/concurrent/ForkJoinPool$ForkJoinWorkerThreadFactory
-instanceKlass org/gradle/internal/concurrent/AbstractManagedExecutor$1
-instanceKlass org/gradle/process/internal/ProcessBuilderFactory
-instanceKlass org/gradle/process/internal/DefaultExecHandle$CompositeStreamsHandler
-instanceKlass org/gradle/process/internal/ExecHandleRunner
-instanceKlass org/gradle/process/internal/ExecHandleListener
-instanceKlass org/gradle/process/internal/ExecHandleShutdownHookAction
-instanceKlass net/rubygrapefruit/platform/internal/DefaultProcessLauncher
-instanceKlass net/rubygrapefruit/platform/internal/WindowsProcessLauncher
-instanceKlass net/rubygrapefruit/platform/internal/WrapperProcessLauncher
-instanceKlass org/gradle/process/ExecResult
-instanceKlass org/gradle/process/internal/DefaultExecHandle
-instanceKlass org/gradle/process/internal/ProcessSettings
-instanceKlass java/util/concurrent/CountDownLatch
-instanceKlass org/gradle/process/internal/streams/ForwardStdinStreamsHandler
-instanceKlass org/gradle/api/internal/file/AbstractFileResolver$2
-instanceKlass org/apache/commons/io/FilenameUtils
-instanceKlass org/gradle/internal/typeconversion/NotationConverterToNotationParserAdapter$ResultImpl
-instanceKlass kotlin/jvm/functions/Function0
-instanceKlass kotlin/Function
-instanceKlass org/gradle/util/internal/DeferredUtil
-instanceKlass java/util/ArrayList$SubList$1
-instanceKlass org/gradle/process/internal/ProcessArgumentsSpec
-instanceKlass org/gradle/process/internal/streams/SafeStreams
-instanceKlass org/gradle/process/internal/ProcessStreamsSpec
-instanceKlass org/gradle/process/internal/streams/EmptyStdInStreamsHandler
-instanceKlass org/gradle/process/internal/ExecHandle
-instanceKlass org/gradle/process/internal/DefaultProcessForkOptions
-instanceKlass org/gradle/process/internal/ProcessArgumentsSpec$HasExecutable
-instanceKlass org/gradle/launcher/daemon/DaemonExecHandleBuilder
-instanceKlass org/gradle/internal/nativeintegration/services/FileSystems
-instanceKlass org/gradle/api/internal/file/collections/DefaultDirectoryFileTreeFactory$1
-instanceKlass org/gradle/launcher/daemon/bootstrap/DaemonStartupCommunication
-instanceKlass org/gradle/launcher/daemon/bootstrap/DaemonOutputConsumer
-instanceKlass org/gradle/process/internal/StreamsHandler
-instanceKlass org/gradle/internal/stream/EncodedStream
-instanceKlass org/gradle/internal/serialize/PositionAwareEncoder
-instanceKlass org/gradle/internal/io/StreamByteBuffer$StreamByteBufferChunk
-instanceKlass org/gradle/internal/io/StreamByteBuffer
-instanceKlass org/gradle/api/internal/classpath/DefaultModuleRegistry$DefaultModule
-instanceKlass org/gradle/api/internal/classpath/ManifestUtil
-instanceKlass org/gradle/internal/logging/console/DefaultColorMap$AttributeColor
-instanceKlass org/gradle/internal/logging/console/DefaultRedrawableLabel$1
-instanceKlass org/gradle/internal/logging/console/WorkInProgressRenderer$AssociationLabel
-instanceKlass org/gradle/internal/logging/console/ProgressOperation
-instanceKlass com/google/common/collect/NullnessCasts
-instanceKlass net/rubygrapefruit/platform/internal/MutableTerminalSize
-instanceKlass org/gradle/internal/logging/console/DefaultTextArea$2$1
-instanceKlass org/gradle/internal/logging/console/DefaultTextArea$2
-instanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext
-instanceKlass org/gradle/internal/logging/sink/GroupingProgressLogEventGenerator$OperationState
-instanceKlass org/gradle/internal/classpath/DefaultClassPath$ImmutableUniqueList$Builder
-instanceKlass org/gradle/internal/classloader/ClassLoaderSpec
-instanceKlass org/gradle/internal/classloader/ClassLoaderHierarchy
-instanceKlass org/gradle/internal/classloader/ClassLoaderVisitor
-instanceKlass org/gradle/api/internal/classpath/Module
-instanceKlass org/gradle/api/internal/classpath/DefaultModuleRegistry
-instanceKlass org/gradle/api/internal/classpath/GlobalCacheRootsProvider
-instanceKlass com/google/common/base/Joiner
-instanceKlass org/gradle/launcher/daemon/client/DaemonStartupMessage
-instanceKlass sun/util/cldr/CLDRBaseLocaleDataMetaInfo$TZCanonicalIDMapHolder
-instanceKlass java/time/chrono/AbstractChronology
-instanceKlass java/time/chrono/Chronology
-instanceKlass java/time/LocalTime
-instanceKlass java/time/temporal/ValueRange
-instanceKlass java/time/temporal/TemporalField
-instanceKlass java/time/LocalDate
-instanceKlass java/time/chrono/ChronoLocalDate
-instanceKlass java/time/zone/ZoneOffsetTransition
-instanceKlass java/time/LocalDateTime
-instanceKlass java/time/chrono/ChronoLocalDateTime
-instanceKlass java/time/temporal/TemporalAdjuster
-instanceKlass java/time/temporal/Temporal
-instanceKlass java/time/temporal/TemporalAccessor
-instanceKlass java/time/zone/ZoneOffsetTransitionRule
-instanceKlass java/time/zone/ZoneRules
-instanceKlass java/time/zone/Ser
-instanceKlass java/io/Externalizable
-instanceKlass java/time/zone/ZoneRulesProvider$1
-instanceKlass java/time/zone/ZoneRulesProvider
-instanceKlass java/time/ZoneId
-instanceKlass sun/util/resources/provider/NonBaseLocaleDataMetaInfo
-instanceKlass sun/util/locale/provider/BaseLocaleDataMetaInfo
-instanceKlass sun/util/locale/provider/TimeZoneNameUtility$TimeZoneNameGetter
-instanceKlass sun/util/locale/provider/TimeZoneNameUtility
-instanceKlass java/util/TimSort
-instanceKlass java/util/Arrays$LegacyMergeSort
-instanceKlass org/gradle/launcher/daemon/registry/DaemonStopEvents$1
-instanceKlass org/gradle/launcher/daemon/registry/PersistentDaemonRegistry$7
-instanceKlass sun/util/calendar/CalendarUtils
-instanceKlass sun/util/calendar/CalendarDate
-instanceKlass sun/util/resources/Bundles$CacheKeyReference
-instanceKlass java/util/ResourceBundle$ResourceBundleProviderHelper
-instanceKlass sun/util/resources/Bundles$CacheKey
-instanceKlass java/util/ResourceBundle$1
-instanceKlass jdk/internal/access/JavaUtilResourceBundleAccess
-instanceKlass sun/util/resources/Bundles
-instanceKlass sun/util/resources/LocaleData$LocaleDataStrategy
-instanceKlass sun/util/resources/Bundles$Strategy
-instanceKlass sun/util/resources/LocaleData$1
-instanceKlass sun/util/resources/LocaleData
-instanceKlass sun/util/locale/provider/LocaleResources
-instanceKlass java/util/ResourceBundle
-instanceKlass java/util/ResourceBundle$Control
-instanceKlass sun/util/locale/provider/CalendarDataUtility$CalendarWeekParameterGetter
-instanceKlass sun/util/locale/provider/LocaleServiceProviderPool$LocalizedObjectGetter
-instanceKlass sun/util/locale/provider/LocaleServiceProviderPool
-instanceKlass java/util/Locale$Builder
-instanceKlass sun/util/locale/provider/CalendarDataUtility
-instanceKlass java/util/Calendar$Builder
-instanceKlass sun/util/locale/provider/AvailableLanguageTags
-instanceKlass sun/util/resources/cldr/provider/CLDRLocaleDataMetaInfo
-instanceKlass jdk/internal/module/ModulePatcher$PatchedModuleReader
-instanceKlass sun/util/locale/InternalLocaleBuilder$CaseInsensitiveChar
-instanceKlass sun/util/locale/InternalLocaleBuilder
-instanceKlass sun/util/locale/StringTokenIterator
-instanceKlass sun/util/locale/ParseStatus
-instanceKlass sun/util/locale/LanguageTag
-instanceKlass sun/util/cldr/CLDRBaseLocaleDataMetaInfo
-instanceKlass sun/util/locale/provider/LocaleDataMetaInfo
-instanceKlass sun/util/locale/provider/ResourceBundleBasedAdapter
-instanceKlass sun/util/locale/provider/LocaleProviderAdapter$1
-instanceKlass sun/util/locale/provider/LocaleProviderAdapter
-instanceKlass java/util/spi/LocaleServiceProvider
-instanceKlass sun/util/calendar/ZoneInfoFile$ZoneOffsetTransitionRule
-instanceKlass sun/util/calendar/ZoneInfoFile$1
-instanceKlass sun/util/calendar/ZoneInfoFile
-instanceKlass java/util/TimeZone
-instanceKlass java/util/Calendar
-instanceKlass org/gradle/launcher/daemon/registry/DaemonStopEvents
-instanceKlass org/gradle/launcher/daemon/registry/PersistentDaemonRegistry$4
-instanceKlass java/io/FileOutputStream$1
-instanceKlass org/gradle/internal/remote/internal/inet/SocketInetAddress
-instanceKlass org/gradle/internal/serialize/AbstractEncoder
-instanceKlass org/gradle/cache/internal/filelock/LockInfo
-instanceKlass org/gradle/cache/internal/FileBackedObjectHolder$1Updater
-instanceKlass org/gradle/launcher/daemon/registry/PersistentDaemonRegistry$6
-instanceKlass org/gradle/launcher/daemon/registry/DaemonStopEvent$Serializer
-instanceKlass org/gradle/launcher/daemon/registry/DaemonStopEvent
-instanceKlass sun/util/calendar/CalendarSystem$GregorianHolder
-instanceKlass sun/util/calendar/CalendarSystem
-instanceKlass java/util/Date
-instanceKlass sun/net/util/SocketExceptions
 instanceKlass sun/net/NetHooks
 instanceKlass java/net/SocketImpl
 instanceKlass java/net/SocketOptions
@@ -323,6 +141,11 @@ instanceKlass org/gradle/launcher/daemon/client/DefaultDaemonConnector$CleanupOn
 instanceKlass org/gradle/launcher/daemon/toolchain/DaemonJvmCriteria$JavaHome
 instanceKlass org/gradle/launcher/daemon/toolchain/DaemonJvmCriteria$Spec
 instanceKlass org/gradle/internal/Pair
+instanceKlass sun/util/calendar/CalendarSystem$GregorianHolder
+instanceKlass sun/util/calendar/CalendarSystem
+instanceKlass java/util/Date
+instanceKlass org/gradle/launcher/daemon/registry/DaemonStopEvent$Serializer
+instanceKlass org/gradle/launcher/daemon/registry/DaemonStopEvent
 instanceKlass org/gradle/launcher/daemon/registry/DaemonInfo
 instanceKlass org/gradle/launcher/daemon/context/DefaultDaemonContext$Serializer
 instanceKlass org/gradle/launcher/daemon/context/DefaultDaemonContext
@@ -345,9 +168,9 @@ instanceKlass org/gradle/cache/internal/filelock/LockStateAccess
 instanceKlass org/gradle/cache/internal/filelock/LockFileAccess
 instanceKlass org/gradle/cache/internal/filelock/LockState
 instanceKlass org/gradle/cache/internal/filelock/DefaultLockStateSerializer
-instanceKlass java/nio/file/FileVisitor
 instanceKlass org/apache/commons/io/filefilter/IOFileFilter
 instanceKlass java/nio/file/PathMatcher
+instanceKlass java/nio/file/FileVisitor
 instanceKlass org/apache/commons/io/file/PathFilter
 instanceKlass org/apache/commons/io/FileUtils
 instanceKlass org/gradle/internal/time/ExponentialBackoff$Query
@@ -468,8 +291,8 @@ instanceKlass org/gradle/launcher/daemon/protocol/DaemonMessageSerializer$BuildS
 instanceKlass org/gradle/launcher/daemon/protocol/Message
 instanceKlass org/gradle/launcher/daemon/protocol/DaemonMessageSerializer
 instanceKlass org/gradle/launcher/daemon/client/DaemonStartListener
-instanceKlass org/gradle/launcher/daemon/context/DaemonConnectDetails
 instanceKlass org/gradle/launcher/daemon/client/DaemonClientConnection$StaleAddressDetector
+instanceKlass org/gradle/launcher/daemon/context/DaemonConnectDetails
 instanceKlass org/gradle/launcher/daemon/client/DefaultDaemonConnector
 instanceKlass org/gradle/internal/serialize/DefaultSerializerRegistry$TypeInfo
 instanceKlass java/util/AbstractMap$SimpleImmutableEntry
@@ -534,8 +357,8 @@ instanceKlass org/gradle/launcher/daemon/registry/DaemonRegistryContent$Serializ
 instanceKlass org/gradle/launcher/daemon/registry/DaemonRegistryContent
 instanceKlass org/gradle/cache/LockOptions
 instanceKlass org/gradle/cache/internal/AbstractFileAccess
-instanceKlass org/gradle/internal/serialize/Encoder
 instanceKlass org/gradle/internal/serialize/Decoder
+instanceKlass org/gradle/internal/serialize/Encoder
 instanceKlass org/gradle/cache/internal/FileBackedObjectHolder
 instanceKlass org/gradle/cache/internal/FileIntegrityViolationSuppressingObjectHolderDecorator
 instanceKlass org/gradle/cache/ObjectHolder$UpdateAction
@@ -586,8 +409,8 @@ instanceKlass org/gradle/internal/logging/progress/ProgressLoggerFactory
 instanceKlass org/gradle/internal/logging/progress/ProgressListener
 instanceKlass org/gradle/internal/operations/BuildOperationIdFactory
 instanceKlass org/gradle/launcher/daemon/client/DaemonClientServicesSupport
-instanceKlass org/gradle/jvm/toolchain/internal/JdkCacheDirectory
 instanceKlass org/gradle/internal/jvm/inspection/JavaInstallationRegistry
+instanceKlass org/gradle/jvm/toolchain/internal/JdkCacheDirectory
 instanceKlass org/gradle/launcher/daemon/toolchain/DaemonClientToolchainServices
 instanceKlass org/gradle/cache/internal/Synchronizer
 instanceKlass org/gradle/cache/internal/CacheSupport
@@ -598,9 +421,9 @@ instanceKlass org/gradle/launcher/daemon/registry/DaemonRegistryServices
 instanceKlass org/gradle/launcher/daemon/client/DaemonClientFactory$1
 instanceKlass org/gradle/launcher/daemon/client/DaemonClientFactory$2
 instanceKlass org/gradle/internal/invocation/BuildAction
+instanceKlass org/gradle/launcher/daemon/client/DaemonClientFactory
 instanceKlass org/gradle/launcher/daemon/client/DaemonGreeter
 instanceKlass org/gradle/internal/serialize/Serializer
-instanceKlass org/gradle/launcher/daemon/client/DaemonClientFactory
 instanceKlass org/gradle/launcher/daemon/client/JvmVersionValidator
 instanceKlass org/gradle/launcher/daemon/client/DaemonClientGlobalServices
 instanceKlass org/gradle/launcher/daemon/context/DaemonRequestContext
@@ -712,12 +535,12 @@ instanceKlass com/google/common/collect/ImmutableSet$SetBuilderImpl
 instanceKlass org/gradle/process/internal/JvmOptions
 instanceKlass org/gradle/internal/logging/console/DefaultAnsiExecutor$AnsiContextImpl
 instanceKlass org/gradle/internal/logging/console/AnsiContext
-instanceKlass org/fusesource/jansi/Ansi$1
 instanceKlass org/gradle/launcher/daemon/toolchain/DaemonJvmCriteria$LauncherJvm
-instanceKlass com/google/common/collect/AbstractIterator$1
+instanceKlass org/fusesource/jansi/Ansi$1
 instanceKlass org/gradle/jvm/toolchain/internal/DefaultToolchainConfiguration
-instanceKlass com/google/common/collect/TransformedIterator
 instanceKlass org/gradle/jvm/toolchain/internal/ToolchainConfiguration
+instanceKlass com/google/common/collect/AbstractIterator$1
+instanceKlass com/google/common/collect/TransformedIterator
 instanceKlass org/gradle/launcher/daemon/configuration/DaemonParameters
 instanceKlass org/gradle/internal/logging/console/WorkInProgressRenderer$1
 instanceKlass com/google/common/collect/Lists
@@ -725,9 +548,9 @@ instanceKlass com/google/common/collect/FluentIterable
 instanceKlass org/gradle/internal/DefaultTaskExecutionRequest
 instanceKlass com/google/common/base/Predicates$InstanceOfPredicate
 instanceKlass com/google/common/base/Predicate
-instanceKlass org/gradle/internal/buildoption/Option$Value
 instanceKlass com/google/common/base/CommonPattern
 instanceKlass com/google/common/base/Predicates
+instanceKlass org/gradle/internal/buildoption/Option$Value
 instanceKlass com/google/common/collect/Iterables
 instanceKlass org/gradle/internal/RunDefaultTasksExecutionRequest
 instanceKlass org/gradle/TaskExecutionRequest
@@ -739,9 +562,9 @@ instanceKlass org/gradle/jvm/toolchain/internal/InstallationLocation
 instanceKlass org/gradle/api/Describable
 instanceKlass com/google/common/base/Optional
 instanceKlass com/google/common/collect/CollectPreconditions
-instanceKlass com/google/common/collect/Maps$EntryTransformer
-instanceKlass com/google/common/collect/BiMap
 instanceKlass com/google/common/base/Converter
+instanceKlass com/google/common/collect/BiMap
+instanceKlass com/google/common/collect/Maps$EntryTransformer
 instanceKlass com/google/common/collect/ImmutableMap
 instanceKlass com/google/common/collect/SortedMapDifference
 instanceKlass com/google/common/collect/MapDifference
@@ -767,41 +590,41 @@ instanceKlass org/gradle/api/provider/HasMultipleValues
 instanceKlass org/gradle/api/provider/Property
 instanceKlass org/gradle/api/provider/Provider
 instanceKlass org/gradle/api/internal/model/InstantiatorBackedObjectFactory
-instanceKlass org/gradle/process/internal/ExecHandleBuilder
 instanceKlass org/gradle/process/internal/JavaExecAction
 instanceKlass org/gradle/process/JavaExecSpec
+instanceKlass org/gradle/process/internal/JavaForkOptionsInternal
+instanceKlass org/gradle/process/JavaDebugOptions
+instanceKlass org/gradle/process/internal/ExecHandleBuilder
 instanceKlass org/gradle/process/internal/ExecAction
 instanceKlass org/gradle/process/ExecSpec
 instanceKlass org/gradle/process/BaseExecSpec
-instanceKlass org/gradle/process/internal/JavaForkOptionsInternal
 instanceKlass org/gradle/process/JavaForkOptions
 instanceKlass org/gradle/process/ProcessForkOptions
-instanceKlass org/gradle/process/JavaDebugOptions
 instanceKlass org/gradle/api/model/ObjectFactory
 instanceKlass org/gradle/initialization/BuildCancellationToken
 instanceKlass org/gradle/process/internal/DefaultExecActionFactory
-instanceKlass org/gradle/internal/concurrent/ManagedScheduledExecutor
 instanceKlass org/gradle/internal/concurrent/ManagedThreadPoolExecutor
+instanceKlass org/gradle/internal/concurrent/ManagedScheduledExecutor
 instanceKlass org/gradle/internal/concurrent/ManagedExecutor
 instanceKlass org/gradle/internal/concurrent/AsyncStoppable
 instanceKlass org/gradle/internal/concurrent/ExecutorPolicy
 instanceKlass org/gradle/internal/concurrent/DefaultExecutorFactory
-instanceKlass org/gradle/launcher/daemon/configuration/DaemonServerConfiguration
 instanceKlass org/gradle/launcher/daemon/context/DaemonContext
+instanceKlass org/gradle/launcher/daemon/configuration/DaemonServerConfiguration
+instanceKlass org/gradle/launcher/exec/BuildActionExecutor
+instanceKlass org/gradle/launcher/exec/BuildActionParameters
 instanceKlass org/gradle/StartParameter
 instanceKlass org/gradle/concurrent/ParallelismConfiguration
-instanceKlass org/gradle/launcher/exec/BuildActionParameters
-instanceKlass org/gradle/launcher/exec/BuildActionExecutor
 instanceKlass org/gradle/launcher/cli/BuildActionsFactory
 instanceKlass org/gradle/launcher/cli/converter/StartParameterConverter
 instanceKlass org/gradle/api/internal/file/collections/FileCollectionObservationListener
 instanceKlass org/gradle/api/internal/tasks/DefaultTaskDependencyFactory
 instanceKlass org/gradle/api/internal/tasks/TaskDependencyFactory
-instanceKlass org/gradle/api/file/ConfigurableFileTree
-instanceKlass org/gradle/api/file/DirectoryTree
 instanceKlass org/gradle/api/file/ConfigurableFileCollection
 instanceKlass org/gradle/api/provider/SupportsConvention
 instanceKlass org/gradle/api/provider/HasConfigurableValue
+instanceKlass org/gradle/api/file/ConfigurableFileTree
+instanceKlass org/gradle/api/file/DirectoryTree
 instanceKlass org/gradle/api/internal/file/collections/MinimalFileTree
 instanceKlass org/gradle/api/internal/file/collections/MinimalFileCollection
 instanceKlass org/gradle/api/internal/file/FileTreeInternal
@@ -852,9 +675,9 @@ instanceKlass org/gradle/internal/typeconversion/NotationParser
 instanceKlass org/gradle/api/internal/file/AbstractFileResolver
 instanceKlass org/gradle/launcher/cli/BuildEnvironmentConfigurationConverter
 instanceKlass org/gradle/internal/id/UUIDGenerator
-instanceKlass org/gradle/internal/remote/MessagingClient
 instanceKlass org/gradle/internal/remote/MessagingServer
 instanceKlass org/gradle/internal/remote/internal/IncomingConnector
+instanceKlass org/gradle/internal/remote/MessagingClient
 instanceKlass org/gradle/internal/remote/internal/OutgoingConnector
 instanceKlass org/gradle/internal/id/IdGenerator
 instanceKlass org/gradle/internal/remote/services/MessagingServices
@@ -863,8 +686,8 @@ instanceKlass java/lang/annotation/Documented
 instanceKlass javax/annotation/meta/TypeQualifierDefault
 instanceKlass javax/annotation/Nonnull
 instanceKlass org/gradle/api/NonNullApi
-instanceKlass org/gradle/internal/service/scopes/Scope$Settings
 instanceKlass org/gradle/internal/service/scopes/Scope$Project
+instanceKlass org/gradle/internal/service/scopes/Scope$Settings
 instanceKlass org/gradle/internal/service/scopes/Scope$Gradle
 instanceKlass org/gradle/internal/service/scopes/Scope$Build
 instanceKlass org/gradle/internal/service/scopes/Scope$BuildTree
@@ -877,32 +700,32 @@ instanceKlass org/gradle/api/tasks/util/PatternSet
 instanceKlass org/gradle/api/tasks/util/PatternFilterable
 instanceKlass org/gradle/api/tasks/AntBuilderAware
 instanceKlass sun/reflect/generics/tree/MethodTypeSignature
+instanceKlass org/gradle/internal/remote/internal/inet/InetAddressFactory
 instanceKlass org/gradle/api/tasks/util/internal/PatternSpecFactory
 instanceKlass org/gradle/internal/file/excludes/FileSystemDefaultExcludesListener
-instanceKlass org/gradle/internal/remote/internal/inet/InetAddressFactory
-instanceKlass org/gradle/api/internal/file/FileLookup
+instanceKlass org/gradle/api/internal/provider/PropertyHost
 instanceKlass org/gradle/api/internal/file/FileResolver
 instanceKlass org/gradle/internal/file/PathToFileResolver
 instanceKlass org/gradle/internal/file/RelativeFilePathResolver
-instanceKlass org/gradle/api/internal/provider/PropertyHost
+instanceKlass org/gradle/api/internal/file/FileLookup
 instanceKlass org/gradle/internal/service/DefaultServiceRegistry$RegistrationWrapper
 instanceKlass java/lang/Class$AnnotationData
 instanceKlass org/gradle/internal/service/scopes/ServiceScope
 instanceKlass org/gradle/internal/service/ServiceScopeValidator
 instanceKlass org/gradle/internal/service/DefaultServiceRegistry$CompositeServiceProvider
 instanceKlass org/gradle/internal/service/DefaultServiceRegistry$ParentServices
-instanceKlass org/gradle/cache/FileLockManager
-instanceKlass org/gradle/cache/internal/ProcessMetaDataProvider
-instanceKlass org/gradle/internal/jvm/inspection/JvmVersionDetector
-instanceKlass org/gradle/api/internal/file/FileCollectionFactory
-instanceKlass org/gradle/internal/event/ScopedListenerManager
-instanceKlass org/gradle/internal/event/ListenerManager
 instanceKlass org/gradle/internal/jvm/inspection/JvmMetadataDetector
 instanceKlass java/util/function/BiConsumer
+instanceKlass org/gradle/internal/event/ScopedListenerManager
+instanceKlass org/gradle/internal/event/ListenerManager
 instanceKlass org/gradle/api/internal/file/collections/DirectoryFileTreeFactory
 instanceKlass org/gradle/cache/internal/locklistener/FileLockContentionHandler
 instanceKlass org/gradle/cache/internal/locklistener/InetAddressProvider
+instanceKlass org/gradle/cache/FileLockManager
+instanceKlass org/gradle/cache/internal/ProcessMetaDataProvider
+instanceKlass org/gradle/internal/jvm/inspection/JvmVersionDetector
 instanceKlass org/gradle/internal/concurrent/ExecutorFactory
+instanceKlass org/gradle/api/internal/file/FileCollectionFactory
 instanceKlass org/gradle/process/internal/ExecFactory
 instanceKlass org/gradle/api/internal/ProcessOperations
 instanceKlass org/gradle/process/internal/JavaForkOptionsFactory
@@ -1027,10 +850,10 @@ instanceKlass jdk/internal/reflect/AccessorGenerator
 instanceKlass jdk/internal/reflect/ClassFileConstants
 instanceKlass net/rubygrapefruit/platform/WindowsRegistry
 instanceKlass net/rubygrapefruit/platform/file/FileSystems
-instanceKlass net/rubygrapefruit/platform/SystemInfo
-instanceKlass net/rubygrapefruit/platform/memory/Memory
 instanceKlass org/gradle/internal/jvm/Jvm
 instanceKlass org/gradle/internal/jvm/JavaInfo
+instanceKlass net/rubygrapefruit/platform/memory/Memory
+instanceKlass net/rubygrapefruit/platform/SystemInfo
 instanceKlass org/gradle/internal/file/StatStatistics
 instanceKlass org/gradle/internal/file/StatStatistics$Collector
 instanceKlass org/gradle/internal/nativeintegration/filesystem/services/GenericFileSystem
@@ -1060,13 +883,13 @@ instanceKlass org/gradle/internal/nativeintegration/jansi/JansiRuntimeResolver
 instanceKlass org/gradle/internal/nativeintegration/jansi/JansiLibraryFactory
 instanceKlass org/gradle/internal/nativeintegration/jansi/JansiStorageLocator
 instanceKlass org/gradle/internal/nativeintegration/jansi/JansiBootPathConfigurer
-instanceKlass org/gradle/internal/nativeintegration/network/HostnameLookup
 instanceKlass org/gradle/internal/nativeintegration/ProcessEnvironment
+instanceKlass org/gradle/internal/nativeintegration/network/HostnameLookup
 instanceKlass org/gradle/internal/file/FileMetadataAccessor
+instanceKlass org/gradle/initialization/GradleUserHomeDirProvider
 instanceKlass org/gradle/internal/nativeintegration/NativeCapabilities
 instanceKlass net/rubygrapefruit/platform/ProcessLauncher
 instanceKlass net/rubygrapefruit/platform/NativeIntegration
-instanceKlass org/gradle/initialization/GradleUserHomeDirProvider
 instanceKlass org/gradle/internal/nativeintegration/console/ConsoleDetector
 instanceKlass org/gradle/internal/nativeintegration/services/NativeServices
 instanceKlass org/gradle/launcher/cli/WelcomeMessageAction$1
@@ -1116,8 +939,8 @@ instanceKlass java/util/concurrent/locks/Condition
 instanceKlass java/util/concurrent/BlockingQueue
 instanceKlass org/slf4j/Logger
 instanceKlass org/slf4j/helpers/SubstituteLoggerFactory
-instanceKlass org/slf4j/ILoggerFactory
 instanceKlass org/slf4j/event/LoggingEvent
+instanceKlass org/slf4j/ILoggerFactory
 instanceKlass org/slf4j/LoggerFactory
 instanceKlass org/gradle/internal/logging/config/LoggingSystemAdapter$SnapshotImpl
 instanceKlass org/gradle/internal/logging/sink/OutputEventRenderer$SnapshotImpl
@@ -1185,8 +1008,8 @@ instanceKlass org/gradle/configuration/GradleLauncherMetaData
 instanceKlass org/gradle/configuration/DefaultBuildClientMetaData
 instanceKlass org/gradle/internal/logging/text/AbstractStyledTextOutputFactory
 instanceKlass org/apache/commons/lang/StringUtils
-instanceKlass org/gradle/internal/exceptions/FailureResolutionAware$Context
 instanceKlass org/gradle/util/internal/TreeVisitor
+instanceKlass org/gradle/internal/exceptions/FailureResolutionAware$Context
 instanceKlass org/gradle/internal/buildevents/BuildExceptionReporter
 instanceKlass org/gradle/launcher/cli/DefaultCommandLineActionFactory$NonParserConfiguringCommandLineActionCreator
 instanceKlass org/gradle/launcher/cli/DefaultCommandLineActionFactory$BuiltInActionCreator
@@ -1393,18 +1216,18 @@ instanceKlass org/gradle/internal/dispatch/Dispatch
 instanceKlass org/gradle/internal/time/TimeSource$1
 instanceKlass org/gradle/internal/time/TimeSource
 instanceKlass org/gradle/internal/time/MonotonicClock
-instanceKlass org/gradle/internal/time/Clock
 instanceKlass org/gradle/internal/time/CountdownTimer
 instanceKlass org/gradle/internal/time/Timer
+instanceKlass org/gradle/internal/time/Clock
 instanceKlass org/gradle/internal/time/Time
 instanceKlass org/gradle/internal/logging/console/ColorMap
 instanceKlass org/gradle/internal/nativeintegration/console/ConsoleMetaData
 instanceKlass org/gradle/internal/Factory
-instanceKlass org/gradle/internal/logging/config/LoggingSystem$Snapshot
-instanceKlass org/gradle/internal/logging/events/InteractiveEvent
 instanceKlass org/gradle/internal/logging/format/LogHeaderFormatter
 instanceKlass org/gradle/api/logging/StandardOutputListener
 instanceKlass org/gradle/internal/logging/text/StyledTextOutput
+instanceKlass org/gradle/internal/logging/config/LoggingSystem$Snapshot
+instanceKlass org/gradle/internal/logging/events/InteractiveEvent
 instanceKlass org/gradle/internal/logging/events/OutputEvent
 instanceKlass org/gradle/internal/logging/sink/OutputEventRenderer
 instanceKlass java/util/concurrent/atomic/AtomicReference
@@ -1415,6 +1238,7 @@ instanceKlass org/gradle/internal/service/ContainsServices
 instanceKlass org/gradle/internal/service/CloseableServiceRegistry
 instanceKlass org/gradle/internal/service/ServiceRegistryBuilder
 instanceKlass org/gradle/internal/logging/services/LoggingServiceRegistry$1
+instanceKlass org/gradle/internal/logging/console/GlobalUserInputReceiver
 instanceKlass org/gradle/internal/logging/config/LoggingRouter
 instanceKlass org/gradle/internal/logging/LoggingOutputInternal
 instanceKlass org/gradle/api/logging/LoggingOutput
@@ -1422,21 +1246,20 @@ instanceKlass org/gradle/internal/logging/config/LoggingConfigurer
 instanceKlass org/gradle/internal/logging/config/LoggingSourceSystem
 instanceKlass org/gradle/internal/logging/config/LoggingSystem
 instanceKlass org/gradle/internal/logging/events/OutputEventListener
-instanceKlass org/gradle/internal/logging/console/GlobalUserInputReceiver
 instanceKlass org/gradle/internal/logging/services/LoggingServiceRegistry
-instanceKlass org/gradle/launcher/bootstrap/CommandLineActionFactory$CommandLineExecution
 instanceKlass org/gradle/internal/service/ServiceRegistry
 instanceKlass org/gradle/internal/service/ServiceLookup
 instanceKlass org/gradle/internal/service/ServiceRegistrationProvider
+instanceKlass org/gradle/launcher/bootstrap/CommandLineActionFactory$CommandLineExecution
 instanceKlass org/gradle/launcher/cli/DefaultCommandLineActionFactory
 instanceKlass org/gradle/launcher/bootstrap/EntryPoint$RecordingExecutionListener
 instanceKlass org/gradle/launcher/bootstrap/CommandLineActionFactory
-instanceKlass org/gradle/launcher/bootstrap/ExecutionListener
-instanceKlass org/gradle/launcher/bootstrap/ExecutionCompleter
 instanceKlass org/gradle/api/Action
 instanceKlass org/gradle/internal/logging/text/StyledTextOutputFactory
 instanceKlass org/gradle/api/logging/configuration/LoggingConfiguration
 instanceKlass org/gradle/initialization/BuildClientMetaData
+instanceKlass org/gradle/launcher/bootstrap/ExecutionCompleter
+instanceKlass org/gradle/launcher/bootstrap/ExecutionListener
 instanceKlass org/gradle/launcher/bootstrap/EntryPoint
 instanceKlass java/util/TreeMap$PrivateEntryIterator
 instanceKlass java/util/NavigableSet
@@ -2151,14 +1974,14 @@ staticfield java/util/concurrent/ConcurrentHashMap CELLSBUSY J 36
 staticfield java/util/concurrent/ConcurrentHashMap CELLVALUE J 144
 staticfield java/util/concurrent/ConcurrentHashMap ABASE I 16
 staticfield java/util/concurrent/ConcurrentHashMap ASHIFT I 2
-ciInstanceKlass java/lang/String 1 1 1396 10 7 12 1 1 1 8 1 9 7 12 1 1 1 9 12 1 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 1 9 12 1 1 10 7 12 1 1 1 10 7 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 7 12 1 1 1 9 7 12 1 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 9 7 12 1 1 10 12 9 7 12 1 1 3 10 7 12 1 1 1 7 1 11 12 1 1 11 12 1 11 12 1 1 10 100 12 1 1 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 10 12 1 11 12 1 1 10 12 1 1 10 12 10 12 1 1 10 100 12 1 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 10 12 1 1 100 1 10 12 1 1 100 1 100 1 10 12 1 1 10 12 1 1 10 12 1 100 1 100 1 100 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 7 1 11 10 12 1 10 12 11 12 1 11 12 1 10 12 1 1 10 12 1 1 10 10 100 12 1 1 1 10 100 12 1 1 10 12 1 1 10 100 12 1 1 10 12 1 10 12 1 1 10 12 1 100 1 10 10 12 1 1 10 12 1 10 12 1 10 12 1 1 100 1 10 12 1 1 10 12 10 12 1 10 12 1 1 10 100 12 1 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 3 3 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 100 1 10 8 1 10 12 1 1 10 12 1 8 1 10 12 1 1 10 12 10 12 1 8 1 10 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 10 100 1 10 10 12 1 10 12 1 10 12 1 10 10 12 1 10 12 1 1 10 12 1 100 1 10 10 12 1 100 1 10 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 10 12 1 1 10 100 1 10 10 12 1 10 12 1 1 10 12 1 1 10 100 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 11 7 1 11 12 10 12 1 10 12 1 1 10 12 1 1 10 10 12 1 10 12 1 9 12 1 1 11 7 12 1 1 1 10 10 12 1 10 12 1 1 10 10 12 1 10 12 1 10 12 1 1 9 12 1 10 12 1 1 10 10 12 1 1 10 12 10 10 12 1 10 12 10 10 12 10 10 12 1 10 12 1 10 12 10 10 12 10 12 1 10 12 10 12 10 10 12 1 10 12 1 1 10 12 1 10 10 12 1 10 7 12 1 1 1 10 12 1 1 10 10 7 12 1 1 1 11 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 12 1 10 10 12 1 10 12 1 10 12 1 10 100 12 1 1 10 12 1 100 1 100 1 8 1 10 10 10 12 1 8 1 10 12 1 3 3 7 1 10 10 12 1 10 12 1 10 12 1 1 10 12 1 1 11 7 12 1 1 1 7 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 8 1 10 12 1 1 10 12 1 11 7 12 1 1 1 11 7 12 1 1 11 12 1 1 10 12 1 10 12 1 1 10 10 7 12 1 1 1 10 12 1 10 12 1 10 10 12 10 12 1 1 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 10 12 1 1 10 10 12 1 8 1 10 12 1 1 18 12 1 1 11 100 12 1 1 1 7 1 3 18 12 1 18 12 1 8 1 10 100 12 1 1 1 11 12 1 1 10 12 10 10 12 1 10 11 12 1 1 10 12 1 1 11 12 1 18 3 11 10 12 1 11 11 10 12 1 10 12 1 1 8 1 10 12 1 10 12 1 10 12 1 1 10 10 12 1 11 100 12 1 7 1 100 1 10 12 1 7 1 10 10 7 12 1 1 1 100 1 10 7 1 10 10 12 1 10 10 12 1 8 1 10 10 12 1 8 1 8 1 10 12 1 10 12 1 10 10 12 10 100 12 1 1 10 100 12 1 1 10 100 12 1 1 8 1 10 12 1 10 12 1 1 10 10 12 8 1 8 1 10 8 1 8 1 8 1 8 1 10 12 1 10 12 1 8 1 10 100 12 1 1 1 10 12 10 12 1 1 10 12 10 10 12 10 12 7 1 9 12 1 1 7 1 10 100 1 100 1 100 1 100 1 1 1 1 1 1 5 0 1 1 1 1 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 15 10 100 12 1 1 1 16 15 10 12 16 15 10 12 15 10 12 15 10 12 1 1 1 1 100 1 100 1 1 1
+ciInstanceKlass java/lang/String 1 1 1396 10 7 12 1 1 1 8 1 9 7 12 1 1 1 9 12 1 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 1 9 12 1 1 10 7 12 1 1 1 10 7 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 7 12 1 1 1 9 7 12 1 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 9 7 12 1 1 10 12 9 7 12 1 1 3 10 7 12 1 1 1 7 1 11 12 1 1 11 12 1 11 12 1 1 10 100 12 1 1 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 10 12 1 11 12 1 1 10 12 1 1 10 12 10 12 1 1 10 100 12 1 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 10 12 1 1 100 1 10 12 1 1 100 1 100 1 10 12 1 1 10 12 1 1 10 12 1 100 1 100 1 100 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 7 1 11 10 12 1 10 12 11 12 1 11 12 1 10 12 1 1 10 12 1 1 10 10 100 12 1 1 1 10 100 12 1 1 10 12 1 1 10 100 12 1 1 10 12 1 10 12 1 1 10 12 1 100 1 10 10 12 1 1 10 12 1 10 12 1 10 12 1 1 100 1 10 12 1 1 10 12 10 12 1 10 12 1 1 10 100 12 1 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 3 3 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 100 1 10 8 1 10 12 1 1 10 12 1 8 1 10 12 1 1 10 12 10 12 1 8 1 10 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 10 100 1 10 10 12 1 10 12 1 10 12 1 10 10 12 1 10 12 1 1 10 12 1 100 1 10 10 12 1 100 1 10 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 10 12 1 1 10 100 1 10 10 12 1 10 12 1 1 10 12 1 1 10 100 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 11 7 1 11 12 10 12 1 10 12 1 1 10 12 1 1 10 10 12 1 10 12 1 9 12 1 1 11 7 12 1 1 1 10 10 12 1 10 12 1 1 10 10 12 1 10 12 1 10 12 1 1 9 12 1 10 12 1 1 10 10 12 1 1 10 12 10 10 12 1 10 12 10 10 12 10 10 12 1 10 12 1 10 12 10 10 12 10 12 1 10 12 10 12 10 10 12 1 10 12 1 1 10 12 1 10 10 12 1 10 7 12 1 1 1 10 12 1 1 10 10 7 12 1 1 1 11 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 12 1 10 10 12 1 10 12 1 10 12 1 10 100 12 1 1 10 12 1 100 1 100 1 8 1 10 10 10 12 1 8 1 10 12 1 3 3 7 1 10 10 12 1 10 12 1 10 12 1 1 10 12 1 1 11 7 12 1 1 1 7 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 8 1 10 12 1 1 10 12 1 11 7 12 1 1 1 11 7 12 1 1 11 12 1 1 10 12 1 10 12 1 1 10 10 7 12 1 1 1 10 12 1 10 12 1 10 10 12 10 12 1 1 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 10 12 1 1 10 10 12 1 8 1 10 12 1 1 18 12 1 1 11 100 12 1 1 1 7 1 3 18 12 1 18 12 1 8 1 10 100 12 1 1 1 11 12 1 1 10 12 10 10 12 1 10 11 12 1 1 10 12 1 1 11 12 1 18 3 11 10 12 1 11 11 10 12 1 10 12 1 1 8 1 10 12 1 10 12 1 10 12 1 1 10 10 12 1 11 100 12 1 100 1 100 1 10 12 1 100 1 10 10 100 12 1 1 1 100 1 10 7 1 10 10 12 1 10 10 12 1 8 1 10 10 12 1 8 1 8 1 10 12 1 10 12 1 10 10 12 10 100 12 1 1 10 100 12 1 1 10 100 12 1 1 8 1 10 12 1 10 12 1 1 10 10 12 8 1 8 1 10 8 1 8 1 8 1 8 1 10 12 1 10 12 1 8 1 10 100 12 1 1 1 10 12 10 12 1 1 10 12 10 10 12 10 12 7 1 9 12 1 1 7 1 10 100 1 100 1 100 1 100 1 1 1 1 1 1 5 0 1 1 1 1 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 15 10 100 12 1 1 1 16 15 10 12 16 15 10 12 15 10 12 15 10 12 1 1 1 1 100 1 100 1 1 1
 staticfield java/lang/String COMPACT_STRINGS Z 1
 staticfield java/lang/String serialPersistentFields [Ljava/io/ObjectStreamField; 0 [Ljava/io/ObjectStreamField;
 staticfield java/lang/String CASE_INSENSITIVE_ORDER Ljava/util/Comparator; java/lang/String$CaseInsensitiveComparator
 ciInstanceKlass java/security/ProtectionDomain 1 1 324 10 7 12 1 1 1 9 7 12 1 1 1 7 1 10 9 12 1 1 9 12 1 1 9 12 1 1 10 7 12 1 1 7 1 9 12 1 9 12 1 1 7 1 9 12 1 1 9 12 1 10 100 12 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 9 12 1 9 100 12 1 1 10 12 1 1 10 100 1 10 12 1 1 8 1 100 1 8 1 10 12 1 10 10 100 12 1 1 1 10 12 1 1 8 1 11 8 1 10 12 1 8 1 8 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 8 1 10 12 1 8 1 8 1 10 100 12 1 1 1 9 100 12 1 1 1 10 12 1 1 9 100 12 1 1 1 10 100 12 1 1 1 100 1 100 1 10 12 1 10 100 12 1 1 1 10 100 1 10 12 1 10 12 1 1 11 100 12 1 1 11 12 1 100 1 11 100 12 1 1 1 10 12 1 10 11 12 1 1 11 12 1 1 10 12 1 10 7 12 1 1 10 100 12 1 1 11 12 1 10 12 8 1 8 1 10 7 12 1 1 1 7 1 10 10 7 12 1 1 1 1 1 1 1 1 1 1 100 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 100 1 1 1 1 1
 staticfield java/security/ProtectionDomain filePermCompatInPD Z 0
 ciInstanceKlass java/security/CodeSource 1 1 395 10 7 12 1 1 1 9 7 12 1 1 1 9 12 1 1 9 12 1 1 9 12 1 1 10 7 12 1 1 1 9 12 1 1 10 100 12 1 1 10 100 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 100 1 10 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 100 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 10 10 12 1 1 10 100 12 1 1 1 10 12 1 10 12 1 10 12 1 8 1 10 12 1 10 12 1 10 12 1 1 10 12 1 8 1 10 12 1 1 10 100 1 10 10 12 1 1 8 1 10 12 1 10 12 1 10 12 1 8 1 8 1 9 12 1 1 100 1 8 1 10 12 1 10 12 1 1 8 1 10 12 1 8 1 8 1 8 1 10 100 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 100 1 100 1 10 12 1 10 12 10 12 1 1 10 100 12 1 1 10 12 1 100 1 10 12 10 8 1 10 12 1 10 12 1 10 12 1 1 100 1 10 12 1 1 100 1 100 1 8 1 8 1 10 10 12 1 1 10 100 12 1 1 1 100 1 10 12 10 12 1 1 11 100 12 1 1 10 10 12 1 11 10 12 1 8 1 100 1 10 12 1 10 12 1 1 10 12 1 11 12 1 1 11 100 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1
-ciInstanceKlass java/lang/StringBuilder 1 1 409 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 1 10 7 12 1 1 1 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 10 12 1 1 10 12 1 1 9 12 1 1 9 12 1 1 10 7 12 1 1 1 10 7 1 10 100 12 1 1 1 10 12 1 10 12 1 1 10 12 1 1 10 10 12 1 1 10 100 12 1 1 10 12 1 10 12 1 1 100 1 100 1 8 1 10 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 10 12 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 10 12 1 10 12 1 100 1 100 1 100 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 100 1 1 1 1 1 1 1 1 1 1
+ciInstanceKlass java/lang/StringBuilder 1 1 409 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 1 10 7 12 1 1 1 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 10 12 1 1 10 12 1 1 9 12 1 1 9 12 1 1 10 7 12 1 1 1 10 100 1 10 100 12 1 1 1 10 12 1 10 12 1 1 10 12 1 1 10 10 12 1 1 10 100 12 1 1 10 12 1 10 12 1 1 100 1 100 1 8 1 10 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 10 12 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 10 12 1 10 12 1 100 1 100 1 100 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 100 1 1 1 1 1 1 1 1 1 1
 ciInstanceKlass jdk/internal/loader/ClassLoaders 1 1 183 10 100 12 1 1 1 10 7 12 1 1 1 10 12 1 1 10 100 12 1 1 1 9 7 12 1 1 1 9 12 1 1 9 12 1 1 7 1 11 100 12 1 1 1 100 1 11 12 1 1 11 12 1 1 10 100 12 1 1 1 10 100 12 1 1 1 100 1 100 1 10 7 12 1 1 1 9 12 1 1 10 12 1 1 7 1 10 12 1 1 10 12 1 7 1 8 1 10 7 12 1 1 1 10 12 1 1 7 1 10 12 1 10 12 1 10 12 1 8 1 10 7 12 1 1 8 1 8 1 10 12 1 7 1 10 12 1 10 12 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 staticfield jdk/internal/loader/ClassLoaders JLA Ljdk/internal/access/JavaLangAccess; java/lang/System$2
 staticfield jdk/internal/loader/ClassLoaders BOOT_LOADER Ljdk/internal/loader/ClassLoaders$BootClassLoader; jdk/internal/loader/ClassLoaders$BootClassLoader
@@ -2199,10 +2022,6 @@ instanceKlass java/io/ObjectInputStream
 instanceKlass com/esotericsoftware/kryo/io/Input
 instanceKlass org/gradle/internal/serialize/kryo/KryoBackedDecoder$1
 instanceKlass org/gradle/internal/remote/internal/inet/SocketConnection$SocketInputStream
-instanceKlass java/lang/ProcessBuilder$NullInputStream
-instanceKlass org/gradle/util/internal/BulkReadInputStream
-instanceKlass org/gradle/internal/stream/EncodedStream$EncodedInput
-instanceKlass org/gradle/internal/io/StreamByteBuffer$StreamByteBufferInputStream
 instanceKlass org/gradle/internal/serialize/AbstractDecoder$DecoderStream
 instanceKlass org/gradle/internal/file/RandomAccessFileInputStream
 instanceKlass java/util/zip/ZipFile$ZipFileInputStream
@@ -2211,34 +2030,32 @@ instanceKlass java/io/FileInputStream
 instanceKlass java/io/ByteArrayInputStream
 ciInstanceKlass java/io/InputStream 1 1 184 100 1 10 7 12 1 1 1 100 1 10 10 7 12 1 1 1 10 7 12 1 1 1 10 12 1 100 1 3 10 12 1 1 100 1 8 1 10 12 1 10 100 12 1 1 1 3 100 1 8 1 10 10 100 12 1 1 1 100 1 10 11 100 12 1 1 1 10 12 1 1 11 12 1 1 11 100 12 1 1 1 11 12 1 1 100 1 10 100 12 1 1 1 5 0 10 12 1 10 12 1 1 100 1 10 8 1 10 8 1 8 1 10 12 1 1 10 100 12 1 1 1 100 1 1 1 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 ciInstanceKlass java/io/ByteArrayInputStream 1 1 96 10 7 12 1 1 1 9 7 12 1 1 1 9 12 1 1 9 12 1 9 12 1 10 7 12 1 1 1 10 7 12 1 1 1 10 7 12 1 1 1 10 100 12 1 1 1 10 12 1 1 10 100 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-instanceKlass java/util/concurrent/ForkJoinWorkerThread
-instanceKlass net/rubygrapefruit/platform/internal/AbstractTerminals$1
 instanceKlass net/rubygrapefruit/platform/internal/AbstractTerminals$2
+instanceKlass net/rubygrapefruit/platform/internal/AbstractTerminals$1
 instanceKlass java/util/logging/LogManager$Cleaner
 instanceKlass jdk/internal/misc/InnocuousThread
 instanceKlass java/lang/ref/Finalizer$FinalizerThread
 instanceKlass java/lang/ref/Reference$ReferenceHandler
-ciInstanceKlass java/lang/Thread 1 1 610 9 7 12 1 1 1 9 12 1 1 10 12 1 1 9 12 1 1 9 12 1 1 100 1 8 1 10 12 1 1 3 8 1 100 1 5 0 10 12 1 1 10 7 12 1 1 9 12 1 1 9 12 1 9 12 1 1 9 12 1 100 1 8 1 10 9 12 1 1 10 7 12 1 1 1 10 100 12 1 1 1 10 10 7 12 1 1 10 12 1 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 10 12 1 9 12 1 1 10 12 1 1 10 12 1 1 9 12 1 10 12 1 1 9 12 1 1 10 7 12 1 1 1 9 12 1 1 9 12 1 1 10 12 1 1 10 7 12 1 1 1 9 12 1 10 12 1 1 9 12 1 100 1 10 7 1 10 8 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 9 12 1 100 1 10 10 12 1 1 10 12 1 10 12 1 100 1 11 7 12 1 1 9 7 12 1 1 1 10 12 1 10 12 1 10 12 9 12 1 1 10 9 12 1 10 12 1 100 1 10 10 12 1 1 9 12 1 10 12 1 11 100 12 1 1 10 12 1 10 12 1 10 12 1 10 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 100 1 10 10 12 1 10 12 1 10 12 1 9 100 12 1 1 1 10 12 1 1 10 12 1 100 1 8 1 10 10 12 1 10 12 8 1 10 12 1 8 1 10 8 1 8 1 10 100 12 1 1 10 100 12 1 1 1 100 1 8 1 10 9 12 1 9 12 1 1 10 12 1 1 10 10 12 1 1 9 12 1 10 12 1 1 100 1 10 12 11 100 12 1 1 1 9 100 12 1 1 1 9 12 1 1 10 12 1 1 100 1 10 12 1 11 100 12 1 1 1 100 1 10 12 1 10 12 1 1 11 12 1 10 12 1 100 1 10 12 1 10 12 1 1 10 7 12 1 1 1 8 1 9 12 1 10 12 1 1 11 100 12 1 1 1 10 100 12 1 1 1 11 12 1 10 12 1 7 1 1 1 1 1 3 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 100 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 100 1 1 100 1 1 1 1 1 1
+ciInstanceKlass java/lang/Thread 1 1 610 9 7 12 1 1 1 9 12 1 1 10 12 1 1 9 12 1 1 9 12 1 1 100 1 8 1 10 12 1 1 3 8 1 100 1 5 0 10 12 1 1 10 7 12 1 1 9 12 1 1 9 12 1 9 12 1 1 9 12 1 100 1 8 1 10 9 12 1 1 10 7 12 1 1 1 10 100 12 1 1 1 10 10 7 12 1 1 10 12 1 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 10 12 1 9 12 1 1 10 12 1 1 10 12 1 1 9 12 1 10 12 1 1 9 12 1 1 10 7 12 1 1 1 9 12 1 1 9 12 1 1 10 12 1 1 10 100 12 1 1 1 9 12 1 10 12 1 1 9 12 1 100 1 10 7 1 10 8 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 9 12 1 100 1 10 10 12 1 1 10 12 1 10 12 1 100 1 11 7 12 1 1 9 100 12 1 1 1 10 12 1 10 12 1 10 12 9 12 1 1 10 9 12 1 10 12 1 100 1 10 10 12 1 1 9 12 1 10 12 1 11 100 12 1 1 10 12 1 10 12 1 10 12 1 10 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 100 1 10 10 12 1 10 12 1 10 12 1 9 100 12 1 1 1 10 12 1 1 10 12 1 100 1 8 1 10 10 12 1 10 12 8 1 10 12 1 8 1 10 8 1 8 1 10 100 12 1 1 10 100 12 1 1 1 100 1 8 1 10 9 12 1 9 12 1 1 10 12 1 1 10 10 12 1 1 9 12 1 10 12 1 1 100 1 10 12 11 100 12 1 1 1 9 100 12 1 1 1 9 12 1 1 10 12 1 1 100 1 10 12 1 11 100 12 1 1 1 100 1 10 12 1 10 12 1 1 11 12 1 10 12 1 100 1 10 12 1 10 12 1 1 10 7 12 1 1 1 8 1 9 12 1 10 12 1 1 11 100 12 1 1 1 10 100 12 1 1 1 11 12 1 10 12 1 7 1 1 1 1 1 3 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 100 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 100 1 1 100 1 1 1 1 1 1
 staticfield java/lang/Thread EMPTY_STACK_TRACE [Ljava/lang/StackTraceElement; 0 [Ljava/lang/StackTraceElement;
 ciMethod java/lang/System arraycopy (Ljava/lang/Object;ILjava/lang/Object;II)V 768 0 384 0 -1
 ciInstanceKlass java/lang/StringLatin1 1 1 380 7 1 10 100 12 1 1 1 100 1 10 12 1 10 7 12 1 1 1 10 7 12 1 1 1 10 12 1 10 7 12 1 1 1 10 12 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 10 10 12 1 10 12 1 1 10 9 7 12 1 1 1 10 12 1 1 10 7 12 1 1 1 10 12 10 12 1 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 12 1 10 12 1 1 9 12 1 1 100 1 10 10 100 12 1 1 1 10 7 12 1 1 1 10 12 1 10 12 1 100 1 100 1 8 1 10 12 1 8 1 10 12 100 1 10 10 10 7 12 1 1 1 8 1 8 1 8 1 10 12 1 1 10 100 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 10 12 10 12 1 10 12 10 10 12 1 10 12 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 10 10 7 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1
 staticfield java/lang/StringLatin1 $assertionsDisabled Z 1
-ciMethod java/lang/StringLatin1 newString ([BII)Ljava/lang/String; 470 0 5392 0 -1
-ciMethod java/lang/StringLatin1 canEncode (I)Z 576 0 90005 0 -1
-ciInstanceKlass java/lang/StringUTF16 1 1 598 100 1 7 1 10 100 12 1 1 1 100 1 10 7 1 3 100 1 100 1 10 8 1 10 12 1 1 10 12 1 8 1 10 12 1 1 10 12 1 9 12 1 1 10 12 1 1 100 1 8 1 10 12 1 9 12 1 1 9 12 1 10 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 100 1 10 12 1 10 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 10 12 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 3 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 9 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 10 12 10 12 10 10 100 12 1 1 1 10 7 12 1 1 1 10 12 1 10 12 1 100 1 8 1 8 1 10 12 1 1 100 1 10 10 100 12 1 1 1 10 100 12 1 1 8 1 8 1 8 1 10 12 1 1 10 12 1 1 10 12 10 12 1 10 100 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 10 12 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 11 100 12 1 1 10 12 1 10 12 1 10 12 1 1 9 12 1 1 9 12 1 5 0 5 0 10 12 1 10 12 10 12 10 7 12 1 1 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1
+ciInstanceKlass java/lang/Math 1 1 395 10 100 12 1 1 1 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 7 1 6 0 6 0 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 7 12 1 1 1 100 1 3 3 3 10 7 12 1 1 1 100 1 5 0 5 0 5 0 5 0 5 0 9 100 12 1 1 1 10 100 12 1 1 1 100 1 8 1 10 12 1 8 1 10 12 1 1 10 12 1 1 100 1 5 0 5 0 100 1 3 5 0 3 5 0 10 12 1 10 12 1 8 1 10 12 1 8 1 9 12 1 1 9 12 1 10 12 1 1 6 0 10 12 1 9 12 1 1 100 1 10 10 12 1 100 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 6 0 10 12 1 1 10 12 1 1 10 12 10 12 1 4 10 12 1 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 5 0 6 0 4 6 0 4 6 0 4 10 12 1 1 9 12 1 1 10 12 1 9 12 1 10 7 12 1 1 1 4 6 0 1 1 6 0 1 6 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+staticfield java/lang/Math negativeZeroFloatBits J -2147483648
+staticfield java/lang/Math negativeZeroDoubleBits J -9223372036854775808
+staticfield java/lang/Math $assertionsDisabled Z 1
+ciInstanceKlass java/util/Arrays 1 1 988 10 7 12 1 1 1 10 100 12 1 1 1 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 100 12 1 1 1 100 1 100 1 10 8 1 10 12 1 1 10 12 1 8 1 8 1 10 12 1 1 10 12 1 100 1 10 12 1 9 100 12 1 1 1 10 100 12 1 1 100 1 10 12 1 1 10 7 12 1 1 10 7 12 1 1 1 100 1 10 12 1 10 12 1 1 7 1 9 100 12 1 1 1 10 12 1 1 10 100 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 100 1 11 12 1 1 10 12 1 10 7 12 1 1 1 10 12 10 12 1 10 12 1 10 12 10 12 1 11 100 12 1 1 1 10 7 12 1 1 1 100 1 10 12 1 10 100 1 10 12 1 10 100 1 10 12 1 10 100 1 10 12 1 10 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 100 12 1 1 1 10 12 1 10 100 12 1 1 1 10 12 1 10 12 1 10 100 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 12 1 8 1 7 1 10 12 10 12 1 10 12 1 1 10 12 1 1 9 100 12 1 1 1 100 1 10 12 1 9 100 1 100 1 10 12 1 9 100 1 100 1 10 12 1 9 100 1 100 1 10 12 1 9 100 1 100 1 10 12 1 9 100 1 100 1 10 12 1 9 100 1 10 12 1 100 1 10 12 1 10 12 1 9 12 1 100 1 10 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 8 1 8 1 10 12 1 10 12 1 8 1 10 12 1 10 12 1 10 12 1 10 100 12 1 1 1 3 10 100 1 10 10 12 1 1 11 100 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 11 12 1 8 1 10 11 12 1 11 100 12 1 1 1 11 100 12 1 1 1 11 12 1 1 18 12 1 1 11 12 1 1 11 100 12 1 1 1 18 12 1 11 100 12 1 1 1 18 12 1 11 100 12 1 1 1 18 12 1 100 1 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 7 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 10 12 10 12 1 10 12 10 12 1 10 12 1 10 12 1 1 1 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 15 10 100 12 1 1 1 16 15 10 12 15 10 12 15 10 12 15 10 12 1 1 100 1 100 1 1 1 1 100 1 1 1 1 1 1 100 1 1 100 1 1 100 1 1 1 100 1 100 1 1
+staticfield java/util/Arrays $assertionsDisabled Z 1
+ciMethod java/lang/StringLatin1 equals ([B[B)Z 634 618 2035 0 -1
+ciMethod java/lang/StringLatin1 charAt ([BI)C 538 0 339373 0 128
+ciInstanceKlass java/lang/StringUTF16 1 1 598 100 1 7 1 10 100 12 1 1 1 100 1 10 7 1 3 100 1 100 1 10 8 1 10 12 1 1 10 12 1 8 1 10 12 1 1 10 12 1 9 12 1 1 10 12 1 1 100 1 8 1 10 12 1 9 12 1 1 9 12 1 10 10 12 1 1 10 12 1 1 10 100 12 1 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 100 1 10 12 1 10 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 10 12 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 3 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 9 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 10 12 10 12 10 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 10 12 1 100 1 8 1 8 1 10 12 1 1 100 1 10 10 100 12 1 1 1 10 100 12 1 1 8 1 8 1 8 1 10 12 1 1 10 12 1 1 10 12 10 12 1 10 100 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 10 12 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 11 100 12 1 1 10 12 1 10 12 1 10 12 1 1 9 12 1 1 9 12 1 5 0 5 0 10 12 1 10 12 10 12 10 7 12 1 1 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1
 staticfield java/lang/StringUTF16 HI_BYTE_SHIFT I 0
 staticfield java/lang/StringUTF16 LO_BYTE_SHIFT I 8
 staticfield java/lang/StringUTF16 $assertionsDisabled Z 1
-ciMethod java/lang/StringUTF16 length ([B)I 2 0 17 0 -1
-ciMethod java/lang/StringUTF16 compress ([CI[BII)I 214 4122 971 0 -1
-ciMethod java/lang/StringUTF16 compress ([CII)[B 510 0 5516 0 0
-ciMethod java/lang/StringUTF16 toBytes ([CII)[B 0 0 1 0 -1
-ciMethod java/lang/StringUTF16 putChar ([BII)V 42 0 21 0 -1
-ciMethod java/lang/StringUTF16 newBytesFor (I)[B 0 0 1 0 -1
-ciMethod java/lang/StringUTF16 checkBoundsBeginEnd (II[B)V 0 0 1 0 -1
-ciMethod java/lang/StringUTF16 newString ([BII)Ljava/lang/String; 0 0 1 0 -1
-ciMethod java/lang/StringUTF16 putCharsSB ([BI[CII)V 0 0 1 0 -1
-ciMethod java/lang/StringUTF16 putChars ([BI[CII)V 0 0 1 0 -1
+ciMethod java/lang/StringUTF16 checkIndex (I[B)V 0 0 4 0 -1
+ciMethod java/lang/StringUTF16 getChar ([BI)C 1024 0 530 0 -1
+ciMethod java/lang/StringUTF16 charAt ([BI)C 0 0 4 0 0
 instanceKlass java/lang/Exception
 instanceKlass java/lang/Error
 ciInstanceKlass java/lang/Throwable 1 1 393 10 7 12 1 1 1 9 7 12 1 1 1 9 12 1 1 9 12 1 9 12 1 1 9 12 1 10 12 1 1 9 12 1 1 10 12 1 1 10 12 1 100 1 100 1 10 8 1 10 12 1 1 8 1 10 100 12 1 1 10 10 12 1 100 1 8 1 10 10 12 1 1 10 7 12 1 1 10 12 1 8 1 9 100 12 1 1 1 10 12 1 1 100 1 10 12 10 12 1 100 1 10 10 7 12 1 1 1 11 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 8 1 10 12 1 10 12 1 1 8 1 8 1 10 12 1 1 10 12 1 8 1 8 1 9 12 1 1 10 100 12 1 1 100 1 10 11 12 1 8 1 8 1 10 7 12 1 1 8 1 10 12 1 8 1 100 1 10 12 1 9 12 1 1 10 12 1 10 100 12 1 9 12 1 1 10 12 1 1 100 1 8 1 10 12 1 10 100 12 1 1 10 12 1 1 100 1 10 100 12 1 1 1 10 12 1 11 100 12 1 1 1 11 100 12 1 1 1 11 12 1 8 1 10 12 1 1 8 1 10 10 9 100 12 1 1 1 8 1 10 12 1 1 10 100 1 8 1 10 11 12 1 1 8 1 9 12 1 10 100 12 1 1 11 9 12 1 1 11 12 1 1 100 10 12 1 10 12 1 1 100 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
@@ -2246,8 +2063,8 @@ staticfield java/lang/Throwable UNASSIGNED_STACK [Ljava/lang/StackTraceElement; 
 staticfield java/lang/Throwable SUPPRESSED_SENTINEL Ljava/util/List; java/util/Collections$EmptyList
 staticfield java/lang/Throwable EMPTY_THROWABLE_ARRAY [Ljava/lang/Throwable; 0 [Ljava/lang/Throwable;
 staticfield java/lang/Throwable $assertionsDisabled Z 1
-instanceKlass sun/security/pkcs11/wrapper/PKCS11Exception
 instanceKlass java/security/PrivilegedActionException
+instanceKlass sun/security/pkcs11/wrapper/PKCS11Exception
 instanceKlass java/security/GeneralSecurityException
 instanceKlass java/lang/CloneNotSupportedException
 instanceKlass java/text/ParseException
@@ -2257,17 +2074,15 @@ instanceKlass java/net/URISyntaxException
 instanceKlass java/lang/ReflectiveOperationException
 instanceKlass java/lang/RuntimeException
 ciInstanceKlass java/lang/Exception 1 1 40 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 100 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-instanceKlass java/lang/InstantiationException
 instanceKlass java/lang/reflect/InvocationTargetException
 instanceKlass java/lang/IllegalAccessException
 instanceKlass java/lang/NoSuchFieldException
 instanceKlass java/lang/NoSuchMethodException
 instanceKlass java/lang/ClassNotFoundException
 ciInstanceKlass java/lang/ReflectiveOperationException 1 1 34 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 100 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1
+instanceKlass com/esotericsoftware/kryo/KryoException
 instanceKlass java/security/ProviderException
 instanceKlass org/gradle/internal/remote/internal/MessageIOException
-instanceKlass com/esotericsoftware/kryo/KryoException
-instanceKlass org/gradle/api/internal/classpath/UnknownModuleException
 instanceKlass org/gradle/cache/InsufficientLockModeException
 instanceKlass org/gradle/cache/LockTimeoutException
 instanceKlass org/gradle/cache/internal/locklistener/GracefullyStoppedException
@@ -2297,8 +2112,8 @@ instanceKlass org/gradle/api/GradleException
 instanceKlass java/lang/UnsupportedOperationException
 instanceKlass org/gradle/internal/service/ServiceLookupException
 instanceKlass org/gradle/api/GradleException
-instanceKlass org/gradle/api/internal/classpath/UnknownModuleException
 instanceKlass org/gradle/api/UncheckedIOException
+instanceKlass org/gradle/api/internal/classpath/UnknownModuleException
 instanceKlass java/lang/IndexOutOfBoundsException
 instanceKlass org/gradle/cli/CommandLineArgumentException
 instanceKlass java/lang/IllegalStateException
@@ -2338,7 +2153,7 @@ instanceKlass java/util/ArrayDeque
 instanceKlass java/util/AbstractSet
 instanceKlass java/util/ImmutableCollections$AbstractImmutableCollection
 instanceKlass java/util/AbstractList
-ciInstanceKlass java/util/AbstractCollection 1 1 160 10 7 12 1 1 1 10 7 12 1 1 1 10 12 1 1 11 7 12 1 1 1 11 12 1 1 10 12 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 10 7 12 1 1 10 7 12 1 1 1 7 1 10 100 12 1 1 1 10 100 12 1 1 1 100 1 10 11 12 1 11 7 1 10 12 1 10 12 1 10 100 12 1 1 1 11 8 1 7 1 10 10 12 1 1 8 1 10 12 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ciInstanceKlass java/util/AbstractCollection 1 1 160 10 7 12 1 1 1 10 7 12 1 1 1 10 12 1 1 11 7 12 1 1 1 11 12 1 1 10 12 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 10 7 12 1 1 10 7 12 1 1 1 7 1 10 100 12 1 1 1 10 100 12 1 1 1 100 1 10 11 12 1 11 7 1 10 12 1 10 12 1 10 100 12 1 1 1 11 8 1 100 1 10 10 12 1 1 8 1 10 12 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 ciInstanceKlass java/lang/Boolean 1 1 151 10 7 12 1 1 1 9 7 12 1 1 1 10 12 1 1 10 12 1 8 1 10 7 12 1 1 9 12 1 1 9 12 1 8 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 100 1 100 1 10 12 1 1 9 100 12 1 1 9 12 10 100 12 1 1 1 10 12 1 1 8 1 10 7 12 1 1 1 9 12 1 1 100 1 100 1 100 1 1 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1
 staticfield java/lang/Boolean TRUE Ljava/lang/Boolean; java/lang/Boolean
 staticfield java/lang/Boolean FALSE Ljava/lang/Boolean; java/lang/Boolean
@@ -2348,7 +2163,7 @@ ciInstanceKlass java/util/concurrent/locks/AbstractOwnableSynchronizer 1 1 32 10
 instanceKlass java/lang/LiveStackFrameInfo
 ciInstanceKlass java/lang/StackFrameInfo 0 0 132 10 100 12 1 1 1 9 100 12 1 1 1 9 100 1 9 12 1 1 11 100 12 1 1 1 9 12 1 1 11 12 1 1 10 12 1 1 10 100 12 1 1 1 10 12 1 11 12 1 11 12 1 1 11 12 1 10 12 1 1 9 12 1 1 10 12 1 1 10 100 12 1 1 10 12 1 1 11 12 1 1 10 12 1 9 12 1 1 10 12 1 1 100 1 8 1 10 12 1 10 100 12 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1
 ciInstanceKlass java/lang/LiveStackFrameInfo 0 0 97 10 100 12 1 1 1 9 100 12 1 1 1 9 12 1 9 12 1 9 12 1 9 12 1 1 100 1 10 12 1 1 10 12 1 8 1 10 12 1 1 8 1 8 1 8 1 10 100 1 10 12 1 100 1 10 12 1 100 1 100 1 1 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1
-ciInstanceKlass java/lang/Character 1 1 576 7 1 100 1 100 1 9 12 1 1 8 1 9 12 1 1 100 1 9 12 1 1 10 100 12 1 1 1 10 100 12 1 1 1 10 100 12 1 1 1 10 100 12 1 1 1 9 100 12 1 1 1 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 10 12 1 1 3 3 3 3 3 10 12 1 1 10 12 1 3 11 7 12 1 1 1 11 12 1 1 10 12 1 1 10 12 1 1 100 1 10 10 12 1 3 10 12 1 1 10 12 1 10 12 1 1 100 1 8 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 7 12 1 1 10 10 12 1 10 10 12 1 10 12 1 1 10 12 1 10 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 10 12 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 1 10 10 12 1 10 5 0 10 12 1 10 12 1 10 10 12 1 10 10 12 1 1 10 10 12 1 10 10 12 1 9 12 1 1 100 1 10 10 12 1 10 12 1 1 3 10 100 12 1 1 1 10 12 1 10 100 12 1 1 100 1 10 10 12 1 1 10 12 1 1 10 12 1 1 8 1 10 12 1 9 100 12 1 1 1 10 12 1 10 10 12 1 10 12 1 1 10 12 1 10 10 12 1 1 10 10 12 1 1 100 1 8 1 10 12 1 1 10 7 12 1 1 1 8 1 10 12 1 1 9 12 1 1 100 1 100 1 100 1 1 1 1 3 1 3 1 3 1 3 1 1 1 1 1 3 1 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1 3 1 1 3 1 1 1 1 1 3 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1 1
+ciInstanceKlass java/lang/Character 1 1 576 7 1 100 1 100 1 9 12 1 1 8 1 9 12 1 1 100 1 9 12 1 1 10 100 12 1 1 1 10 100 12 1 1 1 10 100 12 1 1 1 10 100 12 1 1 1 9 100 12 1 1 1 10 12 1 10 12 1 1 10 12 1 1 10 100 12 1 1 10 12 1 1 3 3 3 3 3 10 12 1 1 10 12 1 3 11 7 12 1 1 1 11 12 1 1 10 12 1 1 10 12 1 1 100 1 10 10 12 1 3 10 12 1 1 10 12 1 10 12 1 1 100 1 8 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 7 12 1 1 10 10 12 1 10 10 12 1 10 12 1 1 10 12 1 10 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 10 12 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 10 10 12 1 1 10 10 12 1 10 5 0 10 12 1 10 12 1 10 10 12 1 10 10 12 1 1 10 10 12 1 10 10 12 1 9 12 1 1 100 1 10 10 12 1 10 12 1 1 3 10 100 12 1 1 1 10 12 1 10 100 12 1 1 100 1 10 10 12 1 1 10 12 1 1 10 12 1 1 8 1 10 12 1 9 100 12 1 1 1 10 12 1 10 10 12 1 10 12 1 1 10 12 1 10 10 12 1 1 10 10 12 1 1 100 1 8 1 10 12 1 1 10 7 12 1 1 1 8 1 10 12 1 1 9 12 1 1 100 1 100 1 100 1 1 1 1 3 1 3 1 3 1 3 1 1 1 1 1 3 1 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1 3 1 1 3 1 1 1 1 1 3 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1 1
 staticfield java/lang/Character TYPE Ljava/lang/Class; java/lang/Class
 staticfield java/lang/Character $assertionsDisabled Z 1
 ciInstanceKlass java/lang/Float 1 1 223 7 1 100 1 10 100 12 1 1 1 10 100 12 1 1 1 4 100 1 10 12 1 1 10 12 1 1 8 1 8 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 10 4 4 4 10 7 12 1 1 9 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 3 10 12 1 1 10 12 1 1 10 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 8 1 10 7 12 1 1 1 9 12 1 1 100 1 100 1 100 1 1 1 1 1 4 1 1 1 4 1 1 3 1 3 1 3 1 3 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 100 1 100 1 1
@@ -2376,7 +2191,7 @@ staticfield java/lang/Integer digits [C 36
 staticfield java/lang/Integer DigitTens [B 100
 staticfield java/lang/Integer DigitOnes [B 100
 staticfield java/lang/Integer sizeTable [I 10
-ciInstanceKlass java/lang/Long 1 1 506 7 1 100 1 7 1 7 1 10 12 1 1 9 12 1 1 9 7 12 1 1 1 10 7 12 1 1 1 10 12 1 1 10 100 12 1 1 1 10 10 12 10 12 1 10 12 1 10 12 1 5 0 5 0 100 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 100 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 10 12 1 5 0 5 0 9 12 1 1 9 12 1 5 0 100 1 8 1 10 12 1 8 1 10 12 1 8 1 8 1 10 12 1 1 5 0 10 12 1 1 5 0 10 12 1 1 10 12 1 1 10 100 12 1 1 1 11 100 1 100 1 10 11 10 12 1 1 8 1 10 12 1 1 8 1 100 1 10 12 1 1 10 12 1 8 1 8 1 11 12 1 1 10 12 1 10 12 1 10 12 1 5 0 5 0 9 7 12 1 1 1 10 12 1 10 12 1 1 8 1 8 1 10 12 1 1 8 1 8 1 8 1 8 1 8 1 8 1 10 12 1 10 12 1 10 12 1 1 10 7 1 9 12 1 1 10 12 1 10 12 1 1 10 100 12 1 1 1 100 1 100 1 10 12 1 1 10 12 1 1 5 0 10 12 1 10 12 1 5 0 5 0 5 0 10 12 1 1 5 0 5 0 10 12 1 10 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 8 1 10 7 12 1 1 1 9 12 1 1 100 1 100 1 100 1 1 1 1 5 0 1 1 1 1 3 1 3 1 5 0 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 100 1 100 1 1
+ciInstanceKlass java/lang/Long 1 1 506 7 1 100 1 7 1 100 1 10 12 1 1 9 12 1 1 9 7 12 1 1 1 10 7 12 1 1 1 10 12 1 1 10 100 12 1 1 1 10 10 12 10 12 1 10 12 1 10 12 1 5 0 5 0 100 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 100 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 10 12 1 5 0 5 0 9 12 1 1 9 12 1 5 0 100 1 8 1 10 12 1 8 1 10 12 1 8 1 8 1 10 12 1 1 5 0 10 12 1 1 5 0 10 12 1 1 10 12 1 1 10 100 12 1 1 1 11 100 1 100 1 10 11 10 12 1 1 8 1 10 12 1 1 8 1 100 1 10 12 1 1 10 12 1 8 1 8 1 11 12 1 1 10 12 1 10 12 1 10 12 1 5 0 5 0 9 7 12 1 1 1 10 12 1 10 12 1 1 8 1 8 1 10 12 1 1 8 1 8 1 8 1 8 1 8 1 8 1 10 12 1 10 12 1 10 12 1 1 10 7 1 9 12 1 1 10 12 1 10 12 1 1 10 100 12 1 1 1 100 1 100 1 10 12 1 1 10 12 1 1 5 0 10 12 1 10 12 1 5 0 5 0 5 0 10 12 1 1 5 0 5 0 10 12 1 10 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 8 1 10 7 12 1 1 1 9 12 1 1 100 1 100 1 100 1 1 1 1 5 0 1 1 1 1 3 1 3 1 5 0 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 100 1 100 1 1
 staticfield java/lang/Long TYPE Ljava/lang/Class; java/lang/Class
 instanceKlass java/lang/ref/PhantomReference
 instanceKlass java/lang/ref/FinalReference
@@ -2385,8 +2200,6 @@ instanceKlass java/lang/ref/SoftReference
 ciInstanceKlass java/lang/ref/Reference 1 1 195 9 7 12 1 1 1 9 7 12 1 1 10 12 1 1 10 12 1 1 9 12 1 1 10 12 1 1 9 12 1 1 9 12 1 1 7 1 10 12 1 10 7 12 1 1 10 12 1 10 12 1 1 10 12 1 9 12 1 10 12 1 1 10 12 1 10 12 1 9 12 1 100 1 100 1 10 12 1 9 12 1 9 12 1 100 1 10 10 12 1 10 10 7 12 1 1 10 7 12 1 1 1 10 12 1 1 10 7 12 1 1 7 1 8 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 7 1 10 10 7 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 staticfield java/lang/ref/Reference processPendingLock Ljava/lang/Object; java/lang/Object
 staticfield java/lang/ref/Reference $assertionsDisabled Z 1
-instanceKlass sun/util/locale/provider/LocaleResources$ResourceReference
-instanceKlass sun/util/resources/Bundles$BundleReference
 instanceKlass sun/util/locale/LocaleObjectCache$CacheEntry
 instanceKlass java/lang/invoke/LambdaFormEditor$Transform
 ciInstanceKlass java/lang/ref/SoftReference 1 1 47 10 7 12 1 1 1 9 7 12 1 1 1 9 12 1 10 12 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1
@@ -2418,27 +2231,19 @@ ciInstanceKlass java/lang/reflect/Constructor 1 1 429 10 100 12 1 1 1 10 100 12 
 ciInstanceKlass java/lang/reflect/Method 1 1 446 9 7 12 1 1 1 10 7 12 1 1 1 10 7 12 1 1 9 12 1 1 10 12 1 1 10 12 1 1 10 7 12 1 1 10 7 12 1 1 1 9 12 1 1 9 12 1 9 12 1 1 9 12 1 9 12 1 9 12 1 1 9 12 1 9 12 1 1 9 12 1 9 12 1 9 12 1 1 100 1 8 1 10 12 1 10 12 1 9 12 1 1 8 1 10 7 12 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 100 1 10 12 1 1 10 12 10 7 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 7 12 1 1 1 10 12 1 1 10 7 1 10 100 12 1 1 1 10 7 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 7 12 1 1 1 10 12 1 10 8 1 10 12 1 10 12 1 7 1 8 1 8 1 8 1 10 12 1 10 12 1 1 10 12 1 1 10 10 12 1 1 10 12 1 11 100 1 9 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 11 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 9 12 1 1 10 7 12 1 1 1 10 12 1 1 10 7 12 1 1 1 10 7 12 1 1 1 10 7 12 1 1 1 11 7 12 1 1 1 10 7 12 1 1 1 7 1 100 1 100 1 10 12 1 10 12 1 1 10 12 1 100 1 8 1 10 12 1 10 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 8 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 ciInstanceKlass java/lang/reflect/Field 1 1 437 9 7 12 1 1 1 10 12 1 1 10 100 12 1 1 1 10 100 12 1 1 9 12 1 1 10 12 1 1 10 12 1 1 10 100 12 1 1 10 7 12 1 1 1 9 12 1 1 9 12 1 9 12 1 9 12 1 1 9 12 1 1 9 12 1 9 12 1 1 9 12 1 1 100 1 8 1 10 12 1 10 12 1 9 12 1 1 9 12 1 10 12 1 10 100 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 100 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 100 1 10 100 12 1 1 100 1 10 8 1 10 12 1 1 10 12 1 1 8 1 10 12 10 12 1 8 1 8 1 10 11 100 1 9 12 1 10 12 1 1 10 12 1 1 11 100 12 1 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 11 12 1 1 10 12 1 10 100 12 1 1 10 12 1 10 12 1 1 10 12 9 12 1 1 10 100 12 1 1 1 10 12 1 1 10 100 12 1 1 10 12 1 1 11 100 1 10 12 1 100 1 10 100 12 1 1 1 10 100 12 1 1 1 9 12 1 10 100 12 1 1 1 11 100 12 1 1 1 10 12 1 1 10 12 1 1 9 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 100 1 1
 ciInstanceKlass java/lang/reflect/Parameter 0 0 226 10 100 12 1 1 1 9 100 12 1 1 1 9 12 1 1 9 12 1 1 9 12 1 10 12 1 1 10 12 1 1 10 100 12 1 1 1 100 1 10 10 12 1 1 11 100 12 1 1 1 10 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 8 1 8 1 10 100 12 1 1 1 10 12 1 10 12 10 12 1 8 1 10 12 1 9 12 1 1 10 12 1 1 9 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 10 12 1 10 100 12 1 1 1 10 12 1 1 11 100 12 1 1 10 100 12 1 1 100 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 9 12 1 100 1 10 11 12 1 1 11 12 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1
-ciInstanceKlass java/lang/StringBuffer 1 1 470 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 1 9 7 12 1 1 1 10 12 1 1 10 12 1 10 12 1 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 10 12 1 1 10 12 1 1 9 12 1 1 10 7 12 1 1 1 10 100 1 10 10 100 12 1 1 1 10 10 12 1 10 8 10 100 12 1 1 1 8 10 12 1 8 1 10 12 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 7 1 10 12 100 1 8 1 10 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 12 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 7 1 10 12 1 9 7 12 1 1 1 9 7 1 9 12 1 1 100 1 100 1 100 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-staticfield java/lang/StringBuffer serialPersistentFields [Ljava/io/ObjectStreamField; 3 [Ljava/io/ObjectStreamField;
+ciInstanceKlass java/lang/StringBuffer 0 0 470 10 100 12 1 1 1 10 12 1 10 12 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 10 12 1 1 10 12 1 1 9 12 1 1 10 100 12 1 1 1 10 100 1 10 10 100 12 1 1 1 10 10 12 1 10 8 10 100 12 1 1 1 8 10 12 1 8 1 10 12 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 100 1 10 12 100 1 8 1 10 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 12 10 12 1 10 12 1 10 12 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 100 1 10 12 1 9 100 12 1 1 1 9 100 1 9 12 1 1 100 1 100 1 100 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ciInstanceKlass java/lang/CharSequence 1 1 130 11 100 12 1 1 1 18 12 1 1 100 1 10 100 12 1 1 1 18 10 100 12 1 1 1 10 100 12 1 1 1 100 1 11 12 1 1 10 100 12 1 1 1 11 12 1 1 100 1 10 12 1 1 10 100 12 1 1 1 100 1 10 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 15 10 100 12 1 1 1 16 1 15 11 12 16 15 11 12 1 1 100 1 100 1 1 100 1 1 100 1 100 1 1
 instanceKlass java/lang/StringBuilder
 instanceKlass java/lang/StringBuffer
-ciInstanceKlass java/lang/AbstractStringBuilder 1 1 547 7 1 7 1 10 7 12 1 1 1 9 7 12 1 1 1 9 12 1 9 12 1 1 9 12 1 1 10 7 12 1 1 1 10 12 1 1 3 3 10 12 1 10 12 1 1 11 7 1 100 1 100 1 10 8 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 9 12 1 1 10 12 1 1 10 7 12 1 1 1 10 10 12 1 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 7 12 1 1 1 100 1 8 1 10 10 12 1 1 100 1 10 12 10 12 1 1 10 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 100 1 10 10 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 1 10 10 12 1 1 10 12 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 10 12 1 1 10 12 1 10 12 1 1 8 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 7 12 1 1 10 12 1 10 12 1 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 10 12 1 1 18 12 1 1 100 1 10 100 12 1 1 1 18 10 12 1 1 10 12 1 10 12 1 1 11 12 1 10 12 1 10 12 1 10 10 12 1 10 8 1 8 1 8 1 10 10 100 1 10 12 1 100 1 10 100 1 10 100 1 1 1 3 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 100 1 1 1 1 1 100 1 1 1 1 1 1 15 10 100 12 1 1 1 16 1 15 10 12 16 15 10 12 1 1 1 1 100 1 100 1 1
+ciInstanceKlass java/lang/AbstractStringBuilder 1 1 547 7 1 7 1 10 7 12 1 1 1 9 7 12 1 1 1 9 12 1 9 12 1 1 9 12 1 1 10 100 12 1 1 1 10 12 1 1 3 3 10 12 1 10 12 1 1 11 7 1 100 1 100 1 10 8 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 9 12 1 1 10 12 1 1 10 7 12 1 1 1 10 10 12 1 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 7 12 1 1 1 100 1 8 1 10 10 12 1 1 100 1 10 12 10 12 1 1 10 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 100 1 10 10 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 1 10 10 12 1 1 10 12 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 10 12 1 1 10 12 1 10 12 1 1 8 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 7 12 1 1 10 12 1 10 12 1 10 100 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 10 12 1 1 18 12 1 1 100 1 10 100 12 1 1 1 18 10 12 1 1 10 12 1 10 12 1 1 11 12 1 10 12 1 10 12 1 10 10 12 1 10 8 1 8 1 8 1 10 10 100 1 10 12 1 100 1 10 100 1 10 100 1 1 1 3 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 100 1 1 1 1 1 100 1 1 1 1 1 1 15 10 100 12 1 1 1 16 1 15 10 12 16 15 10 12 1 1 1 1 100 1 100 1 1
 staticfield java/lang/AbstractStringBuilder EMPTYVALUE [B 0
-ciMethod java/lang/AbstractStringBuilder length ()I 258 0 129 0 0
-ciMethod java/lang/AbstractStringBuilder append ([CII)Ljava/lang/AbstractStringBuilder; 2 0 29 0 -1
-ciMethod java/lang/AbstractStringBuilder <init> (I)V 220 0 6268 0 512
-ciMethod java/lang/AbstractStringBuilder inflate ()V 0 0 2 0 -1
-ciMethod java/lang/AbstractStringBuilder isLatin1 ()Z 556 0 39585 0 -1
-ciMethod java/lang/AbstractStringBuilder ensureCapacityInternal (I)V 520 0 5445 0 -1
-ciMethod java/lang/AbstractStringBuilder checkRange (III)V 524 0 4911 0 -1
-ciMethod java/lang/AbstractStringBuilder appendChars ([CII)V 58 3908 29 0 -1
 ciInstanceKlass java/lang/SecurityManager 0 0 576 10 100 12 1 1 1 9 100 12 1 1 1 10 100 12 1 1 1 100 1 8 1 10 12 1 10 12 1 1 10 100 12 1 1 1 10 100 1 10 100 1 10 9 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 10 100 12 1 1 100 1 8 1 10 9 12 1 1 9 12 1 8 1 9 12 1 100 1 10 8 1 10 12 1 1 10 12 1 10 12 1 1 100 1 10 10 12 1 1 100 1 8 1 10 12 1 8 1 8 1 8 1 8 1 8 1 8 1 10 12 1 8 1 8 1 8 1 8 1 8 1 10 100 12 1 1 1 10 12 1 1 8 1 100 1 8 1 10 8 1 8 1 8 1 8 1 8 1 10 100 12 1 1 8 1 100 1 8 1 8 1 10 8 1 10 12 1 100 1 8 1 10 10 12 1 1 10 12 1 10 12 1 10 12 1 10 100 12 1 1 1 10 12 1 10 100 12 1 1 11 100 12 1 1 1 18 12 1 1 11 100 12 1 1 1 18 12 1 1 11 12 1 1 18 18 11 12 1 18 12 1 11 12 1 1 9 12 1 1 9 12 1 9 12 1 9 12 1 100 1 10 100 12 1 1 10 12 1 10 12 1 18 12 1 18 10 100 12 1 1 1 18 12 1 10 12 1 18 18 8 1 10 12 1 9 12 1 1 11 100 12 1 1 1 8 1 100 1 10 12 1 10 12 1 1 10 12 1 1 9 12 1 1 10 12 1 10 12 1 1 8 1 100 1 10 9 12 1 8 1 10 12 1 8 1 100 1 10 10 100 12 1 1 10 100 1 9 100 12 1 1 1 11 12 1 1 10 12 1 11 12 1 10 12 1 100 1 10 10 12 1 1 10 12 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 15 10 100 12 1 1 1 16 15 10 100 12 1 1 1 16 1 16 15 10 12 16 1 15 10 12 16 15 11 100 1 16 1 16 1 15 10 12 16 15 10 12 16 15 10 12 1 16 1 15 11 12 1 15 10 12 16 15 10 16 1 1 1 1 100 1 100 1 1
 ciInstanceKlass java/security/AccessControlContext 1 1 373 9 7 12 1 1 1 9 12 1 1 10 100 12 1 1 1 8 1 10 100 12 1 1 1 10 7 12 1 1 1 9 12 1 9 12 1 1 9 12 1 1 10 7 12 1 1 100 1 10 12 1 11 100 12 1 1 1 11 12 1 11 12 1 11 12 1 1 7 1 11 12 1 1 10 12 1 10 7 12 1 1 1 9 100 12 1 1 1 10 100 12 1 1 1 11 100 12 1 1 1 10 7 1 100 1 8 1 10 12 1 10 12 1 1 7 1 10 7 12 1 1 1 9 12 1 9 12 1 9 12 1 9 12 1 1 9 12 1 1 9 12 1 9 12 1 10 7 12 1 1 1 9 12 1 10 12 1 1 10 12 1 1 8 1 10 12 1 1 10 12 1 1 10 100 12 1 1 1 100 1 10 10 12 1 1 10 100 12 1 1 1 10 8 1 10 100 12 1 1 8 1 10 100 12 1 1 8 1 8 1 10 12 1 8 1 10 12 1 8 1 10 12 1 10 12 1 10 12 1 1 8 1 8 1 100 1 10 12 1 10 12 1 1 100 1 10 12 1 8 1 10 12 1 10 12 1 10 8 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 10 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1
 ciInstanceKlass java/net/URL 1 1 743 10 7 12 1 1 1 10 12 1 10 7 12 1 1 9 12 1 1 9 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 9 12 1 1 10 7 12 1 1 1 8 1 10 12 1 1 100 1 10 10 12 1 1 8 1 10 12 1 1 9 12 1 100 1 8 1 10 12 1 10 12 1 8 1 9 12 1 10 12 1 1 9 12 1 10 12 1 10 12 1 9 12 1 9 12 1 8 1 9 12 1 10 12 1 1 8 1 9 12 1 1 10 12 1 1 10 7 12 1 1 1 8 1 10 12 1 7 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 1 8 1 10 12 1 1 10 12 1 8 1 9 12 1 8 1 10 12 1 10 7 12 1 1 1 100 1 10 12 1 10 12 1 1 10 7 12 1 1 1 100 1 8 1 10 10 12 1 8 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 8 1 10 12 1 10 10 7 12 1 1 1 10 12 1 9 100 12 1 1 1 10 100 12 1 1 1 9 12 1 1 10 12 1 10 100 12 1 1 1 100 1 100 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 10 10 10 12 1 100 1 10 12 1 10 12 1 1 8 1 9 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 100 1 10 12 1 10 12 1 10 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 9 12 1 1 9 12 1 1 100 1 8 1 10 10 12 1 9 12 1 1 10 7 12 1 1 8 1 10 7 12 1 1 8 1 10 12 1 1 10 12 1 8 1 8 1 10 7 12 1 1 1 100 1 10 100 12 1 1 1 10 12 1 10 12 1 100 1 10 9 12 1 1 10 7 12 1 1 8 1 10 12 1 1 100 1 10 10 100 12 1 1 1 8 9 100 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 7 12 1 1 11 7 12 1 1 10 12 1 10 12 1 9 12 1 10 12 1 1 10 100 12 1 1 10 100 12 1 1 1 8 10 100 12 1 1 100 1 10 8 8 10 12 1 8 8 8 100 1 10 12 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 10 12 1 1 10 12 1 1 10 10 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 10 12 1 100 1 8 1 10 10 10 12 1 1 10 12 1 10 12 1 1 8 1 7 1 10 10 10 7 1 10 12 1 9 7 12 1 1 1 9 12 1 1 7 1 10 10 7 12 1 1 1 100 1 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 staticfield java/net/URL defaultFactory Ljava/net/URLStreamHandlerFactory; java/net/URL$DefaultFactory
 staticfield java/net/URL streamHandlerLock Ljava/lang/Object; java/lang/Object
 staticfield java/net/URL serialPersistentFields [Ljava/io/ObjectStreamField; 7 [Ljava/io/ObjectStreamField;
-ciInstanceKlass java/util/jar/Manifest 1 1 336 10 7 12 1 1 1 7 1 10 9 7 12 1 1 1 7 1 10 9 12 1 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 11 7 1 11 12 1 1 10 12 1 1 10 100 12 1 1 1 100 1 100 1 10 8 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 11 100 1 10 12 1 10 12 1 1 11 12 1 1 10 12 1 11 12 1 1 11 100 12 1 1 1 11 100 12 1 1 11 12 1 1 100 1 10 12 1 8 1 11 12 1 7 1 10 12 1 1 11 12 1 10 12 1 10 12 1 10 100 12 1 1 1 8 1 10 12 1 1 10 9 7 12 1 1 1 10 12 1 1 10 100 12 1 10 12 1 10 12 1 9 100 12 1 1 1 8 1 10 12 1 8 1 8 1 7 1 10 12 1 10 12 1 10 12 1 1 100 1 8 1 10 12 1 1 8 1 10 10 12 1 1 8 1 10 12 1 1 10 100 12 1 1 1 10 12 1 10 11 12 1 1 10 12 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 11 10 12 1 11 10 12 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1
+ciInstanceKlass java/util/jar/Manifest 1 1 336 10 7 12 1 1 1 7 1 10 9 7 12 1 1 1 7 1 10 9 12 1 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 11 7 1 11 12 1 1 10 12 1 1 10 100 12 1 1 1 100 1 100 1 10 8 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 11 100 1 10 12 1 10 12 1 1 11 12 1 1 10 12 1 11 12 1 1 11 100 12 1 1 1 11 100 12 1 1 11 12 1 1 100 1 10 12 1 8 1 11 12 1 100 1 10 12 1 1 11 12 1 10 12 1 10 12 1 10 100 12 1 1 1 8 1 10 12 1 1 10 9 100 12 1 1 1 10 12 1 1 10 100 12 1 10 12 1 10 12 1 9 100 12 1 1 1 8 1 10 12 1 8 1 8 1 7 1 10 12 1 10 12 1 10 12 1 1 100 1 8 1 10 12 1 1 8 1 10 10 12 1 1 8 1 10 12 1 1 10 100 12 1 1 1 10 12 1 10 11 12 1 1 10 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 1 11 10 12 1 11 10 12 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1
 instanceKlass java/util/concurrent/ConcurrentSkipListMap
 instanceKlass java/util/Collections$SingletonMap
 instanceKlass java/util/EnumMap
@@ -2510,7 +2315,7 @@ staticfield jdk/internal/misc/UnsafeConstants DATA_CACHE_LINE_FLUSH_SIZE I 0
 instanceKlass java/lang/invoke/DelegatingMethodHandle
 instanceKlass java/lang/invoke/BoundMethodHandle
 instanceKlass java/lang/invoke/DirectMethodHandle
-ciInstanceKlass java/lang/invoke/MethodHandle 1 1 644 100 1 9 7 12 1 1 1 10 7 12 1 1 1 10 7 12 1 1 1 7 1 7 1 10 12 1 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 11 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 9 12 1 1 10 12 1 1 100 1 100 1 10 8 1 10 12 1 1 10 12 1 8 1 10 12 1 1 10 12 1 10 7 12 1 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 7 12 1 1 1 7 1 10 12 1 1 10 12 1 1 10 12 1 1 8 1 10 7 12 1 1 1 8 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 8 1 10 12 1 1 8 1 10 12 1 8 1 10 100 12 1 1 1 9 12 1 1 100 1 10 9 100 12 1 1 1 9 100 1 8 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 8 1 10 12 1 1 8 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 11 12 1 10 12 1 10 12 1 1 10 100 12 1 1 1 100 1 11 12 1 10 100 1 11 12 1 100 1 10 12 1 11 12 1 9 100 12 1 1 1 11 12 1 1 11 100 12 1 1 1 10 12 1 1 9 12 1 11 12 1 9 12 1 9 12 1 9 12 1 11 12 1 1 9 12 1 9 12 1 9 12 1 9 12 1 9 12 1 9 12 1 9 12 1 8 1 10 12 1 10 12 1 8 1 10 12 1 10 12 1 10 10 7 12 1 1 10 12 1 1 100 1 8 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 100 1 10 100 12 1 1 1 10 12 1 9 7 12 1 1 1 10 12 1 1 10 12 1 1 8 1 9 12 1 9 12 1 1 9 12 1 1 10 12 1 7 1 10 12 1 10 12 1 1 9 12 1 1 9 12 1 1 10 7 12 1 1 1 11 7 12 1 1 9 12 1 10 12 1 1 10 12 1 9 12 1 10 12 1 8 10 12 1 1 8 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 100 1 1 100 1 1 1 1
+ciInstanceKlass java/lang/invoke/MethodHandle 1 1 644 100 1 9 7 12 1 1 1 10 7 12 1 1 1 10 7 12 1 1 1 7 1 7 1 10 12 1 1 9 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 11 100 12 1 1 1 10 12 1 1 10 12 1 10 12 1 9 12 1 1 10 12 1 1 100 1 100 1 10 8 1 10 12 1 1 10 12 1 8 1 10 12 1 1 10 12 1 10 7 12 1 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 1 10 7 12 1 1 1 10 7 12 1 1 1 7 1 10 12 1 1 10 12 1 1 10 12 1 1 8 1 10 7 12 1 1 1 8 1 10 12 1 1 10 12 1 1 10 12 1 1 10 12 1 8 1 10 12 1 1 8 1 10 12 1 8 1 10 100 12 1 1 1 9 12 1 1 100 1 10 9 100 12 1 1 1 9 100 1 8 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 8 1 10 12 1 1 8 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 11 12 1 10 12 1 10 12 1 1 10 100 12 1 1 1 100 1 11 12 1 10 100 1 11 12 1 100 1 10 12 1 11 12 1 9 100 12 1 1 1 11 12 1 1 11 100 12 1 1 1 10 12 1 1 9 12 1 11 12 1 9 12 1 9 12 1 9 12 1 11 12 1 1 9 12 1 9 12 1 9 12 1 9 12 1 9 12 1 9 12 1 9 12 1 8 1 10 12 1 10 12 1 8 1 10 12 1 10 12 1 10 10 7 12 1 1 10 12 1 1 100 1 8 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 100 1 10 100 12 1 1 1 10 12 1 9 7 12 1 1 1 10 12 1 1 10 12 1 1 8 1 9 12 1 9 12 1 1 9 12 1 1 10 12 1 100 1 10 12 1 10 12 1 1 9 12 1 1 9 12 1 1 10 7 12 1 1 1 11 100 12 1 1 9 12 1 10 12 1 1 10 12 1 9 12 1 10 12 1 8 10 12 1 1 8 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 100 1 1 100 1 1 1 1
 staticfield java/lang/invoke/MethodHandle FORM_OFFSET J 20
 staticfield java/lang/invoke/MethodHandle UPDATE_OFFSET J 13
 staticfield java/lang/invoke/MethodHandle $assertionsDisabled Z 1
@@ -2531,8 +2336,6 @@ staticfield java/lang/invoke/DirectMethodHandle NFS [Ljava/lang/invoke/LambdaFor
 staticfield java/lang/invoke/DirectMethodHandle OBJ_OBJ_TYPE Ljava/lang/invoke/MethodType; java/lang/invoke/MethodType
 staticfield java/lang/invoke/DirectMethodHandle LONG_OBJ_TYPE Ljava/lang/invoke/MethodType; java/lang/invoke/MethodType
 staticfield java/lang/invoke/DirectMethodHandle $assertionsDisabled Z 1
-ciInstanceKlass java/lang/Void 1 1 31 10 100 12 1 1 1 8 1 10 7 12 1 1 1 9 7 12 1 1 1 1 1 1 1 1 1 1 1 1 1
-staticfield java/lang/Void TYPE Ljava/lang/Class; java/lang/Class
 ciInstanceKlass java/lang/invoke/LambdaForm 1 1 1052 100 1 9 7 12 1 1 1 10 7 12 1 1 1 10 7 12 1 1 9 12 1 1 9 12 1 1 10 12 1 1 100 1 10 9 12 1 10 12 1 1 9 12 1 10 7 12 1 1 1 9 12 1 9 12 1 9 12 1 1 9 12 1 10 12 1 1 7 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 10 12 1 1 9 100 12 1 1 1 10 12 1 1 9 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 100 12 1 1 1 7 1 10 10 12 1 1 8 1 10 12 1 10 12 1 10 12 1 1 7 1 10 7 12 1 1 1 10 12 1 1 10 12 1 10 12 1 1 9 12 1 1 9 12 1 9 12 1 1 10 12 1 9 12 1 10 100 12 1 1 1 10 12 1 1 10 12 1 9 12 1 1 10 100 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 8 1 10 12 1 10 12 1 8 1 8 1 9 12 1 9 12 1 9 12 1 1 10 12 1 1 10 12 1 9 12 1 10 12 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 9 12 1 10 12 1 8 1 8 1 8 1 8 1 8 1 8 1 8 1 8 1 10 12 1 9 12 1 7 1 10 12 1 1 9 12 1 10 12 1 10 12 1 1 10 12 10 12 1 10 12 1 1 10 12 1 1 10 10 12 1 1 10 12 1 1 7 1 8 1 10 12 1 1 10 12 1 10 12 1 1 10 8 1 10 12 1 1 8 1 8 1 8 1 10 12 1 9 12 1 1 10 12 1 1 10 12 1 1 100 1 10 12 1 1 10 12 1 10 7 12 1 1 1 10 12 1 1 9 12 1 1 8 1 10 100 12 1 1 1 10 7 12 1 1 10 12 10 10 12 1 1 9 12 1 8 10 12 1 1 100 1 10 12 1 1 10 12 1 9 7 12 1 1 9 12 1 1 8 1 10 100 12 1 1 10 12 1 1 100 1 100 1 10 10 12 1 1 10 12 1 1 8 1 8 1 100 1 8 1 10 12 10 12 1 10 12 1 10 12 1 1 8 1 8 1 9 100 12 1 1 1 10 12 1 10 12 1 1 8 1 8 1 8 1 100 1 8 1 100 1 8 1 100 1 8 1 10 12 1 8 1 9 10 7 12 1 1 1 10 12 1 9 12 1 1 10 12 1 10 10 12 1 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 1 8 1 100 10 12 1 10 12 1 9 12 1 1 10 7 12 1 1 8 1 8 1 100 1 8 1 8 1 8 1 8 1 8 1 8 1 8 1 8 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 8 1 8 1 8 1 10 12 1 8 1 10 12 1 8 1 8 1 8 1 8 1 8 1 10 12 1 10 12 1 10 12 1 1 10 7 12 1 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 9 12 1 1 8 1 10 12 1 1 9 12 1 1 10 12 1 1 9 12 1 9 12 1 1 9 12 1 9 12 1 1 7 1 10 7 12 1 1 1 9 12 1 10 12 1 10 12 1 8 1 10 12 1 9 12 1 1 7 1 10 7 12 1 1 1 8 1 100 1 10 12 1 9 12 1 9 12 1 10 12 1 10 12 1 10 7 12 1 1 1 10 12 1 9 7 12 1 1 10 12 1 1 10 12 1 10 12 1 9 12 10 12 1 10 10 12 1 9 9 12 1 7 9 12 1 1 10 12 1 1 9 12 1 10 12 1 10 7 1 9 1 1 1 1 3 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 100 1 1 100 1 1 1 1 1 1 1 1 1 1 1
 staticfield java/lang/invoke/LambdaForm COMPILE_THRESHOLD I 0
 staticfield java/lang/invoke/LambdaForm INTERNED_ARGUMENTS [[Ljava/lang/invoke/LambdaForm$Name; 5 [[Ljava/lang/invoke/LambdaForm$Name;
@@ -2560,7 +2363,6 @@ ciInstanceKlass java/lang/invoke/ConstantCallSite 1 1 65 10 7 12 1 1 1 9 7 12 1 
 staticfield java/lang/invoke/ConstantCallSite UNSAFE Ljdk/internal/misc/Unsafe; jdk/internal/misc/Unsafe
 ciInstanceKlass java/lang/invoke/MutableCallSite 0 0 63 10 100 12 1 1 1 10 12 1 9 100 12 1 1 1 10 12 1 10 12 1 1 9 12 1 1 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1
 instanceKlass java/lang/invoke/VarHandleBooleans$FieldInstanceReadOnly
-instanceKlass java/lang/invoke/VarHandleInts$FieldStaticReadOnly
 instanceKlass java/lang/invoke/VarHandleReferences$FieldStaticReadOnly
 instanceKlass java/lang/invoke/VarHandleLongs$FieldInstanceReadOnly
 instanceKlass java/lang/invoke/VarHandleInts$FieldInstanceReadOnly
@@ -2580,46 +2382,90 @@ ciInstanceKlass jdk/internal/module/Modules 1 1 504 10 100 12 1 1 1 9 7 12 1 1 1
 staticfield jdk/internal/module/Modules JLA Ljdk/internal/access/JavaLangAccess; java/lang/System$2
 staticfield jdk/internal/module/Modules JLMA Ljdk/internal/access/JavaLangModuleAccess; java/lang/module/ModuleDescriptor$1
 staticfield jdk/internal/module/Modules $assertionsDisabled Z 1
-ciMethod java/lang/StringBuilder length ()I 10 0 7090 0 0
-ciMethod java/lang/StringBuilder <init> (I)V 452 0 1433 0 0
-ciMethod java/lang/StringBuilder toString ()Ljava/lang/String; 218 0 19014 0 1056
-ciMethod java/lang/StringBuilder append ([CII)Ljava/lang/StringBuilder; 2 0 29 0 0
-ciMethod java/lang/String <init> ([CIILjava/lang/Void;)V 512 0 5522 0 1024
-ciMethod java/lang/String <init> ([CII)V 244 0 5438 0 1280
-ciMethod java/lang/String rangeCheck ([CII)Ljava/lang/Void; 500 0 5438 0 0
-ciMethod java/lang/String checkBoundsOffCount (III)V 518 0 6414 0 160
-ciMethod java/lang/String checkBoundsBeginEnd (III)V 560 0 6102 0 -1
-ciMethod java/lang/Object <init> ()V 1024 0 242098 0 128
-ciInstanceKlass java/lang/AssertionError 0 0 79 10 100 12 1 1 1 10 12 1 10 100 12 1 1 1 10 100 1 100 1 10 12 1 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 10 12 1 1 1 1 5 0 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-instanceKlass sun/nio/cs/StreamDecoder
-instanceKlass java/io/BufferedReader
-instanceKlass java/io/InputStreamReader
-ciInstanceKlass java/io/Reader 1 1 160 100 1 10 12 1 1 10 7 1 9 7 12 1 1 1 9 12 1 1 100 1 10 10 7 12 1 1 1 100 1 10 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 7 12 1 1 1 10 12 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 100 1 8 1 10 12 1 5 0 10 12 1 1 100 1 8 1 10 8 1 8 1 10 100 12 1 1 1 10 100 12 1 1 1 100 1 100 1 1 1 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-ciInstanceKlass java/io/InputStreamReader 1 1 101 10 7 12 1 1 1 10 7 12 1 1 1 10 7 12 1 1 1 9 7 12 1 1 1 100 1 8 1 10 12 1 10 12 1 8 1 8 1 10 12 1 10 12 1 1 10 12 1 1 10 12 1 10 12 1 10 12 1 1 10 12 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 100 1 1 1 1 1 1 1 100 1 1 1 100 1 1 1 1 1 1 1 1
-ciInstanceKlass java/io/BufferedReader 1 1 216 10 7 12 1 1 1 7 1 9 12 1 1 9 12 1 9 12 1 1 9 12 1 100 1 8 1 10 12 1 9 12 1 1 9 12 1 1 9 12 1 9 12 1 9 12 1 10 12 1 100 1 8 1 10 10 100 12 1 1 1 10 12 1 1 9 12 1 1 10 12 1 1 10 12 1 10 100 12 1 1 1 10 100 12 1 1 1 10 12 1 10 12 1 1 10 7 12 1 1 1 10 12 1 1 7 1 10 12 1 10 12 1 1 9 12 1 10 12 1 10 12 1 1 8 1 8 1 8 1 8 1 10 12 1 100 1 10 12 1 100 1 10 100 12 1 1 1 10 100 12 1 1 1 1 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-ciInstanceKlass sun/nio/cs/StreamDecoder 1 1 323 9 7 12 1 1 1 100 1 8 1 10 12 1 1 10 7 12 1 1 1 10 12 1 1 10 12 1 1 10 12 1 100 1 100 1 100 1 10 10 12 1 10 12 1 10 12 1 1 10 12 1 10 12 1 1 9 12 1 1 9 12 1 9 12 1 1 10 12 1 1 9 12 1 100 1 10 12 1 10 12 1 1 100 1 10 12 10 12 1 10 12 1 10 12 1 10 12 1 1 9 7 12 1 1 1 10 7 12 1 1 1 10 12 1 10 7 12 1 1 10 12 1 9 12 1 1 9 12 1 1 9 12 1 1 9 12 1 1 10 7 12 1 1 1 9 12 1 1 10 12 1 1 10 10 12 1 11 7 12 1 1 10 12 1 10 12 1 10 10 12 1 1 10 12 1 10 7 12 1 1 8 1 100 1 10 8 1 10 12 1 1 10 12 1 8 1 10 12 1 10 10 12 10 12 1 10 7 12 1 1 1 10 10 12 1 1 10 12 1 1 10 7 12 1 1 10 12 1 10 12 1 10 12 1 10 10 12 1 10 12 1 10 12 1 100 1 11 12 1 10 12 1 7 1 11 12 1 10 10 7 12 1 1 1 1 1 3 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 100 1 1 1 1 1 1 1 1 1 1 1 100 1 100 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-staticfield sun/nio/cs/StreamDecoder $assertionsDisabled Z 1
-ciMethodData java/lang/Object <init> ()V 2 242098 orig 80 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 4 0x0 0x9 0x1 0x0 oops 0 methods 0
-ciMethodData java/lang/StringUTF16 length ([B)I 1 17 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 6 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
-ciMethodData java/lang/AbstractStringBuilder ensureCapacityInternal (I)V 2 5445 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 23 0xe0007 0x1150 0x68 0x2f1 0x180005 0x2f1 0x0 0x0 0x0 0x0 0x0 0x200002 0x2f1 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0xc 0x0 oops 0 methods 0
-ciMethodData java/lang/AbstractStringBuilder isLatin1 ()Z 2 39596 orig 80 1 0 0 0 1 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 18 0x30007 0x0 0x58 0x9996 0x80000006000a0007 0x2 0x38 0x9996 0xe0003 0x9996 0x18 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
-ciMethodData java/lang/AbstractStringBuilder inflate ()V 1 2 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 24 0x10005 0x2 0x0 0x0 0x0 0x0 0x0 0x40007 0x1 0x20 0x1 0xd0002 0x1 0x1c0002 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x1 0xc oops 0 methods 0
-ciMethod java/lang/AssertionError <init> (Ljava/lang/Object;)V 0 0 1 0 -1
-ciMethodData java/lang/AbstractStringBuilder <init> (I)V 2 6268 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 21 0x10002 0x180e 0x70007 0x0 0x38 0x180e 0x160003 0x180e 0x28 0x1b0002 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 0 methods 0
-ciMethodData java/lang/StringBuilder toString ()Ljava/lang/String; 2 19020 orig 80 1 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 27 0x10005 0x49df 0x0 0x0 0x0 0x0 0x0 0x40007 0x1 0x48 0x49df 0x100002 0x49df 0x130003 0x49df 0x28 0x1f0002 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
-ciMethodData java/lang/String <init> ([CII)V 2 5438 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 16 0x70002 0x14c4 0xa0002 0x14c4 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x4 0x0 0x0 0x0 0x0 oops 0 methods 0
-ciMethodData java/lang/StringBuilder append ([CII)Ljava/lang/StringBuilder; 1 29 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 11 0x40002 0x1c 0x0 0x0 0x0 0x9 0x4 0xe 0x0 0x0 0x0 oops 0 methods 0
-ciMethodData java/lang/AbstractStringBuilder append ([CII)Ljava/lang/AbstractStringBuilder; 1 29 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 28 0xa0002 0x1c 0x140005 0x1c 0x0 0x0 0x0 0x0 0x0 0x1c0005 0x1c 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x4 0xe 0x0 0x0 0x0 oops 0 methods 0
-ciMethod java/io/Reader read ([CII)I 0 0 1 0 -1
-ciMethodData java/lang/String checkBoundsOffCount (III)V 2 6414 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 76 0x10007 0x0 0x60 0x180b 0x50007 0x0 0x40 0x180b 0xc0007 0x180b 0x1c8 0x0 0x170002 0x0 0x1d0005 0x0 0x0 0x0 0x0 0x0 0x0 0x210005 0x0 0x0 0x0 0x0 0x0 0x0 0x270005 0x0 0x0 0x0 0x0 0x0 0x0 0x2b0005 0x0 0x0 0x0 0x0 0x0 0x0 0x310005 0x0 0x0 0x0 0x0 0x0 0x0 0x350005 0x0 0x0 0x0 0x0 0x0 0x0 0x380005 0x0 0x0 0x0 0x0 0x0 0x0 0x3b0002 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x3 0x0 0x0 0x0 oops 0 methods 0
-ciMethodData java/lang/String <init> ([CIILjava/lang/Void;)V 2 5522 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 31 0x10002 0x1492 0x50007 0x148e 0x20 0x4 0x1e0007 0x0 0x50 0x148e 0x240002 0x148e 0x2b0007 0x0 0x20 0x148e 0x430002 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x5 0xc 0x0 0x0 0x0 0x0 oops 0 methods 0
-ciMethodData java/lang/StringUTF16 compress ([CII)[B 2 5516 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 17 0x90002 0x148d 0xd0007 0x0 0x20 0x148d 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x3 0x0 0x0 0x0 oops 0 methods 0
-ciMethodData java/lang/String rangeCheck ([CII)Ljava/lang/Void; 2 5438 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 13 0x40002 0x1444 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x3 0x0 0x0 0x0 oops 0 methods 0
-ciMethod java/io/BufferedReader ensureOpen ()V 276 0 823 0 -1
-ciMethod java/io/BufferedReader fill ()V 24 0 51 0 0
-ciMethod java/io/BufferedReader readLine (Z[Z)Ljava/lang/String; 276 6704 823 0 -1
-ciMethodData java/io/BufferedReader readLine (Z[Z)Ljava/lang/String; 2 59469 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 159 0xb0005 0x2ad 0x0 0x0 0x0 0x0 0x0 0xf0007 0x0 0x40 0x2ad 0x160007 0x86 0x38 0x227 0x1a0003 0x227 0x18 0x210007 0x2ad 0x20 0x0 0x300007 0x299 0x58 0x27 0x340005 0x27 0x0 0x0 0x0 0x0 0x0 0x3f0007 0x2af 0xd0 0x11 0x430007 0x3 0xb0 0xe 0x470005 0xe 0x0 0x0 0x0 0x0 0x0 0x4a0007 0xe 0x58 0x0 0x4e0005 0x0 0x0 0x0 0x0 0x0 0x0 0x620007 0x88 0x40 0x227 0x700007 0x0 0x20 0x227 0x910007 0x13 0xb0 0xddbe 0xa10007 0x75 0x40 0xdd49 0xa80007 0xdb22 0x58 0x227 0xac0007 0x29c 0x20 0x0 0xb60003 0x29c 0x30 0xbc0003 0xdb22 0xffffffffffffff68 0xcd0007 0x13 0xf8 0x29c 0xd10007 0x5 0x48 0x297 0xe30002 0x297 0xe80003 0x297 0x88 0xf70005 0x5 0x0 0x0 0x0 0x0 0x0 0xfc0005 0x5 0x0 0x0 0x0 0x0 0x0 0x10f0007 0x75 0x20 0x227 0x11e0007 0x0 0x30 0x13 0x1280002 0x13 0x1380005 0x13 0x0 0x0 0x0 0x0 0x0 0x13c0003 0x13 0xfffffffffffffc88 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x3 0x0 0x0 0x0 oops 0 methods 0
-ciMethodData java/io/BufferedReader fill ()V 1 51 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 58 0x50007 0x0 0x38 0x27 0xa0003 0x27 0xa8 0x1c0007 0x0 0x38 0x0 0x2c0003 0x0 0x70 0x380007 0x0 0x48 0x0 0x490002 0x0 0x530003 0x0 0x28 0x680002 0x0 0x910005 0x0 0x0 0x23b189b7db0 0x20 0x23b189b7e60 0x7 0x960007 0x0 0xffffffffffffffc8 0x27 0x9a0007 0x11 0x20 0x16 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 2 28 java/io/InputStreamReader 30 sun/nio/cs/StreamDecoder methods 0
-ciMethodData java/lang/StringBuilder length ()I 2 7090 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 7 0x10002 0x1bad 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
-ciMethodData java/lang/StringBuilder <init> (I)V 2 1433 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 59 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 8 0x20002 0x4b7 0x0 0x0 0x9 0x2 0x0 0x0 oops 0 methods 0
-compile java/io/BufferedReader readLine (Z[Z)Ljava/lang/String; 139 4 inline 12 0 -1 java/io/BufferedReader readLine (Z[Z)Ljava/lang/String; 1 227 java/lang/String <init> ([CII)V 2 7 java/lang/String rangeCheck ([CII)Ljava/lang/Void; 3 4 java/lang/String checkBoundsOffCount (III)V 2 10 java/lang/String <init> ([CIILjava/lang/Void;)V 3 1 java/lang/Object <init> ()V 3 36 java/lang/StringUTF16 compress ([CII)[B 1 296 java/lang/StringBuilder <init> (I)V 2 2 java/lang/AbstractStringBuilder <init> (I)V 3 1 java/lang/Object <init> ()V 1 71 java/lang/StringBuilder length ()I 2 1 java/lang/AbstractStringBuilder length ()I
+ciMethod java/util/Arrays copyOf ([CI)[C 538 0 965 0 0
+ciMethod java/lang/Math min (II)I 526 0 27466 0 -1
+ciMethod java/lang/String charAt (I)C 538 0 343379 0 160
+ciMethod java/lang/String length ()I 544 0 179334 0 96
+ciMethod java/lang/String equals (Ljava/lang/Object;)Z 658 0 7277 0 416
+ciMethod java/lang/String coder ()B 572 0 232208 0 64
+ciMethod java/lang/String isLatin1 ()Z 744 0 451136 0 96
+ciMethod java/lang/String substring (II)Ljava/lang/String; 712 0 7011 0 -1
+ciMethod java/lang/Object <init> ()V 1024 0 228404 0 128
+ciInstanceKlass org/gradle/api/Action 1 0 14 100 100 1 1 1 1 1 1 1 1 1 1 1
+instanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput
+ciInstanceKlass org/gradle/internal/logging/text/AbstractStyledTextOutput 1 1 152 10 9 9 10 10 8 11 10 10 10 10 10 10 10 100 10 100 10 10 10 10 100 10 10 10 10 10 7 7 100 100 1 1 1 7 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 12 12 12 12 12 1 12 12 12 12 7 12 12 12 12 1 1 12 100 12 12 1 12 12 12 12 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+instanceKlass org/gradle/internal/logging/console/StyledTextOutputBackedRenderer$OutputEventTextOutputImpl
+instanceKlass org/gradle/internal/logging/console/DefaultTextArea
+ciInstanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput 1 1 132 9 9 9 9 9 9 9 9 10 10 10 10 7 10 7 10 10 11 10 10 7 10 9 7 10 7 10 7 10 7 7 1 1 1 7 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 12 12 12 12 12 12 12 12 12 7 12 12 7 12 1 12 1 12 12 12 12 12 1 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+staticfield org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput SYSTEM_EOL_PARSING_STATE Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1
+staticfield org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput INITIAL_STATE Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1
+staticfield org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput WELL_KNOWN_EOL_PARSING_STATE Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2
+staticfield org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput WINDOWS_EOL_PARSING_ODDITY_STATE Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$3
+staticfield org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput START_LINE_STATE Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$4
+ciInstanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State 1 0 18 100 100 100 1 100 1 1 1 1 1 100 1 1 1 1 1 1
+ciInstanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 1 1 105 10 10 10 10 8 10 10 10 10 10 10 10 10 10 10 10 10 10 11 10 7 10 7 7 7 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 7 12 12 7 12 12 1 7 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 1 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ciInstanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 1 1 78 10 10 10 10 10 10 10 8 10 10 10 10 10 7 10 7 7 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 7 12 12 12 7 12 12 12 12 1 12 12 12 12 12 1 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ciInstanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$3 1 1 77 10 10 10 8 10 10 10 10 10 10 10 10 10 7 10 7 7 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 7 12 12 12 1 12 12 12 12 12 12 12 100 12 12 1 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ciInstanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$4 1 1 44 10 10 10 10 7 10 7 7 100 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 7 12 12 12 12 1 12 1 1 1 1 1 1 1 1 1 1
+ciInstanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol 1 1 62 10 9 9 9 7 10 10 100 10 7 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 12 12 12 12 100 1 7 12 12 1 12 1 1 1 1 1 1
+ciInstanceKlass org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 1 1 157 9 9 9 9 10 10 10 10 10 9 10 9 10 9 9 10 10 10 8 100 10 10 10 10 10 10 10 10 10 7 7 1 7 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 100 1 1 1 1 1 1 1 7 1 1 1 1 1 1 1 1 1 1 1 1 12 12 12 12 12 7 12 12 12 12 12 12 12 12 12 12 12 12 12 1 1 100 12 12 12 12 12 12 12 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ciMethodData java/lang/Object <init> ()V 2 228404 orig 80 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 4 0x0 0x9 0x1 0x0 oops 0 methods 0
+ciMethodData java/lang/String charAt (I)C 2 343379 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 25 0x10005 0x53c46 0x0 0x0 0x0 0x0 0x0 0x40007 0x3 0x30 0x53c43 0xc0002 0x53c43 0x150002 0x3 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 0 methods 0
+ciMethodData java/lang/String isLatin1 ()Z 2 451136 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 18 0x30007 0x0 0x58 0x6e0cc 0xa0007 0x4 0x38 0x6e0c7 0xe0003 0x6e0c7 0x18 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
+ciMethodData java/lang/StringLatin1 charAt ([BI)C 2 339373 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 18 0x10007 0x0 0x40 0x52ca0 0x70007 0x52ca0 0x30 0x0 0xf0002 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 0 methods 0
+ciMethodData java/lang/String equals (Ljava/lang/Object;)Z 2 7277 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 49 0x20007 0x187f 0x20 0x2a5 0x80104 0x0 0x0 0x25d88157200 0x187c 0x0 0x0 0xb0007 0x3 0xe0 0x187c 0xf0004 0x0 0x0 0x25d88157200 0x187c 0x0 0x0 0x160007 0x0 0x40 0x187c 0x210007 0x0 0x68 0x187c 0x2c0002 0x187c 0x2f0007 0xee8 0x38 0x994 0x330003 0x994 0x18 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 2 7 java/lang/String 18 java/lang/String methods 0
+ciMethodData java/lang/String coder ()B 2 232208 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 14 0x30007 0x0 0x38 0x389f3 0xa0003 0x389f3 0x18 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
+ciMethodData java/lang/String length ()I 2 179334 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 16 0x60005 0x2bb76 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
+ciMethodData java/util/Arrays copyOf ([CI)[C 1 965 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 14 0xb0002 0x2b8 0xe0002 0x2b8 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 0 methods 0
+ciMethod org/gradle/api/Action execute (Ljava/lang/Object;)V 0 0 1 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput doAppend (Ljava/lang/String;)V 232 6452 965 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput doLineText (Ljava/lang/CharSequence;)V 0 0 1 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$100 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 258 0 129 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$200 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;)[C 260 0 130 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$300 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;)Ljava/lang/String; 268 0 134 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$402 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 772 0 15616 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$700 ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 40 0 532 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$800 ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 1024 0 14544 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$900 ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 1024 0 14896 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$1000 ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 70 0 188 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 execute (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)V 978 0 14544 0 1888
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 execute (Ljava/lang/Object;)V 958 0 14544 0 1920
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 execute (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)V 1024 0 14544 0 1376
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 execute (Ljava/lang/Object;)V 1024 0 14544 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol <init> ([C[CI)V 760 0 965 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol copy ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 500 0 965 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol add (C)V 70 0 512 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol add ()V 0 0 1 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol size ()I 528 0 264 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol all ()Z 1024 0 14544 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol none ()Z 1024 0 14544 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext <init> (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;Ljava/lang/String;)V 232 0 965 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext next ()V 1024 0 14356 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext next (I)V 36 0 512 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext isCurrentCharEquals (C)Z 812 0 6184 0 256
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext hasChar ()Z 572 0 70081 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext setState (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State;)V 768 0 15616 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext reset ()V 36 0 560 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext flushLineText ()V 96 0 1525 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext flushEndLine (Ljava/lang/String;)V 36 0 560 0 -1
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext access$000 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 676 0 338 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext access$500 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)Ljava/lang/String; 532 0 266 0 0
+ciMethod org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext access$600 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)[C 0 0 1 0 -1
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext isCurrentCharEquals (C)Z 2 6184 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 54 0x40005 0x0 0x0 0x25d8d6ba4c0 0x1692 0x0 0x0 0xc0007 0x1692 0x80 0x0 0x1b0002 0x0 0x1e0005 0x0 0x0 0x0 0x0 0x0 0x0 0x240003 0x0 0x88 0x330005 0x0 0x0 0x25d8d6ba4c0 0x1692 0x0 0x0 0x370005 0x1692 0x0 0x0 0x0 0x0 0x0 0x3d0007 0x1612 0x38 0x80 0x410003 0x80 0x18 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 2 3 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol 26 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext hasChar ()Z 2 70081 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 23 0x80005 0x0 0x0 0x25d8d6ba4c0 0x110a3 0x0 0x0 0x100007 0x3bb 0x38 0x10ce8 0x140003 0x10ce8 0x18 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 1 3 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext setState (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State;)V 2 15616 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 12 0x50002 0x3b80 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 0 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$402 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 2 15616 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 7 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 0 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 execute (Ljava/lang/Object;)V 2 14544 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 254 127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 24 0x20004 0x0 0x0 0x25d8d6b8580 0x36f1 0x0 0x0 0x50005 0x0 0x0 0x25d8d6b8630 0x36f1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 2 3 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 10 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 execute (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)V 2 14544 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 189 0x10002 0x36e7 0x40005 0x0 0x0 0x25d8d6ba4c0 0x36e7 0x0 0x0 0x70007 0x0 0x418 0x36e7 0xb0002 0x36e7 0x100005 0x36e7 0x0 0x0 0x0 0x0 0x0 0x130007 0x36e7 0x300 0x0 0x180002 0x0 0x1c0002 0x0 0x1f0005 0x0 0x0 0x0 0x0 0x0 0x0 0x230005 0x0 0x0 0x0 0x0 0x0 0x0 0x260007 0x0 0x250 0x0 0x2a0002 0x0 0x2d0005 0x0 0x0 0x0 0x0 0x0 0x0 0x310002 0x0 0x340005 0x0 0x0 0x0 0x0 0x0 0x0 0x370007 0x0 0x1a0 0x0 0x3b0005 0x0 0x0 0x0 0x0 0x0 0x0 0x400002 0x0 0x430005 0x0 0x0 0x0 0x0 0x0 0x0 0x480002 0x0 0x4b0005 0x0 0x0 0x0 0x0 0x0 0x0 0x4e0005 0x0 0x0 0x0 0x0 0x0 0x0 0x520005 0x0 0x0 0x0 0x0 0x0 0x0 0x560002 0x0 0x590005 0x0 0x0 0x0 0x0 0x0 0x0 0x5e0002 0x36e7 0x610005 0x0 0x0 0x25d8d6ba4c0 0x36e7 0x0 0x0 0x640007 0x0 0x68 0x36e7 0x670002 0x36e7 0x6b0005 0x0 0x0 0x25d8d2ebdf0 0x36e7 0x0 0x0 0x730002 0x0 0x760005 0x0 0x0 0x0 0x0 0x0 0x0 0x790005 0x0 0x0 0x0 0x0 0x0 0x0 0x7d0005 0x0 0x0 0x0 0x0 0x0 0x0 0x810005 0x0 0x0 0x0 0x0 0x0 0x0 0x850002 0x0 0x880005 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 3 5 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol 123 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol 136 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol all ()Z 2 14544 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 121 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 14 0x90007 0x36d1 0x38 0x0 0xd0003 0x0 0x18 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol none ()Z 2 14544 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 13 0x40007 0x0 0x38 0x36d1 0x80003 0x36d1 0x18 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$800 ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 2 14544 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 121 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 4 0x0 0x0 0x9 0x0 oops 0 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 execute (Ljava/lang/Object;)V 2 14544 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 24 0x20004 0x0 0x0 0x25d8d6b8580 0x16a 0x0 0x0 0x50005 0x0 0x0 0x25d8d2ebdf0 0x36d1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 2 3 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 10 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 execute (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)V 2 14544 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 109 0x30005 0x0 0x0 0x25d8d6b8580 0x36d1 0x0 0x0 0x60007 0x3627 0xc8 0xaa 0xa0002 0xaa 0xf0005 0x0 0x0 0x25d8d6ba4c0 0xaa 0x0 0x0 0x130002 0xaa 0x160005 0x0 0x0 0x25d8d6b8580 0xaa 0x0 0x0 0x190003 0xaa 0x230 0x1f0005 0x0 0x0 0x25d8d6b8580 0x3627 0x0 0x0 0x220007 0x3613 0x160 0x14 0x260005 0x0 0x0 0x25d8d6b8580 0x14 0x0 0x0 0x2c0005 0x0 0x0 0x25d8d6b8580 0x14 0x0 0x0 0x300005 0x0 0x0 0x25d8d6b8580 0x14 0x0 0x0 0x340005 0x0 0x0 0x25d8d6b8580 0x14 0x0 0x0 0x380002 0x14 0x3b0005 0x0 0x0 0x25d8d6b8580 0x14 0x0 0x0 0x3e0003 0x14 0x98 0x420005 0x0 0x0 0x25d8d6b8580 0x3613 0x0 0x0 0x460002 0x3613 0x490005 0x0 0x0 0x25d8d6b8580 0x3613 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 11 3 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 16 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol 25 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 35 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 46 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 53 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 60 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 67 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 76 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 86 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 95 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol add (C)V 1 512 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 8 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 0 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$1000 ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 1 188 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 4 0x0 0x0 0x9 0x0 oops 0 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput doAppend (Ljava/lang/String;)V 2 68893 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 42 0x60002 0x351 0xb0005 0x0 0x0 0x25d8d6b8580 0x10384 0x0 0x0 0xe0007 0x350 0x70 0x10034 0x160005 0x1c2 0x0 0x25d8d6b8630 0xfc8c 0x25d8d6b86e0 0x1e6 0x1b0003 0x10034 0xffffffffffffff70 0x200002 0x350 0x270005 0x0 0x0 0x25d8d6b8580 0x350 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x2 0x0 0x0 oops 4 5 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext 16 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 18 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$4 28 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext <init> (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;Ljava/lang/String;)V 1 965 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 42 0x60002 0x351 0xe0002 0x351 0x110005 0x0 0x0 0x25d8d6ba4c0 0x351 0x0 0x0 0x1c0002 0x351 0x270002 0x351 0x340005 0x351 0x0 0x0 0x0 0x0 0x0 0x3f0005 0x0 0x0 0x25d8d6ba4c0 0x351 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x3 0x3e 0x0 0x0 oops 2 7 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol 25 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol copy ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 1 965 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 13 0x110002 0x2cb 0x180002 0x2cb 0x0 0x0 0x0 0x0 0x0 0x0 0x9 0x1 0x0 oops 0 methods 0
+ciMethodData org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol <init> ([C[CI)V 1 965 orig 80 0 0 0 0 0 0 0 0 0 0 0 0 93 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 data 12 0x10002 0x249 0x0 0x0 0x0 0x0 0x9 0x4 0xe 0x0 0x0 0x0 oops 0 methods 0
+compile org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput doAppend (Ljava/lang/String;)V -1 4 inline 43 0 -1 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput doAppend (Ljava/lang/String;)V 1 6 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext <init> (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;Ljava/lang/String;)V 2 6 java/lang/Object <init> ()V 2 14 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$100 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 2 17 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol copy ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 3 17 java/util/Arrays copyOf ([CI)[C 3 24 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol <init> ([C[CI)V 4 1 java/lang/Object <init> ()V 2 28 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$200 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;)[C 2 39 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$300 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;)Ljava/lang/String; 2 52 java/lang/String length ()I 3 6 java/lang/String coder ()B 2 63 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol size ()I 1 11 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext hasChar ()Z 2 8 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol size ()I 1 22 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 execute (Ljava/lang/Object;)V 2 5 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$1 execute (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)V 3 1 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext access$000 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 3 4 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol all ()Z 3 11 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext access$500 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)Ljava/lang/String; 3 16 java/lang/String equals (Ljava/lang/Object;)Z 3 94 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext access$000 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 3 97 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol none ()Z 3 103 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$800 ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 3 107 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 execute (Ljava/lang/Object;)V 4 5 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$2 execute (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)V 5 3 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext isCurrentCharEquals (C)Z 6 4 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol size ()I 6 51 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol size ()I 6 55 java/lang/String charAt (I)C 7 1 java/lang/String isLatin1 ()Z 7 12 java/lang/StringLatin1 charAt ([BI)C 5 10 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext access$000 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol; 5 15 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol add (C)V 5 19 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$1000 ()Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 5 22 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext setState (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State;)V 6 5 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput access$402 (Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput;Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State;)Lorg/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$State; 5 31 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$StateContext isCurrentCharEquals (C)Z 6 4 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol size ()I 6 51 org/gradle/internal/logging/text/AbstractLineChoppingStyledTextOutput$SeenFromEol size ()I 6 55 java/lang/String charAt (I)C 7 1 java/lang/String isLatin1 ()Z 7 12 java/lang/StringLatin1 charAt ([BI)C
