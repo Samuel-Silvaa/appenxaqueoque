@@ -13,7 +13,7 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import screenOptions from 'src/modules/shared/style/StackOptions';
 import { useEffect, useState, useRef } from 'react';
-import { format, subDays } from 'date-fns';
+import { differenceInDays, format, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { pinColor } from 'src/infra/utils/appUtils';
 import ChartsPage from './components/charts/Charts';
@@ -32,6 +32,7 @@ import SwipeableFlatList from 'react-native-swipeable-list';
 import CalendarEpisodeListModal from 'src/modules/shared/components/actionConfirmationModal/ActionConfirmationModal';
 import { useToast } from 'react-native-toast-notifications';
 import { DeleteComponent } from 'src/modules/shared/components/deleteComponent/DeleteComponent';
+import { sharedEpisodeStyleSheet } from '../episode/shared/SharedEpisodeStyleSheet';
 
 const stylesheet = {
   reportCard:
@@ -39,7 +40,7 @@ const stylesheet = {
   reportCardColor: 'h-[80%] rounded-full w-2 mr-4 py-2 self-center',
   reportCardHeader: 'flex-col h-[30%] w-[85%]',
   reportCardDesc:
-    'mt-2 w-3/4 h-full opacity-50 dark:text-d-text-gray truncate w-[90%] break-word ',
+    'mt-1 h-full opacity-50 dark:text-d-text-gray truncate break-word ',
 };
 
 const ResourceCard = ({
@@ -73,25 +74,24 @@ const ResourceCard = ({
         ></View>
         <View className={stylesheet.reportCardHeader}>
           <Text className='font-semibold dark:text-d-text-gray'>
-            Entre{' '}
-            {format(reportDetails.startDate || new Date(), 'P', {
-              locale: ptBR,
-            })}{' '}
-            e{' '}
-            {format(reportDetails.endDate! || subDays(new Date(), 15), 'P', {
-              locale: ptBR,
-            })}{' '}
+            Criado em{' '}
             {format(reportDetails.createdAt || new Date(), 'P', {
+              locale: ptBR,
+            })}{' '}
+            <Image
+              className='w-2 h-2'
+              source={require('src/assets/chart-clock.png')}
+            />{' '}
+            {format(reportDetails.createdAt || new Date(), 'HH:mm', {
               locale: ptBR,
             })}
           </Text>
-          {!!reportDetails?.notes ? (
-            <Text className={stylesheet.reportCardDesc}>
-              {reportDetails.notes.replaceAll(',', ' - ')}
-            </Text>
-          ) : (
-            <Text className={stylesheet.reportCardDesc}>Sem anotações</Text>
-          )}
+          <Text className={stylesheet.reportCardDesc}>
+            Período entre {format(reportDetails.startDate, 'P', { locale: ptBR })} e {format(reportDetails.endDate, 'P', { locale: ptBR })}
+          </Text>
+          <Text className={stylesheet.reportCardDesc}>
+            {reportDetails.episodeAmount} episódios
+          </Text>
         </View>
 
         <Image
@@ -108,21 +108,22 @@ const ReportOptionsPage = ({ navigation }) => {
   const [isEpisodesPopulated, setIsEpisodesPopulated] = useState(true);
   const appState = useSelector(appStateSelector);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useAsyncAppDispatch();
 
   useEffect(() => {
     setIsEpisodesPopulated(appState!.episodes!.length > 0);
+
   }, [appState.episode, appState.reports]);
 
   return (
     <AppPageScaffold>
       <View className='flex-row justify-between items-center w-full mt-12'>
         <ExPressable
-          className={`rounded-full w-2/4 h-[45px] ${
-            !isEpisodesPopulated ? 'opacity-[0.4]' : ''
-          } bg-blue-primary/60 text-white dark:text-white dark:bg-d-blue-primary shadow-lg`}
+          className={`rounded-full w-2/4 h-[45px] ${!isEpisodesPopulated ? 'opacity-[0.4]' : ''
+            } bg-blue-primary/60 text-white dark:text-white dark:bg-d-blue-primary shadow-lg`}
           title='Gerar relatório'
           onPress={() =>
-            isEpisodesPopulated ? setIsModalOpen(true) : () => {}
+            isEpisodesPopulated ? setIsModalOpen(true) : () => { }
           }
         />
         <ExPressable
@@ -157,7 +158,7 @@ const ReportListPage = ({ navigation }) => {
   const dispatch = useAsyncAppDispatch();
   const appState = useSelector(appStateSelector);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const dateStringFormat = 'dd/MM/yyyy';
+  const dateStringFormat = 'yyyy/MM/dd';
   const [selectedDate, setSelectedDate] = useState({
     start: format(subDays(new Date(), 90), dateStringFormat, { locale: ptBR }),
     end: format(new Date(), dateStringFormat, { locale: ptBR }),
@@ -168,7 +169,22 @@ const ReportListPage = ({ navigation }) => {
 
   useEffect(() => {
     setIsReportsPopulated(appState!.reports!.length > 0);
+
   }, [appState.episode, appState.reports]);
+
+  useEffect(() => {
+    dispatch(
+      handleFecthReports({
+        patientId: appState.patient!.id!,
+        date: {
+          date: {
+            startDate: selectedDate.start,
+            endDate: selectedDate.end,
+          },
+        },
+      })
+    )
+  }, [])
 
   const {
     formState: { errors },
@@ -209,10 +225,17 @@ const ReportListPage = ({ navigation }) => {
         </View> */}
 
         <View className='self-start px-2 w-full flex flex-row justify-between items-center'>
-          <Text className='dark:text-d-text-gray m-auto'>
-            Relatórios do período entre {'\n'} {selectedDate.start} à{' '}
-            {selectedDate.end}
-          </Text>
+          <View>
+            <TouchableOpacity
+              className={sharedEpisodeStyleSheet.topic.item + ' bg-purple-dark-primary'}
+            >
+              <Text
+                className="text-[#fff]"
+              >
+                Últimos {differenceInDays(new Date(selectedDate.end.replaceAll('/', '-')), new Date(selectedDate.start.replaceAll('/', '-')))} dias
+              </Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             onPress={() => setIsFilterModalOpen(true)}
             className='flex-row justify-between items-center rounded-full bg-white p-3 shadow-lg'

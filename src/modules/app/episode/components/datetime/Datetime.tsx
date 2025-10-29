@@ -126,9 +126,9 @@ const Datetime = () => {
 
   return (
     <View className={stylesheet.calendar.wrapper}>
-   
+
       <View className={stylesheet.calendar.img}>
-             <Text className={sharedEpisodeStyleSheet.timepicker.title.concat(' text-md w-2/3')}>
+        <Text className={sharedEpisodeStyleSheet.timepicker.title.concat(' text-md w-2/3')}>
           Escolha a data da crise
         </Text>
         <Image
@@ -138,11 +138,12 @@ const Datetime = () => {
         />
       </View>
       <CalendarComponent
+        displayheader={false}
         markedDates={appState.episode.dates}
         onDayPress={(date) => {
-          if(isFuture(date.dateString)){
+          if (isFuture(date.dateString)) {
             toast.hideAll()
-            toast.show('Selecione uma data válida!', {type: 'warning'})
+            toast.show('Selecione uma data válida!', { type: 'warning' })
             return
           }
           handleSelectDate(date)

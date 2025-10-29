@@ -17,28 +17,33 @@ const CalendarComponent = ({
   markedDates,
   onDayPress,
   displayMessage,
+  displayheader = true
 }: {
   markedDates?: MarkedDates;
   onDayPress: (date: DateData) => void;
   displayMessage?: boolean;
+  displayheader?: boolean
 }) => {
   return (
-    <View className='relative w-full mt-14'>
-      <View className={stylesheet.calendar.duck}>
-        <Image
-          resizeMode='contain'
-          className='w-[100px] h-[100px] '
-          source={require('src/assets/duck.png')}
-        />
-      </View>
-      <View className={stylesheet.calendar.img}>
-        <Image
-          resizeMode='contain'
-          className='w-[100px] h-[100px] '
-          source={require('src/assets/baby_book.png')}
-        />
-      </View>
-
+    <View className={displayheader ? ' mt-14' : '' + ' relative w-full'}>
+      {displayheader && (
+        <>
+          <View className={stylesheet.calendar.duck}>
+            <Image
+              resizeMode='contain'
+              className='w-[100px] h-[100px] '
+              source={require('src/assets/duck.png')}
+            />
+          </View>
+          <View className={stylesheet.calendar.img}>
+            <Image
+              resizeMode='contain'
+              className='w-[100px] h-[100px] '
+              source={require('src/assets/baby_book.png')}
+            />
+          </View>
+        </>
+      )}
       <View className='bg-blue-four dark:bg-d-blue-primary rounded-[28px] absolute top-0 h-2/5 w-full'></View>
       <View className={stylesheet.container}>
         <View className={stylesheet.body}>

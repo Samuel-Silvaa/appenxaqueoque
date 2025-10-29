@@ -21,8 +21,6 @@ import ProfileStackNavigation from './profile/ProfileStack';
 import AvatarSelection from '../auth/registration/avatar/AvatarSelection';
 import Patient from '../auth/registration/patient/Patient';
 import EpisodeDetailsPage from './episode/components/episodeDetailsPage/EpisodeDetailsPage';
-import * as SecureStore from 'expo-secure-store';
-import { setPatient } from 'src/infra/app/reducers/auth.reducer';
 
 const stylesheet = {
   calendarBtnContainer:
@@ -263,7 +261,7 @@ const TabsRoutes = () => {
         },
         header: (bottomTabsProps) =>
           bottomTabsProps.route.name != 'Report' &&
-          bottomTabsProps.route.name != 'Profile' ? (
+            bottomTabsProps.route.name != 'Profile' ? (
             <AppHeader {...bottomTabsProps} />
           ) : (
             <></>
