@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ImprovementFactor as ImprovementFactorType } from 'src/infra/@types/app.types';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import { Fragment, useCallback } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { appStateSelector } from 'src/infra/app/selectors';
 import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
@@ -19,23 +19,23 @@ const data: {
   value: string;
   img?: ImageSourcePropType;
 }[] = [
-  {
-    label: 'Medicação',
-    value: ImprovementFactorType.MEDICINE,
-  },
-  {
-    label: 'Descanso',
-    value: ImprovementFactorType.SLEEP,
-  },
-  {
-    label: 'Alimentação',
-    value: ImprovementFactorType.FOOD,
-  },
-  {
-    label: 'Outros',
-    value: ImprovementFactorType.ANOTHER,
-  },
-];
+    {
+      label: 'Medicação',
+      value: ImprovementFactorType.MEDICINE,
+    },
+    {
+      label: 'Descanso',
+      value: ImprovementFactorType.SLEEP,
+    },
+    {
+      label: 'Alimentação',
+      value: ImprovementFactorType.FOOD,
+    },
+    {
+      label: 'Outros',
+      value: ImprovementFactorType.ANOTHER,
+    },
+  ];
 
 interface ImprovementSchema {
   medicine: string;
@@ -48,6 +48,7 @@ interface ImprovementSchema {
 const improvementSchema = yup.object<ImprovementSchema>().shape({
   medicine: yup.string(),
   medicineDosage: yup.number(),
+  combinedDosage: yup.number(),
   foodImprovement: yup.string(),
   medicineImprovement: yup.string(),
   anotherImprovementFactor: yup.string(),
@@ -56,6 +57,7 @@ const improvementSchema = yup.object<ImprovementSchema>().shape({
 const ImprovementFactor = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
+  const [isCombinedDosage, setIsCombinedDosage] = useState(false);
 
   // ✅ Always normalize improvementFactor into an array
   const getImprovementFactors = (): string[] => {
@@ -107,6 +109,10 @@ const ImprovementFactor = () => {
               value == ImprovementFactorType.MEDICINE
                 ? null
                 : appState.episode!.medicineDosage,
+            combinedDosage:
+              value == ImprovementFactorType.MEDICINE
+                ? null
+                : appState.episode!.combinedDosage,
             medicineImprovement:
               value == ImprovementFactorType.MEDICINE
                 ? null
@@ -114,7 +120,7 @@ const ImprovementFactor = () => {
           })
         );
         if (value == ImprovementFactorType.MEDICINE) {
-          reset({ medicine: '', medicineDosage: 0, medicineImprovement: '' });
+          reset({ medicine: '', medicineDosage: 0, medicineImprovement: '', combinedDosage: 0 });
         }
         if (value == ImprovementFactorType.FOOD) {
           reset({ foodImprovement: '' });
@@ -185,9 +191,44 @@ const ImprovementFactor = () => {
                         )
                       }
                     ></InputContainer>
+                    <BouncyCheckbox
+                      size={22}
+                      fillColor='#CEB0FA'
+                      unfillColor='#FFFFFF00'
+                      textStyle={{
+                        textDecorationLine: 'none',
+                        flexWrap: 'wrap',
+                        flex: 1,
+                        flexShrink: 1,
+                        marginTop: 10,
+                      }}
+                      text='Medicamento de dosagem combinada'
+                      onPress={() => setIsCombinedDosage((prevState) => !prevState)}
+                    />
+                    <InputContainer
+                      editable={isCombinedDosage}
+                      keyboardType='numeric'
+                      label={isCombinedDosage ? 'Primeira dosagem' : ''}
+                      name='combinedDosage'
+                      setValue={setValue}
+                      control={control}
+                      errors={errors}
+                      maxLength={4}
+                      className={!isCombinedDosage ? 'opacity-25  drop-shadow-sm'
+                        : 'opacity-100 drop-shadow-sm' + ' bg-tertiary w-full'}
+                      defaultValue={appState.episode.combinedDosage?.toString()}
+                      onChange={(e) => {
+                        let numbers = e.nativeEvent.text.replace(/[^0-9]/g, '');
+                        dispatch(
+                          handleFormChanging({
+                            combinedDosage: numbers,
+                          })
+                        );
+                      }}
+                    ></InputContainer>
                     <InputContainer
                       keyboardType='numeric'
-                      label='Dosagem'
+                      label={isCombinedDosage ? 'Segunda dosagem' : 'Dosagem'}
                       name='dosage'
                       setValue={setValue}
                       control={control}

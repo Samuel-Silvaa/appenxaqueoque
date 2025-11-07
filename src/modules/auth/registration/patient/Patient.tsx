@@ -29,7 +29,7 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
     .string()
     .required('Preencha seu nome')
     .min(5, 'O Nome precisa ter no mínimo 5 letras'),
-  email: yup.string().email().required('Preencha seu email'),
+  email: yup.string().email().required('Preencha seu email').default(),
   birthDate: yup
     .date()
     .required('Preencha a data de nascimento')
@@ -61,7 +61,6 @@ const Patient = () => {
   });
 
   const onSubmitHandler = useCallback(async (data: PatientSchemaProps) => {
-    console.log(data);
     const res = await dispatchAsync(
       requestCreatePatient({
         ...data,
@@ -78,7 +77,7 @@ const Patient = () => {
 
   useEffect(() => {
     if (route.params) {
-      reset({ email: route.params.email });
+      reset({ email: route.params?.email });
     }
   }, [route.params]);
 
@@ -96,8 +95,8 @@ const Patient = () => {
 
         <ScrollView
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps='handled'
-          className='w-full h-[85%]'
+          keyboardShouldPersistTaps='never'
+          className='w-full h-[76%]'
         >
           <InputContainer
             className='opacity-45 bg-white drop-shadow-sm'

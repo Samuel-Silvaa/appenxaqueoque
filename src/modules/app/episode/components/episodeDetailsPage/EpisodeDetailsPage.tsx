@@ -19,6 +19,7 @@ import {
 import {
   handleDeleteEpisode,
   handleFormChanging,
+  setEpisodeIndex,
 } from 'src/infra/app/reducers/app.reducer';
 import { useDispatch } from 'react-redux';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
@@ -58,7 +59,7 @@ const sanitizeTime = (value?: string | null): string => value || '';
 const formatArray = (value?: string[] | null): string =>
   Array.isArray(value) ? value.join(' - ') : sanitizeString(value as any);
 
-const EpisodeDetailsPage = ({}: {}) => {
+const EpisodeDetailsPage = ({ }: {}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const dispatchAsync = useAsyncAppDispatch();
@@ -141,14 +142,14 @@ const EpisodeDetailsPage = ({}: {}) => {
       icon: require('src/assets/chart-symptoms.png'),
       title: 'Sintomas associados',
       desc: Array.isArray(episode.symptoms)
-        ? episode.symptoms
+        ? !!episode.symptoms.length ? episode.symptoms : null
         : sanitizeString(episode.symptoms?.replaceAll(',', '\n')),
     },
     {
       icon: require('src/assets/chart-trigger.png'),
       title: 'Gatilhos',
       desc: Array.isArray(episode.triggers)
-        ? episode.triggers
+        ? !!episode.triggers.length ? episode.triggers : null
         : sanitizeString(episode.triggers?.replaceAll(',', '\n')),
       type: Trigger,
     },
@@ -172,7 +173,7 @@ const EpisodeDetailsPage = ({}: {}) => {
       icon: require('src/assets/chart-header-location.png'),
       title: 'Sintomas da aura',
       desc: Array.isArray(episode.haloSymptoms)
-        ? episode.haloSymptoms
+        ? !!episode.haloSymptoms.length ? episode.haloSymptoms : null
         : sanitizeString(episode.haloSymptoms?.replaceAll(',', '\n')),
     },
     {
@@ -215,7 +216,7 @@ const EpisodeDetailsPage = ({}: {}) => {
           value =
             value +
             sanitizeString(
-              `${episode.medicine} - ${episode.medicineDosage} - ${episode.medicineUnit}`
+              `${episode.medicine} - ${!!episode.combinedDosage ? episode.combinedDosage + '/' : ''}${episode.medicineDosage}${!!episode.medicineUnit ? episode.medicineUnit + '' : ''}`
             );
         }
         return value;
@@ -241,7 +242,7 @@ const EpisodeDetailsPage = ({}: {}) => {
     if (id) {
       const res = await dispatchAsync(handleDeleteEpisode({ id: id }));
       if (res.meta.requestStatus === 'fulfilled') {
-        navigation.navigate('Calendar' as never);
+        navigation.navigate('Home' as never);
         toast.show('Episódio deletado com sucesso!', { type: 'success' });
       }
     }
@@ -294,7 +295,7 @@ const EpisodeDetailsPage = ({}: {}) => {
           </View>
 
           <CloseButton
-            onClose={() => navigation.navigate('Calendar' as never)}
+            onClose={() => navigation.navigate('Home' as never)}
           />
         </View>
 

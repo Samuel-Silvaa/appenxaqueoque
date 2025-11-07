@@ -1,7 +1,6 @@
 import { Image, Text, View } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
-import { BlurView } from 'expo-blur';
 import { useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { useDispatch } from 'react-redux';

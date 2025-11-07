@@ -11,11 +11,29 @@ export default {
         projectId: '2f361f4e-1942-44d6-b5bd-8f84856da1e0',
       },
     },
+    splash: {
+      image: './assets/splash.png',
+      resizeMode: 'cover',
+      backgroundColor: '#FFFFFF',
+      dark: {
+        image: './assets/splash.png',
+        backgroundColor: '#000000',
+      },
+    },
     android: {
       package: 'com.samuell_silva.appenxaqueoque',
       adaptiveIcon: {
         foregroundImage: './assets/logoenxaq.png',
         backgroundColor: '#FFFFFF',
+      },
+      splash: {
+        image: './assets/splash.png',
+        resizeMode: 'cover',
+        backgroundColor: '#FFFFFF',
+        dark: {
+          image: './assets/splash.png',
+          backgroundColor: '#000000',
+        },
       },
       plugins: [
         [
@@ -23,14 +41,25 @@ export default {
           {
             backgroundColor: '#FFFFFF',
             image: './assets/splash.png',
+            resizeMode: 'cover',
             dark: {
               image: './assets/splash.png',
               backgroundColor: '#000000',
             },
-            imageWidth: 300,
           },
         ],
       ],
+    },
+    ios: {
+      splash: {
+        image: './assets/splash.png',
+        resizeMode: 'cover',
+        backgroundColor: '#FFFFFF',
+        dark: {
+          image: './assets/splash.png',
+          backgroundColor: '#000000',
+        },
+      },
     },
   },
 };

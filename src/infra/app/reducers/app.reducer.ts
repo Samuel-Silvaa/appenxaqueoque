@@ -83,23 +83,23 @@ const handleFitEpisodeData = (ep: Episode): Episode => {
     period: Number(ep.period) == 1 ? 'true' : 'false',
     triggers: ep.triggers
       ? String(ep.triggers)
-          .split(',')
-          .filter((item) => item && item.trim())
+        .split(',')
+        .filter((item) => item && item.trim())
       : [],
     haloSymptoms: ep.haloSymptoms
       ? String(ep.haloSymptoms)
-          .split(',')
-          .filter((item) => item && item.trim())
+        .split(',')
+        .filter((item) => item && item.trim())
       : [],
     improvementFactor: ep.improvementFactor
       ? String(ep.improvementFactor)
-          .split(',')
-          .filter((item) => item && item.trim())
+        .split(',')
+        .filter((item) => item && item.trim())
       : [],
     symptoms: ep.symptoms
       ? String(ep.symptoms)
-          .split(',')
-          .filter((item) => item && item.trim())
+        .split(',')
+        .filter((item) => item && item.trim())
       : [],
   };
 };
@@ -222,7 +222,7 @@ const appSlice = createSlice({
       (state, action: PayloadAction<Report[]>) => {
         return (state = {
           ...state,
-          reports: action.payload,
+          reports: action.payload.sort((a, b) => b.createdAt!.localeCompare(a.createdAt!)),
           loading: false,
           error: null,
         });

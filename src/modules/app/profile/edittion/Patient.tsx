@@ -40,7 +40,7 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
     .string()
     .required('Preencha seu nome')
     .min(5, 'O Nome precisa ter no mínimo 5 letras'),
-  email: yup.string().email().required('Preencha seu email'),
+  email: yup.string().email().required('Preencha seu email').default(),
   birthDate: yup.date().required('Preencha a data de nascimento').default(),
   gender: yup.string().required('Preencha o sexo'),
   kinship: yup.string().required('Preencha o parentesco'),
@@ -69,7 +69,7 @@ const Patient = () => {
     reset,
   } = useForm({
     reValidateMode: 'onSubmit',
-    defaultValues: { email: auth!.sessionEmail! },
+    defaultValues: { email: auth!.sessionEmail! || appState.patient?.email! },
     resolver: yupResolver(patientSchema),
   });
   const [birthDate, setBirthDate] = useState<Date>(new Date());
@@ -77,6 +77,7 @@ const Patient = () => {
   const toast = useToast();
 
   const onSubmitHandler = useCallback(async (data: PatientSchemaProps) => {
+    setValue('email', appState.patient?.email!);
     if (patientData!.id) {
       console.log({
         ...data,
@@ -101,8 +102,7 @@ const Patient = () => {
           type: 'danger',
         };
         toast.show(
-          `Error inesperado ao  ${
-            appState.episode.isEdition ? 'editar' : 'cadastrar'
+          `Error inesperado ao  ${appState.episode.isEdition ? 'editar' : 'cadastrar'
           } paciente. Entre em contato com nosso suporte!`,
           toastOptions
         );
@@ -120,14 +120,14 @@ const Patient = () => {
   }, []);
 
   useEffect(() => {
-    if (auth.sessionEmail) {
-      reset({ email: auth.sessionEmail });
+    if (auth.sessionEmail || appState.patient?.email) {
+      reset({ email: auth.sessionEmail || appState.patient?.email });
     }
     if (patientData?.birthDate) {
       reset({ birthDate: new Date(patientData.birthDate) });
       setValue('birthDate', new Date(patientData.birthDate));
     }
-  }, [auth.sessionEmail, patientData]);
+  }, [auth.sessionEmail, patientData, appState.patient]);
 
   const Content = useCallback(() => {
     return (
@@ -142,22 +142,15 @@ const Patient = () => {
           keyboardShouldPersistTaps='handled'
           className='w-full h-[85%]'
         >
-          <Controller
-            control={control}
-            defaultValue={auth.sessionEmail!}
+          <InputContainer
+            className='opacity-45 bg-white drop-shadow-sm'
+            keyboardType='email-address'
+            label='E-mail'
+            editable={false}
+            style={{ opacity: 0.6 }}
+            value={appState.patient?.email}
             name='email'
-            render={({ field }) => (
-              <InputContainer
-                className='opacity-45 bg-white drop-shadow-sm'
-                keyboardType='email-address'
-                label='E-mail'
-                editable={false}
-                style={{ opacity: 0.6 }}
-                onChangeText={field.onChange}
-                {...field}
-                errors={errors}
-              />
-            )}
+            errors={errors}
           />
 
           <Controller

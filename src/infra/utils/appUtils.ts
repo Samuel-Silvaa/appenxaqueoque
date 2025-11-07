@@ -130,9 +130,9 @@ export const parseSymptoms = (acuteness: number) => {
     case 2:
       return Symptom.VOMIT;
     case 3:
-      return Symptom.HYPERACUSIS;
-    case 4:
       return Symptom.SICKNESS;
+    case 4:
+      return Symptom.HYPERACUSIS;
     case 5:
       return Symptom.DIZZINESS;
     default:

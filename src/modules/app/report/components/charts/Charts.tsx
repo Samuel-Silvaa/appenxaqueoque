@@ -141,9 +141,12 @@ const ChartsPage = () => {
     ].forEach((location) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (ep.location == location) {
-          count++;
-        }
+        console.log(ep)
+
+        if (!!ep.location)
+          if (ep.location.includes(location)) {
+            count++;
+          }
       });
       locationList.push({
         value: count,
@@ -165,7 +168,7 @@ const ChartsPage = () => {
       let count = 0;
       episodes.map((ep: Episode) => {
         if (Array.isArray(ep.symptoms)) {
-          if (ep.symptoms.includes(symptom)) count++;
+          if (!!ep.symptoms.includes(symptom)) count++;
         } else if (ep.symptoms === symptom) {
           count++;
         }
@@ -212,15 +215,16 @@ const ChartsPage = () => {
     ].forEach((trigger) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (trigger?.includes(',')) {
-          Array.from(trigger.split(',')).map((t) => {
-            if (t == trigger) {
-              count++;
-            }
-          });
-        } else if (ep.triggers == trigger) {
-          count++;
-        }
+        if (!!trigger)
+          if (trigger?.includes(',')) {
+            Array.from(trigger.split(',')).map((t) => {
+              if (t == trigger) {
+                count++;
+              }
+            });
+          } else if (ep.triggers == trigger) {
+            count++;
+          }
       });
       triggersList.push({
         value: count,
@@ -270,7 +274,7 @@ const ChartsPage = () => {
       episodes
         .map(
           (ep: Episode) =>
-            ep.improvementFactor.includes(ImprovementFactor.FOOD) &&
+            !!ep.improvementFactor.includes(ImprovementFactor.FOOD) &&
             ep.foodImprovement
         )
         .filter((e) => !!e),
@@ -282,7 +286,7 @@ const ChartsPage = () => {
       episodes
         .map(
           (ep: Episode) =>
-            ep.improvementFactor.includes(ImprovementFactor.ANOTHER) &&
+            !!ep.improvementFactor.includes(ImprovementFactor.ANOTHER) &&
             ep.anotherImprovementFactor
         )
         .filter((e) => !!e),
@@ -299,7 +303,7 @@ const ChartsPage = () => {
       episodes
         .map(
           (ep: Episode) =>
-            ep.painType?.includes(PainType.ANOTHER) && ep.anotherPainType
+            !!ep.painType?.includes(PainType.ANOTHER) && ep.anotherPainType
         )
         .filter((e) => !!e),
     [episodes]
@@ -310,7 +314,7 @@ const ChartsPage = () => {
       episodes
         .map(
           (ep: Episode) =>
-            ep.triggers?.includes(Trigger.ANOTHER) && ep.anotherImpairFactor
+            !!ep.triggers?.includes(Trigger.ANOTHER) && ep.anotherImpairFactor
         )
         .filter((e) => !!e),
     [episodes]
@@ -400,19 +404,17 @@ const ChartsPage = () => {
 
       {parseImprovementFactor(report.improvementFactor) ==
         ImprovementFactor.MEDICINE && (
-        <ReportCard
-          key='medicine'
-          title='Medicamentos'
-          description={episodes
-            .filter((ep) => ep.medicine != null)
-            .map(
-              (rpt) =>
-                `${rpt.medicine} - ${rpt.medicineDosage}  ${
-                  rpt.medicineUnit || ''
-                }`
-            )}
-        />
-      )}
+          <ReportCard
+            key='medicine'
+            title='Medicamentos'
+            description={episodes
+              .filter((ep) => ep.medicine != null)
+              .map(
+                (rpt) =>
+                  `${rpt.medicine} - ${!!rpt.combinedDosage ? rpt.combinedDosage + '/' : ''}${rpt.medicineDosage}${!!rpt.medicineUnit ? rpt.medicineUnit + '' : ''} ` || ''
+              )}
+          />
+        )}
 
       {!!foodImprovement.length && (
         <ReportCard
@@ -443,6 +445,7 @@ const ChartsPage = () => {
             .map((rpt) => `${rpt.anotherImpairFactor}`)}
         />
       )}
+
 
       {!!report.periodNotes && (
         <ReportCard

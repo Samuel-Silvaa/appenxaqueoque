@@ -29,6 +29,7 @@ export interface Episode {
   location: string | string[];
   medicine: string | null;
   medicineDosage: number;
+  combinedDosage: number;
   medicineUnit: string | null;
   medicineImprovement: string | null;
   notes: string | null;
@@ -153,8 +154,8 @@ export enum Symptom {
   PHOTOSENSIBILITY = 'Sensibilidade à luz',
   NAUSEA = 'Náusea',
   VOMIT = 'Vômito',
-  SICKNESS = 'Dor de barriga',
   HYPERACUSIS = 'Sensibilidade ao barulho',
+  SICKNESS = 'Dor de barriga',
   DIZZINESS = 'Tontura',
   NONE = 'Dados insuficientes',
 }

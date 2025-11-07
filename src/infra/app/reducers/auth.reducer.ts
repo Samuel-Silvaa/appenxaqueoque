@@ -91,6 +91,7 @@ const authSlice = createSlice({
     builder.addCase(
       requestLogin.fulfilled,
       (state, action: PayloadAction<LogInResponse>) => {
+        console.log(action);
         SecureStore.setItem('token', action.payload.token);
         SecureStore.setItem('user', JSON.stringify(action.payload.user));
         if (action.payload.user)
@@ -101,13 +102,12 @@ const authSlice = createSlice({
           refreshToken: '',
           entireScreenLoading: false,
           loading: false,
-          sessionEmail: action.payload.email,
+          sessionEmail: action.meta!.arg.email,
           error: null,
         });
       }
     );
     builder.addCase(requestLogin.rejected, (state, action) => {
-      console.log('red', action);
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
