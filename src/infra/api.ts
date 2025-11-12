@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosResponse, AxiosResponseHeaders } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { navigate } from 'navigationService';
 import { useToast } from 'react-native-toast-notifications';
+import store from './app/store';
+import { signOut } from './app/reducers/auth.reducer';
 
 const api = axios.create({
   //baseURL: 'http://127.0.0.1:8080/',
@@ -21,10 +23,17 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (config) => config,
-  (error) => {
-    if (error.request?.status === 401) {
-      SecureStore.deleteItemAsync('token');
-      SecureStore.deleteItemAsync('user');
+  async (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      // Limpar token e dados do usuário do SecureStore
+      await SecureStore.deleteItemAsync('token');
+      await SecureStore.deleteItemAsync('user');
+      await SecureStore.deleteItemAsync('userId');
+
+      // Limpar estado do Redux
+      store.dispatch(signOut());
+
+      // Navegar para a tela de login
       navigate('login');
     }
     return Promise.reject(error);

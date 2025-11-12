@@ -8,11 +8,13 @@ import {
 } from 'react-native';
 import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
 import { sharedStyleSheet } from 'src/modules/auth/shared/style/stylesheet';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { differenceInDays, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { appStateSelector, authSelector } from 'src/infra/app/selectors';
+import { useCallback } from 'react';
+import { setPageTitle } from 'src/infra/app/reducers/app.reducer';
 
 const stylesheet = {
   userName:
@@ -75,11 +77,11 @@ const CountingDaysTitle = () => {
   const getDaysRange = () =>
     appState.episodes?.length > 0
       ? differenceInDays(
-          format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
-          format(new Date(appState.episodes[0].dateTime!), 'yyyy-MM-dd', {
-            locale: ptBR,
-          })
-        )
+        format(new Date(), 'yyyy-MM-dd', { locale: ptBR }),
+        format(new Date(appState.episodes[0].dateTime!), 'yyyy-MM-dd', {
+          locale: ptBR,
+        })
+      )
       : 0;
   return (
     <View className={stylesheet.countingDays.card}>
@@ -176,6 +178,16 @@ const HomePage = () => {
   const auth = useSelector(authSelector);
   const appstate = useSelector(appStateSelector);
   const isEpisodesPopulated = appstate.episodes.length;
+  const dispatch = useDispatch();
+
+
+  // Limpa o título quando a tela recebe foco
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(setPageTitle(''));
+    }, [dispatch])
+  );
+
 
   return (
     <AppPageScaffold paddingInset={isEpisodesPopulated ? 4 : 0}>

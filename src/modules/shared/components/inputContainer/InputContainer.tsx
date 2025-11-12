@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 const stylesheet = {
@@ -44,7 +44,7 @@ const InputContainer = ({
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = secureTextEntry || name.toLowerCase().includes('password');
   const shouldShowEyeIcon = isPassword && rest.editable !== false;
-  
+
   // Calculate the final secureTextEntry value
   const finalSecureTextEntry = isPassword ? !showPassword : secureTextEntry;
 
@@ -81,28 +81,72 @@ const InputContainer = ({
     </TouchableOpacity>
   );
 
+  // Check if we're being used with an external Controller
+  // External Controller passes onChangeText and value directly via props
+  const hasExternalController = !control && rest.onChangeText !== undefined;
+
   const renderInput = (fields?: ControllerRenderProps) => {
+    // Determine value: use field.value if available, otherwise use rest.value or rest.defaultValue
+    const inputValue = fields?.value !== undefined
+      ? fields.value
+      : (rest.value !== undefined ? rest.value : rest.defaultValue);
+
+    // Determine onChange handler: 
+    // 1. If fields provided (from internal Controller), use field.onChange
+    // 2. If rest.onChangeText provided (from external Controller), use it
+    // 3. Otherwise, use setValue if available
+    const handleChangeText = fields?.onChange
+      ? fields.onChange
+      : (rest.onChangeText || ((text: string) => {
+        if (setValue) {
+          setValue(name, text);
+        }
+      }));
+
     // Use regular TextInput for password fields, MaskedTextInput for others with masks
     if (mask && !isPassword) {
       return (
         <MaskedTextInput
-        {...fields}
-          onChangeText={(text, rawText) => setValue!(name, text)}
+          {...rest}
+          {...(fields || {})}
+          value={inputValue}
+          onChangeText={fields
+            ? (text: string, rawText: string) => fields.onChange(text)
+            : (text: string, rawText: string) => {
+              if (rest.onChangeText) {
+                rest.onChangeText(text);
+              } else if (setValue) {
+                setValue(name, text);
+              }
+            }}
           className={stylesheet.input}
           mask={mask}
           secureTextEntry={finalSecureTextEntry}
-          {...rest}
         />
       );
     }
 
+    // For TextInput, we need to use onChangeText, not onChange
+    // But fields from Controller has onChange, so we need to map it correctly
+    const textInputProps = fields
+      ? {
+        ...rest,
+        value: inputValue,
+        onChangeText: handleChangeText,
+        onBlur: fields.onBlur,
+        // Don't spread fields directly as it has 'onChange' which conflicts with TextInput
+      }
+      : {
+        ...rest,
+        value: inputValue,
+        onChangeText: handleChangeText,
+      };
+
     return (
       <TextInput
-      {...fields}
-        onChangeText={(text) => setValue!(name, text)}
+        {...textInputProps}
         className={stylesheet.input}
         secureTextEntry={finalSecureTextEntry}
-        {...rest}
       />
     );
   };
@@ -120,21 +164,20 @@ const InputContainer = ({
         )}
       </View>
       <View style={{ position: 'relative' }}>
-        {control && (
-        <Controller
-        shouldUnregister={false}
-        control={control}
-        name={name}
-        defaultValue={rest?.defaultValue}
-        render={({ field }) => renderInput()}>
-
-        </Controller>
-        )} 
-
-        {!control && (
+        {/* Use internal Controller only if control is provided AND we're not using external Controller */}
+        {control && !hasExternalController ? (
+          <Controller
+            shouldUnregister={false}
+            control={control}
+            name={name}
+            defaultValue={rest?.defaultValue}
+            render={({ field }) => renderInput(field)}
+          />
+        ) : (
+          /* Render input directly when using external Controller or no Controller */
           renderInput()
         )}
-        
+
         {shouldShowEyeIcon && <EyeIcon />}
       </View>
       {errors[name] && (
@@ -146,4 +189,5 @@ const InputContainer = ({
   );
 };
 
-export default InputContainer;
+// Memoize to prevent unnecessary re-renders that can cause keyboard to close
+export default memo(InputContainer);

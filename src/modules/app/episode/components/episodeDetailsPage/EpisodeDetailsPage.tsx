@@ -20,6 +20,7 @@ import {
   handleDeleteEpisode,
   handleFormChanging,
   setEpisodeIndex,
+  setPageTitle,
 } from 'src/infra/app/reducers/app.reducer';
 import { useDispatch } from 'react-redux';
 import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
@@ -52,12 +53,7 @@ const stylesheet = {
 };
 
 // --- Utils ---
-const sanitizeString = (value?: string | null): string => value?.trim() || '';
-
-const sanitizeTime = (value?: string | null): string => value || '';
-
-const formatArray = (value?: string[] | null): string =>
-  Array.isArray(value) ? value.join(' - ') : sanitizeString(value as any);
+const sanitizeString = (value?: string | null): string => value?.trim() || '---';
 
 const EpisodeDetailsPage = ({ }: {}) => {
   const navigation = useNavigation();
@@ -103,9 +99,11 @@ const EpisodeDetailsPage = ({ }: {}) => {
     return require('src/assets/acuteness-light.png');
   };
 
+  console.log(episode)
   useEffect(() => {
     setEpisode(route.params!.episode as Episode);
   }, []);
+
   const fullDetails = [
     {
       icon: require('src/assets/timer.png'),
@@ -147,7 +145,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
     },
     {
       icon: require('src/assets/chart-trigger.png'),
-      title: 'Gatilhos',
+      title: 'Fatores desencadeantes',
       desc: Array.isArray(episode.triggers)
         ? !!episode.triggers.length ? episode.triggers : null
         : sanitizeString(episode.triggers?.replaceAll(',', '\n')),
@@ -196,35 +194,36 @@ const EpisodeDetailsPage = ({ }: {}) => {
         if (episode.painType == PainType.ANOTHER) {
           value = value + sanitizeString(episode.anotherPainType);
         }
-        return value;
+        return value + '\n';
       case Trigger:
-        if (episode.triggers.includes(Trigger.ANOTHER)) {
-          value = value + sanitizeString(episode.anotherTrigger);
-        }
-        if (episode.triggers.includes(Trigger.FOOD)) {
+
+        if (episode.triggers?.includes(Trigger.FOOD)) {
           value = value + sanitizeString(episode.foodImpair);
+        }
+        if (episode.triggers?.includes(Trigger.ANOTHER)) {
+          value = value + sanitizeString(episode.anotherTrigger);
         }
         return value;
       case ImprovementFactor:
-        if (episode.improvementFactor.includes(ImprovementFactor.ANOTHER)) {
-          value = value + sanitizeString(episode.anotherImprovementFactor);
-        }
-        if (episode.improvementFactor.includes(ImprovementFactor.FOOD)) {
+        if (episode.improvementFactor?.includes(ImprovementFactor.FOOD)) {
           value = value + sanitizeString(episode.foodImprovement);
         }
-        if (episode.improvementFactor.includes(ImprovementFactor.MEDICINE)) {
+        if (episode.improvementFactor?.includes(ImprovementFactor.MEDICINE)) {
           value =
             value +
             sanitizeString(
               `${episode.medicine} - ${!!episode.combinedDosage ? episode.combinedDosage + '/' : ''}${episode.medicineDosage}${!!episode.medicineUnit ? episode.medicineUnit + '' : ''}`
             );
         }
-        return value;
-      case ImpairFactor:
-        if (episode.impairFactor.includes(ImpairFactor.ANOTHER)) {
-          value = value + sanitizeString(episode.anotherImpairFactor);
+        if (episode.improvementFactor?.includes(ImprovementFactor.ANOTHER)) {
+          value = value + '\n' + sanitizeString(episode.anotherImprovementFactor);
         }
         return value;
+      case ImpairFactor:
+        if (episode.impairFactor?.includes(ImpairFactor.ANOTHER)) {
+          value = value + sanitizeString(episode.anotherImpairFactor);
+        }
+        return value + '\n';
     }
   };
 
@@ -257,6 +256,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
               dispatch(
                 handleFormChanging({
                   ...episode,
+                  period: episode.period === 1,
                   isEdition: true,
                   dates: {
                     [format(
@@ -295,7 +295,10 @@ const EpisodeDetailsPage = ({ }: {}) => {
           </View>
 
           <CloseButton
-            onClose={() => navigation.navigate('Home' as never)}
+            onClose={() => {
+              dispatch(setPageTitle(''));
+              navigation.navigate('Home' as never)
+            }}
           />
         </View>
 

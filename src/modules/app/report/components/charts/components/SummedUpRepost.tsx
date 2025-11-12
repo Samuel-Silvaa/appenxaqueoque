@@ -1,4 +1,4 @@
-import { format, differenceInDays } from 'date-fns';
+import { format, differenceInDays, addHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Image, Text, View } from 'react-native';
 import { Report } from 'src/infra/@types/app.types';
@@ -24,7 +24,6 @@ const stylesheet = {
 export const SummedUpReport = (data: { report: Report }) => {
   const { report } = data;
 
-  console.log(report);
   return (
     <View className={stylesheet.wrapper}>
       <View className={stylesheet.header}>
@@ -34,7 +33,7 @@ export const SummedUpReport = (data: { report: Report }) => {
         ></View>
         <Text className='font-semibold text-black dark:text-d-text-dark'>
           De {format(new Date(report.startDate), 'dd MMM', { locale: ptBR })} à{' '}
-          {format(new Date(report.endDate), 'dd MMM', { locale: ptBR })}
+          {format(new Date(addHours(report.endDate, 3)), 'dd MMM', { locale: ptBR })}
         </Text>
         <View>
           <Text className='font-semibold text-black dark:text-d-text-dark'>

@@ -9,10 +9,10 @@ const Help = () => {
 
   useEffect(() => {
     setTimeout(() => {
-  dispatch(setPageTitle('Ajuda'))
+      dispatch(setPageTitle('Ajuda'))
 
     }, 200)
-  },[])
+  }, [])
 
   return (
     <AppPageScaffold >
@@ -24,7 +24,7 @@ const Help = () => {
         </Text>
         <Text className='text-sm text-dark dark:text-d-blue-title mt-8'>
           E-mail: enxaqueoque@gmail.com {'\n'}
-          Telefone: 35 99806-0109 - de seg. à sex. {'\n'}
+          Telefone: (35) 99130-7736 - de seg. à sex. {'\n'}
           das 09:00 às 17:00 horas.
         </Text>
       </View>

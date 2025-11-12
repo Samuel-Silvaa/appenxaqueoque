@@ -41,7 +41,7 @@ const ActiveRoutes = () => {
       }
     };
 
-    NativeWindStyleSheet.setColorScheme(scheme as ColorSchemeSystem);
+    // NativeWindStyleSheet.setColorScheme(scheme as ColorSchemeSystem);
 
     // Handle initial URL
     Linking.getInitialURL().then((url) => {

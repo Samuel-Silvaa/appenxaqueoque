@@ -9,7 +9,7 @@ const Terms = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch(setPageTitle('Termos'));
+      dispatch(setPageTitle('Termos de uso'));
     }, 200);
   }, []);
 
@@ -63,7 +63,7 @@ Eventuais disputas serão resolvidas no foro de Pouso Alegre/MG.
  
 7. Como entrar em contato conosco
  
-Para dúvidas ou solicitações relacionadas a esses Termos de Uso, por gentileza entrar em contato conosco pelo e-mail enxaqueoque@gmail.com ou pelo telefone (35) 99806-0109.`}
+Para dúvidas ou solicitações relacionadas a esses Termos de Uso, por gentileza entrar em contato conosco pelo e-mail enxaqueoque@gmail.com ou pelo telefone (35) 99130-7736.`}
         </Text>
       </ScrollView>
     </AppPageScaffold>

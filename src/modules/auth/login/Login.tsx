@@ -114,7 +114,7 @@ const Login = ({ navigation }: any) => {
           textStyle={{
             textDecorationLine: 'none',
             fontSize: 12,
-            color: Appearance.getColorScheme() == 'dark' ? '#9DA3A9' : '#2E3E4B',
+            color: Appearance.getColorScheme() == 'light' ? '#9DA3A9' : '#2E3E4B',
           }}
         /> */}
         <View></View>

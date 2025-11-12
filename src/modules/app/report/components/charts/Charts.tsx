@@ -124,25 +124,9 @@ const ChartsPage = () => {
       label: Location;
       frontColor: string;
     }> = [];
-    [
-      Location.FRONTALRIGHT,
-      Location.FRONTALLEFT,
-      Location.FRONTALBILATERAL,
-      Location.PARIETALRIGHT,
-      Location.PARIETALLEFT,
-      Location.PARIETALBILATERAL,
-      Location.TEMPLERIGHT,
-      Location.TEMPLELEFT,
-      Location.TEMPLEBILATERAL,
-      Location.BACKSIDE,
-      Location.OCCIPITALRIGHT,
-      Location.OCCIPITALLEFT,
-      Location.OCCIPITALBILATERAL,
-    ].forEach((location) => {
+    Object.values(Location).forEach((location) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        console.log(ep)
-
         if (!!ep.location)
           if (ep.location.includes(location)) {
             count++;
@@ -167,11 +151,10 @@ const ChartsPage = () => {
     Object.values(Symptom).forEach((symptom) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (Array.isArray(ep.symptoms)) {
-          if (!!ep.symptoms.includes(symptom)) count++;
-        } else if (ep.symptoms === symptom) {
-          count++;
-        }
+        if (!!ep.symptoms)
+          if (ep.symptoms.includes(symptom)) {
+            count++;
+          }
       });
       symptomsList.push({
         value: count,
@@ -206,23 +189,11 @@ const ChartsPage = () => {
       label: Trigger;
       frontColor: string;
     }> = [];
-    [
-      Trigger.JAGGEDSLEEP,
-      Trigger.EMOTIONAL,
-      Trigger.VISUALEFFORT,
-      Trigger.FASTING,
-      Trigger.FOOD,
-    ].forEach((trigger) => {
+    Object.values(Trigger).forEach((trigger) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (!!trigger)
-          if (trigger?.includes(',')) {
-            Array.from(trigger.split(',')).map((t) => {
-              if (t == trigger) {
-                count++;
-              }
-            });
-          } else if (ep.triggers == trigger) {
+        if (!!ep.triggers)
+          if (ep.triggers.includes(trigger)) {
             count++;
           }
       });

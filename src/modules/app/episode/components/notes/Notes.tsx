@@ -61,8 +61,7 @@ const Notes = () => {
         type: 'danger',
       };
       toast.show(
-        `Error inesperado ao  ${
-          appState.episode.isEdition ? 'editar' : 'cadastrar'
+        `Error inesperado ao  ${appState.episode.isEdition ? 'editar' : 'cadastrar'
         } episódio. Entre em contato com nosso suporte!`,
         toastOptions
       );

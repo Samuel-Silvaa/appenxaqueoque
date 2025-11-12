@@ -55,7 +55,6 @@ const Patient = () => {
     reset,
   } = useForm({
     reValidateMode: 'onSubmit',
-    mode: 'onSubmit',
     defaultValues: { email: route.params?.email },
     resolver: yupResolver(patientSchema),
   });
@@ -83,7 +82,7 @@ const Patient = () => {
 
   useEffect(() => {
     setValue('birthDate', birthDate);
-  }, [birthDate]);
+  }, [birthDate, setValue]);
 
   const Content = () => {
     return (
@@ -95,7 +94,7 @@ const Patient = () => {
 
         <ScrollView
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps='never'
+          keyboardShouldPersistTaps='handled'
           className='w-full h-[76%]'
         >
           <InputContainer
@@ -117,7 +116,7 @@ const Patient = () => {
                 keyboardType='default'
                 label='Nome da criança'
                 onChangeText={field.onChange}
-                {...field}
+                value={field.value}
                 name='name'
                 errors={errors}
               />

@@ -124,19 +124,17 @@ const Range = ({
             }}
             className={
               sharedEpisodeStyleSheet.topic.item +
-              `${
-                currentStep == index
-                  ? ' bg-purple-dark-primary '
-                  : ' bg-purple-dark-secondary'
+              `${currentStep == index
+                ? ' bg-purple-dark-primary '
+                : ' bg-purple-dark-secondary'
               }`
             }
           >
             <Text
-              className={`${
-                currentStep == index
-                  ? 'text-[#fff]'
-                  : 'text-black dark:text-d-text-gray '
-              }`}
+              className={`${currentStep == index
+                ? 'text-[#fff]'
+                : 'text-black dark:text-d-text-gray '
+                }`}
             >
               {item.title}
             </Text>
@@ -280,9 +278,10 @@ const ReportDateRangeModal = ({
               className={stylesheet.arrowdown}
               resizeMode='contain'
               source={
-                colorScheme == 'dark'
-                  ? require('src/assets/arrowdown.png')
-                  : require('src/assets/arrowdown.png')
+                require('src/assets/arrowdown.png')
+                // colorScheme == 'light'
+                //   ? require('src/assets/arrowdown.png')
+                //   : require('src/assets/arrowdown.png')
               }
             ></Image>
           </TouchableOpacity>
@@ -304,7 +303,7 @@ const ReportDateRangeModal = ({
             control={control}
             errors={errors}
             value={format(getValues('startDate'), 'dd/MM/yyyy')}
-            setValue={() => {}}
+            setValue={() => { }}
             onPressOut={() => {
               showDatePicker();
               setInputSelect('startDate');
@@ -318,7 +317,7 @@ const ReportDateRangeModal = ({
             errors={errors}
             editable={true}
             value={format(getValues('endDate'), 'dd/MM/yyyy')}
-            setValue={() => {}}
+            setValue={() => { }}
             onPressOut={() => {
               showDatePicker();
               setInputSelect('endDate');

@@ -1,7 +1,7 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { useCallback, useEffect } from "react";
-import { Animated, TouchableOpacity,  } from 'react-native';
+import { Animated, TouchableOpacity, } from 'react-native';
 import { Image, Text, View } from 'react-native';
 import { Appearance } from 'react-native';
 import { useSelector } from "react-redux";
@@ -21,7 +21,7 @@ const AppHeader = ({
   route,
 }: BottomTabHeaderProps | NativeStackHeaderProps | any) => {
   const appState = useSelector(appStateSelector);
-    const { setColorScheme } = useColorScheme();
+  const { setColorScheme } = useColorScheme();
 
   const toggleAppColorScheme = useCallback(() => {
 
@@ -32,11 +32,11 @@ const AppHeader = ({
       setColorScheme('light')
 
     }
-  }, [] );
+  }, []);
 
   useEffect(() => {
     setColorScheme('light');
-  },[])
+  }, [])
 
   return (
     <View
@@ -45,12 +45,12 @@ const AppHeader = ({
         backgroundColor: 'transparent'
       }}
     >
-      {(navigation.canGoBack()) ?   (
+      {(navigation.canGoBack()) ? (
         <TouchableOpacity
           className={stylesheet.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           onPress={() => {
-              navigation.goBack()
+            navigation.goBack()
           }}
         >
           <Image resizeMode="contain" className="w-1/7 h-7 " source={require('src/assets/arrowback.png')} />
@@ -58,21 +58,20 @@ const AppHeader = ({
       ) : (
         <View className="w-1/6 h-7 "></View>
       )}
-        {appState.pageTitle && (
-        <Animated.View 
+      {appState.pageTitle && (
+        <Animated.View
         >
           <Text
-          className={`text-2xl ${
-            Appearance.getColorScheme() == 'light'
-              ? 'text-black '
-              : 'text-d-blue-title'
-          } font-extrabold text-center self-center align-centerflex-1`}
-        >
-          {appState.pageTitle}
-        </Text>
+            className={`text-2xl ${Appearance.getColorScheme() == 'light'
+                ? 'text-black '
+                : 'text-d-blue-title'
+              } font-extrabold text-center self-center align-centerflex-1`}
+          >
+            {appState.pageTitle}
+          </Text>
         </Animated.View>
       )}
-      
+
       <TouchableOpacity
         className={stylesheet.themeButton}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}

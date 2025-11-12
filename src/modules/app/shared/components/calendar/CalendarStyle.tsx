@@ -2,7 +2,7 @@ import { Dimensions, StyleProp, ViewStyle, Appearance } from 'react-native';
 import { Theme } from 'react-native-calendars/src/types';
 
 export const getCalendarTheme = (): Theme => {
-  const isDark = Appearance.getColorScheme() === 'dark';
+  //const isDark = Appearance.getColorScheme() === 'light';
 
   return {
     dotStyle: {
@@ -12,16 +12,34 @@ export const getCalendarTheme = (): Theme => {
       borderRadius: 4.5,
     },
     textDayStyle: { columnGap: 20 },
-    backgroundColor: isDark ? '#373D59' : '#ffffff',
-    calendarBackground: isDark ? '#373D59' : '#ffffff',
-    textSectionTitleColor: isDark ? '#9DA3A9' : '#b6c1cd',
+    backgroundColor: '#ffffff',
+    calendarBackground: '#ffffff',
+    textSectionTitleColor: '#b6c1cd',
     selectedDayBackgroundColor: '#00adf5',
     selectedDayTextColor: '#ffffff',
     todayTextColor: '#00adf5',
     textDayFontWeight: '400',
-    dayTextColor: isDark ? '#9DA3A9' : '#2d4150',
-    textDisabledColor: isDark ? '#6E8DBB' : '#9fa3a6',
+    dayTextColor: '#2d4150',
+    textDisabledColor: '#9fa3a6',
   };
+  // return {
+  //   dotStyle: {
+  //     width: '9px',
+  //     height: '9px',
+  //     transform: 'translateY(8px)',
+  //     borderRadius: 4.5,
+  //   },
+  //   textDayStyle: { columnGap: 20 },
+  //   backgroundColor: isDark ? '#373D59' : '#ffffff',
+  //   calendarBackground: isDark ? '#373D59' : '#ffffff',
+  //   textSectionTitleColor: isDark ? '#9DA3A9' : '#b6c1cd',
+  //   selectedDayBackgroundColor: '#00adf5',
+  //   selectedDayTextColor: '#ffffff',
+  //   todayTextColor: '#00adf5',
+  //   textDayFontWeight: '400',
+  //   dayTextColor: isDark ? '#9DA3A9' : '#2d4150',
+  //   textDisabledColor: isDark ? '#6E8DBB' : '#9fa3a6',
+  // };
 };
 
 export const CalendarTheme: Theme = getCalendarTheme();

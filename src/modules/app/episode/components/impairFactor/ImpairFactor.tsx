@@ -50,10 +50,10 @@ const ImpairFactor = () => {
       const currentImpairFactor = Array.isArray(appState.episode.impairFactor)
         ? appState.episode.impairFactor
         : appState.episode.impairFactor
-        ? appState.episode.impairFactor
+          ? appState.episode.impairFactor
             .split(',')
             .filter((value) => value != '')
-        : [];
+          : [];
 
       if (currentImpairFactor!.includes(value)) {
         dispatch(
@@ -91,7 +91,7 @@ const ImpairFactor = () => {
                     textStyle={{
                       textDecorationLine: 'none',
                       color:
-                        Appearance.getColorScheme() == 'dark'
+                        Appearance.getColorScheme() == 'light'
                           ? '#9DA3A9'
                           : '#2E3E4B',
                       flexWrap: 'wrap',
@@ -117,8 +117,8 @@ const ImpairFactor = () => {
                 editable={
                   appState.episode!.impairFactor
                     ? appState.episode.impairFactor!.includes(
-                        ImpairFactorType.ANOTHER
-                      )
+                      ImpairFactorType.ANOTHER
+                    )
                     : false
                 }
                 setValue={setValue}
@@ -130,8 +130,8 @@ const ImpairFactor = () => {
                 className={
                   appState.episode!.impairFactor
                     ? !appState.episode!.impairFactor?.includes(
-                        ImpairFactorType.ANOTHER
-                      )
+                      ImpairFactorType.ANOTHER
+                    )
                       ? 'opacity-25' + ' bg-white drop-shadow-sm'
                       : 'opacity-100' + ' bg-white drop-shadow-sm'
                     : 'opacity-25' + ' bg-white drop-shadow-sm'

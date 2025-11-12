@@ -4,7 +4,6 @@
 module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   important: true,
-  darkMode: 'media',
   theme: {
     extend: {
       blur: {

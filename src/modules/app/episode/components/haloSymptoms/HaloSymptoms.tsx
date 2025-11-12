@@ -13,25 +13,25 @@ const data: {
   value: string;
   img?: ImageSourcePropType;
 }[] = [
-  {
-    label:
-      'Alterações visuais - A criança enxerga linhas ou manchas brilhantes antes ou durante os episódios de dor.',
-    img: require('src/assets/halo.png'),
-    value: HaloSymptom.VISUAL_DISTORTIONS,
-  },
-  {
-    label:
-      'Formigamento - A criança pode sentir dormência nos braços, na face ou na língua.',
-    img: require('src/assets/formigamento.png'),
-    value: HaloSymptom.TINGLING,
-  },
-  {
-    label:
-      'Alterações na fala - A criança pode emitir sons incompreensíveis ou ter dificuldade em pronunciar algumas palavras.',
-    img: require('src/assets/fala.png'),
-    value: HaloSymptom.SPEECH_DISTORTIONS,
-  },
-];
+    {
+      label:
+        'Alterações visuais - A criança enxerga linhas ou manchas brilhantes antes ou durante os episódios de dor.',
+      img: require('src/assets/halo.png'),
+      value: HaloSymptom.VISUAL_DISTORTIONS,
+    },
+    {
+      label:
+        'Formigamento - A criança pode sentir dormência nos braços, na face ou na língua.',
+      img: require('src/assets/formigamento.png'),
+      value: HaloSymptom.TINGLING,
+    },
+    {
+      label:
+        'Alterações na fala - A criança pode emitir sons incompreensíveis ou ter dificuldade em pronunciar algumas palavras.',
+      img: require('src/assets/fala.png'),
+      value: HaloSymptom.SPEECH_DISTORTIONS,
+    },
+  ];
 
 const HaloSymptoms = () => {
   const dispatch = useDispatch();
@@ -42,8 +42,8 @@ const HaloSymptoms = () => {
     const currentHaloSymptoms = Array.isArray(appState.episode.haloSymptoms)
       ? appState.episode.haloSymptoms
       : appState.episode.haloSymptoms
-      ? appState.episode.haloSymptoms.split(',').filter((value) => value != '')
-      : [];
+        ? appState.episode.haloSymptoms.split(',').filter((value) => value != '')
+        : [];
 
     if (currentHaloSymptoms.includes(value)) {
       dispatch(
@@ -75,7 +75,7 @@ const HaloSymptoms = () => {
                   textStyle={{
                     textDecorationLine: 'none',
                     color:
-                      Appearance.getColorScheme() == 'dark'
+                      Appearance.getColorScheme() == 'light'
                         ? '#9DA3A9'
                         : '#2E3E4B',
                     flexWrap: 'wrap',

@@ -46,7 +46,7 @@ const AuthScaffold = ({
       behavior='padding'
     >
       <StatusBar
-        style={Appearance.getColorScheme() == 'dark' ? 'light' : 'dark'}
+        style={Appearance.getColorScheme() == 'light' ? 'light' : 'dark'}
       />
 
       {children}

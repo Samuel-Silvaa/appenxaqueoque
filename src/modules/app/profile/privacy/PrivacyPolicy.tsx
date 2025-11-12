@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ScrollView, Text,  } from 'react-native';
+import { ScrollView, Text, } from 'react-native';
 import AppPageScaffold from '../../shared/components/appPageScaffold/AppPageScaffold';
 import { useDispatch } from "react-redux";
 import { setPageTitle } from "src/infra/app/reducers/app.reducer";
@@ -9,7 +9,7 @@ const PrivacyPolicy = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch(setPageTitle('Política de privacidade'));
+      dispatch(setPageTitle('Políticas'));
     }, 200);
   }, []);
 
@@ -139,7 +139,7 @@ Essa Política de Privacidade pode mudar a qualquer momento e a utilização dos
  
 Como entrar em contato conosco 
  
-Para dúvidas ou solicitações relacionadas à privacidade de dados de crianças, os pais ou responsáveis entre em contato conosco pelo e-mailenxaqueoque@gmail.com ou pelo telefone (35) 99806-0109.
+Para dúvidas ou solicitações relacionadas à privacidade de dados de crianças, os pais ou responsáveis entre em contato conosco pelo e-mailenxaqueoque@gmail.com ou pelo telefone (35) 99130-7736.
           `}
         </Text>
       </ScrollView>

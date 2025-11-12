@@ -88,7 +88,7 @@ const TabsRoutes = () => {
   React.useEffect(() => {
     try {
       Appearance.addChangeListener((a) => {
-        setColorScheme(a.colorScheme);
+        // setColorScheme(a.colorScheme);
       });
       if (auth.user) asyncDispatch(handleFecthPatient(auth.user!.id!));
     } catch (err) {
@@ -115,15 +115,14 @@ const TabsRoutes = () => {
   };
 
   const colorSchemeApproachHex = (focused: boolean) => {
-    if (colorScheme == 'light') return focused ? '#8FD7FF' : '#262D33';
-    if (colorScheme == 'dark') return focused ? '#8FD7FF' : '#9DA3A9';
+    return focused ? '#8FD7FF' : '#262D33';
+    // if (colorScheme == 'dark') return focused ? '#8FD7FF' : '#9DA3A9';
   };
 
   const tabTextStyle = (focused: boolean) => {
-    if (colorScheme == 'light')
-      return focused ? 'text-[#8FD7FF]' : 'text-[#262D33]' + ' text-[9px]';
-    if (colorScheme == 'dark')
-      return focused ? 'text-[#8FD7FF]' : 'text-[#9DA3A9]' + ' text-[9px]';
+    return focused ? 'text-[#8FD7FF]' : 'text-[#262D33]' + ' text-[9px]';
+    // if (colorScheme == 'dark')
+    //   return focused ? 'text-[#8FD7FF]' : 'text-[#9DA3A9]' + ' text-[9px]';
   };
 
   return (
@@ -166,7 +165,8 @@ const TabsRoutes = () => {
       }}
       screenOptions={({ route }) => ({
         headerStyle: {
-          backgroundColor: colorScheme == 'light' ? '#edf1f8' : '#23263F',
+          backgroundColor: '#edf1f8',
+          // backgroundColor: colorScheme == 'light' ? '#edf1f8' : '#23263F',
         },
         headerShadowVisible: false,
         tabBarShowLabel: false,
@@ -270,7 +270,8 @@ const TabsRoutes = () => {
         tabBarBackground: () => (
           <Image
             style={{
-              backgroundColor: colorScheme == 'light' ? '#fff' : '#1F2035',
+              backgroundColor: '#fff',
+              // backgroundColor: colorScheme == 'light' ? '#fff' : '#1F2035',
               width: '95%',
               height: '100%',
               borderRadius: 50,

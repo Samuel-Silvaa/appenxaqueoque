@@ -69,6 +69,7 @@ const authSlice = createSlice({
       state.error = null;
       SecureStore.deleteItemAsync('token');
       SecureStore.deleteItemAsync('user');
+      SecureStore.deleteItemAsync('userId');
     },
     clearErrorMessage: (state) => {
       return (state = { ...state, error: null });

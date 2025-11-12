@@ -49,9 +49,10 @@ const AppPageScaffold = ({
           className={'w-full flex-grow '.concat(hasArrowBack ? ' pt-24' : '')}
           resizeMode='stretch'
           source={
-            colorScheme == 'light'
-              ? require('src/assets/appbg.png')
-              : require('src/assets/dappbg.png')
+            // colorScheme == 'light'
+            //   ? require('src/assets/appbg.png')
+            //   : require('src/assets/dappbg.png')
+            require('src/assets/appbg.png')
           }
         >
           {!disabledScroll && (

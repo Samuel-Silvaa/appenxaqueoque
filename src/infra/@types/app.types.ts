@@ -163,7 +163,7 @@ export enum Symptom {
 export enum Trigger {
   JAGGEDSLEEP = 'Sono irregular',
   EMOTIONAL = 'Fatores emocionais',
-  VISUALEFFORT = 'Esforço visual',
+  VISUALEFFORT = 'Excesso de tela',
   FASTING = 'Jejum prolongado',
   FOOD = 'Alimentação',
   ANOTHER = 'Outros',
