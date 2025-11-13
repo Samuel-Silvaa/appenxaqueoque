@@ -4,7 +4,6 @@ import {
   ImageSourcePropType,
   KeyboardAvoidingView,
   View,
-  Appearance,
 } from 'react-native';
 import { getAlignment } from 'src/modules/shared/style/SharedProcessedStyle';
 import ExPressable from '../buttons/pressable/ExPressable';
@@ -46,7 +45,8 @@ const AuthScaffold = ({
       behavior='padding'
     >
       <StatusBar
-        style={Appearance.getColorScheme() == 'light' ? 'light' : 'dark'}
+        // style={Appearance.getColorScheme() == 'light' ? 'light' : 'dark'}
+        style={'light'}
       />
 
       {children}

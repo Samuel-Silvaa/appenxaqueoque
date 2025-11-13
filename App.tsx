@@ -87,7 +87,7 @@ const ActiveRoutes = () => {
   useEffect(() => {
     if (auth.token && !auth.user) {
       toast.show(
-        'Bem vindo de volta! Finalize o cadastro do paciente para continuar.',
+        'Boas vindas! Finalize o cadastro do paciente para continuar.',
         { type: 'warning', dangerColor: 'danger', duration: 5000 }
       );
       (navigation as any).navigate('patient', { email: auth.sessionEmail });

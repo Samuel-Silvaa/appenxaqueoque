@@ -41,6 +41,127 @@ const patientSchema = yup.object<PatientSchemaProps>().shape({
   avatar: yup.string().optional(),
 });
 
+const Content = ({ control, errors, route, setValue, birthDate, setBirthDate }) => {
+  return (
+    <>
+      <Text className={sharedStyleSheet.title}>Informações da conta</Text>
+      <Text className={sharedStyleSheet.subtitle}>
+        Insira as informações da criança
+      </Text>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps='always'
+        className='w-full h-[76%]'
+      >
+        <InputContainer
+          className='opacity-45 bg-white drop-shadow-sm'
+          keyboardType='email-address'
+          label='E-mail'
+          defaultValue={route.params?.email ?? ''}
+          editable={false}
+          name='email'
+          style={{ opacity: 0.6 }}
+          value={route.params?.email}
+          errors={errors}
+        />
+        <Controller
+          control={control}
+          name='name'
+          render={({ field }) => (
+            <InputContainer
+              keyboardType='default'
+              label='Nome da criança'
+              onChangeText={field.onChange}
+              value={field.value}
+              name='name'
+              errors={errors}
+            />
+          )}
+        />
+
+        <TimeInput
+          label='Data de nascimento'
+          mode='date'
+          placeholder='Selecione a data de nascimento'
+          value={birthDate}
+          setValue={setValue}
+          name='birthDate'
+          errors={errors}
+          maximumDate={new Date()}
+        />
+
+        <SelectContainer
+          control={control}
+          label='Gênero'
+          placeholder='Selecione o sexo'
+          options={[
+            { title: 'Masculino', value: 'male' },
+            { title: 'Feminino', value: 'female' },
+          ]}
+          name='gender'
+          setValue={setValue}
+          errors={errors}
+        />
+
+        <SelectContainer
+          control={control}
+          label='Parentesco'
+          placeholder='Escolha o parentesco do responsável'
+          setValue={setValue}
+          options={[
+            { title: 'Pai', value: 'father' },
+            { title: 'Mãe', value: 'mother' },
+            { title: 'Eu', value: 'patient' },
+          ]}
+          name='kinship'
+          errors={errors}
+        />
+        <View className='flex-row justify-between items-center'>
+          <View className='w-[45%]'>
+            <Controller
+              control={control}
+              name='weight'
+              render={({ field }) => (
+                <InputContainer
+                  keyboardType='numeric'
+                  label='Peso da criança'
+                  value={field.value ?? ''}
+                  onChangeText={field.onChange}
+                  errors={errors}
+                  mask='999.9'
+                  placeholder='0.0'
+                  name='weight'
+                />
+              )}
+            />
+          </View>
+
+          <View className='w-[45%]'>
+            <Controller
+              control={control}
+              name='height'
+              render={({ field }) => (
+                <InputContainer
+                  keyboardType='numeric'
+                  label='Altura da criança'
+                  value={field.value ?? ''}
+                  onChangeText={field.onChange}
+                  errors={errors}
+                  mask='9.99'
+                  placeholder='0.00'
+                  name='height'
+                />
+              )}
+            />
+          </View>
+        </View>
+        <View className='h-[100px] w-full'></View>
+      </ScrollView>
+    </>
+  );
+};
+
 const Patient = () => {
   const dispatchAsync = useAsyncAppDispatch();
   const navigation = useNavigation();
@@ -72,7 +193,7 @@ const Patient = () => {
     if (res.meta.requestStatus == 'fulfilled') {
       (navigation as any).navigate('welcome');
     }
-  }, []);
+  }, [dispatchAsync, navigation]);
 
   useEffect(() => {
     if (route.params) {
@@ -84,126 +205,7 @@ const Patient = () => {
     setValue('birthDate', birthDate);
   }, [birthDate, setValue]);
 
-  const Content = () => {
-    return (
-      <>
-        <Text className={sharedStyleSheet.title}>Informações da conta</Text>
-        <Text className={sharedStyleSheet.subtitle}>
-          Insira as informações da criança
-        </Text>
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps='handled'
-          className='w-full h-[76%]'
-        >
-          <InputContainer
-            className='opacity-45 bg-white drop-shadow-sm'
-            keyboardType='email-address'
-            label='E-mail'
-            defaultValue={route.params?.email ?? ''}
-            editable={false}
-            name='email'
-            style={{ opacity: 0.6 }}
-            value={route.params?.email}
-            errors={errors}
-          />
-          <Controller
-            control={control}
-            name='name'
-            render={({ field }) => (
-              <InputContainer
-                keyboardType='default'
-                label='Nome da criança'
-                onChangeText={field.onChange}
-                value={field.value}
-                name='name'
-                errors={errors}
-              />
-            )}
-          />
-
-          <TimeInput
-            label='Data de nascimento'
-            mode='date'
-            placeholder='Selecione a data de nascimento'
-            value={birthDate}
-            setValue={setValue}
-            name='birthDate'
-            errors={errors}
-            maximumDate={new Date()}
-          />
-
-          <SelectContainer
-            control={control}
-            label='Gênero'
-            placeholder='Selecione o sexo'
-            options={[
-              { title: 'Masculino', value: 'male' },
-              { title: 'Feminino', value: 'female' },
-            ]}
-            name='gender'
-            setValue={setValue}
-            errors={errors}
-          />
-
-          <SelectContainer
-            control={control}
-            label='Parentesco'
-            placeholder='Escolha o parentesco do responsável'
-            setValue={setValue}
-            options={[
-              { title: 'Pai', value: 'father' },
-              { title: 'Mãe', value: 'mother' },
-              { title: 'Eu', value: 'patient' },
-            ]}
-            name='kinship'
-            errors={errors}
-          />
-          <View className='flex-row justify-between items-center'>
-            <View className='w-[45%]'>
-              <Controller
-                control={control}
-                name='weight'
-                render={({ field }) => (
-                  <InputContainer
-                    keyboardType='numeric'
-                    label='Peso da criança'
-                    value={field.value ?? ''}
-                    onChangeText={field.onChange}
-                    errors={errors}
-                    mask='999.9'
-                    placeholder='0.0'
-                    name='weight'
-                  />
-                )}
-              />
-            </View>
-
-            <View className='w-[45%]'>
-              <Controller
-                control={control}
-                name='height'
-                render={({ field }) => (
-                  <InputContainer
-                    keyboardType='numeric'
-                    label='Altura da criança'
-                    value={field.value ?? ''}
-                    onChangeText={field.onChange}
-                    errors={errors}
-                    mask='9.99'
-                    placeholder='0.00'
-                    name='height'
-                  />
-                )}
-              />
-            </View>
-          </View>
-          <View className='h-[100px] w-full'></View>
-        </ScrollView>
-      </>
-    );
-  };
 
   return (
     <AuthScaffold
@@ -211,7 +213,13 @@ const Patient = () => {
       ctaPrimaryText='Cadastrar'
       ctaPrimary={handleSubmit(onSubmitHandler)}
     >
-      <Content />
+      <Content
+        control={control}
+        errors={errors}
+        route={route}
+        setValue={setValue}
+        birthDate={birthDate}
+        setBirthDate={setBirthDate} />
     </AuthScaffold>
   );
 };

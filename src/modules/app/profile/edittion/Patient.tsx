@@ -139,7 +139,7 @@ const Patient = () => {
 
         <ScrollView
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps='handled'
+          keyboardShouldPersistTaps='always'
           className='w-full h-[85%]'
         >
           <InputContainer
