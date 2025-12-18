@@ -35,7 +35,7 @@ api.interceptors.response.use(
       store.dispatch(signOut());
 
       // Navegar para a tela de login
-      navigate('login');
+      navigate('Login');
     }
     return Promise.reject(error);
   }

@@ -104,11 +104,13 @@ const EpisodeDetailsPage = ({ }: {}) => {
   }, []);
 
   const fullDetails = [
+    // 1 - Data e horário
     {
       icon: require('src/assets/timer.png'),
       title: 'Horário do episódio',
       desc: sanitizeString(episode?.time || ''),
     },
+    // 2 - Duração da crise
     {
       icon: require('src/assets/chart-clock.png'),
       title: 'Horas de duração',
@@ -117,6 +119,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
           ? getDifferenceInHours(episode!.start, episode!.end)
           : null,
     },
+    // 3 - Localização
     {
       icon: require('src/assets/chart-header-location.png'),
       title: 'Localização',
@@ -124,17 +127,20 @@ const EpisodeDetailsPage = ({ }: {}) => {
         ? episode.location
         : sanitizeString(episode.location?.replaceAll(',', '\n')),
     },
+    // 4 - Intensidade
     {
       icon: acutenessIcon(),
       title: 'Intensidade',
       desc: sanitizeString(episode.acuteness),
     },
+    // 5 - Características da dor
     {
       icon: require('src/assets/chart-sad.png'),
       title: 'Característica da dor',
       desc: sanitizeString(episode.painType),
       type: PainType,
     },
+    // 6 - Sintomas associados
     {
       icon: require('src/assets/chart-symptoms.png'),
       title: 'Sintomas associados',
@@ -142,6 +148,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
         ? !!episode.symptoms.length ? episode.symptoms.join('\n') : null
         : sanitizeString(episode.symptoms?.replaceAll(',', '\n')),
     },
+    // 7 - Sintomas da aura
     {
       icon: require('src/assets/chart-trigger.png'),
       title: 'Fatores desencadeantes',
@@ -150,14 +157,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
         : sanitizeString(episode.triggers?.replaceAll(',', '\n')),
       type: Trigger,
     },
-    {
-      icon: require('src/assets/chart-improvement.png'),
-      title: 'Fatores de melhora',
-      desc: Array.isArray(episode.improvementFactor)
-        ? !!episode.improvementFactor.length ? episode.improvementFactor.join('\n') : null
-        : sanitizeString(episode.improvementFactor?.replaceAll(',', '\n')),
-      type: ImprovementFactor,
-    },
+    // 8 - Fatores de piora
     {
       icon: require('src/assets/chart-bad-sleep.png'),
       title: 'Fatores de piora',
@@ -166,19 +166,24 @@ const EpisodeDetailsPage = ({ }: {}) => {
         : sanitizeString(episode.impairFactor?.replaceAll(',', '\n')),
       type: ImpairFactor,
     },
+
+    // 10 - Fatores de melhora
     {
-      icon: require('src/assets/chart-header-location.png'),
-      title: 'Sintomas da aura',
-      desc: Array.isArray(episode.haloSymptoms)
-        ? !!episode.haloSymptoms.length ? episode.haloSymptoms.join('\n') : null
-        : sanitizeString(episode.haloSymptoms?.replaceAll(',', '\n')),
+      icon: require('src/assets/chart-improvement.png'),
+      title: 'Fatores de melhora',
+      desc: Array.isArray(episode.improvementFactor)
+        ? episode.improvementFactor
+        : sanitizeString(episode.improvementFactor?.replaceAll(',', '\n')),
+      type: ImprovementFactor,
     },
+    // 11 - Período menstrual
     {
       icon: require('src/assets/chart-period.png'),
       title: 'Período menstrual',
       desc: sanitizeString(episode.periodNotes),
       displayCondition: episode.period,
     },
+    // 12 - Observações
     {
       icon: require('src/assets/chart-notes.png'),
       title: 'Observações',

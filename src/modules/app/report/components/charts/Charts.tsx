@@ -119,6 +119,50 @@ const ChartsPage = () => {
     return dataList;
   }, [episodes]);
 
+  const duration = useMemo(() => {
+    const durationList: Array<{
+      value: number;
+      label: string;
+      frontColor: string;
+    }> = [
+        { label: 'Até 1h', value: 0, frontColor: episodePinColors(0) },
+        { label: '1 a 2h', value: 0, frontColor: episodePinColors(1) },
+        { label: '2 a 4h', value: 0, frontColor: episodePinColors(2) },
+        { label: 'Mais de 4h', value: 0, frontColor: episodePinColors(3) },
+      ];
+
+    episodes.forEach((ep: Episode) => {
+      if (!ep.start || !ep.end) return;
+
+      const [sh, sm] = ep.start.split(':').map(Number);
+      const [eh, em] = ep.end.split(':').map(Number);
+      if (
+        [sh, sm, eh, em].some(
+          (n) => Number.isNaN(n) || n == null || typeof n !== 'number'
+        )
+      ) {
+        return;
+      }
+
+      const startMinutes = sh * 60 + sm;
+      const endMinutes = eh * 60 + em;
+      const diff = endMinutes - startMinutes;
+      if (diff <= 0) return;
+
+      if (diff <= 60) {
+        durationList[0].value += 1;
+      } else if (diff <= 120) {
+        durationList[1].value += 1;
+      } else if (diff <= 240) {
+        durationList[2].value += 1;
+      } else {
+        durationList[3].value += 1;
+      }
+    });
+
+    return durationList;
+  }, [episodes]);
+
   const location = useMemo(() => {
     const locationList: Array<{
       value: number;
@@ -152,10 +196,11 @@ const ChartsPage = () => {
     Object.values(Symptom).forEach((symptom) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (!!ep.symptoms)
-          if (ep.symptoms?.includes(symptom)) {
-            count++;
-          }
+        if (Array.isArray(ep.symptoms)) {
+          if (!!ep.symptoms?.includes(symptom)) count++;
+        } else if (ep.symptoms === symptom) {
+          count++;
+        }
       });
       symptomsList.push({
         value: count,
@@ -184,6 +229,20 @@ const ChartsPage = () => {
     return null;
   }
 
+  const uniqueStrings = (
+    list: Array<string | null | undefined | false> | null | undefined
+  ): string[] => {
+    if (!list) return [];
+    return Array.from(
+      new Set(
+        list.filter(
+          (item): item is string =>
+            typeof item === 'string' && item.trim().length > 0
+        )
+      )
+    );
+  };
+
   const triggers = useMemo(() => {
     const triggersList: Array<{
       value: number;
@@ -208,28 +267,119 @@ const ChartsPage = () => {
     return triggersList;
   }, [episodes]);
 
-  const halo = useMemo(() => {
+  const haloSymptoms = useMemo(() => {
     const haloList: Array<{
       value: number;
       label: HaloSymptom;
       frontColor: string;
     }> = [];
-    Object.values(HaloSymptom).forEach((hal) => {
+
+    Object.values(HaloSymptom).forEach((haloSymptom) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (!!ep.haloSymptoms)
-          if (ep.haloSymptoms?.includes(hal)) {
-            count++;
-          }
+        if (Array.isArray(ep.haloSymptoms)) {
+          if (ep.haloSymptoms?.includes(haloSymptom)) count++;
+        } else if (typeof ep.haloSymptoms === 'string') {
+          if (ep.haloSymptoms.split(',')?.includes(haloSymptom)) count++;
+        }
       });
+
       haloList.push({
         value: count,
-        label: hal,
+        label: haloSymptom,
         frontColor: episodePinColors(haloList.length % colorList.length),
       });
       count = 0;
     });
+
     return haloList;
+  }, [episodes]);
+
+  const impairFactors = useMemo(() => {
+    const impairList: Array<{
+      value: number;
+      label: ImpairFactor;
+      frontColor: string;
+    }> = [];
+
+    Object.values(ImpairFactor).forEach((factor) => {
+      let count = 0;
+      episodes.map((ep: Episode) => {
+        if (Array.isArray(ep.impairFactor)) {
+          if (ep.impairFactor?.includes(factor)) count++;
+        } else if (ep.impairFactor === factor) {
+          count++;
+        }
+      });
+
+      impairList.push({
+        value: count,
+        label: factor,
+        frontColor: episodePinColors(impairList.length % colorList.length),
+      });
+      count = 0;
+    });
+
+    return impairList;
+  }, [episodes]);
+
+  const improvementFactors = useMemo(() => {
+    const improvementList: Array<{
+      value: number;
+      label: ImprovementFactor;
+      frontColor: string;
+    }> = [];
+
+    Object.values(ImprovementFactor).forEach((factor) => {
+      let count = 0;
+      episodes.map((ep: Episode) => {
+        if (Array.isArray(ep.improvementFactor)) {
+          if (ep.improvementFactor?.includes(factor)) count++;
+        } else if (ep.improvementFactor === factor) {
+          count++;
+        }
+      });
+
+      improvementList.push({
+        value: count,
+        label: factor,
+        frontColor: episodePinColors(
+          improvementList.length % colorList.length
+        ),
+      });
+      count = 0;
+    });
+
+    return improvementList;
+  }, [episodes]);
+
+  const period = useMemo(() => {
+    const dataList: Array<{ value: number; name: string; color: string }> = [];
+
+    let yesCount = 0;
+    let noCount = 0;
+
+    episodes.forEach((ep: Episode) => {
+      if (ep.period === 'true' || ep.period === 1) {
+        yesCount++;
+      } else if (ep.period === 'false' || ep.period === 0) {
+        noCount++;
+      }
+    });
+
+    dataList.push({
+      value: yesCount,
+      name: 'Sim',
+      color: colorList[0],
+    });
+
+    dataList.push({
+      value: noCount,
+      name: 'Não',
+      color: colorList[1],
+    });
+
+    return dataList;
   }, [episodes]);
 
   const locationMaxValue = useMemo(() => {
@@ -254,6 +404,18 @@ const ChartsPage = () => {
     return greater;
   }, [symptoms]);
 
+  const durationMaxValue = useMemo(() => {
+    let greater = 0;
+
+    duration.map((item) => {
+      if (item.value > greater) {
+        greater = item.value;
+      }
+    });
+
+    return greater;
+  }, [duration]);
+
   const triggersMaxValue = useMemo(() => {
     let greater = 0;
 
@@ -264,6 +426,42 @@ const ChartsPage = () => {
     });
     return greater;
   }, [triggers]);
+
+  const haloMaxValue = useMemo(() => {
+    let greater = 0;
+
+    haloSymptoms.map((item) => {
+      if (item.value > greater) {
+        greater = item.value;
+      }
+    });
+
+    return greater;
+  }, [haloSymptoms]);
+
+  const impairMaxValue = useMemo(() => {
+    let greater = 0;
+
+    impairFactors.map((item) => {
+      if (item.value > greater) {
+        greater = item.value;
+      }
+    });
+
+    return greater;
+  }, [impairFactors]);
+
+  const improvementMaxValue = useMemo(() => {
+    let greater = 0;
+
+    improvementFactors.map((item) => {
+      if (item.value > greater) {
+        greater = item.value;
+      }
+    });
+
+    return greater;
+  }, [improvementFactors]);
 
   const foodImprovement = useMemo(
     () =>
@@ -290,7 +488,10 @@ const ChartsPage = () => {
   );
 
   const foodImpair = useMemo(
-    () => episodes.map((ep: Episode) => ep.foodImpair).filter((e) => !!e),
+    () =>
+      episodes
+        .map((ep: Episode) => ep.foodImpair)
+        .filter((e): e is string => typeof e === 'string' && !!e),
     [episodes]
   );
 
@@ -308,11 +509,12 @@ const ChartsPage = () => {
   const anotherImpairFactor = useMemo(
     () =>
       episodes
-        .map(
-          (ep: Episode) =>
-            !!ep.triggers?.includes(Trigger.ANOTHER) && ep.anotherImpairFactor
+        .map((ep: Episode) =>
+          ep.triggers && ep.triggers?.includes(Trigger.ANOTHER)
+            ? ep.anotherImpairFactor
+            : null
         )
-        .filter((e) => !!e),
+        .filter((e): e is string => typeof e === 'string' && !!e),
     [episodes]
   );
 
@@ -340,6 +542,18 @@ const ChartsPage = () => {
 
       {!!report && <SummedUpReport report={report} />}
 
+      {/* 1 - Data e horário */}
+      <PieChartComponent assets={time} title='Horário da crise' key='time' />
+
+      {/* 2 - Duração da crise */}
+      <BarChartComponent
+        key='duration-bar'
+        title='Duração da crise'
+        dataset={duration}
+        maxValue={durationMaxValue}
+      />
+
+      {/* 3 - Localização */}
       <BarChartComponent
         key='location-bar'
         title='Localização da dor'
@@ -347,6 +561,21 @@ const ChartsPage = () => {
         maxValue={locationMaxValue}
       />
 
+      {/* 4 - Intensidade */}
+      <PieChartComponent
+        assets={acuteness}
+        title='Intensidade da dor'
+        key='acuteness-pie'
+      />
+
+      {/* 5 - Características da dor */}
+      <PieChartComponent
+        assets={painType}
+        title='Característica da dor'
+        key='painType-pie'
+      />
+
+      {/* 6 - Sintomas associados */}
       <BarChartComponent
         key='symptoms-bar'
         title='Sintomas associados à dor'
@@ -354,48 +583,23 @@ const ChartsPage = () => {
         maxValue={symptomsMaxValue}
       />
 
-      <PieChartComponent
-        assets={acuteness}
-        title='Intensidade da dor'
-        key='acuteness-pie'
-      />
-      <PieChartComponent
-        assets={painType}
-        title='Característica da dor'
-        key='painType-pie'
+      {/* 7 - Sintomas da aura */}
+      <BarChartComponent
+        key='haloSymptoms-bar'
+        title='Sintomas da aura'
+        dataset={haloSymptoms}
+        maxValue={haloMaxValue}
       />
 
-      <PieChartComponent assets={time} title='Horário da crise' key='time' />
+      {/* 8 - Fatores de piora */}
+      <BarChartComponent
+        key='impairFactors-bar'
+        title='Fatores de piora'
+        dataset={impairFactors}
+        maxValue={impairMaxValue}
+      />
 
-
-      {!!foodImpair.length && (
-        <ReportCard
-          key='food-impair'
-          title='Alimentos que foram gatilhos para a crise'
-          description={foodImpair}
-        />
-      )}
-
-      {!!anotherImpairFactor!.length && (
-        <ReportCard
-          key='another-impair'
-          title='Outros tipos de gatilhos para a crise'
-          description={anotherImpairFactor}
-        />
-      )}
-
-
-      {parseImpairFactor(report.impairFactor) == ImpairFactor.ANOTHER && (
-        <ReportCard
-          key='impairFactor'
-          title='Fatores de melhora'
-          description={episodes
-            .filter((ep) => ep.impairFactor != null)
-            .map((rpt) => `${rpt.anotherImpairFactor}`)}
-        />
-      )}
-
-
+      {/* 9 - Fatores desencadeantes */}
       <BarChartComponent
         key='triggers-bar'
         title='Fatores desencadeantes da dor'
@@ -404,58 +608,125 @@ const ChartsPage = () => {
       />
 
 
-      {parseImprovementFactor(report.improvementFactor) ==
+      {
+        !!foodImpair.length && (
+          <ReportCard
+            key='food-impair'
+            title='Alimentos que foram gatilhos para a crise'
+            description={uniqueStrings(foodImpair)}
+          />
+        )
+      }
+
+      {
+        !!anotherImpairFactor!.length && (
+          <ReportCard
+            key='another-impair'
+            title='Outros tipos de gatilhos para a crise'
+            description={uniqueStrings(anotherImpairFactor)}
+          />
+        )
+      }
+
+      {
+        parseImpairFactor(report.impairFactor) == ImpairFactor.ANOTHER && (
+          <ReportCard
+            key='impairFactor'
+            title='Fatores de melhora'
+            description={uniqueStrings(
+              episodes
+                .filter((ep) => ep.impairFactor != null)
+                .map((rpt) => `${rpt.anotherImpairFactor}`)
+            )}
+          />
+        )
+      }
+
+
+
+      {/* 10 - Fatores de melhora */}
+      <BarChartComponent
+        key='improvementFactors-bar'
+        title='Fatores de melhora'
+        dataset={improvementFactors}
+        maxValue={improvementMaxValue}
+      />
+
+      {
+        parseImprovementFactor(report.improvementFactor) ==
         ImprovementFactor.MEDICINE && (
           <ReportCard
             key='medicine'
             title='Medicamentos'
-            description={episodes
-              .filter((ep) => ep.medicine != null)
-              .map(
-                (rpt) =>
-                  `${rpt.medicine} - ${!!rpt.combinedDosage ? rpt.combinedDosage + '/' : ''}${rpt.medicineDosage}${!!rpt.medicineUnit ? rpt.medicineUnit + '' : ''} ` || ''
-              )}
+            description={uniqueStrings(
+              episodes
+                .filter((ep) => ep.medicine != null)
+                .map(
+                  (rpt) =>
+                    `${rpt.medicine} - ${!!rpt.combinedDosage ? rpt.combinedDosage + '/' : ''
+                    }${rpt.medicineDosage}${!!rpt.medicineUnit ? rpt.medicineUnit + '' : ''
+                    } ` || ''
+                )
+            )}
           />
-        )}
+        )
+      }
 
-      {!!foodImprovement.length && (
-        <ReportCard
-          key='foodImprovement'
-          title='Alimentos que melhoraram a crise'
-          description={episodes
-            .filter((ep) => ep.foodImprovement != null)
-            .map((rpt) => `${rpt.foodImprovement}`)}
-        />
-      )}
+      {
+        !!foodImprovement.length && (
+          <ReportCard
+            key='foodImprovement'
+            title='Alimentos que melhoraram a crise'
+            description={uniqueStrings(
+              episodes
+                .filter((ep) => ep.foodImprovement != null)
+                .map((rpt) => `${rpt.foodImprovement}`)
+            )}
+          />
+        )
+      }
 
-      {!!anotherImprovementFactor.length && (
-        <ReportCard
-          key='anotherImprovement'
-          title='Alternativas que melhoraram a crise'
-          description={episodes
-            .filter((ep) => ep.anotherImprovementFactor != null)
-            .map((rpt) => `${rpt.anotherImprovementFactor}`)}
-        />
-      )}
+      {
+        !!anotherImprovementFactor.length && (
+          <ReportCard
+            key='anotherImprovement'
+            title='Alternativas que melhoraram a crise'
+            description={uniqueStrings(
+              episodes
+                .filter((ep) => ep.anotherImprovementFactor != null)
+                .map((rpt) => `${rpt.anotherImprovementFactor}`)
+            )}
+          />
+        )
+      }
 
+      {/* 11 - Período menstrual */}
+      <PieChartComponent
+        key='period-pie'
+        title='Período menstrual'
+        assets={period}
+      />
 
-      {!!report.periodNotes && (
-        <ReportCard
-          key='period-notes'
-          title='Período menstrual'
-          description={report.periodNotes}
-        />
-      )}
+      {
+        !!report.periodNotes && (
+          <ReportCard
+            key='period-notes'
+            title='Período menstrual'
+            description={report.periodNotes}
+          />
+        )
+      }
 
-
-      {!!report.notes && (
-        <ReportCard
-          key='notes'
-          title='Observações'
-          description={normalizeNotes(report.notes)}
-        />
-      )}
-
+      {/* 12 - Observações */}
+      {
+        !!report.notes && (
+          <ReportCard
+            key='notes'
+            title='Observações'
+            description={uniqueStrings(normalizeNotes(report.notes))}
+          />
+        )
+      }
 
       <PhysicianEmailModal
         isOpen={emailModalOpen}
@@ -464,7 +735,7 @@ const ChartsPage = () => {
           setEmailModalOpen(false);
         }}
       />
-    </AppPageScaffold>
+    </AppPageScaffold >
   );
 };
 
