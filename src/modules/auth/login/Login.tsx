@@ -57,7 +57,7 @@ const Login = ({ navigation }: any) => {
   });
 
   const onSubmitHandler = async (data: LoginSchema) => {
-    const res = await dispatch(requestLogin(data));
+    const res = await dispatch(requestLogin({ ...data, password: data.password.trim() }));
 
     if (
       res.meta.requestStatus === 'rejected' &&

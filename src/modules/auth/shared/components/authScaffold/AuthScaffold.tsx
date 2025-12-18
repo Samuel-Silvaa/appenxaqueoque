@@ -41,9 +41,9 @@ const AuthScaffold = ({
   return (
     <KeyboardAvoidingView
       className={`${stylesheet.view} ${getAlignment(alignment)}`}
-      keyboardVerticalOffset={100}
       enabled
-      behavior='padding'
+      keyboardVerticalOffset={40}
+      behavior='height'
     >
       <StatusBar
         style={Appearance.getColorScheme() == 'dark' ? 'light' : 'dark'}

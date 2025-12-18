@@ -29,14 +29,14 @@ const Location = () => {
   const handleSelectLocation = (location: string) => {
     try {
       const currentLocation = getCurrentLocation();
-      const isLocationSet = currentLocation.includes(location);
+      const isLocationSet = currentLocation?.includes(location);
 
       const locations = isLocationSet
         ? currentLocation.filter((l) => l !== location)
         : [...currentLocation, location];
 
       if (
-        locations.includes(ILocation.FRONTALBILATERAL) &&
+        locations?.includes(ILocation.FRONTALBILATERAL) &&
         (location === ILocation.FRONTALRIGHT ||
           location === ILocation.FRONTALLEFT)
       ) {
@@ -57,7 +57,7 @@ const Location = () => {
       }
 
       if (
-        locations.includes(ILocation.PARIETALBILATERAL) &&
+        locations?.includes(ILocation.PARIETALBILATERAL) &&
         (location === ILocation.PARIETALRIGHT ||
           location === ILocation.PARIETALLEFT)
       ) {
@@ -78,7 +78,7 @@ const Location = () => {
       }
 
       if (
-        locations.includes(ILocation.TEMPLEBILATERAL) &&
+        locations?.includes(ILocation.TEMPLEBILATERAL) &&
         (location === ILocation.TEMPLERIGHT ||
           location === ILocation.TEMPLELEFT)
       ) {
@@ -99,7 +99,7 @@ const Location = () => {
       }
 
       if (
-        locations.includes(ILocation.OCCIPITALBILATERAL) &&
+        locations?.includes(ILocation.OCCIPITALBILATERAL) &&
         (location === ILocation.OCCIPITALRIGHT ||
           location === ILocation.OCCIPITALLEFT)
       ) {
@@ -120,8 +120,8 @@ const Location = () => {
       }
 
       if (
-        locations.includes(ILocation.FRONTALLEFT) &&
-        locations.includes(ILocation.FRONTALRIGHT)
+        locations?.includes(ILocation.FRONTALLEFT) &&
+        locations?.includes(ILocation.FRONTALRIGHT)
       ) {
         const filteredLocations = locations.filter(
           (l) => l !== ILocation.FRONTALLEFT && l !== ILocation.FRONTALRIGHT
@@ -132,8 +132,8 @@ const Location = () => {
       }
 
       if (
-        locations.includes(ILocation.PARIETALLEFT) &&
-        locations.includes(ILocation.PARIETALRIGHT)
+        locations?.includes(ILocation.PARIETALLEFT) &&
+        locations?.includes(ILocation.PARIETALRIGHT)
       ) {
         const filteredLocations = locations.filter(
           (l) => l !== ILocation.PARIETALLEFT && l !== ILocation.PARIETALRIGHT
@@ -144,8 +144,8 @@ const Location = () => {
       }
 
       if (
-        locations.includes(ILocation.TEMPLERIGHT) &&
-        locations.includes(ILocation.TEMPLELEFT)
+        locations?.includes(ILocation.TEMPLERIGHT) &&
+        locations?.includes(ILocation.TEMPLELEFT)
       ) {
         const filteredLocations = locations.filter(
           (l) => l !== ILocation.TEMPLELEFT && l !== ILocation.TEMPLERIGHT
@@ -156,8 +156,8 @@ const Location = () => {
       }
 
       if (
-        locations.includes(ILocation.OCCIPITALLEFT) &&
-        locations.includes(ILocation.OCCIPITALRIGHT)
+        locations?.includes(ILocation.OCCIPITALLEFT) &&
+        locations?.includes(ILocation.OCCIPITALRIGHT)
       ) {
         const filteredLocations = locations.filter(
           (l) => l !== ILocation.OCCIPITALLEFT && l !== ILocation.OCCIPITALRIGHT
@@ -176,7 +176,7 @@ const Location = () => {
   const validateLocationSelectedAndReturnColorScheme = (
     location: string
   ): string => {
-    return getCurrentLocation().includes(location) ? selectedColor : '#f2dbc6';
+    return getCurrentLocation()?.includes(location) ? selectedColor : '#f2dbc6';
   };
 
   return (
@@ -196,9 +196,8 @@ const Location = () => {
               </Text>
 
               <Svg
-                viewBox={`-35 0 ${Dimensions.get('window').width} ${
-                  Dimensions.get('window').width
-                }`}
+                viewBox={`-35 0 ${Dimensions.get('window').width} ${Dimensions.get('window').width
+                  }`}
                 width={Dimensions.get('window').width - 80}
                 height={Dimensions.get('window').width}
                 id='Cabeça'
@@ -224,13 +223,13 @@ const Location = () => {
                       handleSelectLocation(ILocation.FRONTALLEFT)
                     }
                     fill={
-                      appState.episode.location.includes(
+                      appState.episode.location?.includes(
                         ILocation.FRONTALBILATERAL
                       )
                         ? selectedColor
                         : validateLocationSelectedAndReturnColorScheme(
-                            ILocation.FRONTALLEFT
-                          )
+                          ILocation.FRONTALLEFT
+                        )
                     }
                   />
                   <Path
@@ -239,25 +238,25 @@ const Location = () => {
                       handleSelectLocation(ILocation.FRONTALRIGHT)
                     }
                     fill={
-                      appState.episode.location.includes(
+                      appState.episode.location?.includes(
                         ILocation.FRONTALBILATERAL
                       )
                         ? selectedColor
                         : validateLocationSelectedAndReturnColorScheme(
-                            ILocation.FRONTALRIGHT
-                          )
+                          ILocation.FRONTALRIGHT
+                        )
                     }
                   />
                   <Path
                     d='M261.93,125.54c4.91-7.63,10.95-14.89,18.08-21.75-9.62-47.64-43.31-91.06-123.94-91.15v126.53c35.6.27,71.26-4.15,105.85-13.64Z'
                     fill={
-                      appState.episode.location.includes(
+                      appState.episode.location?.includes(
                         ILocation.PARIETALBILATERAL
                       )
                         ? selectedColor
                         : validateLocationSelectedAndReturnColorScheme(
-                            ILocation.PARIETALLEFT
-                          )
+                          ILocation.PARIETALLEFT
+                        )
                     }
                     onPressIn={() =>
                       handleSelectLocation(ILocation.PARIETALLEFT)
@@ -266,13 +265,13 @@ const Location = () => {
                   <Path
                     d='M283.1,136.84c0-.31.01-.63.01-.94,0-10.62-.95-21.47-3.1-32.1-7.13,6.86-13.17,14.12-18.08,21.75.69-.19,1.37-.36,2.06-.56-.69.19-1.37.37-2.06.56-15.15,23.53-19.6,50.64-12.48,80.89.48-.14.96-.28,1.43-.42-.47.14-.95.28-1.43.42,3.26,13.86,8.96,28.37,17.17,43.51,3.27-8.52,5.83-18.26,7.82-28.51,15.58,1.45,48.62-68.36,8.66-84.59Z'
                     fill={
-                      appState.episode.location.includes(
+                      appState.episode.location?.includes(
                         ILocation.TEMPLEBILATERAL
                       )
                         ? selectedColor
                         : validateLocationSelectedAndReturnColorScheme(
-                            ILocation.TEMPLELEFT
-                          )
+                          ILocation.TEMPLELEFT
+                        )
                     }
                     onPressIn={() => handleSelectLocation(ILocation.TEMPLELEFT)}
                   />
@@ -283,13 +282,13 @@ const Location = () => {
                   <Path
                     d='M156.08,139.18V12.65c-.08,0-.16,0-.25,0-75.05,0-114.3,38.42-124.53,92.58,5.8,5.82,10.88,11.93,15.22,18.32,35.63,10,72.57,15.35,109.56,15.63Z'
                     fill={
-                      appState.episode.location.includes(
+                      appState.episode.location?.includes(
                         ILocation.PARIETALBILATERAL
                       )
                         ? selectedColor
                         : validateLocationSelectedAndReturnColorScheme(
-                            ILocation.PARIETALRIGHT
-                          )
+                          ILocation.PARIETALRIGHT
+                        )
                     }
                     onPressIn={() =>
                       handleSelectLocation(ILocation.PARIETALRIGHT)
@@ -298,13 +297,13 @@ const Location = () => {
                   <Path
                     d='M61.27,206.01c.17.05.35.1.52.15,6.64-30.91.94-58.69-15.27-82.61-.27-.08-.55-.15-.83-.23.27.08.55.15.83.23-4.33-6.39-9.42-12.5-15.22-18.32-1.84,9.76-2.75,20.02-2.75,30.67,0,.31,0,.63.01.94-39.96,16.23-6.92,86.04,8.66,84.59,1.99,10.25,4.55,19.99,7.82,28.51,8.22-15.19,13.75-29.8,16.75-43.78-.17-.05-.35-.1-.52-.15Z'
                     fill={
-                      appState.episode.location.includes(
+                      appState.episode.location?.includes(
                         ILocation.TEMPLEBILATERAL
                       )
                         ? selectedColor
                         : validateLocationSelectedAndReturnColorScheme(
-                            ILocation.TEMPLERIGHT
-                          )
+                          ILocation.TEMPLERIGHT
+                        )
                     }
                     onPressIn={() =>
                       handleSelectLocation(ILocation.TEMPLERIGHT)
@@ -489,9 +488,8 @@ const Location = () => {
               </Text>
               <Svg
                 className='z-30'
-                viewBox={`-36 0 ${Dimensions.get('window').width} ${
-                  Dimensions.get('window').width
-                }`}
+                viewBox={`-36 0 ${Dimensions.get('window').width} ${Dimensions.get('window').width
+                  }`}
                 width={Dimensions.get('window').width - 80}
                 height={Dimensions.get('window').width}
                 id='Cabeça'
@@ -518,26 +516,26 @@ const Location = () => {
                 <Path
                   d='M155.95,9.74c-88.57,0-127.28,53.51-127.28,123.25,42.69,12.54,85.11,18.91,127.28,19.14V9.74Z'
                   fill={
-                    appState.episode.location.includes(
+                    appState.episode.location?.includes(
                       ILocation.PARIETALBILATERAL
                     )
                       ? selectedColor
                       : validateLocationSelectedAndReturnColorScheme(
-                          ILocation.PARIETALLEFT
-                        )
+                        ILocation.PARIETALLEFT
+                      )
                   }
                   onPressIn={() => handleSelectLocation(ILocation.PARIETALLEFT)}
                 />
                 <Path
                   d='M283.22,133.93c0-.31.01-.63.01-.94,0-58.24-28.45-123.25-127.28-123.25v142.39c42.69.23,85.11-5.83,127.27-18.2Z'
                   fill={
-                    appState.episode.location.includes(
+                    appState.episode.location?.includes(
                       ILocation.PARIETALBILATERAL
                     )
                       ? selectedColor
                       : validateLocationSelectedAndReturnColorScheme(
-                          ILocation.PARIETALRIGHT
-                        )
+                        ILocation.PARIETALRIGHT
+                      )
                   }
                   onPressIn={() =>
                     handleSelectLocation(ILocation.PARIETALRIGHT)
@@ -546,13 +544,13 @@ const Location = () => {
                 <Path
                   d='M155.95,152.14h0c-42.17-.24-84.6-6.62-127.28-19.16,0,.31,0,.63.01.94-39.96,16.23-6.92,86.04,8.66,84.59,4.16,21.41,10.77,40.62,21.22,51.07.39.39.77.77,1.16,1.16,28.78,6.14,62.55,9.47,96.24,9.84v-128.44Z'
                   fill={
-                    appState.episode.location.includes(
+                    appState.episode.location?.includes(
                       ILocation.OCCIPITALBILATERAL
                     )
                       ? selectedColor
                       : validateLocationSelectedAndReturnColorScheme(
-                          ILocation.OCCIPITALLEFT
-                        )
+                        ILocation.OCCIPITALLEFT
+                      )
                   }
                   onPressIn={() =>
                     handleSelectLocation(ILocation.OCCIPITALLEFT)
@@ -568,13 +566,13 @@ const Location = () => {
                 <Path
                   d='M283.22,133.93c-42.16,12.37-84.58,18.44-127.27,18.2h0v128.46c33,.37,65.9-2.1,93.91-7.51,1.16-1.16,2.32-2.33,3.49-3.49,10.45-10.45,17.06-29.66,21.22-51.07,15.58,1.45,48.62-68.36,8.66-84.59Z'
                   fill={
-                    appState.episode.location.includes(
+                    appState.episode.location?.includes(
                       ILocation.OCCIPITALBILATERAL
                     )
                       ? selectedColor
                       : validateLocationSelectedAndReturnColorScheme(
-                          ILocation.OCCIPITALRIGHT
-                        )
+                        ILocation.OCCIPITALRIGHT
+                      )
                   }
                   onPressIn={() =>
                     handleSelectLocation(ILocation.OCCIPITALRIGHT)

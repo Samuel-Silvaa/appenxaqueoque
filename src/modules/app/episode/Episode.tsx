@@ -31,6 +31,7 @@ import Period from './components/period/Period';
 import Notes from './components/notes/Notes';
 import HaloSymptoms from './components/haloSymptoms/HaloSymptoms';
 import Location from './components/location/Location';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 
 const stylesheet = {
   steps: {
@@ -72,11 +73,10 @@ const Steps = () => {
           return (
             <View
               key={`step-${index}`}
-              className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${
-                appState.currentEpStep == index
-                  ? 'bg-blue-dark-secondary border border-blue-dark-primary '
-                  : 'bg-white border border-gray-opacity'
-              }`}
+              className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${appState.currentEpStep == index
+                ? 'bg-blue-dark-secondary border border-blue-dark-primary '
+                : 'bg-white border border-gray-opacity'
+                }`}
             ></View>
           );
         })}
@@ -100,6 +100,8 @@ const Topic = ({
 }: EpisodeScaffold) => {
   const appState = useSelector(appStateSelector);
   const dispatch = useDispatch();
+  const route = useRoute();
+
 
   const DATA: { id: string; title: string }[] = useMemo(
     () =>
@@ -142,21 +144,28 @@ const Topic = ({
     });
   };
 
-  useEffect(() => {
-    dispatch(setPageTitle(DATA[appState.currentEpStep].title));
-    if (episodePagesFlatListRef?.current) {
-      episodePagesFlatListRef?.current.scrollToIndex({
-        index: appState.currentEpStep,
-        animated: true,
-      });
-    }
-    if (headerStepsFlatListRef?.current) {
-      headerStepsFlatListRef?.current.scrollToIndex({
-        index: appState.currentEpStep,
-        animated: true,
-      });
-    }
-  }, [appState.currentEpStep]);
+  // Define o título quando o step muda
+
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (route.name == 'Episode') {
+        dispatch(setPageTitle(DATA[appState.currentEpStep].title));
+        if (episodePagesFlatListRef?.current) {
+          episodePagesFlatListRef?.current.scrollToIndex({
+            index: appState.currentEpStep,
+            animated: true,
+          });
+        }
+        if (headerStepsFlatListRef?.current) {
+          headerStepsFlatListRef?.current.scrollToIndex({
+            index: appState.currentEpStep,
+            animated: true,
+          });
+        }
+      }
+    }, [appState.currentEpStep])
+  );
 
   return (
     <View className={sharedEpisodeStyleSheet.topic.container}>
@@ -173,18 +182,16 @@ const Topic = ({
             }}
             className={
               sharedEpisodeStyleSheet.topic.item +
-              `${
-                appState.currentEpStep == index
-                  ? ' bg-purple-dark-primary '
-                  : ' bg-purple-dark-secondary'
+              `${appState.currentEpStep == index
+                ? ' bg-purple-dark-primary '
+                : ' bg-purple-dark-secondary'
               }`
             }
           >
             <Text
               key={`topic-text-${item.id}`}
-              className={`${
-                appState.currentEpStep == index ? 'text-[#fff]' : 'text-black '
-              }`}
+              className={`${appState.currentEpStep == index ? 'text-[#fff]' : 'text-black '
+                }`}
             >
               {item.title}
             </Text>
@@ -287,6 +294,16 @@ const EpisodePage = () => {
   useEffect(() => {
     dispatch(setLoadingState(false));
   }, []);
+
+  // Limpa o título quando a tela perde o foco (navegação para outra tela)
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        // Cleanup: limpa o título quando sair da tela Episode
+        dispatch(setPageTitle(''));
+      };
+    }, [dispatch])
+  );
 
   return (
     <View>

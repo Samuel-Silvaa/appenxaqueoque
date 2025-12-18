@@ -27,7 +27,7 @@ interface PatientSchemaProps {
 const patientSchema = yup.object<PatientSchemaProps>().shape({
   name: yup
     .string()
-    .required('Preencha seu nome')
+    .required('Preencha seu nome completo')
     .min(5, 'O Nome precisa ter no mínimo 5 letras'),
   email: yup.string().email().required('Preencha seu email').default(),
   birthDate: yup

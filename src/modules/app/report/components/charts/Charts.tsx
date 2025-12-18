@@ -4,6 +4,7 @@ import { Image, Pressable, Text, View } from 'react-native';
 import {
   Acuteness,
   Episode,
+  HaloSymptom,
   ImpairFactor,
   ImprovementFactor,
   Location,
@@ -124,27 +125,11 @@ const ChartsPage = () => {
       label: Location;
       frontColor: string;
     }> = [];
-    [
-      Location.FRONTALRIGHT,
-      Location.FRONTALLEFT,
-      Location.FRONTALBILATERAL,
-      Location.PARIETALRIGHT,
-      Location.PARIETALLEFT,
-      Location.PARIETALBILATERAL,
-      Location.TEMPLERIGHT,
-      Location.TEMPLELEFT,
-      Location.TEMPLEBILATERAL,
-      Location.BACKSIDE,
-      Location.OCCIPITALRIGHT,
-      Location.OCCIPITALLEFT,
-      Location.OCCIPITALBILATERAL,
-    ].forEach((location) => {
+    Object.values(Location).forEach((location) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        console.log(ep)
-
         if (!!ep.location)
-          if (ep.location.includes(location)) {
+          if (ep.location?.includes(location)) {
             count++;
           }
       });
@@ -167,11 +152,10 @@ const ChartsPage = () => {
     Object.values(Symptom).forEach((symptom) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (Array.isArray(ep.symptoms)) {
-          if (!!ep.symptoms.includes(symptom)) count++;
-        } else if (ep.symptoms === symptom) {
-          count++;
-        }
+        if (!!ep.symptoms)
+          if (ep.symptoms?.includes(symptom)) {
+            count++;
+          }
       });
       symptomsList.push({
         value: count,
@@ -206,23 +190,11 @@ const ChartsPage = () => {
       label: Trigger;
       frontColor: string;
     }> = [];
-    [
-      Trigger.JAGGEDSLEEP,
-      Trigger.EMOTIONAL,
-      Trigger.VISUALEFFORT,
-      Trigger.FASTING,
-      Trigger.FOOD,
-    ].forEach((trigger) => {
+    Object.values(Trigger).forEach((trigger) => {
       let count = 0;
       episodes.map((ep: Episode) => {
-        if (!!trigger)
-          if (trigger?.includes(',')) {
-            Array.from(trigger.split(',')).map((t) => {
-              if (t == trigger) {
-                count++;
-              }
-            });
-          } else if (ep.triggers == trigger) {
+        if (!!ep.triggers)
+          if (ep.triggers?.includes(trigger)) {
             count++;
           }
       });
@@ -234,6 +206,30 @@ const ChartsPage = () => {
       count = 0;
     });
     return triggersList;
+  }, [episodes]);
+
+  const halo = useMemo(() => {
+    const haloList: Array<{
+      value: number;
+      label: HaloSymptom;
+      frontColor: string;
+    }> = [];
+    Object.values(HaloSymptom).forEach((hal) => {
+      let count = 0;
+      episodes.map((ep: Episode) => {
+        if (!!ep.haloSymptoms)
+          if (ep.haloSymptoms?.includes(hal)) {
+            count++;
+          }
+      });
+      haloList.push({
+        value: count,
+        label: hal,
+        frontColor: episodePinColors(haloList.length % colorList.length),
+      });
+      count = 0;
+    });
+    return haloList;
   }, [episodes]);
 
   const locationMaxValue = useMemo(() => {
@@ -274,7 +270,7 @@ const ChartsPage = () => {
       episodes
         .map(
           (ep: Episode) =>
-            !!ep.improvementFactor.includes(ImprovementFactor.FOOD) &&
+            !!ep.improvementFactor?.includes(ImprovementFactor.FOOD) &&
             ep.foodImprovement
         )
         .filter((e) => !!e),
@@ -286,7 +282,7 @@ const ChartsPage = () => {
       episodes
         .map(
           (ep: Episode) =>
-            !!ep.improvementFactor.includes(ImprovementFactor.ANOTHER) &&
+            !!ep.improvementFactor?.includes(ImprovementFactor.ANOTHER) &&
             ep.anotherImprovementFactor
         )
         .filter((e) => !!e),
@@ -358,13 +354,6 @@ const ChartsPage = () => {
         maxValue={symptomsMaxValue}
       />
 
-      <BarChartComponent
-        key='triggers-bar'
-        title='Fatores desencadeantes da dor'
-        dataset={triggers}
-        maxValue={triggersMaxValue}
-      />
-
       <PieChartComponent
         assets={acuteness}
         title='Intensidade da dor'
@@ -377,6 +366,7 @@ const ChartsPage = () => {
       />
 
       <PieChartComponent assets={time} title='Horário da crise' key='time' />
+
 
       {!!foodImpair.length && (
         <ReportCard
@@ -394,13 +384,25 @@ const ChartsPage = () => {
         />
       )}
 
-      {!!report.notes && (
+
+      {parseImpairFactor(report.impairFactor) == ImpairFactor.ANOTHER && (
         <ReportCard
-          key='notes'
-          title='Observações'
-          description={normalizeNotes(report.notes)}
+          key='impairFactor'
+          title='Fatores de melhora'
+          description={episodes
+            .filter((ep) => ep.impairFactor != null)
+            .map((rpt) => `${rpt.anotherImpairFactor}`)}
         />
       )}
+
+
+      <BarChartComponent
+        key='triggers-bar'
+        title='Fatores desencadeantes da dor'
+        dataset={triggers}
+        maxValue={triggersMaxValue}
+      />
+
 
       {parseImprovementFactor(report.improvementFactor) ==
         ImprovementFactor.MEDICINE && (
@@ -436,16 +438,6 @@ const ChartsPage = () => {
         />
       )}
 
-      {parseImpairFactor(report.impairFactor) == ImpairFactor.ANOTHER && (
-        <ReportCard
-          key='impairFactor'
-          title='Fatores de melhora'
-          description={episodes
-            .filter((ep) => ep.impairFactor != null)
-            .map((rpt) => `${rpt.anotherImpairFactor}`)}
-        />
-      )}
-
 
       {!!report.periodNotes && (
         <ReportCard
@@ -454,6 +446,16 @@ const ChartsPage = () => {
           description={report.periodNotes}
         />
       )}
+
+
+      {!!report.notes && (
+        <ReportCard
+          key='notes'
+          title='Observações'
+          description={normalizeNotes(report.notes)}
+        />
+      )}
+
 
       <PhysicianEmailModal
         isOpen={emailModalOpen}

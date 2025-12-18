@@ -26,7 +26,6 @@ import {
   requestHandleResetPassword,
 } from 'src/infra/services/authService';
 import * as SecureStore from 'expo-secure-store';
-import { Patient } from 'src/infra/@types/app.types';
 
 // Define initial state type
 export interface AuthReducer {
@@ -74,6 +73,7 @@ const authSlice = createSlice({
       return (state = { ...state, error: null });
     },
     setWelcomeJourneyDone: (state) => {
+      SecureStore.deleteItemAsync('welcome');
       return (state = { ...state, isFirstAccess: false });
     },
     setPatient: (state, action) => {

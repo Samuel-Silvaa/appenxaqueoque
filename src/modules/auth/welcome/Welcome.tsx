@@ -1,9 +1,7 @@
 import { Image, ImageSourcePropType, Text } from 'react-native';
 import AuthScaffold from '../shared/components/authScaffold/AuthScaffold';
 import { sharedStyleSheet } from '../shared/style/stylesheet';
-import { useCallback, useState } from 'react';
-import { useAuth } from 'src/infra/auth/auth';
-import * as SecureStore from 'expo-secure-store';
+import { useState } from 'react';
 import { setWelcomeJourneyDone } from "src/infra/app/reducers/auth.reducer";
 import { useDispatch } from "react-redux";
 
@@ -18,27 +16,27 @@ const data: {
   image: ImageSourcePropType;
   effetcMessage?: string;
 }[] = [
-  {
-    title: 'Seja bem-vindo',
-    subtitle:
-      'Registre seus episódios de dor de cabeça de forma descomplicada e divertida!',
-    logo: require('src/assets/logoenxaq.png'),
-    image: require('src/assets/armchair_kid.png'),
-  },
-  {
-    subtitle:
-      ' Você poderá enviar o relatório dos episódios para o seu médico acompanhar!',
-    image: require('src/assets/group_doc_kids.png'),
-  },
-  {
-    // title: ' Seja bem vindo(a) ao',
-    title: '',
-    subtitle:
-      'Você só precisa registrar os episódios de dor quando estiver em crise.',
-    image: require('src/assets/lunar_kid.png'),
-    effetcMessage: 'Vamos começar?',
-  },
-];
+    {
+      title: 'Seja bem-vindo',
+      subtitle:
+        'Registre seus episódios de dor de cabeça de forma descomplicada e divertida!',
+      logo: require('src/assets/logoenxaq.png'),
+      image: require('src/assets/armchair_kid.png'),
+    },
+    {
+      subtitle:
+        ' Você poderá enviar o relatório dos episódios para o seu médico acompanhar!',
+      image: require('src/assets/group_doc_kids.png'),
+    },
+    {
+      // title: ' Seja bem vindo(a) ao',
+      title: '',
+      subtitle:
+        'Você só precisa registrar os episódios de dor quando estiver em crise.',
+      image: require('src/assets/lunar_kid.png'),
+      effetcMessage: 'Vamos começar?',
+    },
+  ];
 
 const Welcome = ({ navigation }) => {
   const dispatch = useDispatch();
