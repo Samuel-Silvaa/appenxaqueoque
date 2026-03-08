@@ -219,6 +219,11 @@ const ReportDateRangeModal = ({
           })
         );
       } else {
+        console.log({
+                      patientId: appState.patient!.id!,
+            startDate: format(payload.startDate, 'yyyy-MM-dd'),
+            endDate: format(payload.endDate, 'yyyy-MM-dd'),
+        })
         const res = await dispatch(
           handleCreateReport({
             patientId: appState.patient!.id!,

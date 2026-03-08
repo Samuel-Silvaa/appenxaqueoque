@@ -4,7 +4,6 @@ import HomePage from './home/HomePage';
 import { Appearance, Image, Text, View, Animated } from 'react-native';
 import EpisodePage from './episode/Episode';
 import CalendarPage from './calendar/Calendar';
-import AppHeader from '../shared/components/appHeader/AppHeader';
 import ReportStackNavigation from './report/Report';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Success from './success/Success';
@@ -21,6 +20,7 @@ import ProfileStackNavigation from './profile/ProfileStack';
 import AvatarSelection from '../auth/registration/avatar/AvatarSelection';
 import Patient from '../auth/registration/patient/Patient';
 import EpisodeDetailsPage from './episode/components/episodeDetailsPage/EpisodeDetailsPage';
+import AppHeader from '../shared/components/appHeader/AppHeader';
 
 const stylesheet = {
   calendarBtnContainer:

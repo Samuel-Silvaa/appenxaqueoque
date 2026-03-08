@@ -59,6 +59,9 @@ const sanitizeTime = (value?: string | null): string => value || '';
 const formatArray = (value?: string[] | null): string =>
   Array.isArray(value) ? value.join(' - ') : sanitizeString(value as any);
 
+const formatMultilineArray = (value?: string[] | null): string | null =>
+  Array.isArray(value) ? (value.length ? value.join('\n') : null) : null;
+
 const EpisodeDetailsPage = ({ }: {}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -124,7 +127,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
       icon: require('src/assets/chart-header-location.png'),
       title: 'Localização',
       desc: Array.isArray(episode.location)
-        ? episode.location
+        ? formatMultilineArray(episode.location)
         : sanitizeString(episode.location?.replaceAll(',', '\n')),
     },
     {
@@ -142,14 +145,14 @@ const EpisodeDetailsPage = ({ }: {}) => {
       icon: require('src/assets/chart-symptoms.png'),
       title: 'Sintomas associados',
       desc: Array.isArray(episode.symptoms)
-        ? !!episode.symptoms.length ? episode.symptoms : null
+        ? formatMultilineArray(episode.symptoms)
         : sanitizeString(episode.symptoms?.replaceAll(',', '\n')),
     },
     {
       icon: require('src/assets/chart-trigger.png'),
       title: 'Gatilhos',
       desc: Array.isArray(episode.triggers)
-        ? !!episode.triggers.length ? episode.triggers : null
+        ? formatMultilineArray(episode.triggers)
         : sanitizeString(episode.triggers?.replaceAll(',', '\n')),
       type: Trigger,
     },
@@ -157,7 +160,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
       icon: require('src/assets/chart-improvement.png'),
       title: 'Fatores de melhora',
       desc: Array.isArray(episode.improvementFactor)
-        ? episode.improvementFactor
+        ? formatMultilineArray(episode.improvementFactor)
         : sanitizeString(episode.improvementFactor?.replaceAll(',', '\n')),
       type: ImprovementFactor,
     },
@@ -165,7 +168,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
       icon: require('src/assets/chart-bad-sleep.png'),
       title: 'Fatores de piora',
       desc: Array.isArray(episode.impairFactor)
-        ? episode.impairFactor
+        ? formatMultilineArray(episode.impairFactor)
         : sanitizeString(episode.impairFactor?.replaceAll(',', '\n')),
       type: ImpairFactor,
     },
@@ -173,7 +176,7 @@ const EpisodeDetailsPage = ({ }: {}) => {
       icon: require('src/assets/chart-header-location.png'),
       title: 'Sintomas da aura',
       desc: Array.isArray(episode.haloSymptoms)
-        ? !!episode.haloSymptoms.length ? episode.haloSymptoms : null
+        ? formatMultilineArray(episode.haloSymptoms)
         : sanitizeString(episode.haloSymptoms?.replaceAll(',', '\n')),
     },
     {
