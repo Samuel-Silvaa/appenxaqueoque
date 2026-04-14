@@ -72,11 +72,10 @@ const Steps = () => {
           return (
             <View
               key={`step-${index}`}
-              className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${
-                appState.currentEpStep == index
+              className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${appState.currentEpStep == index
                   ? 'bg-blue-dark-secondary border border-blue-dark-primary '
                   : 'bg-white border border-gray-opacity'
-              }`}
+                }`}
             ></View>
           );
         })}
@@ -173,18 +172,16 @@ const Topic = ({
             }}
             className={
               sharedEpisodeStyleSheet.topic.item +
-              `${
-                appState.currentEpStep == index
-                  ? ' bg-purple-dark-primary '
-                  : ' bg-purple-dark-secondary'
+              `${appState.currentEpStep == index
+                ? ' bg-purple-dark-primary '
+                : ' bg-purple-dark-secondary'
               }`
             }
           >
             <Text
               key={`topic-text-${item.id}`}
-              className={`${
-                appState.currentEpStep == index ? 'text-[#fff]' : 'text-black '
-              }`}
+              className={`${appState.currentEpStep == index ? 'text-[#fff]' : 'text-black '
+                }`}
             >
               {item.title}
             </Text>

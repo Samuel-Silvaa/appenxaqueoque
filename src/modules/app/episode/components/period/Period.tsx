@@ -39,16 +39,16 @@ const Period = () => {
     formState: { errors },
     setValue,
     reset
-  } = useForm({ resolver: yupResolver(periodSchema) });
+  } = useForm({ resolver: yupResolver(periodSchema), defaultValues: { period: undefined } });
 
 
   return (
     <RadioButton.Group
       onValueChange={(value) => {
-        if(value == 'false') {
+        if (value == 'false') {
           dispatch(handleFormChanging({ period: value, periodNotes: null }))
-          reset({periodNotes: ''})
-        } else if (value == 'true'){
+          reset({ periodNotes: '' })
+        } else if (value == 'true') {
           dispatch(handleFormChanging({ period: value }))
         }
       }}
@@ -91,7 +91,7 @@ const Period = () => {
             numberOfLines={4}
             multiline={true}
             defaultValue={appState.episode.periodNotes!}
-            onChange={(e) => dispatch(handleFormChanging({ periodNotes: e.nativeEvent.text}))}
+            onChange={(e) => dispatch(handleFormChanging({ periodNotes: e.nativeEvent.text }))}
           ></InputContainer>
         </View>
       </View>

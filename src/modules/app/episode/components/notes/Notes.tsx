@@ -1,28 +1,28 @@
-import { useForm } from 'react-hook-form';
-import { Image, Text, View } from 'react-native';
+import { useForm } from "react-hook-form";
+import { Image, Text, View } from "react-native";
 
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
-import ExPressable from 'src/modules/auth/shared/components/buttons/pressable/ExPressable';
-import { useApp } from 'src/infra/app/app';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { appStateSelector } from 'src/infra/app/selectors';
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import InputContainer from "src/modules/shared/components/inputContainer/InputContainer";
+import ExPressable from "src/modules/auth/shared/components/buttons/pressable/ExPressable";
+import { useApp } from "src/infra/app/app";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
 import {
   handleFetchEpisodes,
   handleFormChanging,
-} from 'src/infra/app/reducers/app.reducer';
-import { useAsyncAppDispatch } from 'src/infra/app/store';
-import { ToastOptions, useToast } from 'react-native-toast-notifications';
+} from "src/infra/app/reducers/app.reducer";
+import { useAsyncAppDispatch } from "src/infra/app/store";
+import { ToastOptions, useToast } from "react-native-toast-notifications";
 
 const stylesheet = {
-  wrapper: 'flex-col w-full items-center justify-between relative',
-  title: 'font-semibold text-black my-2  mb-10 mx-auto text-lg',
-  label: 'text-md font-semibold text-black self-start mt-14 pl-4 mb-4',
+  wrapper: "flex-col w-full items-center justify-between relative",
+  title: "font-semibold text-black my-2  mb-10 mx-auto text-lg",
+  label: "text-md font-semibold text-black self-start mt-14 pl-4 mb-4",
   notesWrapper:
-    'flex-row w-full min-h-[140px] max-h-[150px] p-2 pt-0 bg-blue-four rounded-[28px] mt-1 mb-4 relative',
-  notesInput: 'bg-white w-full p-4 h-[95%]',
+    "flex-row w-full min-h-[140px] max-h-[150px] p-2 pt-0 bg-blue-four rounded-[28px] mt-1 mb-4 relative",
+  notesInput: "bg-white w-full p-4 h-[95%]",
 };
 
 interface NotesSchema {
@@ -47,35 +47,37 @@ const Notes = () => {
   } = useForm({ resolver: yupResolver(notesSchema) });
 
   const handleSubmit = async () => {
-    const res = await submitEpisode();
+    try {
+      const res = await submitEpisode();
 
-    if (res.id) {
-      asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
-      navigation.setOptions(res);
-      navigation.navigate('Success' as never);
-    }
+      // false = validation/API failure, toast already shown in submitEpisode
+      if (res === false || !res) {
+        return;
+      }
 
-    if (res.meta.requestStatus == 'rejected') {
+      if (res.id) {
+        asyncDispatch(handleFetchEpisodes(appState.patient!.id!));
+        navigation.navigate("Success" as never);
+        return;
+      }
+
       toast.hideAll();
-      const toastOptions: ToastOptions = {
-        type: 'danger',
-      };
       toast.show(
-        `Error inesperado ao  ${
-          appState.episode.isEdition ? 'editar' : 'cadastrar'
-        } episódio. Entre em contato com nosso suporte!`,
-        toastOptions
+        `Erro inesperado ao ${appState.episode.isEdition ? "editar" : "cadastrar"} episódio. Entre em contato com nosso suporte!`,
+        { type: "danger" },
       );
-      return;
+    } catch (err) {
+      console.log('[handleSubmit] error:', err);
+      toast.show('Erro inesperado. Tente novamente.', { type: 'danger' });
     }
   };
 
   return (
     <View className={stylesheet.wrapper}>
       <Image
-        className='absolute top-[20px] right-[-20px] w-[148px] h-[148px] z-40'
-        resizeMode='contain'
-        source={require('src/assets/boy_magnifier.png')}
+        className="absolute top-[20px] right-[-20px] w-[148px] h-[148px] z-40"
+        resizeMode="contain"
+        source={require("src/assets/boy_magnifier.png")}
       ></Image>
       <Text className={stylesheet.title}>Estamos quase lá</Text>
 
@@ -83,9 +85,9 @@ const Notes = () => {
 
       <View className={stylesheet.notesWrapper}>
         <InputContainer
-          textAlignVertical='top'
+          textAlignVertical="top"
           className={stylesheet.notesInput}
-          name='notes'
+          name="notes"
           setValue={setValue}
           control={control}
           errors={errors}
@@ -100,8 +102,8 @@ const Notes = () => {
 
       <ExPressable
         onPress={handleSubmit}
-        title='Salvar episódio'
-        className='bg-[#8FD7FF] '
+        title="Salvar episódio"
+        className="bg-[#8FD7FF] "
       />
     </View>
   );

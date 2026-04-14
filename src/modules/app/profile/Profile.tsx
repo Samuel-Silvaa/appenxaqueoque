@@ -4,30 +4,31 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
-import { useDispatch, useSelector } from 'react-redux';
-import { appStateSelector, authSelector } from 'src/infra/app/selectors';
-import { signOut } from 'src/infra/app/reducers/auth.reducer';
-import { useNavigation } from '@react-navigation/native';
+} from "react-native";
+import AppPageScaffold from "../shared/components/appPageScaffold/AppPageScaffold";
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector, authSelector } from "src/infra/app/selectors";
+import { signOut } from "src/infra/app/reducers/auth.reducer";
+import { useNavigation } from "@react-navigation/native";
 import {
   handleDeleteAccount,
   setPageTitle,
-} from 'src/infra/app/reducers/app.reducer';
-import { differenceInYears } from 'date-fns';
-import CalendarEpisodeListModal from 'src/modules/shared/components/actionConfirmationModal/ActionConfirmationModal';
-import { useEffect, useState } from 'react';
-import { useAsyncAppDispatch } from 'src/infra/app/store';
-import { useToast } from 'react-native-toast-notifications';
+} from "src/infra/app/reducers/app.reducer";
+import { differenceInYears } from "date-fns";
+import CalendarEpisodeListModal from "src/modules/shared/components/actionConfirmationModal/ActionConfirmationModal";
+import ConfirmModal from "src/modules/shared/components/confirmModal/ConfirmModal";
+import { useEffect, useState } from "react";
+import { useAsyncAppDispatch } from "src/infra/app/store";
+import { useToast } from "react-native-toast-notifications";
 
 const stylesheet = {
   profile: {
-    wrapper: 'flex-col w-full items-center justify-center my-4',
+    wrapper: "flex-col w-full items-center justify-center my-4",
     infoRow:
-      'flex-row justify-between items-center w-2/4 my-1 rounded-full bg-white dark:bg-d-blue-primary p-4',
+      "flex-row justify-between items-center min-w-2/4 my-1 rounded-full bg-white dark:bg-d-blue-primary p-4 gap-x-2",
   },
   customActionButton:
-    'w-full flex-row items-center p-4 bg-transparent dark:bg-transparent',
+    "w-full flex-row items-center p-4 bg-transparent dark:bg-transparent",
 };
 
 const CustomActionButton = ({
@@ -44,8 +45,8 @@ const CustomActionButton = ({
       onPress={onPress}
       className={stylesheet.customActionButton}
     >
-      <Image className='mr-3 w-5 h-5 p-1' source={iconName}></Image>
-      <Text className='dark:text-d-text-dark'>{title}</Text>
+      <Image className="mr-3 w-5 h-5 p-1" source={iconName}></Image>
+      <Text className="dark:text-d-text-dark">{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -57,10 +58,11 @@ const ProfilePage = () => {
   const dispatchAsync = useAsyncAppDispatch();
   const navigation = useNavigation();
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const [openSignOutModal, setOpenSignOutModal] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
-    dispatch(setPageTitle('Perfil'));
+    dispatch(setPageTitle("Perfil"));
   }, []);
 
   const handleDelete = async () => {
@@ -69,12 +71,12 @@ const ProfilePage = () => {
         handleDeleteAccount({
           id: appState.patient!.id,
           emailAddress: auth.sessionEmail,
-        })
+        }),
       );
-      if (res.meta.requestStatus === 'fulfilled') {
+      if (res.meta.requestStatus === "fulfilled") {
         toast.show(
-          'É uma pena que tenha partido. Estaremos sempre disponíveis para ajudar!',
-          { type: 'success', duration: 30000 }
+          "É uma pena que tenha partido. Estaremos sempre disponíveis para ajudar!",
+          { type: "success", duration: 30000 },
         );
         dispatch(signOut());
       }
@@ -83,122 +85,122 @@ const ProfilePage = () => {
   return (
     <AppPageScaffold>
       <View className={stylesheet.profile.wrapper}>
-        <View className='relative mb-4'>
+        <View className="relative mb-4">
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('AvatarSelection', {
+              navigation.navigate("AvatarSelection", {
                 email: auth.sessionEmail,
                 isLogged: true,
               });
             }}
-            className='bg-gray-secondary dark:bg-d-blue-primary items-center justify-center rounded-full absolute inline-flex bottom-[-20px] right-0 z-50 p-0'
+            className="bg-gray-secondary dark:bg-d-blue-primary items-center justify-center rounded-full absolute inline-flex bottom-[-20px] right-0 z-50 p-0"
           >
             <Image
-              className=' w-5 h-5 m-3'
-              resizeMode='contain'
-              source={require('src/assets/camera-icon.png')}
+              className=" w-5 h-5 m-3"
+              resizeMode="contain"
+              source={require("src/assets/camera-icon.png")}
             ></Image>
           </TouchableOpacity>
           <Image
             source={
               auth.avatar
                 ? { uri: auth.avatar }
-                : require('src/assets/duck.png')
+                : require("src/assets/duck.png")
             }
-            className='w-36 h-36 rounded-full'
+            className="w-36 h-36 rounded-full"
           ></Image>
         </View>
         <Text
-          className='my-1 dark:text-d-text-white font-[600] my-2'
+          className="my-1 dark:text-d-text-white font-[600] my-2"
           style={{ fontSize: 17 }}
         >
           {appState.patient?.name}
         </Text>
         <View className={stylesheet.profile.infoRow}>
-          <Text className='dark:text-d-text-white font-[300]'>
+          <Text className="dark:text-d-text-white font-[300]">
             {differenceInYears(Date.now(), appState.patient?.birthDate!)} anos
           </Text>
-          <Text className='dark:text-d-text-white font-[300]'>
-            {appState.patient?.height!.toFixed(2)}m{' '}
+          <Text className="dark:text-d-text-white font-[300]">
+            {appState.patient?.height!.toFixed(2)}m{" "}
           </Text>
-          <Text className='dark:text-d-text-white font-[300]'>
+          <Text className="dark:text-d-text-white font-[300]">
             {appState.patient?.weight}kg
           </Text>
         </View>
       </View>
-      <View className='bg-blue-tertiary dark:bg-d-blue-primary w-full flex-grow rounded-[33px] p-4 mt-6 relative overflow-visible z-0'>
+      <View className="bg-blue-tertiary dark:bg-d-blue-primary w-full flex-grow rounded-[33px] p-4 mt-6 relative overflow-visible z-0">
         <Image
-          source={require('src/assets/ruiva-perfil.png')}
-          className='w-32 h-32 absolute top-[-50px] right-0 z-50'
-          style={{ objectFit: 'contain' }}
+          source={require("src/assets/ruiva-perfil.png")}
+          className="w-32 h-32 absolute top-[-50px] right-0 z-50"
+          style={{ objectFit: "contain" }}
         ></Image>
-        <View className='bg-white dark:bg-[#8593B8] w-full flex-grow rounded-[33px] py-4 '>
+        <View className="bg-white dark:bg-[#8593B8] w-full flex-grow rounded-[33px] py-4 ">
           <CustomActionButton
-            iconName={require('src/assets/pencil.png')}
+            iconName={require("src/assets/pencil.png")}
             onPress={() => {
               navigation.navigate(
-                'PatientLogged' as never,
-                { isEditMode: true } as never
+                "PatientLogged" as never,
+                { isEditMode: true } as never,
               );
             }}
-            title='Editar perfil'
+            title="Editar perfil"
           />
           {/* <CustomActionButton title='Notificações' /> */}
           <CustomActionButton
-            title='Políticas de privacidade'
-            iconName={require('src/assets/lock.png')}
+            title="Políticas de privacidade"
+            iconName={require("src/assets/lock.png")}
             onPress={() => {
-              navigation.navigate('PrivacyPolicy' as never);
+              navigation.navigate("PrivacyPolicy" as never);
             }}
           />
           <CustomActionButton
-            title='Termos de uso'
-            iconName={require('src/assets/diploma.png')}
+            title="Termos de uso"
+            iconName={require("src/assets/diploma.png")}
             onPress={() => {
-              navigation.navigate('Terms' as never);
+              navigation.navigate("Terms" as never);
             }}
           />
           <CustomActionButton
-            title='Segurança'
-            iconName={require('src/assets/key.png')}
+            title="Segurança"
+            iconName={require("src/assets/key.png")}
             onPress={() => {
-              navigation.navigate('ResetPassword' as never);
+              navigation.navigate("ResetPassword" as never);
             }}
           />
           <CustomActionButton
-            title='Meus relatórios'
-            iconName={require('src/assets/document.png')}
+            title="Meus relatórios"
+            iconName={require("src/assets/document.png")}
             onPress={() => {
-              navigation.navigate('Report' as never);
+              navigation.navigate("Report" as never);
             }}
           />
           <CustomActionButton
-            title='Sobre nós'
-            iconName={require('src/assets/info.png')}
+            title="Sobre nós"
+            iconName={require("src/assets/info.png")}
             onPress={() => {
-              navigation.navigate('AboutUs' as never);
+              navigation.navigate("AboutUs" as never);
             }}
           />
           {/* <CustomActionButton title='Contas vinculadas' /> */}
           <CustomActionButton
-            title='Ajuda'
-            iconName={require('src/assets/interrogation.png')}
+            title="Ajuda"
+            iconName={require("src/assets/interrogation.png")}
             onPress={() => {
-              navigation.navigate('Help' as never);
+              navigation.navigate("Help" as never);
             }}
           />
           <CustomActionButton
-            title='Deletar conta'
-            iconName={require('src/assets/user.png')}
+            title="Deletar conta"
+            iconName={require("src/assets/user.png")}
             onPress={() => {
               setOpenConfirmationModal(true);
             }}
           />
           <CustomActionButton
-            title='Sair'
-            iconName={require('src/assets/out.png')}
+            title="Sair"
+            iconName={require("src/assets/out.png")}
             onPress={() => {
-              dispatch(signOut());
+              setOpenSignOutModal(true);
             }}
           />
 
@@ -215,30 +217,43 @@ const ProfilePage = () => {
               }}
             />
           )}
+
+          <ConfirmModal
+            isOpen={openSignOutModal}
+            onClose={() => setOpenSignOutModal(false)}
+            title='Deseja mesmo sair?'
+            subtitle='Você será desconectado da sua conta.'
+            rejectLabel='Cancelar'
+            confirmLabel='Sair'
+            onConfirm={() => {
+              setOpenSignOutModal(false);
+              dispatch(signOut());
+            }}
+          />
         </View>
       </View>
-      <Text className='p-4 text-start text-xs text-d-text-dark dark:text-[#737E86]'>
-        Para uma melhor experiência e um ambiente agradável, leia as{' '}
+      <Text className="p-4 text-start text-xs text-d-text-dark dark:text-[#737E86]">
+        Para uma melhor experiência e um ambiente agradável, leia as{" "}
         <Text
           onPress={() => {
-            navigation.navigate('PrivacyPolicy' as never);
+            navigation.navigate("PrivacyPolicy" as never);
           }}
-          className='dark:text-[#8FD7FF] text-xs text-success'
+          className="dark:text-[#8FD7FF] text-xs text-success"
         >
           Políticas de privacidade
-        </Text>{' '}
+        </Text>{" "}
         e os
         <Text
           onPress={() => {
-            navigation.navigate('Terms' as never);
+            navigation.navigate("Terms" as never);
           }}
-          className='dark:text-[#8FD7FF] text-xs text-success'
+          className="dark:text-[#8FD7FF] text-xs text-success"
         >
-          {' '}
+          {" "}
           Termos de uso.
         </Text>
       </Text>
-      <Text className='m-auto text-xs'>Versão 1.0 - Beta - Teste aberto</Text>
+      <Text className="m-auto text-xs">Versão 1.0 - Beta - Teste aberto</Text>
     </AppPageScaffold>
   );
 };

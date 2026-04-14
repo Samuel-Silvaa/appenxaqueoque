@@ -1,7 +1,15 @@
 import axios, { AxiosError, AxiosResponse, AxiosResponseHeaders } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { navigate } from 'navigationService';
-import { useToast } from 'react-native-toast-notifications';
+import store from 'src/infra/app/store';
+import { signOut } from 'src/infra/app/reducers/auth.reducer';
+
+class SilentAuthError extends Error {
+  constructor() {
+    super('SILENT_AUTH_ERROR');
+    this.name = 'SilentAuthError';
+  }
+}
 
 const api = axios.create({
   //baseURL: 'http://127.0.0.1:8080/',
@@ -22,10 +30,14 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (config) => config,
   (error) => {
-    if (error.request?.status === 401) {
-      SecureStore.deleteItemAsync('token');
-      SecureStore.deleteItemAsync('user');
-      navigate('login');
+    const status = error.response?.status ?? error.request?.status;
+    if (status === 401 || status === 400) {
+      const token = store.getState().auth.token;
+      if (token) {
+        store.dispatch(signOut());
+        navigate('login');
+        return Promise.reject(new SilentAuthError());
+      }
     }
     return Promise.reject(error);
   }
@@ -40,6 +52,7 @@ const get = async <T>(
     const { data } = await api.get(url, { headers: headers, params: params });
     return data;
   } catch (error) {
+    if (error instanceof SilentAuthError) throw error;
     throw error;
   }
 };
@@ -49,6 +62,7 @@ const post = async (url: string, payload: object): Promise<any> => {
     const { data } = await api.post(url, payload);
     return data;
   } catch (error) {
+    if (error instanceof SilentAuthError) throw error;
     const err = error as AxiosError;
 
     // throw a clean error message if present
@@ -75,6 +89,7 @@ const put = async <T>(
     );
     return data;
   } catch (error) {
+    if (error instanceof SilentAuthError) throw error;
     const err = error as AxiosError;
 
     // throw a clean error message if present
@@ -97,6 +112,7 @@ const patch = async <T>(
     const { data } = await api.patch(url, payload, headers);
     return data;
   } catch (error) {
+    if (error instanceof SilentAuthError) throw error;
     const err = error as AxiosError;
 
     // throw a clean error message if present
@@ -115,6 +131,7 @@ const remove = async <T>(url: string, body?: object): Promise<T> => {
     const { data } = await api.delete(url, body);
     return data;
   } catch (error) {
+    if (error instanceof SilentAuthError) throw error;
     const err = error as AxiosError;
 
     // throw a clean error message if present

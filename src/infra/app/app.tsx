@@ -1,21 +1,22 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useState } from "react";
 
-import {
-  AppContextDefaultValues,
-  Episode,
-} from '../@types/app.types';
-import { ToastOptions, useToast } from 'react-native-toast-notifications';
+import { AppContextDefaultValues, Episode } from "../@types/app.types";
+import { ToastOptions, useToast } from "react-native-toast-notifications";
 import {
   requestFetchReportEpisodesRange,
   requestGeneratePdfReport,
-} from '../services/appService';
-import { AppActions } from './actions';
-import * as SecureStore from 'expo-secure-store';
-import { addHours } from 'date-fns';
-import { handleCreateEpisode, handleStepForward, handleUpdateEpisode } from './reducers/app.reducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { appStateSelector, authSelector } from './selectors';
-import { useAsyncAppDispatch } from './store';
+} from "../services/appService";
+import { AppActions } from "./actions";
+import * as SecureStore from "expo-secure-store";
+import { addHours } from "date-fns";
+import {
+  handleCreateEpisode,
+  handleStepForward,
+  handleUpdateEpisode,
+} from "./reducers/app.reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector, authSelector } from "./selectors";
+import { useAsyncAppDispatch } from "./store";
 
 const AppContext = createContext<AppContextDefaultValues>({
   isLoading: false,
@@ -35,7 +36,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const auth = useSelector(authSelector);
   const appState = useSelector(appStateSelector);
 
-
   const validateStepForward = (nextStep: number): boolean => {
     if (nextStep >= 0) {
       dispatch(handleStepForward(nextStep));
@@ -49,8 +49,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     try {
       if (!Object.keys(appState.episode.dates).length) {
         handleToast(
-          'Preencha ao menos a data do episódio para continuar!',
-          'danger'
+          "Preencha ao menos a data do episódio para continuar!",
+          "danger",
         );
         return false;
       } else {
@@ -58,33 +58,48 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           ...appState.episode,
           dateTime: addHours(
             new Date(Object.keys(appState.episode.dates)[0]),
-            9
+            9,
           ),
+          period: appState.episode.period === "true" ? true : false,
+          combinedDosage: appState.episode.combinedDosage
+            ? parseInt(appState.episode.combinedDosage)
+            : null,
           location: Array.isArray(appState.episode.location)
-            ? appState.episode.location.join(',')
-            : appState.episode.location ? appState.episode.location : null,
+            ? appState.episode.location.join(",")
+            : appState.episode.location
+              ? appState.episode.location
+              : null,
           triggers: Array.isArray(appState.episode.triggers)
-            ? appState.episode.triggers.join(',')
-            : appState.episode.triggers ? appState.episode.triggers : null,
+            ? appState.episode.triggers.join(",")
+            : appState.episode.triggers
+              ? appState.episode.triggers
+              : null,
           haloSymptoms: Array.isArray(appState.episode.haloSymptoms)
-            ? appState.episode.haloSymptoms.join(',')
-            :  appState.episode.haloSymptoms ? appState.episode.haloSymptoms : null,
+            ? appState.episode.haloSymptoms.join(",")
+            : appState.episode.haloSymptoms
+              ? appState.episode.haloSymptoms
+              : null,
           improvementFactor: Array.isArray(appState.episode.improvementFactor)
-            ? appState.episode.improvementFactor.join(',')
-            : appState.episode.improvementFactor ? appState.episode.improvementFactor : null,
+            ? appState.episode.improvementFactor.join(",")
+            : appState.episode.improvementFactor
+              ? appState.episode.improvementFactor
+              : null,
           symptoms: Array.isArray(appState.episode.symptoms)
-            ? appState.episode.symptoms.join(',')
-            : appState.episode.symptoms ? appState.episode.symptoms : null,
+            ? appState.episode.symptoms.join(",")
+            : appState.episode.symptoms
+              ? appState.episode.symptoms
+              : null,
           impairFactor: Array.isArray(appState.episode.impairFactor)
-            ? appState.episode.impairFactor.join(',')
-            : appState.episode.impairFactor ? appState.episode.impairFactor : null,
+            ? appState.episode.impairFactor.join(",")
+            : appState.episode.impairFactor
+              ? appState.episode.impairFactor
+              : null,
         };
-        
 
         Object.keys(parsedObject).map((key) => {
           if (
-            typeof parsedObject[key] === 'string' &&
-            parsedObject[key] === ''
+            typeof parsedObject[key] === "string" &&
+            parsedObject[key] === ""
           ) {
             parsedObject[key] = null;
           }
@@ -93,52 +108,103 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 
         if (parsedObject.isEdition) {
           delete parsedObject.isEdition;
-          const res = await asyncDispatch(handleUpdateEpisode(
-           {payload:  parsedObject,
-            id: appState.episode.id!,}
-          ));
 
-          if (res.meta.requestStatus == 'fulfilled') {
-            const data = res.payload!;
-            
+          if (!appState.episode.id) {
+            handleToast(
+              "Erro ao editar: ID do episódio não encontrado.",
+              "danger",
+            );
+            return false;
+          }
+
+          console.log(
+            "[submitEpisode] UPDATE payload:",
+            parsedObject,
+            "id:",
+            appState.episode.id,
+          );
+
+          const res = await asyncDispatch(
+            handleUpdateEpisode({
+              payload: parsedObject,
+              id: appState.episode.id,
+            }),
+          );
+
+          console.log(
+            "[submitEpisode] UPDATE result:",
+            res.meta.requestStatus,
+            res.payload,
+          );
+
+          if (res.meta.requestStatus == "fulfilled") {
+            const data = res.payload;
+
             return {
               ...data,
-              triggers: String(data.triggers).split(','),
-              improvementFactor: String(data.improvementFactor).split(','),
-              symptoms: String(data.symptoms).split(','),
-              haloSymptoms: String(data.haloSymptoms).split(','),
-              impairFactor: String(data.impairFactor).split(','),
+              id: data.id ?? appState.episode.id,
+              triggers: Array.isArray(data.triggers)
+                ? data.triggers
+                : String(data.triggers ?? "")
+                    .split(",")
+                    .filter(Boolean),
+              improvementFactor: Array.isArray(data.improvementFactor)
+                ? data.improvementFactor
+                : String(data.improvementFactor ?? "")
+                    .split(",")
+                    .filter(Boolean),
+              symptoms: Array.isArray(data.symptoms)
+                ? data.symptoms
+                : String(data.symptoms ?? "")
+                    .split(",")
+                    .filter(Boolean),
+              haloSymptoms: Array.isArray(data.haloSymptoms)
+                ? data.haloSymptoms
+                : String(data.haloSymptoms ?? "")
+                    .split(",")
+                    .filter(Boolean),
+              impairFactor: Array.isArray(data.impairFactor)
+                ? data.impairFactor
+                : String(data.impairFactor ?? "")
+                    .split(",")
+                    .filter(Boolean),
             };
           }
+
+          const errMsg =
+            (res as any).error?.message ||
+            "Erro ao editar episódio. Tente novamente.";
+          handleToast(errMsg, "danger");
+          return false;
         } else {
           delete parsedObject.id;
           delete parsedObject.isEdition;
-        console.log(`SUBMIT`, parsedObject)
+          console.log(`SUBMIT`, parsedObject);
 
           const res = await asyncDispatch(
             handleCreateEpisode({
               payload: parsedObject,
-              id: auth.user?.id ?? '',
-            })
+              id: auth.user?.id ?? "",
+            }),
           );
 
-          if (res.meta.requestStatus == 'fulfilled') {
+          if (res.meta.requestStatus == "fulfilled") {
             const data = res.payload as Episode;
 
             return {
               ...data,
-              triggers: String(data.triggers).split(','),
-              improvementFactor: String(data.improvementFactor).split(','),
-              symptoms: String(data.symptoms).split(','),
-              haloSymptoms: String(data.haloSymptoms).split(','),
-              impairFactor: String(data.impairFactor).split(','),
+              triggers: String(data.triggers).split(","),
+              improvementFactor: String(data.improvementFactor).split(","),
+              symptoms: String(data.symptoms).split(","),
+              haloSymptoms: String(data.haloSymptoms).split(","),
+              impairFactor: String(data.impairFactor).split(","),
             };
           }
         }
       }
-    } catch ( err) {
+    } catch (err) {
       console.log(err);
-      handleToast((err)as string || 'erro inesperado', 'danger');
+      handleToast((err as string) || "erro inesperado", "danger");
     }
   };
 
@@ -166,15 +232,15 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       .then((res) => {
         setIsLoading(false);
         successCallbackAction(res);
-        if (isShowingToast) handleToast('Tudo certo!', 'success');
+        if (isShowingToast) handleToast("Tudo certo!", "success");
       })
       .catch((err) => {
         setIsLoading(false);
         handleToast(
-          err.response.data.message != 'Validation failed'
+          err.response.data.message != "Validation failed"
             ? err.response.data.message
-            : 'Tivemos um problema. Tente novamente mais tarde!',
-          'danger'
+            : "Tivemos um problema. Tente novamente mais tarde!",
+          "danger",
         );
       });
   };
@@ -182,9 +248,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const appDispatch = async (
     action: string,
     payload?: any,
-    assetId?: string
+    assetId?: string,
   ): Promise<any> => {
-    const userId = await SecureStore.getItemAsync('userId');
+    const userId = await SecureStore.getItemAsync("userId");
     switch (action) {
       case AppActions.REQUEST_GENERATE_PDF_REPORT:
         return handlePromise({
@@ -195,10 +261,10 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           payload,
           successCallbackAction: (res) => {
             toast.show(
-              'Um pdf do relátorio foi enviado ao médico! Verifique sua caixa de spam',
+              "Um pdf do relátorio foi enviado ao médico! Verifique sua caixa de spam",
               {
-                type: 'success',
-              }
+                type: "success",
+              },
             );
           },
           isShowingToast: true,
@@ -217,9 +283,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const reducer = (type: any, payload: any, response: any) => {
-   
-  };
+  const reducer = (type: any, payload: any, response: any) => {};
 
   return (
     <AppContext.Provider
@@ -228,7 +292,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         validateStepForward,
         submitEpisode,
         isLoading,
-        handleToast
+        handleToast,
       }}
     >
       {children}

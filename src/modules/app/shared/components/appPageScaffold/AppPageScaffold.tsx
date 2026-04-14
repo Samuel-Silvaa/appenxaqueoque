@@ -37,7 +37,8 @@ const AppPageScaffold = ({
 
   return (
     <KeyboardAvoidingView
-      keyboardVerticalOffset={20}
+      keyboardVerticalOffset={1
+      }
       enabled
       behavior='padding'
       className={`${stylesheet.view} ${getAppScaffoldAlignment(alignment)}`}
@@ -46,7 +47,7 @@ const AppPageScaffold = ({
       <StatusBar />
       {displayBg && (
         <ImageBackground
-          className={'w-full flex-grow '.concat(hasArrowBack ? ' pt-24' : '')}
+          className={'w-full flex-grow'.concat(hasArrowBack ? ' pt-24' : ' ')}
           resizeMode='stretch'
           source={
             colorScheme == 'light'

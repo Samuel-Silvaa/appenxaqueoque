@@ -121,9 +121,9 @@ const TabsRoutes = () => {
 
   const tabTextStyle = (focused: boolean) => {
     if (colorScheme == 'light')
-      return focused ? 'text-[#8FD7FF]' : 'text-[#262D33]' + ' text-[9px]';
+      return focused ? 'text-[#8FD7FF] text-[12px]' : 'text-[#262D33]' + ' text-[8px]';
     if (colorScheme == 'dark')
-      return focused ? 'text-[#8FD7FF]' : 'text-[#9DA3A9]' + ' text-[9px]';
+      return focused ? 'text-[#8FD7FF] text-[12px]' : 'text-[#9DA3A9]' + ' text-[8px]';
   };
 
   return (

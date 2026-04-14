@@ -124,19 +124,17 @@ const Range = ({
             }}
             className={
               sharedEpisodeStyleSheet.topic.item +
-              `${
-                currentStep == index
-                  ? ' bg-purple-dark-primary '
-                  : ' bg-purple-dark-secondary'
+              `${currentStep == index
+                ? ' bg-purple-dark-primary '
+                : ' bg-purple-dark-secondary'
               }`
             }
           >
             <Text
-              className={`${
-                currentStep == index
-                  ? 'text-[#fff]'
-                  : 'text-black dark:text-d-text-gray '
-              }`}
+              className={`${currentStep == index
+                ? 'text-[#fff]'
+                : 'text-black dark:text-d-text-gray '
+                }`}
             >
               {item.title}
             </Text>
@@ -219,11 +217,7 @@ const ReportDateRangeModal = ({
           })
         );
       } else {
-        console.log({
-                      patientId: appState.patient!.id!,
-            startDate: format(payload.startDate, 'yyyy-MM-dd'),
-            endDate: format(payload.endDate, 'yyyy-MM-dd'),
-        })
+
         const res = await dispatch(
           handleCreateReport({
             patientId: appState.patient!.id!,
@@ -293,23 +287,24 @@ const ReportDateRangeModal = ({
           </TouchableOpacity>
         </View>
 
-        <Text className={sharedStyleSheet.subtitle + ' w-3/4 m-auto my-4'}>
-          Selecione uma data inicial e uma data final para{' '}
-          {filter
-            ? 'filtrar por período'
-            : 'gerar o seu relatório de episódios'}
-        </Text>
+        <View>
+          <Text className={sharedStyleSheet.subtitle + ' w-3/4 m-auto my-4'}>
+            Selecione uma data inicial e uma data final para{' '}
+            {filter
+              ? 'filtrar por período'
+              : 'gerar o seu relatório de episódios'}
+          </Text>
+        </View>
         <View className={stylesheet.rangeCard}>
           <Range returnSelectedDaysRange={handleDateRange} />
 
           <InputContainer
             label='Data inicial'
-            name='notes'
+            name='startDate'
             inputMode='numeric'
             control={control}
             errors={errors}
             value={format(getValues('startDate'), 'dd/MM/yyyy')}
-            setValue={() => {}}
             onPressOut={() => {
               showDatePicker();
               setInputSelect('startDate');
@@ -318,12 +313,11 @@ const ReportDateRangeModal = ({
           <InputContainer
             label='Data final'
             inputMode='numeric'
-            name='notes'
+            name='endDate'
             control={control}
             errors={errors}
             editable={true}
             value={format(getValues('endDate'), 'dd/MM/yyyy')}
-            setValue={() => {}}
             onPressOut={() => {
               showDatePicker();
               setInputSelect('endDate');

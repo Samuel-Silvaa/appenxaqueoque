@@ -1,5 +1,5 @@
-import { Dimensions, Text, View } from 'react-native';
-import { BarChart, barDataItem } from 'react-native-gifted-charts';
+import { Dimensions, Text, View } from "react-native";
+import { BarChart, barDataItem } from "react-native-gifted-charts";
 
 export const BarChartComponent = ({
   dataset,
@@ -12,20 +12,20 @@ export const BarChartComponent = ({
 }) => {
   return (
     <>
-      <View className='m-auto p-4 rounded-full bg-snow-white-secondary dark:bg-d-blue-primary mt-4 mb-2'>
-        <Text className='m-auto font-bold dark:text-white'> {title} </Text>
+      <View className="m-auto p-4 rounded-full bg-snow-white-secondary dark:bg-d-blue-primary mt-4 mb-2">
+        <Text className="m-auto font-bold dark:text-white"> {title} </Text>
       </View>
 
       {dataset && (
         <View
-          key={'bar-' + title}
+          key={"bar-" + title}
           style={{
-            backgroundColor: '#fff',
+            backgroundColor: "#fff",
             paddingBottom: 60,
             paddingTop: 20,
             borderRadius: 25,
-            shadowOffset: { width: 2, height: 4 },
-            shadowColor: '#ccc',
+            shadowOffset: { width: 3, height: 4 },
+            shadowColor: "#ccc",
             shadowOpacity: 0.8,
             zIndex: 20,
           }}
@@ -36,28 +36,30 @@ export const BarChartComponent = ({
             barBorderTopLeftRadius={4}
             barWidth={18}
             data={dataset}
-            width={Dimensions.get('window').width - 62}
+            width={Dimensions.get("window").width - 62}
             showValuesAsTopLabel
+            topLabelTextStyle={{ marginTop: -10 }}
             scrollAnimation
             yAxisLabelWidth={10}
             xAxisLabelsVerticalShift={20}
             xAxisLabelTextStyle={{
+              minHeight: 20,
               transform: [
-                { rotate: '90deg' },
+                { rotate: "90deg" },
                 { translateY: 90 },
                 { translateX: 90 },
-                { rotate: '180deg' },
+                { rotate: "180deg" },
               ],
-              textAlign: 'right',
+              textAlign: "right",
             }}
             labelWidth={200}
             hideYAxisText
-            labelsExtraHeight={120}
-            barBorderRadius={4}
+            labelsExtraHeight={150}
+            barBorderRadius={20}
             yAxisThickness={1}
             xAxisThickness={1}
-            xAxisColor='#ccc'
-            yAxisColor='#CCC'
+            xAxisColor="#ccc"
+            yAxisColor="#CCC"
             maxValue={maxValue ? maxValue + 1 : 10}
             barMarginBottom={6}
           />

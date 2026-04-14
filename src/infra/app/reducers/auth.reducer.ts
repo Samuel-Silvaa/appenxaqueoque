@@ -131,6 +131,7 @@ const authSlice = createSlice({
     );
     builder.addCase(requestSignup.rejected, (state, action) => {
       console.log(action);
+      if (action.error.name === 'SilentAuthError') return { ...state, loading: false };
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -158,6 +159,7 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestCreatePatient.rejected, (state, action) => {
+      if (action.error.name === 'SilentAuthError') return { ...state, loading: false };
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -180,6 +182,7 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestSendEmailConfirmation.rejected, (state, action) => {
+      if (action.error.name === 'SilentAuthError') return { ...state, loading: false };
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -204,6 +207,7 @@ const authSlice = createSlice({
     builder.addCase(
       requestSendPasswordEmailConfirmation.rejected,
       (state, action) => {
+        if (action.error.name === 'SilentAuthError') return { ...state, loading: false };
         return (state = {
           ...state,
           error: action.error.message ?? 'Erro inesperado',
@@ -229,6 +233,7 @@ const authSlice = createSlice({
     builder.addCase(
       requestSendNewPasswordWithCode.rejected,
       (state, action) => {
+        if (action.error.name === 'SilentAuthError') return { ...state, loading: false };
         return (state = {
           ...state,
           error: action.error.message ?? 'Erro inesperado',
@@ -252,6 +257,7 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestResetPassword.rejected, (state, action) => {
+      if (action.error.name === 'SilentAuthError') return { ...state, loading: false };
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -279,6 +285,7 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestConfirmEmail.rejected, (state, action) => {
+      if (action.error.name === 'SilentAuthError') return { ...state, loading: false };
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',
@@ -296,6 +303,7 @@ const authSlice = createSlice({
       return state;
     });
     builder.addCase(requestUpdateAvatar.rejected, (state, action) => {
+      if (action.error.name === 'SilentAuthError') { state.loading = false; return state; }
       state.loading = false;
       state.error = action.error.message ?? 'Erro ao atualizar avatar';
       return state;
@@ -321,6 +329,7 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(requestUpdatePatient.rejected, (state, action) => {
+      if (action.error.name === 'SilentAuthError') return { ...state, loading: false };
       return (state = {
         ...state,
         error: action.error.message ?? 'Erro inesperado',

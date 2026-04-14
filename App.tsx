@@ -109,7 +109,7 @@ const ActiveRoutes = () => {
 
 const Toast = ({ toastOptions }: { toastOptions: ToastProps }) => {
   let containerClass =
-    'w-3/4 h-[56px] rounded-[8px] flex items-center justify-center p-2 shadow-lg';
+    'w-3/4 h-[70px] rounded-[8px] flex items-center justify-center shadow-lg';
 
   switch (toastOptions.type) {
     case 'success':

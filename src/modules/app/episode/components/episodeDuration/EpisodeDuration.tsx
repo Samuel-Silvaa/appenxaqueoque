@@ -11,6 +11,15 @@ import { TimeInputWithValidation } from 'src/modules/shared/components/timeInput
 import { format, isValid, parse } from 'date-fns';
 import { sharedEpisodeStyleSheet } from "../../shared/SharedEpisodeStyleSheet";
 
+const parseTimeString = (value: string): Date | null => {
+  if (!value) return null;
+  let parsed = parse(value, 'HH:mm', new Date());
+  if (isValid(parsed)) return parsed;
+  parsed = parse(value, 'HH:mm:ss', new Date());
+  if (isValid(parsed)) return parsed;
+  return null;
+};
+
 const stylesheet = {
   calendarWrapper:
     'flex-col w-full items-center overflow-hidden dark:bg-d-blue-primary',
@@ -53,12 +62,8 @@ const EpisodeDuration = () => {
     resolver: yupResolver(durationSchema),
     mode: 'onChange',
     defaultValues: {
-      start: appState.episode.start
-        ? parse(appState.episode.start, 'HH:mm', new Date())
-        : null,
-      end: appState.episode.end
-        ? parse(appState.episode.end, 'HH:mm', new Date())
-        : null,
+      start: parseTimeString(appState.episode.start ?? ''),
+      end: parseTimeString(appState.episode.end ?? ''),
     },
   });
 

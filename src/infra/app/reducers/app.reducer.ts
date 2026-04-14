@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   CreateReportDTO,
   requestCreateEpisode,
@@ -12,13 +12,13 @@ import {
   requestDeleteAccount,
   requestDeleteEpisode,
   requestDeleteReport,
-} from 'src/infra/services/appService';
+} from "src/infra/services/appService";
 import {
   Episode,
   EpisodeModalDTO,
   Patient,
   Report,
-} from 'src/infra/@types/app.types';
+} from "src/infra/@types/app.types";
 
 // Define initial state type
 export interface AppReducer {
@@ -30,7 +30,7 @@ export interface AppReducer {
   pageTitle: string;
   loading: boolean;
   error: string | null;
-  pdfReportStatus: 'success' | 'error' | 'loading' | null;
+  pdfReportStatus: "success" | "error" | "loading" | null;
   reportEpisodes: Episode[];
 }
 
@@ -55,7 +55,7 @@ const initialEpisodeState: Episode = {
   medicineImprovement: null,
   notes: null,
   painType: null,
-  period: 'false',
+  period: "false",
   periodNotes: null,
   symptoms: [],
   time: null,
@@ -70,7 +70,7 @@ const initialState: AppReducer = {
   patient: null,
   reports: [],
   currentEpStep: 0,
-  pageTitle: '',
+  pageTitle: "",
   loading: false,
   error: null,
   pdfReportStatus: null,
@@ -80,33 +80,43 @@ const initialState: AppReducer = {
 const handleFitEpisodeData = (ep: Episode): Episode => {
   return {
     ...ep,
-    period: Number(ep.period) == 1 ? 'true' : 'false',
+    period: Number(ep.period) == 1 ? "true" : "false",
     triggers: ep.triggers
       ? String(ep.triggers)
-        .split(',')
-        .filter((item) => item && item.trim())
+          .split(",")
+          .filter((item) => item && item.trim())
       : [],
     haloSymptoms: ep.haloSymptoms
       ? String(ep.haloSymptoms)
-        .split(',')
-        .filter((item) => item && item.trim())
+          .split(",")
+          .filter((item) => item && item.trim())
       : [],
     improvementFactor: ep.improvementFactor
       ? String(ep.improvementFactor)
-        .split(',')
-        .filter((item) => item && item.trim())
+          .split(",")
+          .filter((item) => item && item.trim())
+      : [],
+    impairFactor: ep.impairFactor
+      ? String(ep.impairFactor)
+          .split(",")
+          .filter((item) => item && item.trim())
       : [],
     symptoms: ep.symptoms
       ? String(ep.symptoms)
-        .split(',')
-        .filter((item) => item && item.trim())
+          .split(",")
+          .filter((item) => item && item.trim())
+      : [],
+    location: ep.location
+      ? String(ep.location)
+          .split(",")
+          .filter((item) => item && item.trim())
       : [],
   };
 };
 
 // Create slice
 const appSlice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
   reducers: {
     clearAppErrorMessage: (state) => {
@@ -151,15 +161,17 @@ const appSlice = createSlice({
           loading: false,
           error: null,
         });
-      }
+      },
     );
     builder.addCase(handleCreateEpisode.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
         error:
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado',
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
     });
@@ -172,19 +184,21 @@ const appSlice = createSlice({
       (state, action: PayloadAction<Episode[]>) => {
         return (state = {
           ...state,
-          episodes: action.payload,
+          episodes: action.payload.map(handleFitEpisodeData),
           loading: false,
           error: null,
         });
-      }
+      },
     );
     builder.addCase(handleFetchEpisodes.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
         error:
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado',
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
     });
@@ -201,15 +215,17 @@ const appSlice = createSlice({
           loading: false,
           error: null,
         });
-      }
+      },
     );
     builder.addCase(handleFecthPatient.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
         error:
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado',
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
     });
@@ -222,19 +238,23 @@ const appSlice = createSlice({
       (state, action: PayloadAction<Report[]>) => {
         return (state = {
           ...state,
-          reports: action.payload.sort((a, b) => b.createdAt!.localeCompare(a.createdAt!)),
+          reports: action.payload.sort((a, b) =>
+            b.createdAt!.localeCompare(a.createdAt!),
+          ),
           loading: false,
           error: null,
         });
-      }
+      },
     );
     builder.addCase(handleFecthReports.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
         error:
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado',
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
     });
@@ -250,12 +270,14 @@ const appSlice = createSlice({
           loading: false,
           error: null,
         });
-      }
+      },
     );
     builder.addCase(handleCreateReport.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
-        error: 'Nenhum episódio criado para o período selecionado!',
+        error: "Erro ao gerar relatório!",
         loading: false,
       });
     });
@@ -269,17 +291,21 @@ const appSlice = createSlice({
         state.reportEpisodes = action.payload;
         state.loading = false;
         state.error = null;
-      }
+      },
     );
     builder.addCase(
       handleFetchReportEpisodesRange.rejected,
       (state, action) => {
+        if (action.error.name === "SilentAuthError") {
+          state.loading = false;
+          return;
+        }
         state.error =
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado';
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado");
         state.loading = false;
-      }
+      },
     );
 
     // REQUEST_GENERATE_PDF_REPORT
@@ -290,12 +316,14 @@ const appSlice = createSlice({
       return (state = { ...state, loading: false });
     });
     builder.addCase(handleGeneratePdfReport.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
         error:
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado',
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
     });
@@ -308,12 +336,14 @@ const appSlice = createSlice({
       return (state = { ...state, loading: false });
     });
     builder.addCase(handleDeleteAccount.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
         error:
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado',
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
     });
@@ -332,12 +362,14 @@ const appSlice = createSlice({
       });
     });
     builder.addCase(handleDeleteReport.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
         error:
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado',
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
     });
@@ -352,17 +384,19 @@ const appSlice = createSlice({
         loading: false,
         episodes:
           state.episodes?.filter(
-            (episode) => episode.id != action.payload.id
+            (episode) => episode.id != action.payload.id,
           ) || [],
       });
     });
     builder.addCase(handleDeleteEpisode.rejected, (state, action) => {
+      if (action.error.name === "SilentAuthError")
+        return { ...state, loading: false };
       return (state = {
         ...state,
         error:
-          action.error.code == '401'
-            ? 'Sessão expirada. Por favor conecte-se novamente!'
-            : action.error.message ?? 'Erro inesperado',
+          action.error.code == "401"
+            ? "Sessão expirada. Por favor conecte-se novamente!"
+            : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
     });
@@ -370,24 +404,24 @@ const appSlice = createSlice({
 });
 
 export const handleCreateEpisode = createAsyncThunk(
-  'app/handleCreateEpisode',
+  "app/handleCreateEpisode",
   async (data: { payload: Episode; id: string }) => {
     return await requestCreateEpisode(data.payload, data.id);
-  }
+  },
 );
 
 export const handleUpdateEpisode = createAsyncThunk(
-  'app/handleUpdateEpisode',
+  "app/handleUpdateEpisode",
   async (data: { payload: EpisodeModalDTO; id: string }) => {
     return await requestUpdateEpisode(data.payload, data.id);
-  }
+  },
 );
 
 export const handleFetchEpisodes = createAsyncThunk(
-  'app/handleFetchEpisodes',
+  "app/handleFetchEpisodes",
   async (patientId: string) => {
     return await requestFetchEpisodes(patientId);
-  }
+  },
 );
 
 interface DateInterface {
@@ -395,61 +429,61 @@ interface DateInterface {
 }
 
 export const handleFecthReports = createAsyncThunk(
-  'app/handleFecthReports',
+  "app/handleFecthReports",
   async (payload: { patientId: string; date: DateInterface }) => {
     return await requestFetchReports(payload.patientId, payload.date.date!);
-  }
+  },
 );
 
 export const handleFecthPatient = createAsyncThunk(
-  'app/handleFetchPatient',
+  "app/handleFetchPatient",
   async (userId: string) => {
     return await requestFetchPatient(userId);
-  }
+  },
 );
 
 export const handleCreateReport = createAsyncThunk(
-  'app/handleCreateReport',
+  "app/handleCreateReport",
   async (payload: CreateReportDTO) => {
     return await requestCreateReport(payload);
-  }
+  },
 );
 
 export const handleFetchReportEpisodesRange = createAsyncThunk(
-  'app/handleFetchReportEpisodesRange',
+  "app/handleFetchReportEpisodesRange",
   async (ids: string) => {
     return await requestFetchReportEpisodesRange(ids);
-  }
+  },
 );
 
 export const handleGeneratePdfReport = createAsyncThunk(
-  'app/handleGeneratePdfReport',
+  "app/handleGeneratePdfReport",
   async (payload: { id: string; physicianEmail: string }) => {
     return await requestGeneratePdfReport(payload);
-  }
+  },
 );
 
 export const handleDeleteAccount = createAsyncThunk(
-  'app/handleDeleteAccount',
+  "app/handleDeleteAccount",
   async (payload: { id: string; emailAddress: string }) => {
     return await requestDeleteAccount(payload);
-  }
+  },
 );
 
 export const handleDeleteEpisode = createAsyncThunk(
-  'app/handleDeleteEpisode',
+  "app/handleDeleteEpisode",
   async (payload: { id: string }) => {
     const res = await requestDeleteEpisode(payload);
     return { id: payload.id, ...res };
-  }
+  },
 );
 
 export const handleDeleteReport = createAsyncThunk(
-  'app/handleDeleteReport',
+  "app/handleDeleteReport",
   async (payload: { id: string }) => {
     const res = await requestDeleteReport(payload);
     return { id: payload.id, ...res };
-  }
+  },
 );
 
 // Export actions and reducer
