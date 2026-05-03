@@ -17,7 +17,7 @@ const stylesheet = {
   wrapper: "flex-col w-full items-center ",
   cardWrapper: "flex-row items-center justify-center w-full ",
   cardOption:
-    "flex-row items-center justify-center bg-white rounded-full w-[50%]",
+    "flex-row items-center justify-center bg-white rounded-full w-[33%]",
   notesLabel: "text-md font-semibold text-black self-start mt-14 pl-4",
   notesWrapper:
     "flex-row w-full min-h-[140px] max-h-[150px] p-2 pt-2 bg-blue-four rounded-[28px] mt-1 relative",

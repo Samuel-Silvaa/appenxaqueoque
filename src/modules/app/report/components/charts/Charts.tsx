@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useMemo, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -23,12 +24,10 @@ import AppPageScaffold from "src/modules/app/shared/components/appPageScaffold/A
 import PhysicianEmailModal from "src/modules/shared/components/physicianEmailModal/PhysicianEmailModal";
 import PieChartComponent from "./components/PieChartComponent";
 import { BarChartComponent } from "./components/BarChartComponent";
-import { SummedUpReport } from "./components/SummedUpRepost";
 import { ReportCard } from "./components/ReportCard";
 import {
   episodePinColors,
   parseImpairFactor,
-  parseImprovementFactor,
   parsePainType,
 } from "src/infra/utils/appUtils";
 
@@ -403,6 +402,87 @@ const ChartsPage = () => {
     [episodes],
   );
 
+  const episodeDatesList = useMemo(
+    () =>
+      episodes
+        .map((ep: Episode) => {
+          const raw = ep.dateTime || ep.start;
+          if (!raw) return null;
+          try {
+            return format(new Date(raw), "dd/MM/yyyy");
+          } catch {
+            return null;
+          }
+        })
+        .filter((d): d is string => !!d)
+        .filter((d, i, arr) => arr.indexOf(d) === i),
+    [episodes],
+  );
+
+  const avgDuration = useMemo(() => {
+    const timeToMinutes = (t: string): number | null => {
+      const parts = t.split(":").map(Number);
+      if (parts.length < 2 || parts.some(isNaN)) return null;
+      return parts[0] * 60 + parts[1];
+    };
+
+    const durations = episodes
+      .filter((ep: Episode) => !!ep.start && !!ep.end)
+      .map((ep: Episode) => {
+        const startMin = timeToMinutes(ep.start!);
+        const endMin = timeToMinutes(ep.end!);
+        if (startMin === null || endMin === null) return null;
+
+        const diff =
+          endMin >= startMin ? endMin - startMin : 1440 - startMin + endMin;
+        return diff;
+      })
+      .filter((d): d is number => d !== null && d > 0);
+
+    if (!durations.length) return null;
+
+    const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
+    const hours = Math.floor(avg / 60);
+    const minutes = Math.round(avg % 60);
+    return hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;
+  }, [episodes]);
+
+  const improvementFactorData = useMemo(() => {
+    const dataList: Array<{
+      value: number;
+      label: ImprovementFactor;
+      frontColor: string;
+    }> = [];
+    [
+      ImprovementFactor.MEDICINE,
+      ImprovementFactor.SLEEP,
+      ImprovementFactor.FOOD,
+      ImprovementFactor.ANOTHER,
+    ].forEach((factor, index) => {
+      let count = 0;
+      episodes.forEach((ep: Episode) => {
+        if (includesOption(ep.improvementFactor, factor)) {
+          count++;
+        }
+      });
+      dataList.push({
+        value: count,
+        label: factor,
+        frontColor: episodePinColors(index),
+      });
+      count = 0;
+    });
+    return dataList;
+  }, [episodes]);
+
+  const improvementFactorMaxValue = useMemo(() => {
+    let greater = 0;
+    improvementFactorData.forEach((d) => {
+      if (d.value > greater) greater = d.value;
+    });
+    return greater;
+  }, [improvementFactorData]);
+
   return (
     <AppPageScaffold>
       <View className={stylesheet.footer}>
@@ -425,12 +505,28 @@ const ChartsPage = () => {
         </Pressable>
       </View>
 
-      {!!report && <SummedUpReport report={report} />}
+      {/* 1 - Data */}
+      <ReportCard
+        key="dates"
+        title={`${format(new Date(report.startDate), "dd/MM/yyyy")} – ${format(new Date(report.endDate), "dd/MM/yyyy")} - ${report.episodeAmount} episódios`}
+        description={
+          episodeDatesList.length ? episodeDatesList : ["Sem datas registradas"]
+        }
+      />
 
-      {/* === Horário da crise (Datetime) === */}
+      {/* 2 - Horário da crise */}
       <PieChartComponent assets={time} title="Horário da crise" key="time" />
 
-      {/* === Localização da dor === */}
+      {/* 3 - Média de duração da crise */}
+      {!!avgDuration && (
+        <ReportCard
+          key="avg-duration"
+          title="Média de duração da crise"
+          description={[avgDuration]}
+        />
+      )}
+
+      {/* 4 - Localização da dor */}
       <BarChartComponent
         key="location-bar"
         title="Localização da dor"
@@ -438,14 +534,14 @@ const ChartsPage = () => {
         maxValue={locationMaxValue}
       />
 
-      {/* === Intensidade da dor (Acuteness) === */}
+      {/* 5 - Intensidade da dor */}
       <PieChartComponent
         assets={acuteness}
         title="Intensidade da dor"
         key="acuteness-pie"
       />
 
-      {/* === Característica da dor (PainType) + Outros === */}
+      {/* 6 - Característica da dor */}
       <PieChartComponent
         assets={painType}
         title="Característica da dor"
@@ -453,7 +549,7 @@ const ChartsPage = () => {
         outros={[{ label: "Outros", items: anotherPainType }]}
       />
 
-      {/* === Sintomas associados === */}
+      {/* 7 - Sintomas associados */}
       <BarChartComponent
         key="symptoms-bar"
         title="Sintomas associados à dor"
@@ -461,7 +557,7 @@ const ChartsPage = () => {
         maxValue={symptomsMaxValue}
       />
 
-      {/* === Sintomas de halo (HaloSymptoms) === */}
+      {/* 8 - Sintomas da aura */}
       <BarChartComponent
         key="halo-bar"
         title="Sintomas da aura"
@@ -469,16 +565,16 @@ const ChartsPage = () => {
         maxValue={haloMaxValue}
       />
 
-      {/* === O que piora a dor (ImpairFactor) + Outros === */}
+      {/* 9 - Fatores de piora */}
       <BarChartComponent
         key="impairFactor-bar"
-        title="O que piora a dor"
+        title="Fatores de piora"
         dataset={impairFactorData}
         maxValue={impairFactorMaxValue}
         outros={[{ label: "Outros", items: anotherImpairFactor }]}
       />
 
-      {/* === Fatores desencadeantes (Triggers) + Outros === */}
+      {/* 10 - Fatores desencadeantes */}
       <BarChartComponent
         key="triggers-bar"
         title="Fatores desencadeantes da dor"
@@ -490,40 +586,60 @@ const ChartsPage = () => {
         ]}
       />
 
-      {/* === Fatores de melhora (ImprovementFactor) + detalhes === */}
-      {parseImprovementFactor(report.improvementFactor) ==
-        ImprovementFactor.MEDICINE && (
-        <ReportCard
-          key="medicine"
-          title="Medicamentos"
-          description={medicineList}
-        />
-      )}
-      {!!foodImprovement.length && (
-        <ReportCard
-          key="foodImprovement"
-          title="Alimentos que melhoraram a crise"
-          description={foodImprovement}
-        />
-      )}
-      {!!anotherImprovementFactor.length && (
-        <ReportCard
-          key="anotherImprovement"
-          title="Alternativas que melhoraram a crise"
-          description={anotherImprovementFactor}
-        />
-      )}
+      {/* 11 - Fatores de melhora */}
+      <BarChartComponent
+        key="improvementFactor-bar"
+        title="Fatores de melhora"
+        dataset={improvementFactorData}
+        maxValue={improvementFactorMaxValue}
+        outros={[
+          ...(medicineList.length
+            ? [{ label: "Medicamentos", items: medicineList }]
+            : []),
+          ...(foodImprovement.length
+            ? [{ label: "Alimentação", items: foodImprovement }]
+            : []),
+          ...(anotherImprovementFactor.length
+            ? [{ label: "Outros", items: anotherImprovementFactor }]
+            : []),
+        ]}
+      />
 
-      {/* === Período menstrual === */}
-      {!!report.periodNotes && (
-        <ReportCard
-          key="period-notes"
-          title="Período menstrual"
-          description={toUniqueList(report.periodNotes)}
-        />
-      )}
+      {/* 12 - Período menstrual */}
+      {(() => {
+        const simCount = episodes.filter(
+          (ep: Episode) => ep.period === "true" || ep.period === true,
+        ).length;
+        const naoCount = episodes.filter(
+          (ep: Episode) => ep.period === "false" || ep.period === false,
+        ).length;
+        const naCount = episodes.filter(
+          (ep: Episode) =>
+            ep.period === "N/A" ||
+            ep.period === null ||
+            ep.period === undefined,
+        ).length;
+        const periodNotesList = uniqueFromEpisodes(
+          episodes,
+          (ep: Episode) => ep.periodNotes,
+        );
 
-      {/* === Observações (Notes) === */}
+        const lines: string[] = [];
+        if (simCount > 0) lines.push(`Sim: ${simCount} episódio(s)`);
+        if (naoCount > 0) lines.push(`Não: ${naoCount} episódio(s)`);
+        if (naCount > 0) lines.push(`Não se aplica: ${naCount} episódio(s)`);
+        periodNotesList.forEach((n) => lines.push(`Obs: ${n}`));
+
+        return (
+          <ReportCard
+            key="period-notes"
+            title="Período menstrual"
+            description={lines.length ? lines : ["Sem informação registrada"]}
+          />
+        );
+      })()}
+
+      {/* 13 - Observações finais */}
       {!!report.notes && (
         <ReportCard
           key="notes"
