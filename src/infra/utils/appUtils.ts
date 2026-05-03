@@ -65,8 +65,8 @@ export const episodePinColors = (acuteness: string | number): string => {
   }
 };
 
-export const parseAcuteness = (acuteness: number) => {
-  switch (acuteness) {
+export const parseAcuteness = (acuteness: number | string) => {
+  switch (Number(acuteness)) {
     case 0:
       return Acuteness.LIGHT;
     case 1:
@@ -78,8 +78,8 @@ export const parseAcuteness = (acuteness: number) => {
   }
 };
 
-export const parseTime = (acuteness: number) => {
-  switch (acuteness) {
+export const parseTime = (acuteness: number | string) => {
+  switch (Number(acuteness)) {
     case 0:
       return Time.MORNING;
     case 1:
@@ -93,8 +93,8 @@ export const parseTime = (acuteness: number) => {
   }
 };
 
-export const parseImprovementFactor = (acuteness: number) => {
-  switch (acuteness) {
+export const parseImprovementFactor = (acuteness: number | string) => {
+  switch (Number(acuteness)) {
     case 0:
       return ImprovementFactor.MEDICINE;
     case 1:
@@ -108,8 +108,8 @@ export const parseImprovementFactor = (acuteness: number) => {
   }
 };
 
-export const parseImpairFactor = (acuteness: number) => {
-  switch (acuteness) {
+export const parseImpairFactor = (acuteness: number | string) => {
+  switch (Number(acuteness)) {
     case 0:
       return ImpairFactor.JUMP;
     case 1:
@@ -121,8 +121,8 @@ export const parseImpairFactor = (acuteness: number) => {
   }
 };
 
-export const parseSymptoms = (acuteness: number) => {
-  switch (acuteness) {
+export const parseSymptoms = (acuteness: number | string) => {
+  switch (Number(acuteness)) {
     case 0:
       return Symptom.PHOTOSENSIBILITY;
     case 1:
@@ -140,8 +140,8 @@ export const parseSymptoms = (acuteness: number) => {
   }
 };
 
-export const parseLocation = (acuteness: number) => {
-  switch (acuteness) {
+export const parseLocation = (acuteness: number | string) => {
+  switch (Number(acuteness)) {
     case 0:
       return Location.FRONTALRIGHT;
     case 1:
@@ -173,8 +173,8 @@ export const parseLocation = (acuteness: number) => {
   }
 };
 
-export const parsePainType = (acuteness: number) => {
-  switch (acuteness) {
+export const parsePainType = (acuteness: number | string) => {
+  switch (Number(acuteness)) {
     case 0:
       return PainType.THROB;
     case 1:
@@ -186,8 +186,8 @@ export const parsePainType = (acuteness: number) => {
   }
 };
 
-export const parseTriggers = (acuteness: number) => {
-  switch (acuteness) {
+export const parseTriggers = (acuteness: number | string) => {
+  switch (Number(acuteness)) {
     case 0:
       return Trigger.JAGGEDSLEEP;
     case 1:

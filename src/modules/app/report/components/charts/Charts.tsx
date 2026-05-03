@@ -1,6 +1,6 @@
-import { useRoute } from '@react-navigation/native';
-import { useEffect, useMemo, useState } from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import { useRoute } from "@react-navigation/native";
+import { useEffect, useMemo, useState } from "react";
+import { Image, Pressable, Text, View } from "react-native";
 import {
   Acuteness,
   Episode,
@@ -13,51 +13,51 @@ import {
   Symptom,
   Time,
   Trigger,
-} from 'src/infra/@types/app.types';
-import { useSelector } from 'react-redux';
-import { useAsyncAppDispatch } from 'src/infra/app/store';
-import { handleFetchReportEpisodesRange } from 'src/infra/app/reducers/app.reducer';
-import { appStateSelector } from 'src/infra/app/selectors';
+} from "src/infra/@types/app.types";
+import { useSelector } from "react-redux";
+import { useAsyncAppDispatch } from "src/infra/app/store";
+import { handleFetchReportEpisodesRange } from "src/infra/app/reducers/app.reducer";
+import { appStateSelector } from "src/infra/app/selectors";
 
-import AppPageScaffold from 'src/modules/app/shared/components/appPageScaffold/AppPageScaffold';
-import PhysicianEmailModal from 'src/modules/shared/components/physicianEmailModal/PhysicianEmailModal';
-import PieChartComponent from './components/PieChartComponent';
-import { BarChartComponent } from './components/BarChartComponent';
-import { SummedUpReport } from './components/SummedUpRepost';
-import { ReportCard } from './components/ReportCard';
+import AppPageScaffold from "src/modules/app/shared/components/appPageScaffold/AppPageScaffold";
+import PhysicianEmailModal from "src/modules/shared/components/physicianEmailModal/PhysicianEmailModal";
+import PieChartComponent from "./components/PieChartComponent";
+import { BarChartComponent } from "./components/BarChartComponent";
+import { SummedUpReport } from "./components/SummedUpRepost";
+import { ReportCard } from "./components/ReportCard";
 import {
   episodePinColors,
   parseImpairFactor,
   parseImprovementFactor,
   parsePainType,
-} from 'src/infra/utils/appUtils';
+} from "src/infra/utils/appUtils";
 
 const stylesheet = {
-  footer: 'w-full ',
+  footer: "w-full ",
   footerBtn:
-    'bg-[#F8ECDE] dark:bg-d-blue-primary w-full h-[70px] rounded-full p-2 my-2',
+    "bg-[#F8ECDE] dark:bg-d-blue-primary w-full h-[70px] rounded-full p-2 my-2",
   footerBtnInner:
-    'bg-white dark:bg-d-blue-primary-dark w-ful h-full rounded-full p-1 flex-row items-center justify-center',
+    "bg-white dark:bg-d-blue-primary-dark w-ful h-full rounded-full p-1 flex-row items-center justify-center",
 };
 
 const colorList = [
-  '#C8F7E166',
-  '#FFCBA666',
-  '#FFA6A666',
-  '#FFB0B566',
-  '#9193E866',
-  '#FFDAF266',
+  "#C8F7E166",
+  "#FFCBA666",
+  "#FFA6A666",
+  "#FFB0B566",
+  "#9193E866",
+  "#FFDAF266",
 ];
 
 const normalizeText = (value: unknown): string => {
-  if (typeof value !== 'string') return '';
-  return value.replace(/\s+/g, ' ').trim();
+  if (typeof value !== "string") return "";
+  return value.replace(/\s+/g, " ").trim();
 };
 
 const toUniqueList = (value: unknown): string[] => {
   const raw = Array.isArray(value)
     ? value
-    : typeof value === 'string'
+    : typeof value === "string"
       ? value.split(/[\n,;]+/)
       : [];
 
@@ -75,13 +75,13 @@ const toUniqueList = (value: unknown): string[] => {
 const includesOption = (value: unknown, option: string): boolean => {
   const normalizedOption = normalizeText(option).toLocaleLowerCase();
   return toUniqueList(value).some(
-    (entry) => entry.toLocaleLowerCase() === normalizedOption
+    (entry) => entry.toLocaleLowerCase() === normalizedOption,
   );
 };
 
 const uniqueFromEpisodes = (
   episodes: Episode[],
-  selector: (episode: Episode) => unknown
+  selector: (episode: Episode) => unknown,
 ): string[] => {
   const uniqueMap = new Map<string, string>();
   episodes.forEach((episode) => {
@@ -122,7 +122,7 @@ const ChartsPage = () => {
         });
         dataList.push({ value: count, name: act, color: colorList[index] });
         count = 0;
-      }
+      },
     );
     return dataList;
   }, [episodes]);
@@ -158,7 +158,7 @@ const ChartsPage = () => {
           color: episodePinColors(index),
         });
         count = 0;
-      }
+      },
     );
     return dataList;
   }, [episodes]);
@@ -288,60 +288,101 @@ const ChartsPage = () => {
     return greater;
   }, [triggers]);
 
+  const impairFactorData = useMemo(() => {
+    const dataList: Array<{
+      value: number;
+      label: ImpairFactor;
+      frontColor: string;
+    }> = [];
+    [ImpairFactor.JUMP, ImpairFactor.CROUCH, ImpairFactor.ANOTHER].forEach(
+      (factor, index) => {
+        let count = 0;
+        episodes.forEach((ep: Episode) => {
+          if (includesOption(ep.impairFactor, factor)) {
+            count++;
+          }
+        });
+        dataList.push({
+          value: count,
+          label: factor,
+          frontColor: episodePinColors(index),
+        });
+        count = 0;
+      },
+    );
+    return dataList;
+  }, [episodes]);
+
+  const impairFactorMaxValue = useMemo(() => {
+    let greater = 0;
+    impairFactorData.forEach((d) => {
+      if (d.value > greater) greater = d.value;
+    });
+    return greater;
+  }, [impairFactorData]);
+
+  const haloMaxValue = useMemo(() => {
+    let greater = 0;
+    halo.forEach((h) => {
+      if (h.value > greater) greater = h.value;
+    });
+    return greater;
+  }, [halo]);
+
   const foodImprovement = useMemo(
     () =>
-      uniqueFromEpisodes(
-        episodes,
-        (ep: Episode) =>
-          includesOption(ep.improvementFactor, ImprovementFactor.FOOD)
-            ? ep.foodImprovement
-            : null
+      uniqueFromEpisodes(episodes, (ep: Episode) =>
+        includesOption(ep.improvementFactor, ImprovementFactor.FOOD)
+          ? ep.foodImprovement
+          : null,
       ),
-    [episodes]
+    [episodes],
   );
 
   const anotherImprovementFactor = useMemo(
     () =>
-      uniqueFromEpisodes(
-        episodes,
-        (ep: Episode) =>
-          includesOption(ep.improvementFactor, ImprovementFactor.ANOTHER)
-            ? ep.anotherImprovementFactor
-            : null
+      uniqueFromEpisodes(episodes, (ep: Episode) =>
+        includesOption(ep.improvementFactor, ImprovementFactor.ANOTHER)
+          ? ep.anotherImprovementFactor
+          : null,
       ),
-    [episodes]
+    [episodes],
   );
 
   const foodImpair = useMemo(
     () =>
-      uniqueFromEpisodes(
-        episodes,
-        (ep: Episode) =>
-          includesOption(ep.triggers, Trigger.FOOD) ? ep.foodImpair : null
+      uniqueFromEpisodes(episodes, (ep: Episode) =>
+        includesOption(ep.triggers, Trigger.FOOD) ? ep.foodImpair : null,
       ),
-    [episodes]
+    [episodes],
   );
 
   const anotherPainType = useMemo(
     () =>
-      uniqueFromEpisodes(
-        episodes,
-        (ep: Episode) =>
-          includesOption(ep.painType, PainType.ANOTHER) ? ep.anotherPainType : null
+      uniqueFromEpisodes(episodes, (ep: Episode) =>
+        includesOption(ep.painType, PainType.ANOTHER)
+          ? ep.anotherPainType
+          : null,
       ),
-    [episodes]
+    [episodes],
   );
 
   const anotherImpairFactor = useMemo(
     () =>
-      uniqueFromEpisodes(
-        episodes,
-        (ep: Episode) =>
-          includesOption(ep.triggers, Trigger.ANOTHER)
-            ? ep.anotherImpairFactor
-            : null
+      uniqueFromEpisodes(episodes, (ep: Episode) =>
+        includesOption(ep.impairFactor, ImpairFactor.ANOTHER)
+          ? ep.anotherImpairFactor
+          : null,
       ),
-    [episodes]
+    [episodes],
+  );
+
+  const anotherTrigger = useMemo(
+    () =>
+      uniqueFromEpisodes(episodes, (ep: Episode) =>
+        includesOption(ep.triggers, Trigger.ANOTHER) ? ep.anotherTrigger : null,
+      ),
+    [episodes],
   );
 
   const medicineList = useMemo(
@@ -356,10 +397,10 @@ const ChartsPage = () => {
         }
 
         return `${ep.medicine} - ${
-          !!ep.combinedDosage ? ep.combinedDosage + '/' : ''
-        }${ep.medicineDosage}${!!ep.medicineUnit ? ep.medicineUnit : ''}`;
+          !!ep.combinedDosage ? ep.combinedDosage + "/" : ""
+        }${ep.medicineDosage}${!!ep.medicineUnit ? ep.medicineUnit : ""} - ${ep.medicineImprovement}`;
       }),
-    [episodes]
+    [episodes],
   );
 
   return (
@@ -372,13 +413,13 @@ const ChartsPage = () => {
               setEmailModalOpen(true);
             }}
           >
-            <Text className='dark:text-d-text-gray'>
-              Enviar relatório para o médico{' '}
+            <Text className="dark:text-d-text-gray">
+              Enviar relatório para o médico{" "}
             </Text>
             <Image
-              className='ml-1 h-[24px]'
-              resizeMode='contain'
-              source={require('src/assets/send.png')}
+              className="ml-1 h-[24px]"
+              resizeMode="contain"
+              source={require("src/assets/send.png")}
             ></Image>
           </Pressable>
         </Pressable>
@@ -386,120 +427,110 @@ const ChartsPage = () => {
 
       {!!report && <SummedUpReport report={report} />}
 
+      {/* === Horário da crise (Datetime) === */}
+      <PieChartComponent assets={time} title="Horário da crise" key="time" />
+
+      {/* === Localização da dor === */}
       <BarChartComponent
-        key='location-bar'
-        title='Localização da dor'
+        key="location-bar"
+        title="Localização da dor"
         dataset={location}
         maxValue={locationMaxValue}
       />
 
+      {/* === Intensidade da dor (Acuteness) === */}
+      <PieChartComponent
+        assets={acuteness}
+        title="Intensidade da dor"
+        key="acuteness-pie"
+      />
+
+      {/* === Característica da dor (PainType) + Outros === */}
+      <PieChartComponent
+        assets={painType}
+        title="Característica da dor"
+        key="painType-pie"
+        outros={[{ label: "Outros", items: anotherPainType }]}
+      />
+
+      {/* === Sintomas associados === */}
       <BarChartComponent
-        key='symptoms-bar'
-        title='Sintomas associados à dor'
+        key="symptoms-bar"
+        title="Sintomas associados à dor"
         dataset={symptoms}
         maxValue={symptomsMaxValue}
       />
 
-      <PieChartComponent
-        assets={acuteness}
-        title='Intensidade da dor'
-        key='acuteness-pie'
-      />
-      <PieChartComponent
-        assets={painType}
-        title='Característica da dor'
-        key='painType-pie'
-      />
-
-      <PieChartComponent assets={time} title='Horário da crise' key='time' />
-
-
-      {!!foodImpair.length && (
-        <ReportCard
-          key='food-impair'
-          title='Alimentos que foram gatilhos para a crise'
-          description={foodImpair}
-        />
-      )}
-
-      {!!anotherImpairFactor!.length && (
-        <ReportCard
-          key='another-impair'
-          title='Outros tipos de gatilhos para a crise'
-          description={anotherImpairFactor}
-        />
-      )}
-
-
-      {!!anotherPainType.length && (
-        <ReportCard
-          key='another-pain-type'
-          title='Outras características da dor'
-          description={anotherPainType}
-        />
-      )}
-
-
-      {parseImpairFactor(report.impairFactor) == ImpairFactor.ANOTHER && (
-        <ReportCard
-          key='impairFactor'
-          title='Fatores de melhora'
-          description={anotherImpairFactor}
-        />
-      )}
-
-
+      {/* === Sintomas de halo (HaloSymptoms) === */}
       <BarChartComponent
-        key='triggers-bar'
-        title='Fatores desencadeantes da dor'
+        key="halo-bar"
+        title="Sintomas da aura"
+        dataset={halo}
+        maxValue={haloMaxValue}
+      />
+
+      {/* === O que piora a dor (ImpairFactor) + Outros === */}
+      <BarChartComponent
+        key="impairFactor-bar"
+        title="O que piora a dor"
+        dataset={impairFactorData}
+        maxValue={impairFactorMaxValue}
+        outros={[{ label: "Outros", items: anotherImpairFactor }]}
+      />
+
+      {/* === Fatores desencadeantes (Triggers) + Outros === */}
+      <BarChartComponent
+        key="triggers-bar"
+        title="Fatores desencadeantes da dor"
         dataset={triggers}
         maxValue={triggersMaxValue}
+        outros={[
+          { label: "Alimentação", items: foodImpair },
+          { label: "Outros", items: anotherTrigger },
+        ]}
       />
 
-
+      {/* === Fatores de melhora (ImprovementFactor) + detalhes === */}
       {parseImprovementFactor(report.improvementFactor) ==
         ImprovementFactor.MEDICINE && (
-          <ReportCard
-            key='medicine'
-            title='Medicamentos'
-            description={medicineList}
-          />
-        )}
-
+        <ReportCard
+          key="medicine"
+          title="Medicamentos"
+          description={medicineList}
+        />
+      )}
       {!!foodImprovement.length && (
         <ReportCard
-          key='foodImprovement'
-          title='Alimentos que melhoraram a crise'
+          key="foodImprovement"
+          title="Alimentos que melhoraram a crise"
           description={foodImprovement}
         />
       )}
-
       {!!anotherImprovementFactor.length && (
         <ReportCard
-          key='anotherImprovement'
-          title='Alternativas que melhoraram a crise'
+          key="anotherImprovement"
+          title="Alternativas que melhoraram a crise"
           description={anotherImprovementFactor}
         />
       )}
 
-
+      {/* === Período menstrual === */}
       {!!report.periodNotes && (
         <ReportCard
-          key='period-notes'
-          title='Período menstrual'
+          key="period-notes"
+          title="Período menstrual"
           description={toUniqueList(report.periodNotes)}
         />
       )}
 
-
+      {/* === Observações (Notes) === */}
       {!!report.notes && (
         <ReportCard
-          key='notes'
-          title='Observações'
+          key="notes"
+          title="Observações finais"
           description={toUniqueList(report.notes)}
         />
       )}
-
 
       <PhysicianEmailModal
         isOpen={emailModalOpen}

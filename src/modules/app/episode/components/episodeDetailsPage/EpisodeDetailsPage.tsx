@@ -230,7 +230,7 @@ const EpisodeDetailsPage = ({}: {}) => {
     },
     {
       icon: require("src/assets/chart-trigger.png"),
-      title: "Gatilhos",
+      title: "Fatores desencadeantes",
       desc: formatTriggers(episode),
     },
     {
@@ -250,7 +250,7 @@ const EpisodeDetailsPage = ({}: {}) => {
     },
     {
       icon: require("src/assets/chart-notes.png"),
-      title: "Observações",
+      title: "Observações finais",
       desc: sanitizeString(episode.notes) || null,
     },
   ];

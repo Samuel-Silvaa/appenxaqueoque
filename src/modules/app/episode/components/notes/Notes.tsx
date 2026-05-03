@@ -67,8 +67,8 @@ const Notes = () => {
         { type: "danger" },
       );
     } catch (err) {
-      console.log('[handleSubmit] error:', err);
-      toast.show('Erro inesperado. Tente novamente.', { type: 'danger' });
+      console.log("[handleSubmit] error:", err);
+      toast.show("Erro inesperado. Tente novamente.", { type: "danger" });
     }
   };
 
@@ -81,7 +81,7 @@ const Notes = () => {
       ></Image>
       <Text className={stylesheet.title}>Estamos quase lá</Text>
 
-      <Text className={stylesheet.label}>Alguma observação?</Text>
+      <Text className={stylesheet.label}>Alguma observação final?</Text>
 
       <View className={stylesheet.notesWrapper}>
         <InputContainer

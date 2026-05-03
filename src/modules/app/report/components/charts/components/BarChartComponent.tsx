@@ -1,19 +1,36 @@
 import { Dimensions, Text, View } from "react-native";
 import { BarChart, barDataItem } from "react-native-gifted-charts";
+import { sharedEpisodeStyleSheet } from "src/modules/app/episode/shared/SharedEpisodeStyleSheet";
+
+type OutrosGroup = { label: string; items: string[] };
 
 export const BarChartComponent = ({
   dataset,
   maxValue,
   title,
+  outros,
 }: {
   dataset: Array<barDataItem>;
   maxValue: number;
   title: string;
+  outros?: OutrosGroup[];
 }) => {
   return (
     <>
-      <View className="m-auto p-4 rounded-full bg-snow-white-secondary dark:bg-d-blue-primary mt-4 mb-2">
-        <Text className="m-auto font-bold dark:text-white"> {title} </Text>
+      <View
+        style={{
+          alignSelf: "center",
+          padding: 16,
+          borderRadius: 9999,
+          backgroundColor: "#fbfcfe",
+          marginTop: 16,
+          marginBottom: 8,
+        }}
+      >
+        <Text style={{ alignSelf: "center", fontWeight: "bold" }}>
+          {" "}
+          {title}{" "}
+        </Text>
       </View>
 
       {dataset && (
@@ -63,6 +80,31 @@ export const BarChartComponent = ({
             maxValue={maxValue ? maxValue + 1 : 10}
             barMarginBottom={6}
           />
+
+          {!!outros?.length && (
+            <View style={{ paddingHorizontal: 20, paddingTop: 16 }}>
+              {outros.map((group, gi) =>
+                group.items.length > 0 ? (
+                  <View
+                    key={gi}
+                    style={{ marginBottom: gi < outros.length - 1 ? 12 : 0 }}
+                  >
+                    <Text style={{ fontWeight: "600", marginBottom: 4 }}>
+                      {group.label}:
+                    </Text>
+                    {group.items.map((item, ii) => (
+                      <View
+                        key={ii}
+                        className="h-[43px] rounded-full bg-purple-dark-primary m-2 shrink-0 px-4 justify-center shadow-md"
+                      >
+                        <Text className="text-white">{item}</Text>
+                      </View>
+                    ))}
+                  </View>
+                ) : null,
+              )}
+            </View>
+          )}
         </View>
       )}
     </>

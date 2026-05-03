@@ -4,42 +4,42 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import AppPageScaffold from '../shared/components/appPageScaffold/AppPageScaffold';
-import { RefObject, createRef, useEffect, useMemo } from 'react';
-import FormSteps from './components';
+} from "react-native";
+import AppPageScaffold from "../shared/components/appPageScaffold/AppPageScaffold";
+import { RefObject, createRef, useEffect, useMemo } from "react";
+import FormSteps from "./components";
 
-import { sharedEpisodeStyleSheet } from './shared/SharedEpisodeStyleSheet';
-import React from 'react';
-import _ from 'lodash';
-import { useDispatch, useSelector } from 'react-redux';
-import { appStateSelector } from 'src/infra/app/selectors';
+import { sharedEpisodeStyleSheet } from "./shared/SharedEpisodeStyleSheet";
+import React from "react";
+import _ from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { appStateSelector } from "src/infra/app/selectors";
 import {
   handleStepForward,
   setLoadingState,
   setPageTitle,
-} from 'src/infra/app/reducers/app.reducer';
-import Datetime from './components/datetime/Datetime';
-import EpisodeDuration from './components/episodeDuration/EpisodeDuration';
-import Acuteness from './components/acuteness/Acuteness';
-import PainType from './components/painType/PainType';
-import Symptoms from './components/symptoms/Symptoms';
-import ImpairFactor from './components/impairFactor/ImpairFactor';
-import ImprovementFactor from './components/improvementFactor/ImprovementFactor';
-import Trigger from './components/trigger/Trigger';
-import Period from './components/period/Period';
-import Notes from './components/notes/Notes';
-import HaloSymptoms from './components/haloSymptoms/HaloSymptoms';
-import Location from './components/location/Location';
+} from "src/infra/app/reducers/app.reducer";
+import Datetime from "./components/datetime/Datetime";
+import EpisodeDuration from "./components/episodeDuration/EpisodeDuration";
+import Acuteness from "./components/acuteness/Acuteness";
+import PainType from "./components/painType/PainType";
+import Symptoms from "./components/symptoms/Symptoms";
+import ImpairFactor from "./components/impairFactor/ImpairFactor";
+import ImprovementFactor from "./components/improvementFactor/ImprovementFactor";
+import Trigger from "./components/trigger/Trigger";
+import Period from "./components/period/Period";
+import Notes from "./components/notes/Notes";
+import HaloSymptoms from "./components/haloSymptoms/HaloSymptoms";
+import Location from "./components/location/Location";
 
 const stylesheet = {
   steps: {
-    container: 'flex-row w-full justify-evenly items-center ',
+    container: "flex-row w-full justify-evenly items-center ",
   },
   form: {
-    wrapper: 'flex-col w-full ',
+    wrapper: "flex-col w-full ",
     header: {
-      wrapper: 'flex-col w-full ',
+      wrapper: "flex-col w-full ",
     },
   },
 };
@@ -60,7 +60,7 @@ const Steps = () => {
       FormSteps.Period,
       FormSteps.Notes,
     ],
-    []
+    [],
   );
   const appState = useSelector(appStateSelector);
 
@@ -72,10 +72,11 @@ const Steps = () => {
           return (
             <View
               key={`step-${index}`}
-              className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${appState.currentEpStep == index
-                  ? 'bg-blue-dark-secondary border border-blue-dark-primary '
-                  : 'bg-white border border-gray-opacity'
-                }`}
+              className={`w-[18px] h-[18px] rounded-full drop-shadow-md ${
+                appState.currentEpStep == index
+                  ? "bg-blue-dark-secondary border border-blue-dark-primary "
+                  : "bg-white border border-gray-opacity"
+              }`}
             ></View>
           );
         })}
@@ -103,20 +104,20 @@ const Topic = ({
   const DATA: { id: string; title: string }[] = useMemo(
     () =>
       [
-        'Data e horário',
-        'Duração da crise',
-        'Localização',
-        'Intensidade',
-        'Características da dor',
-        'Sintomas associados',
-        'Sintomas da aura',
-        'Fatores de piora',
-        'Fatores desencadeantes',
-        'Fatores de melhora',
-        'Periodo menstrual',
-        'Observações',
+        "Data e horário",
+        "Duração da crise",
+        "Localização",
+        "Intensidade",
+        "Características da dor",
+        "Sintomas associados",
+        "Sintomas da aura",
+        "Fatores de piora",
+        "Fatores desencadeantes",
+        "Fatores de melhora",
+        "Periodo menstrual",
+        "Observações finais",
       ].map((item, indx) => ({ title: item, id: item + indx })),
-    []
+    [],
   );
 
   const handleScrollToIndexFailed = (info: {
@@ -172,16 +173,18 @@ const Topic = ({
             }}
             className={
               sharedEpisodeStyleSheet.topic.item +
-              `${appState.currentEpStep == index
-                ? ' bg-purple-dark-primary '
-                : ' bg-purple-dark-secondary'
+              `${
+                appState.currentEpStep == index
+                  ? " bg-purple-dark-primary "
+                  : " bg-purple-dark-secondary"
               }`
             }
           >
             <Text
               key={`topic-text-${item.id}`}
-              className={`${appState.currentEpStep == index ? 'text-[#fff]' : 'text-black '
-                }`}
+              className={`${
+                appState.currentEpStep == index ? "text-[#fff]" : "text-black "
+              }`}
             >
               {item.title}
             </Text>
@@ -216,7 +219,7 @@ const FormContent = ({ episodePagesFlatListRef }: EpisodeScaffold) => {
     <View
       style={{
         flex: 1,
-        width: Dimensions.get('screen').width - 32,
+        width: Dimensions.get("screen").width - 32,
         paddingTop: 20,
       }}
     >
@@ -264,7 +267,7 @@ const FormScaffold = () => {
   }, [appState.currentEpStep]);
 
   return (
-    <View className='w-full'>
+    <View className="w-full">
       <FormHeader
         headerStepsFlatListRef={headerStepsFlatListRef}
         episodePagesFlatListRef={episodePagesFlatListRef}
