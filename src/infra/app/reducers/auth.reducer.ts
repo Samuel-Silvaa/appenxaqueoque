@@ -68,6 +68,7 @@ const authSlice = createSlice({
       state.user = null;
       state.error = null;
       SecureStore.deleteItemAsync('token');
+      SecureStore.deleteItemAsync('refreshToken');
       SecureStore.deleteItemAsync('user');
     },
     clearErrorMessage: (state) => {
@@ -79,8 +80,15 @@ const authSlice = createSlice({
     setPatient: (state, action) => {
       return (state = { ...state, user: action.payload });
     },
-    setToken: (state, action) => {
-      return (state = { ...state, token: action.payload });
+    setToken: (state, action: PayloadAction<string | { token: string; refreshToken?: string }>) => {
+      if (typeof action.payload === 'string') {
+        state.token = action.payload;
+      } else {
+        state.token = action.payload.token;
+        if (action.payload.refreshToken !== undefined) {
+          state.refreshToken = action.payload.refreshToken;
+        }
+      }
     },
   },
   extraReducers: (builder) => {
@@ -91,15 +99,16 @@ const authSlice = createSlice({
     builder.addCase(
       requestLogin.fulfilled,
       (state, action: PayloadAction<LogInResponse>) => {
-        console.log(action);
         SecureStore.setItem('token', action.payload.token);
+        if (action.payload.refreshToken) {
+          SecureStore.setItem('refreshToken', action.payload.refreshToken);
+        }
         SecureStore.setItem('user', JSON.stringify(action.payload.user));
         if (action.payload.user)
           SecureStore.setItemAsync('userId', action.payload.user.id!);
         return (state = {
           ...state,
           ...action.payload,
-          refreshToken: '',
           entireScreenLoading: false,
           loading: false,
           sessionEmail: action.meta!.arg.email,

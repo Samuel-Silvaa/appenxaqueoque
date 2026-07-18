@@ -54,7 +54,7 @@ const requestHandleConfirmEmail = async (
 
 const requestUpdateAvatar = async (payload: {
   avatar: string;
-  email: string;
+  email?: string;
 }): Promise<any> => {
   const formData = new FormData();
   formData.append('avatar', {
@@ -62,7 +62,6 @@ const requestUpdateAvatar = async (payload: {
     name: 'avatar' + new Date().getTime().toString() + '.jpg',
     type: 'image/jpeg',
   } as any);
-  formData.append('email', payload.email);
 
   return put('session/avatar', formData, {
     'Content-Type': 'multipart/form-data',

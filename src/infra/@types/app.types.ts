@@ -21,12 +21,12 @@ export interface Episode {
   dateTime?: string | null;
   foodImpair: string | null;
   foodImprovement: string | null;
-  haloSymptoms: string | string[];
+  haloSymptoms: string[];
   id?: string | null;
-  impairFactor: string | string[];
-  improvementFactor: string | string[];
+  impairFactor: string[];
+  improvementFactor: string[];
   isEdition?: boolean;
-  location: string | string[];
+  location: string[];
   medicine: string | null;
   medicineDosage: number;
   combinedDosage: number;
@@ -36,9 +36,9 @@ export interface Episode {
   painType: string | null;
   period: any;
   periodNotes: string | null;
-  symptoms: string | string[];
+  symptoms: string[];
   time: string | null;
-  triggers: string | string[];
+  triggers: string[];
   start?: string | null;
   end?: string | null;
 }

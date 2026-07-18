@@ -16,6 +16,7 @@ export interface LogInResponse {
   avatar: string;
   email: string;
   token: string;
+  refreshToken: string;
   userType: string;
   user: PatientDTO | PhysicianDTO;
   isEmailConfirmed: boolean;

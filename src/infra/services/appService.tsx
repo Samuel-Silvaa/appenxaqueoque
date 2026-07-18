@@ -14,13 +14,9 @@ const requestCreateReport = async (
 
 const requestGeneratePdfReport = async (payload: {
   id: string;
-  physicianEmail: string;
+  physicianEmail?: string;
 }): Promise<Episode> => {
-  return get(
-    `report/chart/generate/${payload.id}`,
-    {},
-    { physicianemail: payload.physicianEmail }
-  );
+  return get(`report/chart/generate/${payload.id}`);
 };
 
 const requestCreateEpisode = async (
@@ -60,22 +56,16 @@ const requestFetchReports = async (
   patientId: string,
   payload: { startDate: string; endDate: string }
 ): Promise<Report[]> =>
-  get(
-    `report/list/${patientId}`,
-    {},
-    {
-      enddate: payload.endDate
-        ? payload.endDate
-        : format(new Date(), 'yyyy-MM-dd'),
-      startdate: payload.startDate
-        ? payload.startDate
-        : format(subDays(new Date(), 15), 'yyyy-MM-dd'),
-    }
-  );
+  get(`report/list/${patientId}`, {
+    endDate: payload.endDate ? payload.endDate : format(new Date(), 'yyyy-MM-dd'),
+    startDate: payload.startDate
+      ? payload.startDate
+      : format(subDays(new Date(), 15), 'yyyy-MM-dd'),
+  });
 
 const requestFetchReportEpisodesRange = async (
   ids: string
-): Promise<Episode[]> => get(`report/episodes`, {}, { ids: ids });
+): Promise<Episode[]> => get(`report/episodes`, { ids });
 
 const requestDeleteAccount = async ({ id, emailAddress }: { id: string, emailAddress: string }): Promise<{ email: string, userType: string }> =>
   remove(`session/${id}/${emailAddress}`);
