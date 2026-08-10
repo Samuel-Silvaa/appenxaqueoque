@@ -74,6 +74,25 @@ export interface EpisodeModalDTO {
   triggers: string | string[];
 }
 
+export type ClinicalOptionCategory =
+  | 'TIME'
+  | 'LOCATION'
+  | 'ACUTENESS'
+  | 'PAIN_TYPE'
+  | 'SYMPTOM'
+  | 'HALO_SYMPTOM'
+  | 'TRIGGER'
+  | 'IMPROVEMENT_FACTOR'
+  | 'IMPAIRMENT_FACTOR';
+
+export interface ClinicalOption {
+  id: string;
+  category: ClinicalOptionCategory;
+  code: string;
+  label: string;
+  sortOrder: number;
+}
+
 export interface Report {
   createdAt?: string;
   id?: string;

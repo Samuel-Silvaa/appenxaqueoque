@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Success from './success/Success';
 import {
   clearEpisodeState,
+  handleFetchClinicalOptions,
   handleFecthPatient,
   handleFetchEpisodes,
   setPageTitle,
@@ -90,10 +91,11 @@ const TabsRoutes = () => {
       Appearance.addChangeListener((a) => {
         setColorScheme(a.colorScheme);
       });
-      if (auth.user) asyncDispatch(handleFecthPatient(auth.user!.id!));
-    } catch (err) {
-      console.log(err);
-    }
+      if (auth.user) {
+        asyncDispatch(handleFecthPatient(auth.user.id!));
+        asyncDispatch(handleFetchClinicalOptions());
+      }
+    } catch {}
   }, []);
 
   React.useEffect(() => {

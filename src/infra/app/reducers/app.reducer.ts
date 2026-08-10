@@ -4,6 +4,7 @@ import {
   requestCreateEpisode,
   requestCreateReport,
   requestFetchEpisodes,
+  requestFetchClinicalOptions,
   requestFetchPatient,
   requestFetchReports,
   requestUpdateEpisode,
@@ -18,6 +19,7 @@ import {
   EpisodeModalDTO,
   Patient,
   Report,
+  ClinicalOption,
 } from "src/infra/@types/app.types";
 
 // Define initial state type
@@ -32,6 +34,8 @@ export interface AppReducer {
   error: string | null;
   pdfReportStatus: "success" | "error" | "loading" | null;
   reportEpisodes: Episode[];
+  clinicalOptions: ClinicalOption[];
+  clinicalOptionsLoading: boolean;
 }
 
 const initialEpisodeState: Episode = {
@@ -51,6 +55,7 @@ const initialEpisodeState: Episode = {
   location: [],
   medicine: null,
   medicineDosage: 0,
+  combinedDosage: 0,
   medicineUnit: null,
   medicineImprovement: null,
   notes: null,
@@ -75,6 +80,8 @@ const initialState: AppReducer = {
   error: null,
   pdfReportStatus: null,
   reportEpisodes: [],
+  clinicalOptions: [],
+  clinicalOptionsLoading: false,
 };
 
 const handleFitEpisodeData = (ep: Episode): Episode => {
@@ -201,6 +208,20 @@ const appSlice = createSlice({
             : (action.error.message ?? "Erro inesperado"),
         loading: false,
       });
+    });
+    // REQUEST_FETCH_CLINICAL_OPTIONS
+    builder.addCase(handleFetchClinicalOptions.pending, (state) => {
+      state.clinicalOptionsLoading = true;
+    });
+    builder.addCase(
+      handleFetchClinicalOptions.fulfilled,
+      (state, action: PayloadAction<ClinicalOption[]>) => {
+        state.clinicalOptions = action.payload;
+        state.clinicalOptionsLoading = false;
+      },
+    );
+    builder.addCase(handleFetchClinicalOptions.rejected, (state) => {
+      state.clinicalOptionsLoading = false;
     });
     // REQUEST_FETCH_PATIENT
     builder.addCase(handleFecthPatient.pending, (state) => {
@@ -421,6 +442,13 @@ export const handleFetchEpisodes = createAsyncThunk(
   "app/handleFetchEpisodes",
   async (patientId: string) => {
     return await requestFetchEpisodes(patientId);
+  },
+);
+
+export const handleFetchClinicalOptions = createAsyncThunk(
+  "app/handleFetchClinicalOptions",
+  async () => {
+    return await requestFetchClinicalOptions();
   },
 );
 

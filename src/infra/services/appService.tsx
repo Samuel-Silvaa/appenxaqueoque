@@ -1,5 +1,12 @@
 import { get, patch, post, remove } from '../api';
-import { Episode, EpisodeModalDTO, Patient, Report } from '../@types/app.types';
+import {
+  ClinicalOption,
+  ClinicalOptionCategory,
+  Episode,
+  EpisodeModalDTO,
+  Patient,
+  Report,
+} from '../@types/app.types';
 import { format, subDays } from 'date-fns';
 
 export interface CreateReportDTO {
@@ -52,6 +59,11 @@ const requestFetchPatient = async (id: string): Promise<Patient> =>
 const requestFetchEpisodes = async (patientId: string): Promise<Episode[]> =>
   get(`episode/patient/${patientId}`);
 
+const requestFetchClinicalOptions = async (
+  category?: ClinicalOptionCategory
+): Promise<ClinicalOption[]> =>
+  get('clinical-options', category ? { category } : undefined);
+
 const requestFetchReports = async (
   patientId: string,
   payload: { startDate: string; endDate: string }
@@ -81,6 +93,7 @@ export {
   requestCreateEpisode,
   requestFetchPatient,
   requestFetchEpisodes,
+  requestFetchClinicalOptions,
   requestUpdateEpisode,
   requestFetchReports,
   requestFetchReportEpisodesRange,
