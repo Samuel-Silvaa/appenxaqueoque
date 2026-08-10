@@ -41,6 +41,15 @@ export interface Episode {
   triggers: string[];
   start?: string | null;
   end?: string | null;
+  timeOptionId?: string | null;
+  locationOptionIds?: string[];
+  acutenessOptionId?: string | null;
+  painTypeOptionId?: string | null;
+  symptomOptionIds?: string[];
+  haloSymptomOptionIds?: string[];
+  triggerOptionIds?: string[];
+  improvementFactorOptionIds?: string[];
+  impairmentFactorOptionIds?: string[];
 }
 
 export interface EpisodeModalDTO {
@@ -72,6 +81,15 @@ export interface EpisodeModalDTO {
   time: string;
   impairFactor: string | string[];
   triggers: string | string[];
+  timeOptionId?: string | null;
+  locationOptionIds?: string[];
+  acutenessOptionId?: string | null;
+  painTypeOptionId?: string | null;
+  symptomOptionIds?: string[];
+  haloSymptomOptionIds?: string[];
+  triggerOptionIds?: string[];
+  improvementFactorOptionIds?: string[];
+  impairmentFactorOptionIds?: string[];
 }
 
 export type ClinicalOptionCategory =

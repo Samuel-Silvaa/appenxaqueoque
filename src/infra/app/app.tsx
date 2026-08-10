@@ -1,6 +1,11 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 
-import { AppContextDefaultValues, Episode } from "../@types/app.types";
+import {
+  AppContextDefaultValues,
+  ClinicalOption,
+  ClinicalOptionCategory,
+  Episode,
+} from "../@types/app.types";
 import { ToastOptions, useToast } from "react-native-toast-notifications";
 import {
   requestFetchReportEpisodesRange,
@@ -26,6 +31,28 @@ const AppContext = createContext<AppContextDefaultValues>({
   dispatch: () => new Promise(() => {}),
   reports: undefined,
 });
+
+const toOptionValues = (value: string | string[] | null | undefined): string[] => {
+  if (Array.isArray(value)) return value.filter(Boolean);
+  return value ? value.split(",").filter(Boolean) : [];
+};
+
+const findOptionId = (
+  options: ClinicalOption[],
+  category: ClinicalOptionCategory,
+  value: string | null | undefined,
+): string | null =>
+  options.find((option) => option.category === category && option.label === value)
+    ?.id ?? null;
+
+const findOptionIds = (
+  options: ClinicalOption[],
+  category: ClinicalOptionCategory,
+  value: string | string[] | null | undefined,
+): string[] =>
+  toOptionValues(value)
+    .map((optionValue) => findOptionId(options, category, optionValue))
+    .filter((optionId): optionId is string => Boolean(optionId));
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -54,15 +81,65 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         );
         return false;
       } else {
+        const canonicalClinicalOptions = appState.clinicalOptions.length
+          ? {
+              timeOptionId: findOptionId(
+                appState.clinicalOptions,
+                "TIME",
+                appState.episode.time,
+              ),
+              locationOptionIds: findOptionIds(
+                appState.clinicalOptions,
+                "LOCATION",
+                appState.episode.location,
+              ),
+              acutenessOptionId: findOptionId(
+                appState.clinicalOptions,
+                "ACUTENESS",
+                appState.episode.acuteness,
+              ),
+              painTypeOptionId: findOptionId(
+                appState.clinicalOptions,
+                "PAIN_TYPE",
+                appState.episode.painType,
+              ),
+              symptomOptionIds: findOptionIds(
+                appState.clinicalOptions,
+                "SYMPTOM",
+                appState.episode.symptoms,
+              ),
+              haloSymptomOptionIds: findOptionIds(
+                appState.clinicalOptions,
+                "HALO_SYMPTOM",
+                appState.episode.haloSymptoms,
+              ),
+              triggerOptionIds: findOptionIds(
+                appState.clinicalOptions,
+                "TRIGGER",
+                appState.episode.triggers,
+              ),
+              improvementFactorOptionIds: findOptionIds(
+                appState.clinicalOptions,
+                "IMPROVEMENT_FACTOR",
+                appState.episode.improvementFactor,
+              ),
+              impairmentFactorOptionIds: findOptionIds(
+                appState.clinicalOptions,
+                "IMPAIRMENT_FACTOR",
+                appState.episode.impairFactor,
+              ),
+            }
+          : {};
         const parsedObject: any = {
           ...appState.episode,
+          ...canonicalClinicalOptions,
           dateTime: addHours(
             new Date(Object.keys(appState.episode.dates)[0]),
             9,
           ),
           period: appState.episode.period === "true" ? true : false,
           combinedDosage: appState.episode.combinedDosage
-            ? parseInt(appState.episode.combinedDosage)
+            ? Number(appState.episode.combinedDosage)
             : null,
           location: Array.isArray(appState.episode.location)
             ? appState.episode.location.join(",")
@@ -106,6 +183,18 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         });
         delete parsedObject.dates;
 
+        if (appState.clinicalOptions.length) {
+          delete parsedObject.time;
+          delete parsedObject.location;
+          delete parsedObject.acuteness;
+          delete parsedObject.painType;
+          delete parsedObject.symptoms;
+          delete parsedObject.haloSymptoms;
+          delete parsedObject.triggers;
+          delete parsedObject.improvementFactor;
+          delete parsedObject.impairFactor;
+        }
+
         if (parsedObject.isEdition) {
           delete parsedObject.isEdition;
 
@@ -117,13 +206,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             return false;
           }
 
-          console.log(
-            "[submitEpisode] UPDATE payload:",
-            parsedObject,
-            "id:",
-            appState.episode.id,
-          );
-
           const res = await asyncDispatch(
             handleUpdateEpisode({
               payload: parsedObject,
@@ -131,14 +213,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             }),
           );
 
-          console.log(
-            "[submitEpisode] UPDATE result:",
-            res.meta.requestStatus,
-            res.payload,
-          );
-
           if (res.meta.requestStatus == "fulfilled") {
-            const data = res.payload;
+            const data = res.payload as Episode;
 
             return {
               ...data,
@@ -179,7 +255,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         } else {
           delete parsedObject.id;
           delete parsedObject.isEdition;
-          console.log(`SUBMIT`, parsedObject);
 
           const res = await asyncDispatch(
             handleCreateEpisode({
@@ -202,9 +277,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       }
-    } catch (err) {
-      console.log(err);
-      handleToast((err as string) || "erro inesperado", "danger");
+    } catch {
+      handleToast("Erro inesperado", "danger");
     }
   };
 
