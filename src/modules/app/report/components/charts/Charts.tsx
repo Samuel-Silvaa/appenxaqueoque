@@ -11,6 +11,7 @@ import {
   Location,
   PainType,
   Report,
+  ReportOptionStat,
   Symptom,
   Time,
   Trigger,
@@ -92,6 +93,17 @@ const uniqueFromEpisodes = (
   return Array.from(uniqueMap.values());
 };
 
+const getSnapshotStats = (
+  optionStats: ReportOptionStat[] | undefined,
+  category: ReportOptionStat["category"],
+): ReportOptionStat[] | null => {
+  if (!optionStats?.length) return null;
+
+  return optionStats
+    .filter((stat) => stat.category === category)
+    .sort((left, right) => left.sortOrder - right.sortOrder);
+};
+
 const ChartsPage = () => {
   const route = useRoute();
   const asyncDispatch = useAsyncAppDispatch();
@@ -110,6 +122,15 @@ const ChartsPage = () => {
   }, [report.episodesIds]);
 
   const acuteness = useMemo(() => {
+    const snapshotStats = getSnapshotStats(report.optionStats, "ACUTENESS");
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        name: stat.optionLabel,
+        color: colorList[index % colorList.length],
+      }));
+    }
+
     const dataList: Array<{ value: number; name: string; color: string }> = [];
     [Acuteness.LIGHT, Acuteness.MILD, Acuteness.SEVERE].forEach(
       (act, index) => {
@@ -124,9 +145,18 @@ const ChartsPage = () => {
       },
     );
     return dataList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const painType = useMemo(() => {
+    const snapshotStats = getSnapshotStats(report.optionStats, "PAIN_TYPE");
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        name: stat.optionLabel,
+        color: episodePinColors(index),
+      }));
+    }
+
     const dataList: Array<{ value: number; name: string; color: string }> = [];
     [PainType.THROB, PainType.TIGHT].forEach((pt, index) => {
       let count = 0;
@@ -139,9 +169,18 @@ const ChartsPage = () => {
       count = 0;
     });
     return dataList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const time = useMemo(() => {
+    const snapshotStats = getSnapshotStats(report.optionStats, "TIME");
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        name: stat.optionLabel,
+        color: episodePinColors(index),
+      }));
+    }
+
     const dataList: Array<{ value: number; name: string; color: string }> = [];
     [Time.MORNING, Time.EVENING, Time.NIGHT, Time.MIDNIGHT].forEach(
       (pt, index) => {
@@ -160,12 +199,21 @@ const ChartsPage = () => {
       },
     );
     return dataList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const location = useMemo(() => {
+    const snapshotStats = getSnapshotStats(report.optionStats, "LOCATION");
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        label: stat.optionLabel,
+        frontColor: episodePinColors(index % colorList.length),
+      }));
+    }
+
     const locationList: Array<{
       value: number;
-      label: Location;
+      label: string;
       frontColor: string;
     }> = [];
     Object.values(Location).forEach((location) => {
@@ -183,12 +231,21 @@ const ChartsPage = () => {
       count = 0;
     });
     return locationList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const symptoms = useMemo(() => {
+    const snapshotStats = getSnapshotStats(report.optionStats, "SYMPTOM");
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        label: stat.optionLabel,
+        frontColor: episodePinColors(index % colorList.length),
+      }));
+    }
+
     const symptomsList: Array<{
       value: number;
-      label: Symptom;
+      label: string;
       frontColor: string;
     }> = [];
     Object.values(Symptom).forEach((symptom) => {
@@ -206,12 +263,21 @@ const ChartsPage = () => {
       count = 0;
     });
     return symptomsList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const triggers = useMemo(() => {
+    const snapshotStats = getSnapshotStats(report.optionStats, "TRIGGER");
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        label: stat.optionLabel,
+        frontColor: episodePinColors(index % colorList.length),
+      }));
+    }
+
     const triggersList: Array<{
       value: number;
-      label: Trigger;
+      label: string;
       frontColor: string;
     }> = [];
     Object.values(Trigger).forEach((trigger) => {
@@ -229,12 +295,21 @@ const ChartsPage = () => {
       count = 0;
     });
     return triggersList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const halo = useMemo(() => {
+    const snapshotStats = getSnapshotStats(report.optionStats, "HALO_SYMPTOM");
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        label: stat.optionLabel,
+        frontColor: episodePinColors(index % colorList.length),
+      }));
+    }
+
     const haloList: Array<{
       value: number;
-      label: HaloSymptom;
+      label: string;
       frontColor: string;
     }> = [];
     Object.values(HaloSymptom).forEach((hal) => {
@@ -252,7 +327,7 @@ const ChartsPage = () => {
       count = 0;
     });
     return haloList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const locationMaxValue = useMemo(() => {
     let greater = 0;
@@ -288,9 +363,21 @@ const ChartsPage = () => {
   }, [triggers]);
 
   const impairFactorData = useMemo(() => {
+    const snapshotStats = getSnapshotStats(
+      report.optionStats,
+      "IMPAIRMENT_FACTOR",
+    );
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        label: stat.optionLabel,
+        frontColor: episodePinColors(index),
+      }));
+    }
+
     const dataList: Array<{
       value: number;
-      label: ImpairFactor;
+      label: string;
       frontColor: string;
     }> = [];
     [ImpairFactor.JUMP, ImpairFactor.CROUCH, ImpairFactor.ANOTHER].forEach(
@@ -310,7 +397,7 @@ const ChartsPage = () => {
       },
     );
     return dataList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const impairFactorMaxValue = useMemo(() => {
     let greater = 0;
@@ -448,9 +535,21 @@ const ChartsPage = () => {
   }, [episodes]);
 
   const improvementFactorData = useMemo(() => {
+    const snapshotStats = getSnapshotStats(
+      report.optionStats,
+      "IMPROVEMENT_FACTOR",
+    );
+    if (snapshotStats) {
+      return snapshotStats.map((stat, index) => ({
+        value: stat.count,
+        label: stat.optionLabel,
+        frontColor: episodePinColors(index),
+      }));
+    }
+
     const dataList: Array<{
       value: number;
-      label: ImprovementFactor;
+      label: string;
       frontColor: string;
     }> = [];
     [
@@ -473,7 +572,7 @@ const ChartsPage = () => {
       count = 0;
     });
     return dataList;
-  }, [episodes]);
+  }, [episodes, report.optionStats]);
 
   const improvementFactorMaxValue = useMemo(() => {
     let greater = 0;

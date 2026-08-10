@@ -129,6 +129,15 @@ export interface Report {
   episodesIds: string;
   notes: string;
   periodNotes: string;
+  optionStats?: ReportOptionStat[];
+}
+
+export interface ReportOptionStat {
+  category: ClinicalOptionCategory;
+  optionCode: string;
+  optionLabel: string;
+  count: number;
+  sortOrder: number;
 }
 
 export interface AppContextDefaultValues {
