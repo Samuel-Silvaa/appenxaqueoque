@@ -10,6 +10,7 @@ import {
   parsePainType,
   parseSymptoms,
   parseTriggers,
+  getMostFrequentReportOptionLabel,
 } from 'src/infra/utils/appUtils';
 
 const stylesheet = {
@@ -21,16 +22,34 @@ const stylesheet = {
   content: 'bg-primary w-full rounded-[25px] p-6 flex-col justify-around ',
   summaryItem: 'flex-row gap-x-4 my-1',
 };
+
 export const SummedUpReport = (data: { report: Report }) => {
   const { report } = data;
+  const time =
+    getMostFrequentReportOptionLabel(report, 'TIME') ??
+    parseTime(report.time ?? -1);
+  const location =
+    getMostFrequentReportOptionLabel(report, 'LOCATION') ??
+    parseLocation(report.location ?? -1);
+  const acuteness =
+    getMostFrequentReportOptionLabel(report, 'ACUTENESS') ??
+    parseAcuteness(report.acuteness ?? -1);
+  const painType =
+    getMostFrequentReportOptionLabel(report, 'PAIN_TYPE') ??
+    parsePainType(report.painType ?? -1);
+  const symptom =
+    getMostFrequentReportOptionLabel(report, 'SYMPTOM') ??
+    parseSymptoms(report.symptoms ?? -1);
+  const trigger =
+    getMostFrequentReportOptionLabel(report, 'TRIGGER') ??
+    parseTriggers(report.triggers ?? -1);
 
-  console.log(report);
   return (
     <View className={stylesheet.wrapper}>
       <View className={stylesheet.header}>
         <View
           className={stylesheet.status}
-          style={{ backgroundColor: pinColor(report.acuteness) }}
+          style={{ backgroundColor: pinColor(acuteness) }}
         ></View>
         <Text className='font-semibold text-black dark:text-d-text-dark'>
           De {format(new Date(report.startDate), 'dd MMM', { locale: ptBR })} à{' '}
@@ -64,7 +83,7 @@ export const SummedUpReport = (data: { report: Report }) => {
               source={require('src/assets/chart-clock.png')}
             />
             <Text className='dark:text-d-text-dark'>
-              {parseTime(report.time)}{' '}
+              {time}{' '}
             </Text>
           </View>
           <View className={stylesheet.summaryItem}>
@@ -73,7 +92,7 @@ export const SummedUpReport = (data: { report: Report }) => {
               source={require('src/assets/chart-header-location.png')}
             />
             <Text className='dark:text-d-text-dark'>
-              {parseLocation(report.location)}{' '}
+              {location}{' '}
             </Text>
           </View>
           <View className={stylesheet.summaryItem}>
@@ -82,7 +101,7 @@ export const SummedUpReport = (data: { report: Report }) => {
               source={require('src/assets/chart-acuteness.png')}
             />
             <Text className='dark:text-d-text-dark'>
-              {parseAcuteness(report.acuteness)}{' '}
+              {acuteness}{' '}
             </Text>
           </View>
           <View className={stylesheet.summaryItem}>
@@ -91,7 +110,7 @@ export const SummedUpReport = (data: { report: Report }) => {
               source={require('src/assets/chart-sad.png')}
             />
             <Text className='dark:text-d-text-dark'>
-              {parsePainType(report.painType)}{' '}
+              {painType}{' '}
             </Text>
           </View>
           <View className={stylesheet.summaryItem}>
@@ -100,7 +119,7 @@ export const SummedUpReport = (data: { report: Report }) => {
               source={require('src/assets/chart-symptom.png')}
             />
             <Text className='dark:text-d-text-dark'>
-              {parseSymptoms(report.symptoms)}{' '}
+              {symptom}{' '}
             </Text>
           </View>
           <View className={stylesheet.summaryItem}>
@@ -109,7 +128,7 @@ export const SummedUpReport = (data: { report: Report }) => {
               source={require('src/assets/chart-trigger.png')}
             />
             <Text className='dark:text-d-text-dark'>
-              {parseTriggers(report.triggers)}{' '}
+              {trigger}{' '}
             </Text>
           </View>
         </View>

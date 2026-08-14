@@ -15,7 +15,10 @@ import screenOptions from "src/modules/shared/style/StackOptions";
 import { useEffect, useState, useRef } from "react";
 import { differenceInDays, format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { pinColor } from "src/infra/utils/appUtils";
+import {
+  getMostFrequentReportOptionLabel,
+  pinColor,
+} from "src/infra/utils/appUtils";
 import ChartsPage from "./components/charts/Charts";
 import { Report } from "src/infra/@types/app.types";
 import { useForm } from "react-hook-form";
@@ -51,6 +54,10 @@ const ResourceCard = ({
   navigation?: any;
 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const acuteness =
+    getMostFrequentReportOptionLabel(reportDetails, "ACUTENESS") ??
+    reportDetails.acuteness ??
+    -1;
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -70,7 +77,7 @@ const ResourceCard = ({
       >
         <View
           className={stylesheet.reportCardColor}
-          style={{ backgroundColor: pinColor(reportDetails.acuteness) }}
+          style={{ backgroundColor: pinColor(acuteness) }}
         ></View>
         <View className={stylesheet.reportCardHeader}>
           <Text className="font-semibold dark:text-d-text-gray">

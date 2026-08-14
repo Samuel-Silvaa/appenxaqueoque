@@ -5,6 +5,7 @@ import {
   ImprovementFactor,
   Location,
   PainType,
+  Report,
   Symptom,
   Time,
   Trigger,
@@ -13,7 +14,7 @@ import { random } from 'lodash';
 
 export const pinColor = (
   acuteness: string | number,
-  randomize?: boolean = false
+  randomize = false
 ): string => {
   switch (acuteness) {
     case Acuteness.LIGHT:
@@ -29,6 +30,17 @@ export const pinColor = (
       return randomize ? pinColor(random(2)) : '#9194E9';
   }
 };
+
+export const getMostFrequentReportOptionLabel = (
+  report: Report,
+  category: string,
+): string | undefined =>
+  report.optionStats
+    ?.filter((stat) => stat.category === category)
+    .sort(
+      (left, right) =>
+        right.count - left.count || left.sortOrder - right.sortOrder,
+    )[0]?.optionLabel;
 
 export const episodePinColors = (acuteness: string | number): string => {
   switch (acuteness) {
