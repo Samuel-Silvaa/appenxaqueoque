@@ -6,10 +6,10 @@ import {
   View,
 } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
-import { RadioButton } from 'react-native-paper';
+import { RadioButton, useTheme } from 'react-native-paper';
 import Card from '../form/card/Card';
 import { PainType as PainTypeEnum } from 'src/infra/@types/app.types';
-import { Fragment, useCallback } from 'react';
+import { Fragment } from 'react';
 import InputContainer from 'src/modules/shared/components/inputContainer/InputContainer';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -39,31 +39,66 @@ const data: {
   },
 ];
 
-const painTypeSchema = yup.object<{ anotherPainType: string }>().shape({
+const painTypeSchema = yup.object<{ anotherPainType?: string }>().shape({
   anotherPainType: yup.string(),
 });
 
 const PainType = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
+  const theme = useTheme();
+  const hasClinicalOptions = appState.clinicalOptions.length > 0;
 
   const {
     control,
     formState: { errors },
     setValue,
-  } = useForm({ resolver: yupResolver(painTypeSchema) });
+  } = useForm<{ anotherPainType?: string }>({
+    resolver: yupResolver(painTypeSchema),
+  });
 
-  const handlePainTypeChange = useCallback(
-    async (value: string) => {
-      if (value !== PainTypeEnum.ANOTHER) {
-        dispatch(handleFormChanging({ painType: value, anotherPainType: '' }));
-        setValue( 'anotherPainType', '' );
-      } else {
-        dispatch(handleFormChanging({ painType: value }));
-      }
-    },
-    [appState.episode.painType]
-  );
+  const optionIdFor = (label: string): string | undefined =>
+    appState.clinicalOptions.find(
+      (option) => option.category === 'PAIN_TYPE' && option.label === label,
+    )?.id;
+
+  const selectedPainType = hasClinicalOptions
+    ? appState.episode.painTypeOptionId ??
+      optionIdFor(appState.episode.painType ?? '')
+    : appState.episode.painType;
+
+  const selectedPainTypeLabel = hasClinicalOptions
+    ? appState.clinicalOptions.find(
+        (option) => option.id === selectedPainType,
+      )?.label
+    : selectedPainType;
+
+  const handlePainTypeChange = (value: string) => {
+    const selectedOption = hasClinicalOptions
+      ? appState.clinicalOptions.find((option) => option.id === value)
+      : undefined;
+    const label = selectedOption?.label ?? value;
+
+    if (label !== PainTypeEnum.ANOTHER) {
+      dispatch(
+        handleFormChanging(
+          selectedOption
+            ? { painTypeOptionId: selectedOption.id, anotherPainType: '' }
+            : { painType: label, anotherPainType: '' },
+        ),
+      );
+      setValue('anotherPainType', '');
+      return;
+    }
+
+    dispatch(
+      handleFormChanging(
+        selectedOption
+          ? { painTypeOptionId: selectedOption.id }
+          : { painType: label },
+      ),
+    );
+  };
 
   return (
     <View className='h-full w-full'>
@@ -72,7 +107,7 @@ const PainType = () => {
           onValueChange={(value) =>
            handlePainTypeChange(value)
           }
-          value={appState.episode.painType!}
+          value={selectedPainType!}
         >
           {data.map((act, index) => (
             <Fragment key={index}>
@@ -80,7 +115,10 @@ const PainType = () => {
               isHeart={act.value == PainTypeEnum.THROB}
                 children={
                   <View className='flex-row items-center'>
-                    <RadioButton value={act.value} color='#CEB0FA' />
+                    <RadioButton
+                      value={optionIdFor(act.value) ?? act.value}
+                      color={theme.colors.secondary}
+                    />
                     <Text
                       className='dark:text-d-text-gray'
                       style={{ flexWrap: 'wrap', flex: 1, flexShrink: 1 }}
@@ -94,9 +132,7 @@ const PainType = () => {
               <Text></Text>
               {act.value == PainTypeEnum.ANOTHER && (
                 <InputContainer
-                  editable={appState.episode.painType?.includes(
-                    PainTypeEnum.ANOTHER
-                  )}
+                  editable={selectedPainTypeLabel === PainTypeEnum.ANOTHER}
                   setValue={setValue}
                   label='Qual outra característica da dor?'
                   name='anotherPainType'
@@ -104,13 +140,13 @@ const PainType = () => {
                   control={control}
                   errors={errors}
                   className={
-                    appState.episode.painType != PainTypeEnum.ANOTHER
+                    selectedPainTypeLabel !== PainTypeEnum.ANOTHER
                       ? 'opacity-25' + ' bg-white drop-shadow-sm'
                       : 'opacity-100' + ' bg-white drop-shadow-sm'
                   }
                   defaultValue={appState.episode.anotherPainType!}
                   onChange={(e) => {
-                    if (appState.episode.painType == PainTypeEnum.ANOTHER) {
+                    if (selectedPainTypeLabel === PainTypeEnum.ANOTHER) {
                       dispatch(
                         handleFormChanging({
                           anotherPainType: e.nativeEvent.text,

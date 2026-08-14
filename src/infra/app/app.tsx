@@ -100,11 +100,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
                   "ACUTENESS",
                   appState.episode.acuteness,
                 ),
-              painTypeOptionId: findOptionId(
-                appState.clinicalOptions,
-                "PAIN_TYPE",
-                appState.episode.painType,
-              ),
+              painTypeOptionId:
+                appState.episode.painTypeOptionId ??
+                findOptionId(
+                  appState.clinicalOptions,
+                  "PAIN_TYPE",
+                  appState.episode.painType,
+                ),
               symptomOptionIds: findOptionIds(
                 appState.clinicalOptions,
                 "SYMPTOM",

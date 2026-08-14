@@ -61,6 +61,7 @@ const initialEpisodeState: Episode = {
   medicineImprovement: null,
   notes: null,
   painType: null,
+  painTypeOptionId: null,
   period: "false",
   periodNotes: null,
   symptoms: [],
