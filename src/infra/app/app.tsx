@@ -83,11 +83,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       } else {
         const canonicalClinicalOptions = appState.clinicalOptions.length
           ? {
-              timeOptionId: findOptionId(
-                appState.clinicalOptions,
-                "TIME",
-                appState.episode.time,
-              ),
+              timeOptionId:
+                appState.episode.timeOptionId ??
+                findOptionId(
+                  appState.clinicalOptions,
+                  "TIME",
+                  appState.episode.time,
+                ),
               locationOptionIds: findOptionIds(
                 appState.clinicalOptions,
                 "LOCATION",

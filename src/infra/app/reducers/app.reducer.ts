@@ -66,6 +66,7 @@ const initialEpisodeState: Episode = {
   periodNotes: null,
   symptoms: [],
   time: null,
+  timeOptionId: null,
   triggers: [],
   start: null,
   end: null,

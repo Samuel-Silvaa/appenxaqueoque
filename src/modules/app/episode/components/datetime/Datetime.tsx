@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { RadioButton } from 'react-native-paper';
+import { RadioButton, useTheme } from 'react-native-paper';
 import CalendarComponent from 'src/modules/app/shared/components/calendar/CalendarComponent';
 import { sharedEpisodeStyleSheet } from '../../shared/SharedEpisodeStyleSheet';
 import { DateData } from 'react-native-calendars';
@@ -53,11 +53,37 @@ const Timepicker = () => {
 
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
+  const theme = useTheme();
+  const hasClinicalOptions = appState.clinicalOptions.length > 0;
+
+  const optionIdFor = (label: Time): string | undefined =>
+    appState.clinicalOptions.find(
+      (option) => option.category === 'TIME' && option.label === label,
+    )?.id;
+
+  const selectedTime = hasClinicalOptions
+    ? appState.episode.timeOptionId ??
+      optionIdFor(appState.episode.time as Time)
+    : appState.episode.time;
+
+  const selectTime = (value: string) => {
+    const selectedOption = hasClinicalOptions
+      ? appState.clinicalOptions.find((option) => option.id === value)
+      : undefined;
+
+    dispatch(
+      handleFormChanging(
+        selectedOption
+          ? { timeOptionId: selectedOption.id }
+          : { time: value },
+      ),
+    );
+  };
 
   return (
     <RadioButton.Group
-      onValueChange={(value) => dispatch(handleFormChanging({ time: value }))}
-      value={appState.episode.time!}
+      onValueChange={selectTime}
+      value={selectedTime ?? ''}
     >
       <View className={sharedEpisodeStyleSheet.timepicker.container}>
         <Text className={sharedEpisodeStyleSheet.timepicker.title}>
@@ -67,7 +93,7 @@ const Timepicker = () => {
 
         {data.map((time, index) => (
           <TouchableOpacity
-            onPress={() => dispatch(handleFormChanging(({ time: time.value })))}
+            onPress={() => selectTime(optionIdFor(time.value) ?? time.value)}
             key={index}
             className={
               sharedEpisodeStyleSheet.timepicker.timeIndicatorContainer
@@ -84,9 +110,9 @@ const Timepicker = () => {
                 }
               >
                 <RadioButton
-                  value={time.value}
-                  color='#CEB0FA'
-                  uncheckedColor='#d0edfc'
+                  value={optionIdFor(time.value) ?? time.value}
+                  color={theme.colors.secondary}
+                  uncheckedColor={theme.colors.primary}
                 />
                 <Text
                   className={
@@ -107,7 +133,8 @@ const Timepicker = () => {
 
 const Datetime = () => {
   const dispatch = useDispatch();
-  const appState = useSelector(appStateSelector)
+  const appState = useSelector(appStateSelector);
+  const theme = useTheme();
   const toast = useToast();
 
   const handleSelectDate = useCallback((date: DateData) => {
@@ -117,12 +144,12 @@ const Datetime = () => {
           [date.dateString]: {
             selected: true,
             marked: true,
-            selectedColor: '#9194E9',
+            selectedColor: theme.colors.secondary,
           },
         },
       })));
     }
-  }, []);
+  }, [dispatch, theme.colors.secondary]);
 
   return (
     <View className={stylesheet.calendar.wrapper}>
