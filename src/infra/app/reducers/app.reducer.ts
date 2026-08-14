@@ -54,6 +54,7 @@ const initialEpisodeState: Episode = {
   improvementFactor: [],
   isEdition: false,
   location: [],
+  locationOptionIds: [],
   medicine: null,
   medicineDosage: 0,
   combinedDosage: 0,
