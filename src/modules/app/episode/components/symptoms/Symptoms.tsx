@@ -50,26 +50,45 @@ const data: {
 const Symptoms = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
+  const hasClinicalOptions = appState.clinicalOptions.length > 0;
 
-  const handleSetSymptomsValues = (value: string) => {
-    // Ensure symptoms is always an array
-    const currentSymptoms = Array.isArray(appState.episode.symptoms)
+  const currentSymptoms = hasClinicalOptions && appState.episode.symptomOptionIds?.length
+    ? appState.episode.symptomOptionIds
+    : Array.isArray(appState.episode.symptoms)
       ? appState.episode.symptoms
       : appState.episode.symptoms
         ? String(appState.episode.symptoms)
             .split(",")
-            .filter((v) => v.trim() !== "")
+            .filter((value) => value.trim() !== "")
         : [];
 
-    if (currentSymptoms.includes(value)) {
-      dispatch(
-        handleFormChanging({
-          symptoms: currentSymptoms.filter((tr) => tr !== value),
-        }),
-      );
-    } else {
-      dispatch(handleFormChanging({ symptoms: [...currentSymptoms, value] }));
-    }
+  const optionIdFor = (label: string): string | undefined =>
+    appState.clinicalOptions.find(
+      (option) => option.category === "SYMPTOM" && option.label === label,
+    )?.id;
+
+  const handleSetSymptomsValues = (value: string) => {
+    const optionId = optionIdFor(value);
+    const selectedValue = hasClinicalOptions && optionId ? optionId : value;
+    const symptoms = currentSymptoms.includes(selectedValue)
+      ? currentSymptoms.filter((symptom) => symptom !== selectedValue)
+      : [...currentSymptoms, selectedValue];
+
+    dispatch(
+      handleFormChanging(
+        hasClinicalOptions
+          ? { symptomOptionIds: symptoms }
+          : { symptoms },
+      ),
+    );
+  };
+
+  const isSymptomSelected = (label: string): boolean => {
+    const optionId = optionIdFor(label);
+
+    return currentSymptoms.includes(
+      hasClinicalOptions && optionId ? optionId : label,
+    );
   };
 
   return (
@@ -98,8 +117,8 @@ const Symptoms = () => {
                     flexShrink: 1,
                   }}
                   text={act.label}
-                  isChecked={appState.episode.symptoms?.includes(act.value)}
-                  onPress={(isChecked: boolean) => {
+                  isChecked={isSymptomSelected(act.value)}
+                  onPress={() => {
                     handleSetSymptomsValues(act.value);
                   }}
                 />

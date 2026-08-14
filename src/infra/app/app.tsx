@@ -112,11 +112,14 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
                   "PAIN_TYPE",
                   appState.episode.painType,
                 ),
-              symptomOptionIds: findOptionIds(
-                appState.clinicalOptions,
-                "SYMPTOM",
-                appState.episode.symptoms,
-              ),
+              symptomOptionIds:
+                appState.episode.symptomOptionIds?.length
+                  ? appState.episode.symptomOptionIds
+                  : findOptionIds(
+                      appState.clinicalOptions,
+                      "SYMPTOM",
+                      appState.episode.symptoms,
+                    ),
               haloSymptomOptionIds: findOptionIds(
                 appState.clinicalOptions,
                 "HALO_SYMPTOM",
