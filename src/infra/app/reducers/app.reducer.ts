@@ -40,6 +40,7 @@ export interface AppReducer {
 
 const initialEpisodeState: Episode = {
   acuteness: null,
+  acutenessOptionId: null,
   anotherImpairFactor: null,
   anotherImprovementFactor: null,
   anotherPainType: null,

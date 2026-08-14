@@ -29,23 +29,49 @@ const data = [
 const Acuteness = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
+  const hasClinicalOptions = appState.clinicalOptions.length > 0;
+
+  const optionIdFor = (label: AcutenessType): string | undefined =>
+    appState.clinicalOptions.find(
+      (option) => option.category === 'ACUTENESS' && option.label === label,
+    )?.id;
+
+  const selectedAcuteness = hasClinicalOptions
+    ? appState.episode.acutenessOptionId ??
+      optionIdFor(appState.episode.acuteness as AcutenessType)
+    : appState.episode.acuteness;
+
+  const selectAcuteness = (label: AcutenessType) => {
+    const optionId = optionIdFor(label);
+
+    dispatch(
+      handleFormChanging(
+        optionId
+          ? { acutenessOptionId: optionId }
+          : { acuteness: label },
+      ),
+    );
+  };
 
   return (
     <View className='h-full w-full'>
       <Wrapper title='Qual foi a intensidade da dor ?'>
         <RadioButton.Group
-          onValueChange={(value) => dispatch(handleFormChanging({ acuteness: value }))}
-          value={appState.episode.acuteness!}
+          onValueChange={(value) => selectAcuteness(value as AcutenessType)}
+          value={selectedAcuteness!}
         >
           {data.map((act, index) => (
             <Card
               key={index}
               onPress={() => {
-                dispatch(handleFormChanging({ acuteness: act.value }));
+                selectAcuteness(act.value);
               }}
               children={
                 <View className='flex-row items-center'>
-                  <RadioButton value={act.value} color={pinColor(index)} />
+                  <RadioButton
+                    value={optionIdFor(act.value) ?? act.value}
+                    color={pinColor(index)}
+                  />
                   <Text 
                     className='dark:text-d-text-gray'
                     style={{ flexWrap: 'wrap', flex: 1, flexShrink: 1 }}

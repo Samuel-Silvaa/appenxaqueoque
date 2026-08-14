@@ -93,11 +93,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
                 "LOCATION",
                 appState.episode.location,
               ),
-              acutenessOptionId: findOptionId(
-                appState.clinicalOptions,
-                "ACUTENESS",
-                appState.episode.acuteness,
-              ),
+              acutenessOptionId:
+                appState.episode.acutenessOptionId ??
+                findOptionId(
+                  appState.clinicalOptions,
+                  "ACUTENESS",
+                  appState.episode.acuteness,
+                ),
               painTypeOptionId: findOptionId(
                 appState.clinicalOptions,
                 "PAIN_TYPE",
