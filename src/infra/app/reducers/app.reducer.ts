@@ -49,6 +49,7 @@ const initialEpisodeState: Episode = {
   foodImpair: null,
   foodImprovement: null,
   haloSymptoms: [],
+  haloSymptomOptionIds: [],
   id: null,
   impairFactor: [],
   improvementFactor: [],

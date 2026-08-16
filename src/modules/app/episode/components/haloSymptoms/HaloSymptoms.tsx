@@ -1,12 +1,12 @@
-import { Appearance, ImageSourcePropType, View } from 'react-native';
+import { ImageSourcePropType, View } from 'react-native';
 import Wrapper from '../form/wrapper/Wrapper';
 import Card from '../form/card/Card';
-import { useApp } from 'src/infra/app/app';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { HaloSymptom } from 'src/infra/@types/app.types';
 import { useDispatch, useSelector } from 'react-redux';
 import { appStateSelector } from 'src/infra/app/selectors';
 import { handleFormChanging } from 'src/infra/app/reducers/app.reducer';
+import { useTheme } from 'react-native-paper';
 
 const data: {
   label: string;
@@ -36,28 +36,46 @@ const data: {
 const HaloSymptoms = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
+  const theme = useTheme();
+  const hasClinicalOptions = appState.clinicalOptions.length > 0;
+  const legacyHaloSymptoms = appState.episode.haloSymptoms as string | string[];
+
+  const currentHaloSymptoms: string[] =
+    hasClinicalOptions && appState.episode.haloSymptomOptionIds?.length
+      ? appState.episode.haloSymptomOptionIds
+      : Array.isArray(legacyHaloSymptoms)
+        ? legacyHaloSymptoms
+        : legacyHaloSymptoms
+          ? legacyHaloSymptoms.split(',').filter(Boolean)
+          : [];
+
+  const optionIdFor = (label: string): string | undefined =>
+    appState.clinicalOptions.find(
+      (option) => option.category === 'HALO_SYMPTOM' && option.label === label,
+    )?.id;
 
   const handleSetSymptomsValues = (value: string) => {
-    // Ensure haloSymptoms is always an array
-    const currentHaloSymptoms = Array.isArray(appState.episode.haloSymptoms)
-      ? appState.episode.haloSymptoms
-      : appState.episode.haloSymptoms
-      ? appState.episode.haloSymptoms.split(',').filter((value) => value != '')
-      : [];
+    const optionId = optionIdFor(value);
+    const selectedValue = hasClinicalOptions && optionId ? optionId : value;
+    const haloSymptoms = currentHaloSymptoms.includes(selectedValue)
+      ? currentHaloSymptoms.filter((symptom) => symptom !== selectedValue)
+      : [...currentHaloSymptoms, selectedValue];
 
-    if (currentHaloSymptoms.includes(value)) {
-      dispatch(
-        handleFormChanging({
-          haloSymptoms: currentHaloSymptoms.filter((tr) => tr !== value),
-        })
-      );
-    } else {
-      dispatch(
-        handleFormChanging({
-          haloSymptoms: [...currentHaloSymptoms, value],
-        })
-      );
-    }
+    dispatch(
+      handleFormChanging(
+        hasClinicalOptions
+          ? { haloSymptomOptionIds: haloSymptoms }
+          : { haloSymptoms },
+      ),
+    );
+  };
+
+  const isHaloSymptomSelected = (label: string): boolean => {
+    const optionId = optionIdFor(label);
+
+    return currentHaloSymptoms.includes(
+      hasClinicalOptions && optionId ? optionId : label,
+    );
   };
 
   return (
@@ -70,26 +88,19 @@ const HaloSymptoms = () => {
               <View className='flex-row items-center w-[96%] text-justify p-1'>
                 <BouncyCheckbox
                   size={22}
-                  fillColor='#CEB0FA'
-                  unfillColor='#FFFFFF00'
+                  fillColor={theme.colors.secondary}
+                  unfillColor='transparent'
                   textStyle={{
                     textDecorationLine: 'none',
-                    color:
-                      Appearance.getColorScheme() == 'dark'
-                        ? '#9DA3A9'
-                        : '#2E3E4B',
+                    color: theme.colors.onSurface,
                     flexWrap: 'wrap',
                     flex: 1,
                     flexShrink: 1,
                     textAlign: 'justify',
                   }}
                   text={act.label}
-                  isChecked={
-                    appState.episode.haloSymptoms
-                      ? appState.episode.haloSymptoms.includes(act.value)
-                      : null
-                  }
-                  onPress={(isChecked: boolean) => {
+                  isChecked={isHaloSymptomSelected(act.value)}
+                  onPress={() => {
                     handleSetSymptomsValues(act.value);
                   }}
                 />

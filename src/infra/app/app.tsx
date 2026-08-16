@@ -120,11 +120,14 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
                       "SYMPTOM",
                       appState.episode.symptoms,
                     ),
-              haloSymptomOptionIds: findOptionIds(
-                appState.clinicalOptions,
-                "HALO_SYMPTOM",
-                appState.episode.haloSymptoms,
-              ),
+              haloSymptomOptionIds:
+                appState.episode.haloSymptomOptionIds?.length
+                  ? appState.episode.haloSymptomOptionIds
+                  : findOptionIds(
+                      appState.clinicalOptions,
+                      "HALO_SYMPTOM",
+                      appState.episode.haloSymptoms,
+                    ),
               triggerOptionIds: findOptionIds(
                 appState.clinicalOptions,
                 "TRIGGER",
