@@ -7,14 +7,15 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Trigger as TriggerType } from "src/infra/@types/app.types";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { Fragment, useCallback } from "react";
+import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { appStateSelector } from "src/infra/app/selectors";
 import { handleFormChanging } from "src/infra/app/reducers/app.reducer";
+import { useTheme } from "react-native-paper";
 
 interface TriggerSchema {
-  foodImpair: string;
-  anotherTrigger: string;
+  foodImpair?: string;
+  anotherTrigger?: string;
 }
 
 const triggerSchema = yup.object<TriggerSchema>().shape({
@@ -56,41 +57,59 @@ const data: {
 const Trigger = () => {
   const dispatch = useDispatch();
   const appState = useSelector(appStateSelector);
+  const theme = useTheme();
+  const hasClinicalOptions = appState.clinicalOptions.length > 0;
+  const legacyTriggers = appState.episode.triggers as string | string[];
 
   const {
     control,
     formState: { errors },
     setValue,
-  } = useForm({ resolver: yupResolver(triggerSchema) });
+  } = useForm<TriggerSchema>({ resolver: yupResolver(triggerSchema) });
 
-  const handleSetTriggersValues = useCallback(
-    (value: string) => {
-      // Ensure triggers is always an array
-      const currentTriggers = Array.isArray(appState.episode.triggers)
-        ? appState.episode.triggers
-        : appState.episode.triggers
-          ? appState.episode.triggers.split(",").filter((v) => v !== "")
+  const currentTriggers: string[] =
+    hasClinicalOptions && appState.episode.triggerOptionIds?.length
+      ? appState.episode.triggerOptionIds
+      : Array.isArray(legacyTriggers)
+        ? legacyTriggers
+        : legacyTriggers
+          ? legacyTriggers.split(",").filter(Boolean)
           : [];
 
-      if (currentTriggers.includes(value)) {
-        const update: Record<string, any> = {
-          triggers: currentTriggers.filter((tr) => tr !== value),
-        };
-        if (value === TriggerType.FOOD) {
-          update.foodImpair = "";
-          setValue("foodImpair", "");
-        }
-        if (value === TriggerType.ANOTHER) {
-          update.anotherTrigger = "";
-          setValue("anotherTrigger", "");
-        }
-        dispatch(handleFormChanging(update));
-      } else {
-        dispatch(handleFormChanging({ triggers: [...currentTriggers, value] }));
-      }
-    },
-    [appState.episode.triggers],
-  );
+  const optionIdFor = (label: string): string | undefined =>
+    appState.clinicalOptions.find(
+      (option) => option.category === "TRIGGER" && option.label === label,
+    )?.id;
+
+  const isTriggerSelected = (label: string): boolean => {
+    const optionId = optionIdFor(label);
+
+    return currentTriggers.includes(
+      hasClinicalOptions && optionId ? optionId : label,
+    );
+  };
+
+  const handleSetTriggersValues = (value: string) => {
+    const optionId = optionIdFor(value);
+    const selectedValue = hasClinicalOptions && optionId ? optionId : value;
+    const triggers = currentTriggers.includes(selectedValue)
+      ? currentTriggers.filter((trigger) => trigger !== selectedValue)
+      : [...currentTriggers, selectedValue];
+    const update: Record<string, string | string[]> = hasClinicalOptions
+      ? { triggerOptionIds: triggers }
+      : { triggers };
+
+    if (currentTriggers.includes(selectedValue) && value === TriggerType.FOOD) {
+      update.foodImpair = "";
+      setValue("foodImpair", "");
+    }
+    if (currentTriggers.includes(selectedValue) && value === TriggerType.ANOTHER) {
+      update.anotherTrigger = "";
+      setValue("anotherTrigger", "");
+    }
+
+    dispatch(handleFormChanging(update));
+  };
 
   return (
     <View className="h-full w-full">
@@ -103,8 +122,8 @@ const Trigger = () => {
                 <View className="flex-row items-center ">
                   <BouncyCheckbox
                     size={22}
-                    fillColor="#CEB0FA"
-                    unfillColor="#FFFFFF00"
+                    fillColor={theme.colors.secondary}
+                    unfillColor="transparent"
                     textStyle={{
                       textDecorationLine: "none",
                       flexWrap: "wrap",
@@ -112,13 +131,8 @@ const Trigger = () => {
                       padding: 4,
                     }}
                     text={act.label}
-                    isChecked={
-                      appState.episode.triggers
-                        ? appState.episode.triggers &&
-                          appState.episode.triggers!.includes(act.value)
-                        : false
-                    }
-                    onPress={(isChecked: boolean) => {
+                    isChecked={isTriggerSelected(act.value)}
+                    onPress={() => {
                       handleSetTriggersValues(act.value);
                     }}
                   />
@@ -135,12 +149,10 @@ const Trigger = () => {
                 control={control}
                 errors={errors}
                 editable={
-                  appState.episode.triggers &&
-                  appState.episode.triggers!.includes(TriggerType.FOOD)
+                  isTriggerSelected(TriggerType.FOOD)
                 }
                 className={`${
-                  appState.episode.triggers &&
-                  appState.episode.triggers!.includes(TriggerType.FOOD)
+                  isTriggerSelected(TriggerType.FOOD)
                     ? " opacity-100"
                     : " opacity-25"
                 } bg-white drop-shadow-sm`}
@@ -161,12 +173,10 @@ const Trigger = () => {
                 errors={errors}
                 placeholder="Descreva brevemente"
                 editable={
-                  appState.episode.triggers &&
-                  appState.episode.triggers!.includes(TriggerType.ANOTHER)
+                  isTriggerSelected(TriggerType.ANOTHER)
                 }
                 className={`${
-                  appState.episode.triggers &&
-                  appState.episode.triggers!.includes(TriggerType.ANOTHER)
+                  isTriggerSelected(TriggerType.ANOTHER)
                     ? " opacity-100 "
                     : " opacity-25"
                 } bg-white drop-shadow-sm`}

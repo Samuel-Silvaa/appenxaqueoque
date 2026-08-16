@@ -128,11 +128,14 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
                       "HALO_SYMPTOM",
                       appState.episode.haloSymptoms,
                     ),
-              triggerOptionIds: findOptionIds(
-                appState.clinicalOptions,
-                "TRIGGER",
-                appState.episode.triggers,
-              ),
+              triggerOptionIds:
+                appState.episode.triggerOptionIds?.length
+                  ? appState.episode.triggerOptionIds
+                  : findOptionIds(
+                      appState.clinicalOptions,
+                      "TRIGGER",
+                      appState.episode.triggers,
+                    ),
               improvementFactorOptionIds: findOptionIds(
                 appState.clinicalOptions,
                 "IMPROVEMENT_FACTOR",

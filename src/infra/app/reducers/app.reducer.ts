@@ -71,6 +71,7 @@ const initialEpisodeState: Episode = {
   time: null,
   timeOptionId: null,
   triggers: [],
+  triggerOptionIds: [],
   start: null,
   end: null,
 };
