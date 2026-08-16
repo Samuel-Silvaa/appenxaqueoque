@@ -52,6 +52,7 @@ const initialEpisodeState: Episode = {
   haloSymptomOptionIds: [],
   id: null,
   impairFactor: [],
+  impairmentFactorOptionIds: [],
   improvementFactor: [],
   isEdition: false,
   location: [],

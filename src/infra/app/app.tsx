@@ -141,11 +141,14 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
                 "IMPROVEMENT_FACTOR",
                 appState.episode.improvementFactor,
               ),
-              impairmentFactorOptionIds: findOptionIds(
-                appState.clinicalOptions,
-                "IMPAIRMENT_FACTOR",
-                appState.episode.impairFactor,
-              ),
+              impairmentFactorOptionIds:
+                appState.episode.impairmentFactorOptionIds?.length
+                  ? appState.episode.impairmentFactorOptionIds
+                  : findOptionIds(
+                      appState.clinicalOptions,
+                      "IMPAIRMENT_FACTOR",
+                      appState.episode.impairFactor,
+                    ),
             }
           : {};
         const parsedObject: any = {
